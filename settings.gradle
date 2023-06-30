@@ -16,3 +16,4 @@ rootProject.name = "CurtainCall"
 include ':app'
 include ':data'
 include ':core:base'
+include ':core:network'
