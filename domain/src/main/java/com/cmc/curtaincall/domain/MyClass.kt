@@ -1,4 +1,3 @@
 package com.cmc.curtaincall.domain
 
-class MyClass {
-}
+class MyClass

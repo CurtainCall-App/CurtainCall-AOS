@@ -14,3 +14,9 @@ naming:
     constantPattern: '[A-Z][A-Za-z0-9]*'
   FunctionNaming:
     ignoreAnnotated: [ 'Composable' ]
+
+empty-blocks:
+  EmptyClassBlock:
+    active: false
+  EmptyKtFile:
+    active: false
