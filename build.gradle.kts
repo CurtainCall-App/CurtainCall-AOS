@@ -1,11 +1,12 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("com.android.application").version("8.0.1") apply false
-    id("com.android.library").version("8.0.1") apply false
-    id("org.jetbrains.kotlin.android").version("1.8.10") apply false
-    id("org.jetbrains.kotlin.jvm").version("1.8.10") apply false
-    id("org.jlleitschuh.gradle.ktlint").version("11.4.2") apply false
-    id("io.gitlab.arturbosch.detekt").version("1.23.0") apply true
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.jvm) apply false
+    alias(libs.plugins.ktlint) apply false
+    alias(libs.plugins.detekt) apply true
 }
 
 allprojects {
