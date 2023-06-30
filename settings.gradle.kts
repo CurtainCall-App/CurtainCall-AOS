@@ -13,4 +13,15 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "CurtainCall"
-include ':app'
+include(":app")
+include(":data")
+include(":core:base")
+include(":core:network")
+include(":common:design")
+include(":common:utility")
+include(":domain")
+include(":feature:home")
+include(":feature:performance")
+include(":feature:livetalk")
+include(":feature:partymember")
+include(":feature:mypage")
