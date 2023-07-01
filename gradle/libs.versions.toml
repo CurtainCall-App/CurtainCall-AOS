@@ -1,6 +1,6 @@
 [versions]
 # plugins
-androidPlugin = "8.0.1"
+androidPlugin = "7.4.1"
 kotlinPlugin = "1.8.10"
 ktlintPlugin = "11.4.2"
 detektPlugin = "1.23.0"
