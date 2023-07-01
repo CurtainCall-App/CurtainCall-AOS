@@ -8,6 +8,8 @@ style:
     ignoreCompanionObjectPropertyDeclaration: true
   UnusedPrivateMember:
     ignoreAnnotated: [ 'preview' ]
+  WildcardImport:
+    active: false
 
 naming:
   TopLevelPropertyNaming:
