@@ -8,13 +8,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.cmc.curtaincall.core.base.CurtainCallDestination
-import com.cmc.curtaincall.feature.auth.navigation.authGraph
+import com.cmc.curtaincall.feature.auth.authNavGraph
+import com.cmc.curtaincall.feature.home.homeNavGraph
 import com.cmc.curtaincall.ui.SplashScreen
 
-private const val SPLASH = "splash"
 private const val ROOT_GRAPH = "root_graph"
+private const val SPLASH = "splash"
 
-internal object Splash : CurtainCallDestination {
+object Splash : CurtainCallDestination {
     override val route = SPLASH
 }
 
@@ -29,7 +30,7 @@ internal fun AppNavHost(navHostController: NavHostController = rememberNavContro
         composable(route = Splash.route) {
             SplashScreen()
         }
-
-        authGraph()
+        authNavGraph()
+        homeNavGraph()
     }
 }
