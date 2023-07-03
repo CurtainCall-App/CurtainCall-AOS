@@ -27,13 +27,15 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:base"))
+    implementation(project(":feature:auth"))
+
     // androidx
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
     // compose
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.activity.compose)
     implementation(libs.bundles.androidx.compose)
 
     // logging
