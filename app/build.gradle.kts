@@ -29,6 +29,7 @@ android {
 dependencies {
     implementation(project(":core:base"))
     implementation(project(":feature:auth"))
+    implementation(project(":feature:home"))
 
     // androidx
     implementation(libs.androidx.core.ktx)
