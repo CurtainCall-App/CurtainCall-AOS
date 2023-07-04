@@ -27,12 +27,22 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:base"))
+    implementation(project(":feature:auth"))
+    implementation(project(":feature:home"))
+
+    // androidx
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
+
+    // compose
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.androidx.compose)
 
+    // logging
+    implementation(libs.timber)
+
+    // test
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso)

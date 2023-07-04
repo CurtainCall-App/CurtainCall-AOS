@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.cmc.curtaincall.feature.home"
+    namespace = "com.cmc.curtaincall.feature.auth"
 
     defaultConfig {
         consumerProguardFiles("consumer-rules.pro")
@@ -26,10 +26,6 @@ android {
 
 dependencies {
     implementation(project(":core:base"))
-    implementation(project(":feature:performance"))
-    implementation(project(":feature:livetalk"))
-    implementation(project(":feature:partymember"))
-    implementation(project(":feature:mypage"))
 
     // androidx
     implementation(libs.androidx.core.ktx)
