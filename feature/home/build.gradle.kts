@@ -26,6 +26,7 @@ android {
 
 dependencies {
     implementation(project(":core:base"))
+    implementation(project(":feature:performance"))
 
     // androidx
     implementation(libs.androidx.core.ktx)
