@@ -28,6 +28,7 @@ dependencies {
     implementation(project(":core:base"))
     implementation(project(":feature:performance"))
     implementation(project(":feature:livetalk"))
+    implementation(project(":feature:partymember"))
 
     // androidx
     implementation(libs.androidx.core.ktx)
