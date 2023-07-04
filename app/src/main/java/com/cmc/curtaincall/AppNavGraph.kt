@@ -11,7 +11,7 @@ import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.feature.auth.AuthDestination
 import com.cmc.curtaincall.feature.auth.authNavGraph
 import com.cmc.curtaincall.feature.home.HomeDestination
-import com.cmc.curtaincall.feature.home.ui.HomeScreen
+import com.cmc.curtaincall.feature.home.HomeNavHost
 import com.cmc.curtaincall.ui.SplashScreen
 
 private const val ROOT_GRAPH = "root_graph"
@@ -49,7 +49,7 @@ internal fun AppNavHost(navHostController: NavHostController = rememberNavContro
         }
 
         composable(route = HomeDestination.Home.route) {
-            HomeScreen()
+            HomeNavHost()
         }
 
         authNavGraph(
