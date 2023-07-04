@@ -10,10 +10,12 @@ style:
     ignoreAnnotated: [ 'preview' ]
   WildcardImport:
     active: false
+  UnusedParameter:
+    active: false
 
 naming:
   TopLevelPropertyNaming:
-    constantPattern: '[A-Z][A-Za-z0-9]*'
+    constantPattern: '[A-Z][A-Za-z0-9_]*'
   FunctionNaming:
     ignoreAnnotated: [ 'Composable' ]
 
