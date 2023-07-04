@@ -8,7 +8,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.cmc.curtaincall.navigation.AppNavHost
 import com.cmc.curtaincall.ui.theme.CurtainCallTheme
 
 class MainActivity : ComponentActivity() {
