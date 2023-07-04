@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.home.ui
+package com.cmc.curtaincall.feature.livetalk.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
@@ -10,30 +10,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HomeScreen(
-    onNavigatePerformance: () -> Unit,
-    onNavigateLiveTalk: () -> Unit
+fun LiveTalkScreen(
+    onNavigateDetail: () -> Unit
 ) {
     Column {
         Text(
-            text = "home",
+            text = "livetalk",
             modifier = Modifier.size(100.dp, 100.dp)
         )
 
         Button(
-            onClick = { onNavigatePerformance() },
+            onClick = { onNavigateDetail() },
             modifier = Modifier.size(150.dp, 50.dp),
             shape = RoundedCornerShape(10.dp)
         ) {
-            Text(text = "performance")
-        }
-
-        Button(
-            onClick = { onNavigateLiveTalk() },
-            modifier = Modifier.size(150.dp, 50.dp),
-            shape = RoundedCornerShape(10.dp)
-        ) {
-            Text(text = "livetalk")
+            Text(text = "livetalk detail")
         }
     }
 }
