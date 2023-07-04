@@ -4,7 +4,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
 }
 
-
 android {
     namespace = "com.cmc.curtaincall.feature.auth"
 
