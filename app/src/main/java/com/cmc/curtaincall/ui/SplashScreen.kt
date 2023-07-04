@@ -38,12 +38,3 @@ fun SplashScreen(
         }
     }
 }
-
-@Preview
-@Composable
-private fun SplashScreenPreview() {
-    SplashScreen(
-        onNavigateLoginUp = {},
-        onNavigateHome = {}
-    )
-}
