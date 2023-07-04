@@ -13,6 +13,10 @@ import com.cmc.curtaincall.feature.livetalk.LIVETALK
 import com.cmc.curtaincall.feature.livetalk.LiveTalkDestination
 import com.cmc.curtaincall.feature.livetalk.livetalkNavGraph
 import com.cmc.curtaincall.feature.livetalk.ui.LiveTalkScreen
+import com.cmc.curtaincall.feature.partymember.PARTYMEMBER
+import com.cmc.curtaincall.feature.partymember.PartyMemberDestination
+import com.cmc.curtaincall.feature.partymember.partymemberNavGraph
+import com.cmc.curtaincall.feature.partymember.ui.PartymemberScreen
 import com.cmc.curtaincall.feature.performance.PERFORMANCE
 import com.cmc.curtaincall.feature.performance.PerformanceDestination
 import com.cmc.curtaincall.feature.performance.performanceNavGraph
@@ -33,6 +37,10 @@ sealed interface HomeDestination : CurtainCallDestination {
     object LiveTalk : HomeDestination {
         override val route = LIVETALK
     }
+
+    object PartyMember : HomeDestination {
+        override val route = PARTYMEMBER
+    }
 }
 
 @Composable
@@ -50,6 +58,9 @@ fun HomeNavHost(navHostController: NavHostController = rememberNavController()) 
                 },
                 onNavigateLiveTalk = {
                     navHostController.navigate(HomeDestination.LiveTalk.route)
+                },
+                onNavigatePartyMember = {
+                    navHostController.navigate(HomeDestination.PartyMember.route)
                 }
             )
         }
@@ -70,7 +81,16 @@ fun HomeNavHost(navHostController: NavHostController = rememberNavController()) 
             )
         }
 
+        composable(HomeDestination.PartyMember.route) {
+            PartymemberScreen(
+                onNavigateDetail = {
+                    navHostController.navigate(PartyMemberDestination.Detail.route)
+                }
+            )
+        }
+
         performanceNavGraph(navHostController)
         livetalkNavGraph(navHostController)
+        partymemberNavGraph(navHostController)
     }
 }

@@ -12,7 +12,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun HomeScreen(
     onNavigatePerformance: () -> Unit,
-    onNavigateLiveTalk: () -> Unit
+    onNavigateLiveTalk: () -> Unit,
+    onNavigatePartyMember: () -> Unit
 ) {
     Column {
         Text(
@@ -34,6 +35,14 @@ fun HomeScreen(
             shape = RoundedCornerShape(10.dp)
         ) {
             Text(text = "livetalk")
+        }
+
+        Button(
+            onClick = { onNavigatePartyMember() },
+            modifier = Modifier.size(150.dp, 50.dp),
+            shape = RoundedCornerShape(10.dp)
+        ) {
+            Text(text = "partymember")
         }
     }
 }
