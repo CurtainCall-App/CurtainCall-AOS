@@ -13,7 +13,8 @@ import androidx.compose.ui.unit.dp
 fun HomeScreen(
     onNavigatePerformance: () -> Unit,
     onNavigateLiveTalk: () -> Unit,
-    onNavigatePartyMember: () -> Unit
+    onNavigatePartyMember: () -> Unit,
+    onNavigateMyPage: () -> Unit
 ) {
     Column {
         Text(
@@ -43,6 +44,14 @@ fun HomeScreen(
             shape = RoundedCornerShape(10.dp)
         ) {
             Text(text = "partymember")
+        }
+
+        Button(
+            onClick = { onNavigateMyPage() },
+            modifier = Modifier.size(150.dp, 50.dp),
+            shape = RoundedCornerShape(10.dp)
+        ) {
+            Text(text = "mypage")
         }
     }
 }

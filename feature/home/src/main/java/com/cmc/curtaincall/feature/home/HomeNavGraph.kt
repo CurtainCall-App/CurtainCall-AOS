@@ -13,6 +13,8 @@ import com.cmc.curtaincall.feature.livetalk.LIVETALK
 import com.cmc.curtaincall.feature.livetalk.LiveTalkDestination
 import com.cmc.curtaincall.feature.livetalk.livetalkNavGraph
 import com.cmc.curtaincall.feature.livetalk.ui.LiveTalkScreen
+import com.cmc.curtaincall.feature.mypage.MyPageDestination
+import com.cmc.curtaincall.feature.mypage.mypageNavGraph
 import com.cmc.curtaincall.feature.partymember.PARTYMEMBER
 import com.cmc.curtaincall.feature.partymember.PartyMemberDestination
 import com.cmc.curtaincall.feature.partymember.partymemberNavGraph
@@ -61,6 +63,9 @@ fun HomeNavHost(navHostController: NavHostController = rememberNavController()) 
                 },
                 onNavigatePartyMember = {
                     navHostController.navigate(HomeDestination.PartyMember.route)
+                },
+                onNavigateMyPage = {
+                    navHostController.navigate(MyPageDestination.MyPage.route)
                 }
             )
         }
@@ -92,5 +97,6 @@ fun HomeNavHost(navHostController: NavHostController = rememberNavController()) 
         performanceNavGraph(navHostController)
         livetalkNavGraph(navHostController)
         partymemberNavGraph(navHostController)
+        mypageNavGraph(navHostController)
     }
 }
