@@ -52,6 +52,17 @@ internal fun AppNavHost(navHostController: NavHostController = rememberNavContro
             HomeScreen()
         }
 
-        authNavGraph()
+        authNavGraph(
+            onNavigateSignUp = {
+                navHostController.navigate(AuthDestination.SignUp.route)
+            },
+            onNavigateHome = {
+                navHostController.navigate(HomeDestination.Home.route) {
+                    popUpTo(AuthDestination.Login.route) {
+                        inclusive = true
+                    }
+                }
+            }
+        )
     }
 }

@@ -21,14 +21,17 @@ sealed interface AuthDestination : CurtainCallDestination {
     }
 }
 
-fun NavGraphBuilder.authNavGraph() {
+fun NavGraphBuilder.authNavGraph(
+    onNavigateSignUp: () -> Unit,
+    onNavigateHome: () -> Unit
+) {
     navigation(startDestination = AuthDestination.Login.route, route = AUTH_GRAPH) {
         composable(route = AuthDestination.Login.route) {
-            LoginScreen()
+            LoginScreen(onNavigateSignUp, onNavigateHome)
         }
 
         composable(route = AuthDestination.SignUp.route) {
-            SignUpScreen()
+            SignUpScreen(onNavigateHome)
         }
     }
 }
