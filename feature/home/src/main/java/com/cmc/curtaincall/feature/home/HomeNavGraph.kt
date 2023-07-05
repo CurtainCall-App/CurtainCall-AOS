@@ -1,13 +1,18 @@
 package com.cmc.curtaincall.feature.home
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.cmc.curtaincall.core.base.CurtainCallDestination
+import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.core.base.BottomDestination
+import com.cmc.curtaincall.feature.home.ui.HomeBottomBar
 import com.cmc.curtaincall.feature.home.ui.HomeScreen
 import com.cmc.curtaincall.feature.livetalk.LIVETALK
 import com.cmc.curtaincall.feature.livetalk.LiveTalkDestination
@@ -27,76 +32,87 @@ import com.cmc.curtaincall.feature.performance.ui.PerformanceScreen
 private const val HOME_GRAPH = "home_graph"
 private const val HOME = "home"
 
-sealed interface HomeDestination : CurtainCallDestination {
+sealed interface HomeDestination : BottomDestination {
     object Home : HomeDestination {
         override val route = HOME
+        override val icon = R.drawable.ic_home
     }
 
     object Performance : HomeDestination {
         override val route = PERFORMANCE
+        override val icon = R.drawable.ic_performance
     }
 
     object LiveTalk : HomeDestination {
         override val route = LIVETALK
+        override val icon = R.drawable.ic_my
     }
 
     object PartyMember : HomeDestination {
         override val route = PARTYMEMBER
+        override val icon = R.drawable.ic_partymember
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeNavHost(navHostController: NavHostController = rememberNavController()) {
-    NavHost(
-        navController = navHostController,
-        startDestination = HomeDestination.Home.route,
-        modifier = Modifier.fillMaxSize(),
-        route = HOME_GRAPH
-    ) {
-        composable(HomeDestination.Home.route) {
-            HomeScreen(
-                onNavigatePerformance = {
-                    navHostController.navigate(HomeDestination.Performance.route)
-                },
-                onNavigateLiveTalk = {
-                    navHostController.navigate(HomeDestination.LiveTalk.route)
-                },
-                onNavigatePartyMember = {
-                    navHostController.navigate(HomeDestination.PartyMember.route)
-                },
-                onNavigateMyPage = {
-                    navHostController.navigate(MyPageDestination.MyPage.route)
-                }
-            )
-        }
+    Scaffold(
+        bottomBar = { HomeBottomBar(navHostController) }
+    ) { innerPadding ->
+        NavHost(
+            navController = navHostController,
+            startDestination = HomeDestination.Home.route,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+            route = HOME_GRAPH
+        ) {
+            composable(HomeDestination.Home.route) {
+                HomeScreen(
+                    onNavigatePerformance = {
+                        navHostController.navigate(HomeDestination.Performance.route)
+                    },
+                    onNavigateLiveTalk = {
+                        navHostController.navigate(HomeDestination.LiveTalk.route)
+                    },
+                    onNavigatePartyMember = {
+                        navHostController.navigate(HomeDestination.PartyMember.route)
+                    },
+                    onNavigateMyPage = {
+                        navHostController.navigate(MyPageDestination.MyPage.route)
+                    }
+                )
+            }
 
-        composable(HomeDestination.Performance.route) {
-            PerformanceScreen(
-                onNavigateDetail = {
-                    navHostController.navigate(PerformanceDestination.Detail.route)
-                }
-            )
-        }
+            composable(HomeDestination.Performance.route) {
+                PerformanceScreen(
+                    onNavigateDetail = {
+                        navHostController.navigate(PerformanceDestination.Detail.route)
+                    }
+                )
+            }
 
-        composable(HomeDestination.LiveTalk.route) {
-            LiveTalkScreen(
-                onNavigateDetail = {
-                    navHostController.navigate(LiveTalkDestination.Detail.route)
-                }
-            )
-        }
+            composable(HomeDestination.LiveTalk.route) {
+                LiveTalkScreen(
+                    onNavigateDetail = {
+                        navHostController.navigate(LiveTalkDestination.Detail.route)
+                    }
+                )
+            }
 
-        composable(HomeDestination.PartyMember.route) {
-            PartymemberScreen(
-                onNavigateDetail = {
-                    navHostController.navigate(PartyMemberDestination.Detail.route)
-                }
-            )
-        }
+            composable(HomeDestination.PartyMember.route) {
+                PartymemberScreen(
+                    onNavigateDetail = {
+                        navHostController.navigate(PartyMemberDestination.Detail.route)
+                    }
+                )
+            }
 
-        performanceNavGraph(navHostController)
-        livetalkNavGraph(navHostController)
-        partymemberNavGraph(navHostController)
-        mypageNavGraph(navHostController)
+            performanceNavGraph(navHostController)
+            livetalkNavGraph(navHostController)
+            partymemberNavGraph(navHostController)
+            mypageNavGraph(navHostController)
+        }
     }
 }
