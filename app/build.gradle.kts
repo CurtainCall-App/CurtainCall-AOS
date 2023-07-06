@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.android.application)
@@ -8,6 +10,7 @@ android {
     namespace = "com.cmc.curtaincall"
 
     defaultConfig {
+        buildConfigField("String", "KAKAO_APP_KEY", gradleLocalProperties(rootDir).getProperty("KAKAO_APP_KEY"))
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -41,6 +44,9 @@ dependencies {
 
     // logging
     implementation(libs.timber)
+
+    // auth
+    implementation(libs.kakao.user)
 
     // test
     testImplementation(libs.junit)
