@@ -23,10 +23,8 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.CancellableContinuation
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
-import timber.log.Timber
 import kotlin.coroutines.resume
 
 @Composable
@@ -86,8 +84,8 @@ fun LoginScreen(
             onClick = {
                 coroutineScope.launch {
                     val result = loginKaKao(context)
-                    if(result is KaKaoLoginResult.Success){
-                        Timber.d("kakao login ${result.idToken}")
+                    if (result is KaKaoLoginResult.Success) {
+                        onNavigateHome()
                     }
                 }
             },
@@ -107,7 +105,6 @@ private fun getGoogleSignInClient(context: Context): GoogleSignInClient =
         .requestIdToken(context.getString(R.string.google_web_client_id))
         .build()
         .let { GoogleSignIn.getClient(context, it) }
-
 
 internal sealed interface KaKaoLoginResult {
     data class Success(val idToken: String) : KaKaoLoginResult
@@ -130,7 +127,6 @@ private suspend fun loginKaKao(context: Context): KaKaoLoginResult = suspendCanc
         loginWithKaKaoAccount(context, continuation)
     }
 }
-
 
 private fun loginWithKaKaoAccount(
     context: Context,

@@ -11,7 +11,7 @@ android {
     namespace = "com.cmc.curtaincall.feature.auth"
 
     defaultConfig {
-        manifestPlaceholders["KAKAO_REDIRECT_SCHEME"] = "kakao${gradleLocalProperties(rootDir).getProperty("KAKAO_APP_KEY")}"
+        resValue("string", "KAKAO_REDIRECT_SCHEME", "kakao${gradleLocalProperties(rootDir).getProperty("KAKAO_APP_KEY")}")
         consumerProguardFiles("consumer-rules.pro")
     }
 
