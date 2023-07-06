@@ -19,7 +19,7 @@ private const val PERFORMANCE_REVIEW = "performance_review"
 sealed interface PerformanceDestination : CurtainCallDestination {
     object Performance : PerformanceDestination, BottomDestination {
         override val route = PERFORMANCE
-        override val icon = R.drawable.ic_home
+        override val icon = R.drawable.ic_performance
     }
 
     object Detail : PerformanceDestination {
