@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.android.library)
@@ -9,6 +11,7 @@ android {
     namespace = "com.cmc.curtaincall.feature.auth"
 
     defaultConfig {
+        resValue("string", "KAKAO_REDIRECT_SCHEME", "kakao${gradleLocalProperties(rootDir).getProperty("KAKAO_APP_KEY")}")
         consumerProguardFiles("consumer-rules.pro")
     }
 
@@ -41,8 +44,11 @@ dependencies {
     implementation(libs.firebase.auth.ktx)
     implementation(libs.play.services.auth)
 
-    // loggin
+    // logging
     implementation(libs.timber)
+
+    // auth
+    implementation(libs.kakao.user)
 
     implementation(libs.androidx.core.ktx)
     testImplementation(libs.junit)

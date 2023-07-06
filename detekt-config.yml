@@ -1,6 +1,8 @@
 complexity:
   LongParameterList:
     ignoreDefaultParameters: true
+  LongMethod:
+    active: false
 
 style:
   MagicNumber:
@@ -11,6 +13,8 @@ style:
   WildcardImport:
     active: false
   UnusedParameter:
+    active: false
+  MaxLineLength:
     active: false
 
 naming:
@@ -23,4 +27,8 @@ empty-blocks:
   EmptyClassBlock:
     active: false
   EmptyKtFile:
+    active: false
+
+exceptions:
+  ThrowingExceptionsWithoutMessageOrCause:
     active: false
