@@ -27,7 +27,6 @@ import com.cmc.curtaincall.feature.performance.performanceNavGraph
 private const val HOME_GRAPH = "home_graph"
 private const val HOME = "home"
 
-
 object HomeDestination : CurtainCallDestination, BottomDestination {
     override val route = HOME
     override val icon = R.drawable.ic_home
