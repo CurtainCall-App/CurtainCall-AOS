@@ -72,7 +72,7 @@ fun HomeNavHost(navHostController: NavHostController = rememberNavController()) 
         composable(HomeDestination.Home.route) {
             HomeScreen(
                 onNavigatePerformance = {
-                    navHostController.navigate(HomeDestination.Performance.route)
+                    navHostController.navigate(PerformanceDestination.Performance.route)
                 },
                 onNavigateLiveTalk = {
                     navHostController.navigate(LiveTalkDestination.LiveTalk.route)
@@ -82,14 +82,6 @@ fun HomeNavHost(navHostController: NavHostController = rememberNavController()) 
                 },
                 onNavigateMyPage = {
                     navHostController.navigate(MyPageDestination.MyPage.route)
-                }
-            )
-        }
-
-        composable(HomeDestination.Performance.route) {
-            PerformanceScreen(
-                onNavigateDetail = {
-                    navHostController.navigate(PerformanceDestination.Detail.route)
                 }
             )
         }

@@ -7,6 +7,7 @@ import androidx.navigation.navigation
 import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.feature.performance.ui.PerformanceDetailScreen
 import com.cmc.curtaincall.feature.performance.ui.PerformanceReviewScreen
+import com.cmc.curtaincall.feature.performance.ui.PerformanceScreen
 
 private const val PERFORMANCE_GRAPH = "performance_graph"
 const val PERFORMANCE = "performance"
@@ -14,6 +15,10 @@ private const val PERFORMANCE_DETAIL = "performance_detail"
 private const val PERFORMANCE_REVIEW = "performance_review"
 
 sealed interface PerformanceDestination : CurtainCallDestination {
+    object Performance : PerformanceDestination {
+        override val route = PERFORMANCE
+    }
+
     object Detail : PerformanceDestination {
         override val route = PERFORMANCE_DETAIL
     }
@@ -25,6 +30,12 @@ sealed interface PerformanceDestination : CurtainCallDestination {
 
 fun NavGraphBuilder.performanceNavGraph(navHostController: NavHostController) {
     navigation(startDestination = PerformanceDestination.Detail.route, route = PERFORMANCE_GRAPH) {
+        composable(route = PerformanceDestination.Performance.route) {
+            PerformanceScreen {
+                navHostController.navigate(PerformanceDestination.Detail.route)
+            }
+        }
+
         composable(route = PerformanceDestination.Detail.route) {
             PerformanceDetailScreen(
                 onNavigateReview = {
