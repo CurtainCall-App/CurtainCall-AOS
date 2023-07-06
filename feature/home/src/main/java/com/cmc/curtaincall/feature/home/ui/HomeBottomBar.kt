@@ -1,9 +1,9 @@
 package com.cmc.curtaincall.feature.home.ui
 
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.painterResource
@@ -33,7 +33,7 @@ fun HomeBottomBar(navHostController: NavHostController) {
     val hasBottomNavigation = bottomDestinations.any { it.route == currentDestination?.route }
 
     if (hasBottomNavigation) {
-        BottomNavigation {
+        NavigationBar {
             bottomDestinations.forEach { bottomDestination ->
                 HomeBottomBarItem(
                     bottomDestination = bottomDestination,
@@ -52,7 +52,7 @@ fun RowScope.HomeBottomBarItem(
     navHostController: NavHostController
 ) {
     require(bottomDestination is BottomDestination)
-    BottomNavigationItem(
+    NavigationBarItem(
         selected = bottomDestination.route == currentDestination?.route,
         onClick = { navHostController.navigate(bottomDestination.route) },
         icon = { Icon(painter = painterResource(bottomDestination.icon), contentDescription = null) }
