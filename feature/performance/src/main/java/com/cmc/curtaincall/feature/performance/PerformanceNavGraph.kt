@@ -4,7 +4,9 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
+import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.feature.performance.ui.PerformanceDetailScreen
 import com.cmc.curtaincall.feature.performance.ui.PerformanceReviewScreen
 import com.cmc.curtaincall.feature.performance.ui.PerformanceScreen
@@ -15,8 +17,9 @@ private const val PERFORMANCE_DETAIL = "performance_detail"
 private const val PERFORMANCE_REVIEW = "performance_review"
 
 sealed interface PerformanceDestination : CurtainCallDestination {
-    object Performance : PerformanceDestination {
+    object Performance : PerformanceDestination, BottomDestination {
         override val route = PERFORMANCE
+        override val icon = R.drawable.ic_home
     }
 
     object Detail : PerformanceDestination {

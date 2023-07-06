@@ -25,6 +25,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":common:design"))
     implementation(project(":core:base"))
 
     // androidx

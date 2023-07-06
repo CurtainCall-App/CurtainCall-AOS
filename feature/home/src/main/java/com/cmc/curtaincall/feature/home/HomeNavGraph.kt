@@ -1,36 +1,25 @@
 package com.cmc.curtaincall.feature.home
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navigation
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
-import com.cmc.curtaincall.feature.home.ui.HomeBottomBar
 import com.cmc.curtaincall.feature.home.ui.HomeScreen
-import com.cmc.curtaincall.feature.livetalk.LIVETALK
 import com.cmc.curtaincall.feature.livetalk.LiveTalkDestination
 import com.cmc.curtaincall.feature.livetalk.livetalkNavGraph
-import com.cmc.curtaincall.feature.livetalk.ui.LiveTalkScreen
 import com.cmc.curtaincall.feature.mypage.MyPageDestination
 import com.cmc.curtaincall.feature.mypage.mypageNavGraph
-import com.cmc.curtaincall.feature.partymember.PARTYMEMBER
 import com.cmc.curtaincall.feature.partymember.PartyMemberDestination
 import com.cmc.curtaincall.feature.partymember.partymemberNavGraph
-import com.cmc.curtaincall.feature.partymember.ui.PartymemberScreen
-import com.cmc.curtaincall.feature.performance.PERFORMANCE
 import com.cmc.curtaincall.feature.performance.PerformanceDestination
 import com.cmc.curtaincall.feature.performance.performanceNavGraph
-import com.cmc.curtaincall.feature.performance.ui.PerformanceScreen
 
 private const val HOME_GRAPH = "home_graph"
 private const val HOME = "home"

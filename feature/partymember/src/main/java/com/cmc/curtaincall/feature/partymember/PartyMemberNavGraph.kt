@@ -7,14 +7,17 @@ import androidx.navigation.navigation
 import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.feature.partymember.ui.PartyMemberDetailScreen
 import com.cmc.curtaincall.feature.partymember.ui.PartymemberScreen
+import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.core.base.BottomDestination
 
 private const val PARTYMEMBER_GRAPH = "partymember_graph"
 const val PARTYMEMBER = "partymember"
 private const val PARTYMEMBER_DETAIL = "partymemeber_detail"
 
 sealed interface PartyMemberDestination : CurtainCallDestination {
-    object PartyMember : PartyMemberDestination {
+    object PartyMember : PartyMemberDestination, BottomDestination {
         override val route = PARTYMEMBER
+        override val icon = R.drawable.ic_partymember
     }
 
     object Detail : PartyMemberDestination {

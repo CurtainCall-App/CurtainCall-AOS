@@ -4,10 +4,12 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.feature.mypage.ui.MyPageScreen
 import com.cmc.curtaincall.feature.mypage.ui.ParticipantScreen
 import com.cmc.curtaincall.feature.mypage.ui.RecruitmentScreen
+import com.cmc.curtaincall.common.design.R
 
 private const val MYPAGE_GRAPH = "mypage_graph"
 const val MYPAGE = "mypage"
@@ -20,8 +22,9 @@ private const val MYPAGE_CONTACT = "mypage_contact"
 private const val MYPAGE_LOGOUT = "mypage_logout"
 
 sealed interface MyPageDestination : CurtainCallDestination {
-    object MyPage : MyPageDestination {
+    object MyPage : MyPageDestination, BottomDestination {
         override val route = MYPAGE
+        override val icon = R.drawable.ic_my
     }
 
     object Recruitment : MyPageDestination {
