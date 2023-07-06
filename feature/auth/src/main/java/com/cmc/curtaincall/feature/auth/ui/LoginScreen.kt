@@ -78,5 +78,3 @@ private fun getGoogleSignInClient(context: Context): GoogleSignInClient =
         .requestIdToken(context.getString(R.string.google_web_client_id))
         .build()
         .let { GoogleSignIn.getClient(context, it) }
-
-
