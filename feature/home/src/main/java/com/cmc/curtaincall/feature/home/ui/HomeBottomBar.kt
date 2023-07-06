@@ -15,28 +15,28 @@ import com.cmc.curtaincall.feature.home.HomeDestination
 
 @Composable
 fun HomeBottomBar(navHostController: NavHostController) {
-    val bottomDestinations = listOf(
-        HomeDestination.Home,
-        HomeDestination.Performance,
-        HomeDestination.LiveTalk,
-        HomeDestination.PartyMember
-    )
-
-    val navBackStackEntry by navHostController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
-    val hasBottomNavigation = bottomDestinations.any { it.route == currentDestination?.route }
-
-    if (hasBottomNavigation) {
-        BottomNavigation {
-            bottomDestinations.forEach { bottomDestination ->
-                HomeBottomBarItem(
-                    bottomDestination = bottomDestination,
-                    currentDestination = currentDestination,
-                    navHostController = navHostController
-                )
-            }
-        }
-    }
+//    val bottomDestinations = listOf(
+//        HomeDestination.Home,
+//        HomeDestination.Performance,
+//        HomeDestination.LiveTalk,
+//        HomeDestination.PartyMember
+//    )
+//
+//    val navBackStackEntry by navHostController.currentBackStackEntryAsState()
+//    val currentDestination = navBackStackEntry?.destination
+//    val hasBottomNavigation = bottomDestinations.any { it.route == currentDestination?.route }
+//
+//    if (hasBottomNavigation) {
+//        BottomNavigation {
+//            bottomDestinations.forEach { bottomDestination ->
+//                HomeBottomBarItem(
+//                    bottomDestination = bottomDestination,
+//                    currentDestination = currentDestination,
+//                    navHostController = navHostController
+//                )
+//            }
+//        }
+//    }
 }
 
 @Composable
@@ -45,12 +45,12 @@ fun RowScope.HomeBottomBarItem(
     currentDestination: NavDestination?,
     navHostController: NavHostController
 ) {
-    BottomNavigationItem(
-        selected = bottomDestination.route == currentDestination?.route,
-        onClick = {
-        },
-        icon = {
-            Icon(painter = painterResource(bottomDestination.icon), contentDescription = null)
-        }
-    )
+//    BottomNavigationItem(
+//        selected = bottomDestination.route == currentDestination?.route,
+//        onClick = {
+//        },
+//        icon = {
+//            Icon(painter = painterResource(bottomDestination.icon), contentDescription = null)
+//        }
+//    )
 }

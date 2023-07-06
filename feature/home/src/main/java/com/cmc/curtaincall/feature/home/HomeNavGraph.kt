@@ -6,12 +6,15 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.core.base.BottomDestination
+import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.feature.home.ui.HomeBottomBar
 import com.cmc.curtaincall.feature.home.ui.HomeScreen
 import com.cmc.curtaincall.feature.livetalk.LIVETALK
@@ -32,26 +35,10 @@ import com.cmc.curtaincall.feature.performance.ui.PerformanceScreen
 private const val HOME_GRAPH = "home_graph"
 private const val HOME = "home"
 
-sealed interface HomeDestination : BottomDestination {
-    object Home : HomeDestination {
-        override val route = HOME
-        override val icon = R.drawable.ic_home
-    }
 
-    object Performance : HomeDestination {
-        override val route = PERFORMANCE
-        override val icon = R.drawable.ic_performance
-    }
-
-    object LiveTalk : HomeDestination {
-        override val route = LIVETALK
-        override val icon = R.drawable.ic_my
-    }
-
-    object PartyMember : HomeDestination {
-        override val route = PARTYMEMBER
-        override val icon = R.drawable.ic_partymember
-    }
+object HomeDestination : CurtainCallDestination, BottomDestination {
+    override val route = HOME
+    override val icon = R.drawable.ic_home
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,11 +52,11 @@ fun HomeNavHost(navHostController: NavHostController = rememberNavController()) 
 
     NavHost(
         navController = navHostController,
-        startDestination = HomeDestination.Home.route,
+        startDestination = HomeDestination.route,
         modifier = Modifier.fillMaxSize(),
         route = HOME_GRAPH
     ) {
-        composable(HomeDestination.Home.route) {
+        composable(route = HomeDestination.route) {
             HomeScreen(
                 onNavigatePerformance = {
                     navHostController.navigate(PerformanceDestination.Performance.route)

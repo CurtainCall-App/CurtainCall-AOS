@@ -29,7 +29,7 @@ sealed interface PerformanceDestination : CurtainCallDestination {
 }
 
 fun NavGraphBuilder.performanceNavGraph(navHostController: NavHostController) {
-    navigation(startDestination = PerformanceDestination.Detail.route, route = PERFORMANCE_GRAPH) {
+    navigation(startDestination = PerformanceDestination.Performance.route, route = PERFORMANCE_GRAPH) {
         composable(route = PerformanceDestination.Performance.route) {
             PerformanceScreen {
                 navHostController.navigate(PerformanceDestination.Detail.route)

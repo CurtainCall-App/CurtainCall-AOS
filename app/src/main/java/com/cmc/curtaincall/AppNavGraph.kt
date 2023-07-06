@@ -39,7 +39,7 @@ internal fun AppNavHost(navHostController: NavHostController = rememberNavContro
                     }
                 },
                 onNavigateHome = {
-                    navHostController.navigate(HomeDestination.Home.route) {
+                    navHostController.navigate(HomeDestination.route) {
                         popUpTo(Splash.route) {
                             inclusive = true
                         }
@@ -48,7 +48,7 @@ internal fun AppNavHost(navHostController: NavHostController = rememberNavContro
             )
         }
 
-        composable(route = HomeDestination.Home.route) {
+        composable(route = HomeDestination.route) {
             HomeNavHost()
         }
 
@@ -57,7 +57,7 @@ internal fun AppNavHost(navHostController: NavHostController = rememberNavContro
                 navHostController.navigate(AuthDestination.SignUp.route)
             },
             onNavigateHome = {
-                navHostController.navigate(HomeDestination.Home.route) {
+                navHostController.navigate(HomeDestination.route) {
                     popUpTo(AuthDestination.Login.route) {
                         inclusive = true
                     }
