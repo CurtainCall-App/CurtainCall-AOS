@@ -25,15 +25,16 @@ fun LoginScreen(
     onNavigateHome: () -> Unit
 ) {
     val context = LocalContext.current
-    val registerGoogleLogin = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == RESULT_OK) {
-            result.data?.let { intent ->
-                val task = GoogleSignIn.getSignedInAccountFromIntent(intent)
-                checkNotNull(task.result.idToken)
-                onNavigateHome()
+    val registerGoogleLogin =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                result.data?.let { intent ->
+                    val task = GoogleSignIn.getSignedInAccountFromIntent(intent)
+                    checkNotNull(task.result.idToken)
+                    onNavigateHome()
+                }
             }
         }
-    }
 
     Column {
         Text(
