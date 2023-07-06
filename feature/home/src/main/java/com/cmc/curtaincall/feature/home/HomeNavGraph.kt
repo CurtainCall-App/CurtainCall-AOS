@@ -57,62 +57,54 @@ sealed interface HomeDestination : BottomDestination {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeNavHost(navHostController: NavHostController = rememberNavController()) {
-    Scaffold(
-        bottomBar = { HomeBottomBar(navHostController) }
-    ) { innerPadding ->
-        NavHost(
-            navController = navHostController,
-            startDestination = HomeDestination.Home.route,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            route = HOME_GRAPH
-        ) {
-            composable(HomeDestination.Home.route) {
-                HomeScreen(
-                    onNavigatePerformance = {
-                        navHostController.navigate(HomeDestination.Performance.route)
-                    },
-                    onNavigateLiveTalk = {
-                        navHostController.navigate(HomeDestination.LiveTalk.route)
-                    },
-                    onNavigatePartyMember = {
-                        navHostController.navigate(HomeDestination.PartyMember.route)
-                    },
-                    onNavigateMyPage = {
-                        navHostController.navigate(MyPageDestination.MyPage.route)
-                    }
-                )
-            }
+//    Scaffold(
+//        bottomBar = { HomeBottomBar(navHostController) }
+//    ) { innerPadding ->
+//
+//    }
 
-            composable(HomeDestination.Performance.route) {
-                PerformanceScreen(
-                    onNavigateDetail = {
-                        navHostController.navigate(PerformanceDestination.Detail.route)
-                    }
-                )
-            }
-
-            composable(HomeDestination.LiveTalk.route) {
-                LiveTalkScreen(
-                    onNavigateDetail = {
-                        navHostController.navigate(LiveTalkDestination.Detail.route)
-                    }
-                )
-            }
-
-            composable(HomeDestination.PartyMember.route) {
-                PartymemberScreen(
-                    onNavigateDetail = {
-                        navHostController.navigate(PartyMemberDestination.Detail.route)
-                    }
-                )
-            }
-
-            performanceNavGraph(navHostController)
-            livetalkNavGraph(navHostController)
-            partymemberNavGraph(navHostController)
-            mypageNavGraph(navHostController)
+    NavHost(
+        navController = navHostController,
+        startDestination = HomeDestination.Home.route,
+        modifier = Modifier.fillMaxSize(),
+        route = HOME_GRAPH
+    ) {
+        composable(HomeDestination.Home.route) {
+            HomeScreen(
+                onNavigatePerformance = {
+                    navHostController.navigate(HomeDestination.Performance.route)
+                },
+                onNavigateLiveTalk = {
+                    navHostController.navigate(HomeDestination.LiveTalk.route)
+                },
+                onNavigatePartyMember = {
+                    navHostController.navigate(PartyMemberDestination.PartyMember.route)
+                },
+                onNavigateMyPage = {
+                    navHostController.navigate(MyPageDestination.MyPage.route)
+                }
+            )
         }
+
+        composable(HomeDestination.Performance.route) {
+            PerformanceScreen(
+                onNavigateDetail = {
+                    navHostController.navigate(PerformanceDestination.Detail.route)
+                }
+            )
+        }
+
+        composable(HomeDestination.LiveTalk.route) {
+            LiveTalkScreen(
+                onNavigateDetail = {
+                    navHostController.navigate(LiveTalkDestination.Detail.route)
+                }
+            )
+        }
+
+        performanceNavGraph(navHostController)
+        livetalkNavGraph(navHostController)
+        partymemberNavGraph(navHostController)
+        mypageNavGraph(navHostController)
     }
 }
