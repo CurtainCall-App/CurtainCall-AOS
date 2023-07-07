@@ -30,6 +30,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":common:design"))
     implementation(project(":core:base"))
     implementation(project(":feature:auth"))
     implementation(project(":feature:home"))
