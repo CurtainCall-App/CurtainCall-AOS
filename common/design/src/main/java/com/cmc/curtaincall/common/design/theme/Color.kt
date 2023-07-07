@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.ui.theme
+package com.cmc.curtaincall.common.design.theme
 
 import androidx.compose.ui.graphics.Color
 
