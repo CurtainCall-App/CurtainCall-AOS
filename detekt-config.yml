@@ -16,6 +16,8 @@ style:
     active: false
   MaxLineLength:
     active: false
+  UseCheckOrError:
+    active: false
 
 naming:
   TopLevelPropertyNaming:
