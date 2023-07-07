@@ -12,6 +12,8 @@ android {
 
     defaultConfig {
         resValue("string", "KAKAO_REDIRECT_SCHEME", "kakao${gradleLocalProperties(rootDir).getProperty("KAKAO_APP_KEY")}")
+        resValue("string", "FACEBOOK_CLIENT_ID", gradleLocalProperties(rootDir).getProperty("FACEBOOK_CLIENT_ID"))
+        resValue("string", "FACEBOOK_CLIENT_TOKEN", gradleLocalProperties(rootDir).getProperty("FACEBOOK_CLIENT_TOKEN"))
         consumerProguardFiles("consumer-rules.pro")
     }
 
@@ -30,6 +32,7 @@ android {
 
 dependencies {
     implementation(project(":core:base"))
+    implementation(project(":common:utility"))
 
     // androidx
     implementation(libs.androidx.core.ktx)
@@ -49,6 +52,7 @@ dependencies {
 
     // auth
     implementation(libs.kakao.user)
+    implementation(libs.facebook.login)
 
     implementation(libs.androidx.core.ktx)
     testImplementation(libs.junit)
