@@ -42,6 +42,7 @@ dependencies {
     // compose
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.androidx.compose)
+    implementation(libs.bundles.accompanist.compose)
 
     // logging
     implementation(libs.timber)
