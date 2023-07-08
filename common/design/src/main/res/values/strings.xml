@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- splash -->
+    <string name="splash_logo_image_description">Splash Logo Image</string>
+
+    <!-- onboarding -->
+    <string name="onboarding_performance_navigation">작품 탐색</string>
+    <string name="onboarding_performance_navigation_description">현재 상영 중인 연극 및\n뮤지컬에 관한 모든 정보를\n확인할 수 있어요.</string>
+    <string name="onboarding_partymember_gathering">파티원 모집</string>
+    <string name="onboarding_partymember_gathering_description">보고 싶은 작품을 다른 사람과\n함께 감상하거나 이야기를 나누며\n작품을 온전히 즐길 수 있어요.</string>
+    <string name="onboarding_livetalk">라이브톡</string>
+    <string name="onboarding_livetalk_description">당일 상연하는 작품들에 한해\n실시간으로 다른 관객들과 함께\n이야기를 나눌 수 있어요.</string>
+    <string name="onboarding_skip">건너뛰기</string>
+    <string name="onboarding_login">로그인 하기</string>
+</resources>

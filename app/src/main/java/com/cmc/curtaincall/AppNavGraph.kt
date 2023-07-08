@@ -12,13 +12,19 @@ import com.cmc.curtaincall.feature.auth.AuthDestination
 import com.cmc.curtaincall.feature.auth.authNavGraph
 import com.cmc.curtaincall.feature.home.HomeDestination
 import com.cmc.curtaincall.feature.home.HomeNavHost
+import com.cmc.curtaincall.ui.OnBoardingScreen
 import com.cmc.curtaincall.ui.SplashScreen
 
 private const val ROOT_GRAPH = "root_graph"
 private const val SPLASH = "splash"
+private const val ONBOARDING = "onboarding"
 
 object Splash : CurtainCallDestination {
     override val route = SPLASH
+}
+
+object OnBoarding : CurtainCallDestination {
+    override val route = ONBOARDING
 }
 
 @Composable
@@ -30,17 +36,27 @@ internal fun AppNavHost(navHostController: NavHostController = rememberNavContro
         route = ROOT_GRAPH
     ) {
         composable(route = Splash.route) {
-            SplashScreen(
+            SplashScreen {
+                navHostController.navigate(OnBoarding.route) {
+                    popUpTo(Splash.route) {
+                        inclusive = true
+                    }
+                }
+            }
+        }
+
+        composable(route = OnBoarding.route) {
+            OnBoardingScreen(
                 onNavigateLoginUp = {
                     navHostController.navigate(AuthDestination.Login.route) {
-                        popUpTo(Splash.route) {
+                        popUpTo(OnBoarding.route) {
                             inclusive = true
                         }
                     }
                 },
                 onNavigateHome = {
                     navHostController.navigate(HomeDestination.route) {
-                        popUpTo(Splash.route) {
+                        popUpTo(OnBoarding.route) {
                             inclusive = true
                         }
                     }
