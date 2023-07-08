@@ -11,6 +11,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -21,6 +22,7 @@ import com.cmc.curtaincall.common.design.theme.French_Rose
 import com.cmc.curtaincall.common.design.theme.Gunmetal
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
+import com.google.accompanist.pager.HorizontalPagerIndicator
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -59,6 +61,16 @@ internal fun OnBoardingScreen(
                 }
             }
         }
+
+        HorizontalPagerIndicator(
+            pagerState = pagerState,
+            pageCount = pagerItems.size,
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(top = 28.dp, end = 22.dp),
+            activeColor = White,
+            inactiveColor = White.copy(alpha = 0.2f)
+        )
     }
 }
 
