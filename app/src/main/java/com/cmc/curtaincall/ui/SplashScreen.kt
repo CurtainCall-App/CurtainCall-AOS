@@ -34,7 +34,7 @@ fun SplashScreen(onNavigateOnBoarding: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(R.drawable.ic_splash_logo),
+            painter = painterResource(R.drawable.ic_logo),
             contentDescription = stringResource(R.string.splash_logo_image_description)
         )
     }

@@ -40,7 +40,7 @@ jobs:
       - name: Create Google Services
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        run: echo "$GOOGLE_SERVICES_JSON" > feature/auth/google-services.json
+        run: echo "$GOOGLE_SERVICES_JSON" > app/google-services.json
 
       - name: Access KAKAO_APP_KEY
         run: echo KAKAO_APP_KEY=\"$API_KEY\" >> local.properties

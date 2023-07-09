@@ -4,7 +4,6 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.google.services)
 }
 
 android {
@@ -31,6 +30,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":common:design"))
     implementation(project(":core:base"))
     implementation(project(":common:utility"))
 
