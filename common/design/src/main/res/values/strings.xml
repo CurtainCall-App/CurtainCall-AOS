@@ -12,4 +12,12 @@
     <string name="onboarding_livetalk_description">당일 상연하는 작품들에 한해\n실시간으로 다른 관객들과 함께\n이야기를 나눌 수 있어요.</string>
     <string name="onboarding_skip">건너뛰기</string>
     <string name="onboarding_login">로그인 하기</string>
+
+    <!-- login -->
+    <string name="login_logo_image_description">Login Logo Image</string>
+    <string name="login_start">3초만에 시작하기</string>
+    <string name="login_kakao">Login KaKao</string>
+    <string name="login_google">Login Google</string>
+    <string name="login_facebook">Login Facebook</string>
+<!--    <string name="google_web_client_id">539840727415-2nam5gaqftni97an0p0v8fl6udkv5o3b.apps.googleusercontent.com</string>-->
 </resources>
