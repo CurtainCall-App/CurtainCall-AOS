@@ -5,19 +5,28 @@ import android.content.Context
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.cmc.curtaincall.feature.auth.R
+import androidx.compose.ui.unit.sp
+import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.theme.French_Rose
+import com.cmc.curtaincall.common.design.theme.Gunmetal
+import com.cmc.curtaincall.common.design.theme.White
+import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 import com.facebook.CallbackManager
 import com.facebook.FacebookCallback
 import com.facebook.FacebookException
@@ -44,100 +53,137 @@ fun LoginScreen(
     onNavigateSignUp: () -> Unit,
     onNavigateHome: () -> Unit
 ) {
-    val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
-    val registerGoogleLogin = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == RESULT_OK) {
-            result.data?.let { intent ->
-                val task = GoogleSignIn.getSignedInAccountFromIntent(intent)
-                checkNotNull(task.result.idToken)
-                onNavigateHome()
-            }
-        }
-    }
-
-    val loginManager = LoginManager.getInstance()
-    val callbackManager = remember { CallbackManager.Factory.create() }
-    val registerFacebookLogin = rememberLauncherForActivityResult(loginManager.createLogInActivityResultContract(callbackManager)) {}
-
-    Column {
-        Text(
-            text = "login",
-            modifier = Modifier.size(100.dp, 100.dp)
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Gunmetal),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(R.drawable.ic_logo),
+            contentDescription = stringResource(R.string.login_logo_image_description),
+            modifier = Modifier.padding(top = 217.dp)
         )
 
-        Button(
-            onClick = { onNavigateSignUp() },
-            modifier = Modifier.size(100.dp, 50.dp),
-            shape = RoundedCornerShape(10.dp)
-        ) {
-            Text(text = "signup")
-        }
-
-        Button(
-            onClick = { onNavigateHome() },
-            modifier = Modifier.size(100.dp, 50.dp),
-            shape = RoundedCornerShape(10.dp)
-        ) {
-            Text(text = "home")
-        }
-
-        Button(
-            onClick = {
-                val signInClient = getGoogleSignInClient(context)
-                registerGoogleLogin.launch(signInClient.signInIntent)
-            },
+        Text(
+            text = stringResource(R.string.login_start),
             modifier = Modifier
-                .size(100.dp, 50.dp)
-                .padding(top = 10.dp),
-            shape = RoundedCornerShape(10.dp)
-        ) {
-            Text(text = "google")
-        }
+                .padding(top = 111.dp)
+                .background(French_Rose, RoundedCornerShape(22.dp))
+                .padding(vertical = 11.dp, horizontal = 17.dp),
+            color = White,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Bold,
+            fontFamily = spoqahansanseeo
+        )
 
-        Button(
-            onClick = {
-                coroutineScope.launch {
-                    val result = loginKaKao(context)
-                    if (result is AuthResult.Success) {
-                        onNavigateHome()
-                    }
-                }
-            },
-            modifier = Modifier
-                .size(100.dp, 50.dp)
-                .padding(top = 10.dp),
-            shape = RoundedCornerShape(10.dp)
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(top = 21.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "kakao")
-        }
-
-        Button(
-            onClick = {
-                coroutineScope.launch {
-                    val result = loginFacebook(
-                        loginManager = loginManager,
-                        callbackManager = callbackManager,
-                        launcher = registerFacebookLogin
-                    )
-                    if (result is AuthResult.Success) {
-                        onNavigateHome()
-                    }
-                }
-            },
-            modifier = Modifier
-                .size(100.dp, 50.dp)
-                .padding(top = 10.dp),
-            shape = RoundedCornerShape(10.dp)
-        ) {
-            Text(text = "facebook")
+            LoginKaKao(onNavigateSignUp, onNavigateHome)
+            Spacer(Modifier.width(16.dp))
+            LoginGoogle(onNavigateSignUp, onNavigateHome)
+            Spacer(Modifier.width(16.dp))
+            LoginFacebook(onNavigateSignUp, onNavigateHome)
         }
     }
 }
 
-fun getGoogleSignInClient(context: Context): GoogleSignInClient =
-    GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().requestIdToken(context.getString(R.string.google_web_client_id)).build()
-        .let { GoogleSignIn.getClient(context, it) }
+@Composable
+private fun LoginKaKao(
+    onNavigateSignUp: () -> Unit,
+    onNavigateHome: () -> Unit
+) {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    Image(
+        painter = painterResource(R.drawable.ic_kakao_login),
+        contentDescription = stringResource(R.string.login_kakao),
+        modifier = Modifier
+            .size(48.dp)
+            .clickable {
+                coroutineScope.launch {
+                    when (loginKaKao(context)) {
+                        is AuthResult.Success -> {
+                            // TODO 카카오 AccessToken 서버 전달
+                            onNavigateHome()
+                        }
+                        is AuthResult.Failure -> {
+                            // TODO 카카오 로그인 에러 메세지 정의
+                        }
+                    }
+                }
+            }
+    )
+}
+
+@Composable
+private fun LoginGoogle(
+    onNavigateSignUp: () -> Unit,
+    onNavigateHome: () -> Unit
+) {
+    val context = LocalContext.current
+    val registerGoogleLogin = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == RESULT_OK) {
+            // TODO 구글 AcceessToken 서버 전달
+            result.data?.let { intent ->
+                val task = GoogleSignIn.getSignedInAccountFromIntent(intent)
+                task.result.idToken?.let { token ->
+                    onNavigateHome()
+                }
+            }
+        } else {
+            // TODO 구글 로그인 에러 메세지 정의
+        }
+    }
+
+    Image(
+        painter = painterResource(R.drawable.ic_google_login),
+        contentDescription = stringResource(R.string.login_google),
+        modifier = Modifier
+            .size(48.dp)
+            .clickable {
+                val signInClient = getGoogleSignInClient(context)
+                registerGoogleLogin.launch(signInClient.signInIntent)
+            }
+    )
+}
+
+@Composable
+private fun LoginFacebook(
+    onNavigateSignUp: () -> Unit,
+    onNavigateHome: () -> Unit
+) {
+    val coroutineScope = rememberCoroutineScope()
+    val loginManager = LoginManager.getInstance()
+    val callbackManager = remember { CallbackManager.Factory.create() }
+    val registerFacebookLogin = rememberLauncherForActivityResult(
+        contract = loginManager.createLogInActivityResultContract(callbackManager),
+        onResult = {}
+    )
+
+    Image(
+        painter = painterResource(R.drawable.ic_facebook_login),
+        contentDescription = stringResource(R.string.login_facebook),
+        modifier = Modifier
+            .size(48.dp)
+            .clickable {
+                coroutineScope.launch {
+                    when (loginFacebook(loginManager, callbackManager, registerFacebookLogin)) {
+                        is AuthResult.Success -> {
+                            // TODO 페이스북 AccessToken 전달
+                            onNavigateHome()
+                        }
+                        is AuthResult.Failure -> {
+                            // TODO 페이스북 로그인 에러 메세지 정의
+                        }
+                    }
+                }
+            }
+    )
+}
 
 private suspend fun loginKaKao(context: Context): AuthResult = suspendCancellableCoroutine { continuation ->
     if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
@@ -168,6 +214,13 @@ private fun loginWithKaKaoAccount(
         }
     }
 }
+
+private fun getGoogleSignInClient(context: Context): GoogleSignInClient =
+    GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+        .requestEmail()
+        .requestIdToken(context.getString(com.cmc.curtaincall.feature.auth.R.string.google_web_client_id))
+        .build()
+        .let { GoogleSignIn.getClient(context, it) }
 
 private suspend fun loginFacebook(
     loginManager: LoginManager,
