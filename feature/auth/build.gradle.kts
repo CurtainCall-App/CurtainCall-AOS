@@ -41,6 +41,7 @@ dependencies {
     // compose
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.androidx.compose)
+    implementation(libs.bundles.accompanist.compose)
 
     // firebase
     implementation(platform(libs.firebase.bom))
