@@ -2,4 +2,11 @@
 <resources>
 
     <style name="Theme.CurtainCall" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.CurtainCall.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenAnimationDuration">500</item>
+        <item name="windowSplashScreenBackground">@color/gunmetal</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_spalsh_logo</item>
+        <item name="postSplashScreenTheme">@style/Theme.CurtainCall</item>
+    </style>
 </resources>
