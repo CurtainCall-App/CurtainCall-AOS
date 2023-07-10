@@ -108,7 +108,7 @@ private fun LoginKaKao(
                     when (loginKaKao(context)) {
                         is AuthResult.Success -> {
                             // TODO 카카오 AccessToken 서버 전달
-                            onNavigateHome()
+                            onNavigateSignUp()
                         }
                         is AuthResult.Failure -> {
                             // TODO 카카오 로그인 에러 메세지 정의
@@ -131,7 +131,7 @@ private fun LoginGoogle(
             result.data?.let { intent ->
                 val task = GoogleSignIn.getSignedInAccountFromIntent(intent)
                 task.result.idToken?.let { token ->
-                    onNavigateHome()
+                    onNavigateSignUp()
                 }
             }
         } else {
@@ -174,7 +174,7 @@ private fun LoginFacebook(
                     when (loginFacebook(loginManager, callbackManager, registerFacebookLogin)) {
                         is AuthResult.Success -> {
                             // TODO 페이스북 AccessToken 전달
-                            onNavigateHome()
+                            onNavigateSignUp()
                         }
                         is AuthResult.Failure -> {
                             // TODO 페이스북 로그인 에러 메세지 정의
