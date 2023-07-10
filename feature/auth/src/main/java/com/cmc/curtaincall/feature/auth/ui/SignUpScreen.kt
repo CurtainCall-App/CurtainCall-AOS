@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -11,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cmc.curtaincall.common.design.component.TopAppBarWithBack
@@ -145,6 +147,31 @@ private fun SignUpContent(modifier: Modifier = Modifier) {
                 allTermsState = listOf(marketingTermsState, locationTermsState, notificationTermsState, marketingTermsState).all { it }
             }
         )
+
+        Spacer(Modifier.weight(1f))
+
+        Button(
+            onClick = { },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(52.dp)
+                .padding(horizontal = 22.dp)
+                .padding(bottom = 15.dp),
+            enabled = serviceTermsState,
+            shape = RoundedCornerShape(15.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = if (serviceTermsState) Me_Pink else dPhilippine_Gray
+            )
+        ) {
+            Text(
+                text = stringResource(R.string.signup_terms_next),
+                color = if (serviceTermsState) White else Cadet_Grey,
+                fontSize = 17.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = spoqahansanseeo,
+                textAlign = TextAlign.Center
+            )
+        }
     }
 }
 
