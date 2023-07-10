@@ -78,6 +78,9 @@ internal fun AppNavHost(navHostController: NavHostController = rememberNavContro
                         inclusive = true
                     }
                 }
+            },
+            onBack = {
+                navHostController.popBackStack()
             }
         )
     }
