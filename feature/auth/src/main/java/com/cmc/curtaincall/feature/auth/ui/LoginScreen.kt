@@ -32,6 +32,7 @@ import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -53,6 +54,9 @@ fun LoginScreen(
     onNavigateSignUp: () -> Unit,
     onNavigateHome: () -> Unit
 ) {
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setStatusBarColor(Gunmetal)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -70,7 +74,8 @@ fun LoginScreen(
             modifier = Modifier
                 .padding(top = 111.dp)
                 .background(French_Rose, RoundedCornerShape(22.dp))
-                .padding(vertical = 11.dp, horizontal = 17.dp),
+                .padding(vertical = 11.dp, horizontal = 17.dp)
+                .clickable { onNavigateSignUp() },
             color = White,
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
