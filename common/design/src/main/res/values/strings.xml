@@ -36,4 +36,6 @@
     <string name="signup_input_nickname">닉네임을 입력해주세요.</string>
     <string name="signup_input_double_check">중복 확인</string>
     <string name="signup_input_next">다음</string>
+    <string name="signup_welcome_description">이제 커튼콜 이용을\n시작해볼까요?</string>기
+    <string name="signup_welcome_start">시작하기</string>
 </resources>

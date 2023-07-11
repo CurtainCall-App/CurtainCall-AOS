@@ -8,12 +8,14 @@ import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.feature.auth.ui.LoginScreen
 import com.cmc.curtaincall.feature.auth.ui.SignUpInputScreen
 import com.cmc.curtaincall.feature.auth.ui.SignUpTermsScreen
+import com.cmc.curtaincall.feature.auth.ui.WelComeScreen
 import com.cmc.curtaincall.feature.home.HomeDestination
 
 private const val AUTH_GRAPH = "auth_graph"
 private const val LOGIN = "login"
 private const val SIGNUP_TERMS = "signup_terms"
 private const val SIGNUP_INPUT = "signup_input"
+private const val WELCOME = "welcome"
 
 sealed interface AuthDestination : CurtainCallDestination {
     object Login : AuthDestination {
@@ -26,6 +28,10 @@ sealed interface AuthDestination : CurtainCallDestination {
 
     object SignUpInput : AuthDestination {
         override val route = SIGNUP_INPUT
+    }
+
+    object Welcome : AuthDestination {
+        override val route = WELCOME
     }
 }
 
@@ -59,9 +65,9 @@ fun NavGraphBuilder.authNavGraph(navHostController: NavHostController) {
 
         composable(route = AuthDestination.SignUpInput.route) {
             SignUpInputScreen(
-                onNavigateHome = {
-                    navHostController.navigate(HomeDestination.route) {
-                        popUpTo(AuthDestination.Login.route) {
+                onNavigateWelcome = {
+                    navHostController.navigate(AuthDestination.Welcome.route) {
+                        popUpTo(AuthDestination.SignUpInput.route) {
                             inclusive = true
                         }
                     }
@@ -70,6 +76,16 @@ fun NavGraphBuilder.authNavGraph(navHostController: NavHostController) {
                     navHostController.popBackStack()
                 }
             )
+        }
+
+        composable(route = AuthDestination.Welcome.route) {
+            WelComeScreen {
+                navHostController.navigate(HomeDestination.route) {
+                    popUpTo(AuthDestination.Login.route) {
+                        inclusive = true
+                    }
+                }
+            }
         }
     }
 }

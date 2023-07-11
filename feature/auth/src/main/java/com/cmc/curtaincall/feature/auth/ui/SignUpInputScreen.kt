@@ -27,7 +27,7 @@ private const val INPUT_CHECK_REGEX = "^[ㄱ-ㅎ가-힣a-zA-Z0-9]{6,15}$"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SignUpInputScreen(
-    onNavigateHome: () -> Unit,
+    onNavigateWelcome: () -> Unit,
     onBack: () -> Unit
 ) {
     Scaffold(
@@ -45,7 +45,8 @@ internal fun SignUpInputScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(White)
+                .background(White),
+            onNavigateWelcome = onNavigateWelcome
         )
     }
 }
@@ -53,7 +54,8 @@ internal fun SignUpInputScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SignUpInputContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateWelcome: () -> Unit
 ) {
     var nicknameState by remember { mutableStateOf("") }
     var nicknameCheckState by remember { mutableStateOf(false) }
@@ -145,7 +147,7 @@ private fun SignUpInputContent(
         Spacer(Modifier.weight(1f))
 
         Button(
-            onClick = { /*TODO*/ },
+            onClick = onNavigateWelcome,
             modifier = Modifier.fillMaxWidth()
                 .padding(bottom = 15.dp)
                 .padding(horizontal = 22.dp)
