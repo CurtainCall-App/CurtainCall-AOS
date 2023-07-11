@@ -33,4 +33,7 @@
     <string name="signup">회원가입</string>
     <string name="signup_input_description">커튼콜에서 사용할\n닉네임을 입력해주세요.</string>
     <string name="signup_input_sub_description">닉네임은 공백없이 최소 6자에서 최대 15자 이하로\n한글, 영문, 숫자를 자유롭게 조합해주세요.</string>
+    <string name="signup_input_nickname">닉네임을 입력해주세요.</string>
+    <string name="signup_input_double_check">중복 확인</string>
+    <string name="signup_input_next">다음</string>
 </resources>
