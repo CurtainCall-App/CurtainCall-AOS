@@ -34,7 +34,7 @@ fun TopAppBarWithBack(
                     color = Eerie_Black,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
-                    fontFamily = spoqahansanseeo,
+                    fontFamily = spoqahansanseeo
                 )
             }
         },

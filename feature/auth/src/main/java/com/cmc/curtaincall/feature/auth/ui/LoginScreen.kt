@@ -75,7 +75,7 @@ fun LoginScreen(
                 .padding(top = 111.dp)
                 .background(French_Rose, RoundedCornerShape(22.dp))
                 .padding(vertical = 11.dp, horizontal = 17.dp)
-                .clickable { onNavigateSignUpTerms() },
+                .clickable { onNavigateHome() },
             color = White,
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
