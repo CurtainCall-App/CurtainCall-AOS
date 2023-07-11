@@ -68,20 +68,6 @@ internal fun AppNavHost(navHostController: NavHostController = rememberNavContro
             HomeNavHost()
         }
 
-        authNavGraph(
-            onNavigateSignUp = {
-                navHostController.navigate(AuthDestination.SignUp.route)
-            },
-            onNavigateHome = {
-                navHostController.navigate(HomeDestination.route) {
-                    popUpTo(AuthDestination.Login.route) {
-                        inclusive = true
-                    }
-                }
-            },
-            onBack = {
-                navHostController.popBackStack()
-            }
-        )
+        authNavGraph(navHostController)
     }
 }

@@ -33,6 +33,7 @@ dependencies {
     implementation(project(":common:design"))
     implementation(project(":core:base"))
     implementation(project(":common:utility"))
+    implementation(project(":feature:home"))
 
     // androidx
     implementation(libs.androidx.core.ktx)

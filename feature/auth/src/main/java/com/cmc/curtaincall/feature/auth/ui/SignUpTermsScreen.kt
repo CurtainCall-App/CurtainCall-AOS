@@ -22,8 +22,8 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignUpScreen(
-    onNavigateHome: () -> Unit,
+internal fun SignUpTermsScreen(
+    onNavigateSignUpInput: () -> Unit,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -43,13 +43,17 @@ fun SignUpScreen(
         SignUpContent(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .padding(paddingValues),
+            onNavigateSignUpInput = onNavigateSignUpInput
         )
     }
 }
 
 @Composable
-private fun SignUpContent(modifier: Modifier = Modifier) {
+private fun SignUpContent(
+    modifier: Modifier = Modifier,
+    onNavigateSignUpInput: () -> Unit
+) {
     var allTermsState by remember { mutableStateOf(false) }
     var serviceTermsState by remember { mutableStateOf(false) }
     var locationTermsState by remember { mutableStateOf(false) }
@@ -93,7 +97,8 @@ private fun SignUpContent(modifier: Modifier = Modifier) {
         )
 
         Spacer(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(horizontal = 22.dp)
                 .padding(top = 24.dp)
                 .height(1.dp)
@@ -151,7 +156,7 @@ private fun SignUpContent(modifier: Modifier = Modifier) {
         Spacer(Modifier.weight(1f))
 
         Button(
-            onClick = { },
+            onClick = onNavigateSignUpInput,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp)
@@ -217,7 +222,8 @@ private fun SignUpTerms(
             Icon(
                 painter = painterResource(R.drawable.ic_arrow_down),
                 contentDescription = description,
-                modifier = Modifier.size(24.dp, 24.dp)
+                modifier = Modifier
+                    .size(24.dp, 24.dp)
                     .clickable { onClickDown() }
             )
         }

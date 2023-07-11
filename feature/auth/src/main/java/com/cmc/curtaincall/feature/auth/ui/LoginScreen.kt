@@ -51,7 +51,7 @@ private sealed interface AuthResult {
 
 @Composable
 fun LoginScreen(
-    onNavigateSignUp: () -> Unit,
+    onNavigateSignUpTerms: () -> Unit,
     onNavigateHome: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -75,7 +75,7 @@ fun LoginScreen(
                 .padding(top = 111.dp)
                 .background(French_Rose, RoundedCornerShape(22.dp))
                 .padding(vertical = 11.dp, horizontal = 17.dp)
-                .clickable { onNavigateSignUp() },
+                .clickable { onNavigateSignUpTerms() },
             color = White,
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
@@ -87,18 +87,18 @@ fun LoginScreen(
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            LoginKaKao(onNavigateSignUp, onNavigateHome)
+            LoginKaKao(onNavigateSignUpTerms, onNavigateHome)
             Spacer(Modifier.width(16.dp))
-            LoginGoogle(onNavigateSignUp, onNavigateHome)
+            LoginGoogle(onNavigateSignUpTerms, onNavigateHome)
             Spacer(Modifier.width(16.dp))
-            LoginFacebook(onNavigateSignUp, onNavigateHome)
+            LoginFacebook(onNavigateSignUpTerms, onNavigateHome)
         }
     }
 }
 
 @Composable
 private fun LoginKaKao(
-    onNavigateSignUp: () -> Unit,
+    onNavigateSignUpTerms: () -> Unit,
     onNavigateHome: () -> Unit
 ) {
     val context = LocalContext.current
@@ -113,7 +113,7 @@ private fun LoginKaKao(
                     when (loginKaKao(context)) {
                         is AuthResult.Success -> {
                             // TODO 카카오 AccessToken 서버 전달
-                            onNavigateSignUp()
+                            onNavigateSignUpTerms()
                         }
                         is AuthResult.Failure -> {
                             // TODO 카카오 로그인 에러 메세지 정의
@@ -126,7 +126,7 @@ private fun LoginKaKao(
 
 @Composable
 private fun LoginGoogle(
-    onNavigateSignUp: () -> Unit,
+    onNavigateSignUpTerms: () -> Unit,
     onNavigateHome: () -> Unit
 ) {
     val context = LocalContext.current
@@ -136,7 +136,7 @@ private fun LoginGoogle(
             result.data?.let { intent ->
                 val task = GoogleSignIn.getSignedInAccountFromIntent(intent)
                 task.result.idToken?.let { token ->
-                    onNavigateSignUp()
+                    onNavigateSignUpTerms()
                 }
             }
         } else {
@@ -158,7 +158,7 @@ private fun LoginGoogle(
 
 @Composable
 private fun LoginFacebook(
-    onNavigateSignUp: () -> Unit,
+    onNavigateSignUpTerms: () -> Unit,
     onNavigateHome: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -179,7 +179,7 @@ private fun LoginFacebook(
                     when (loginFacebook(loginManager, callbackManager, registerFacebookLogin)) {
                         is AuthResult.Success -> {
                             // TODO 페이스북 AccessToken 전달
-                            onNavigateSignUp()
+                            onNavigateSignUpTerms()
                         }
                         is AuthResult.Failure -> {
                             // TODO 페이스북 로그인 에러 메세지 정의
