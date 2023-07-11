@@ -159,9 +159,9 @@ private fun SignUpTermsContent(
             onClick = onNavigateSignUpInput,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(52.dp)
                 .padding(horizontal = 22.dp)
-                .padding(bottom = 15.dp),
+                .padding(bottom = 15.dp)
+                .height(52.dp),
             enabled = serviceTermsState,
             shape = RoundedCornerShape(15.dp),
             colors = ButtonDefaults.buttonColors(

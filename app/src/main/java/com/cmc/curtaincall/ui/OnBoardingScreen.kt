@@ -104,9 +104,9 @@ private fun OnBoardingPagerItem(
             onClick = onClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(56.dp)
                 .padding(horizontal = 22.dp)
-                .padding(bottom = 17.dp),
+                .padding(bottom = 17.dp)
+                .height(52.dp),
             shape = RoundedCornerShape(15.dp),
             colors = ButtonDefaults.buttonColors(containerColor = French_Rose)
         ) {
