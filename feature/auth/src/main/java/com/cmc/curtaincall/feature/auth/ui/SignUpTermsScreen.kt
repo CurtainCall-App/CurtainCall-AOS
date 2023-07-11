@@ -165,7 +165,7 @@ private fun SignUpTermsContent(
             enabled = serviceTermsState,
             shape = RoundedCornerShape(15.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = if (serviceTermsState) Me_Pink else dPhilippine_Gray
+                containerColor = if (serviceTermsState) Me_Pink else Philippine_Gray
             )
         ) {
             Text(
