@@ -40,7 +40,7 @@ internal fun SignUpTermsScreen(
             )
         }
     ) { paddingValues ->
-        SignUpContent(
+        SignUpTermsContent(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues),
@@ -50,7 +50,7 @@ internal fun SignUpTermsScreen(
 }
 
 @Composable
-private fun SignUpContent(
+private fun SignUpTermsContent(
     modifier: Modifier = Modifier,
     onNavigateSignUpInput: () -> Unit
 ) {

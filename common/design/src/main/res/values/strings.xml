@@ -30,4 +30,7 @@
     <string name="signup_terms_notification">알림 (선택)</string>
     <string name="signup_terms_marketing">마케팅 정보 수신 동의 (선택)</string>
     <string name="signup_terms_next">동의하고 계속하기</string>
+    <string name="signup">회원가입</string>
+    <string name="signup_input_description">커튼콜에서 사용할\n닉네임을 입력해주세요.</string>
+    <string name="signup_input_sub_description">닉네임은 공백없이 최소 6자에서 최대 15자 이하로\n한글, 영문, 숫자를 자유롭게 조합해주세요.</string>
 </resources>
