@@ -13,6 +13,7 @@ import com.cmc.curtaincall.common.design.R
 
 private const val MYPAGE_GRAPH = "mypage_graph"
 const val MYPAGE = "mypage"
+private const val MYPAGE_LABEL = "MY"
 private const val MYPAGE_RECRUITMENT = "mypage_recruitment"
 private const val MYPAGE_PARTICIPANT = "mypage_participant"
 private const val MYPAGE_WRITE = "mypage_write"
@@ -25,6 +26,8 @@ sealed interface MyPageDestination : CurtainCallDestination {
     object MyPage : MyPageDestination, BottomDestination {
         override val route = MYPAGE
         override val icon = R.drawable.ic_my
+        override val selectIcon = R.drawable.ic_my
+        override val label = MYPAGE_LABEL
     }
 
     object Recruitment : MyPageDestination {
