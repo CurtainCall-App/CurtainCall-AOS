@@ -12,12 +12,15 @@ import com.cmc.curtaincall.core.base.BottomDestination
 
 private const val PARTYMEMBER_GRAPH = "partymember_graph"
 const val PARTYMEMBER = "partymember"
+private const val PARTYMEMBER_LABEL = "파티원"
 private const val PARTYMEMBER_DETAIL = "partymemeber_detail"
 
 sealed interface PartyMemberDestination : CurtainCallDestination {
     object PartyMember : PartyMemberDestination, BottomDestination {
         override val route = PARTYMEMBER
         override val icon = R.drawable.ic_partymember
+        override val selectIcon = R.drawable.ic_partymember_sel
+        override val label = PARTYMEMBER_LABEL
     }
 
     object Detail : PartyMemberDestination {

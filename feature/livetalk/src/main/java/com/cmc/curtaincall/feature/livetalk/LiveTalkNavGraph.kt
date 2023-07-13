@@ -12,12 +12,15 @@ import com.cmc.curtaincall.common.design.R
 
 private const val LIVETALK_GRAPH = "livetalk_graph"
 const val LIVETALK = "livetalk"
+private const val LIVETALK_LABEL = "라이브톡"
 private const val LIVETALK_DETAIL = "livetalk_detail"
 
 sealed interface LiveTalkDestination : CurtainCallDestination {
     object LiveTalk : LiveTalkDestination, BottomDestination {
         override val route = LIVETALK
         override val icon = R.drawable.ic_livetalk
+        override val selectIcon = R.drawable.ic_livetalk
+        override val label = LIVETALK_LABEL
     }
 
     object Detail : LiveTalkDestination {

@@ -1,11 +1,17 @@
 package com.cmc.curtaincall.feature.home
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -26,17 +32,32 @@ import com.cmc.curtaincall.feature.performance.performanceNavGraph
 
 private const val HOME_GRAPH = "home_graph"
 private const val HOME = "home"
+private const val HOME_LABEL = "홈"
 
 object HomeDestination : CurtainCallDestination, BottomDestination {
     override val route = HOME
     override val icon = R.drawable.ic_home
+    override val selectIcon = R.drawable.ic_home_sel
+    override val label = HOME_LABEL
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeNavHost(navHostController: NavHostController = rememberNavController()) {
     Scaffold(
-        bottomBar = { HomeBottomBar(navHostController) }
+        bottomBar = {
+            HomeBottomBar(navHostController)
+        },
+        floatingActionButton = {
+            Image(
+                painter = painterResource(R.drawable.ic_livetalk),
+                contentDescription = LiveTalkDestination.LiveTalk.route,
+                modifier = Modifier
+                    .offset(y = 60.dp)
+                    .clickable { navHostController.navigate(LiveTalkDestination.LiveTalk.route) }
+            )
+        },
+        floatingActionButtonPosition = FabPosition.Center
     ) { innerPadding ->
         NavHost(
             navController = navHostController,
