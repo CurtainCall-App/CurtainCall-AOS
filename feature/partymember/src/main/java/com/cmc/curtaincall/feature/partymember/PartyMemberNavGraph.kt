@@ -19,7 +19,7 @@ sealed interface PartyMemberDestination : CurtainCallDestination {
     object PartyMember : PartyMemberDestination, BottomDestination {
         override val route = PARTYMEMBER
         override val icon = R.drawable.ic_partymember
-        override val selectIcon = R.drawable.ic_partymember
+        override val selectIcon = R.drawable.ic_partymember_sel
         override val label = PARTYMEMBER_LABEL
     }
 

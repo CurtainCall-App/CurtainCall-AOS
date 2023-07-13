@@ -26,7 +26,7 @@ sealed interface MyPageDestination : CurtainCallDestination {
     object MyPage : MyPageDestination, BottomDestination {
         override val route = MYPAGE
         override val icon = R.drawable.ic_my
-        override val selectIcon = R.drawable.ic_my
+        override val selectIcon = R.drawable.ic_my_sel
         override val label = MYPAGE_LABEL
     }
 

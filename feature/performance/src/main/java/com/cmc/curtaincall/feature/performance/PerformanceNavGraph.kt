@@ -21,7 +21,7 @@ sealed interface PerformanceDestination : CurtainCallDestination {
     object Performance : PerformanceDestination, BottomDestination {
         override val route = PERFORMANCE
         override val icon = R.drawable.ic_performance
-        override val selectIcon = R.drawable.ic_performance
+        override val selectIcon = R.drawable.ic_performance_sel
         override val label = PERFORMANCE_LABEL
     }
 
