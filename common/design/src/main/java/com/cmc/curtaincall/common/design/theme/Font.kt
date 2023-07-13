@@ -13,3 +13,9 @@ val spoqahansanseeo = FontFamily(
     Font(R.font.spoqahansansneo_light, FontWeight.Light, FontStyle.Normal),
     Font(R.font.spoqahansanseeo_thin, FontWeight.Thin, FontStyle.Normal)
 )
+
+val gmarketsans = FontFamily(
+    Font(R.font.gmarketsans_bold, FontWeight.Bold, FontStyle.Normal),
+    Font(R.font.gmarketsans_medium, FontWeight.Medium, FontStyle.Normal),
+    Font(R.font.gmarketsans_light, FontWeight.Light, FontStyle.Normal)
+)
