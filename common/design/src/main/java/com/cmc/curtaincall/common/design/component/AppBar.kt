@@ -1,5 +1,6 @@
 package com.cmc.curtaincall.common.design.component
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.size
@@ -7,6 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -46,6 +48,55 @@ fun TopAppBarWithBack(
                     contentDescription = null,
                     modifier = Modifier.size(22.dp, 22.dp),
                     tint = Eerie_Black
+                )
+            }
+        },
+        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = White)
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopAppBarWithAction(
+    title: String,
+    modifier: Modifier = Modifier,
+    @DrawableRes actionRes: Int,
+    onBack: () -> Unit,
+    onClickAction: () -> Unit
+) {
+    CenterAlignedTopAppBar(
+        title = {
+            Box(
+                modifier = Modifier.fillMaxHeight(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = title,
+                    color = Eerie_Black,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = spoqahansanseeo
+                )
+            }
+        },
+        modifier = modifier,
+        navigationIcon = {
+            IconButton(onClick = onBack) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_arrow_back),
+                    contentDescription = null,
+                    modifier = Modifier.size(22.dp, 22.dp),
+                    tint = Eerie_Black
+                )
+            }
+        },
+        actions = {
+            IconButton(onClick = onClickAction) {
+                Icon(
+                    painter = painterResource(actionRes),
+                    contentDescription = null,
+                    modifier = Modifier.size(37.dp, 22.dp),
+                    tint = Color.Unspecified
                 )
             }
         },
