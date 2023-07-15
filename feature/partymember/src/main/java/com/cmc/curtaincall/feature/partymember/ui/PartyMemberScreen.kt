@@ -3,6 +3,7 @@ package com.cmc.curtaincall.feature.partymember.ui
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -20,7 +21,7 @@ import com.cmc.curtaincall.common.design.theme.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
-fun PartyMemberScreen(onNavigateDetail: () -> Unit) {
+fun PartyMemberScreen(onNavigateList: () -> Unit) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(Black.copy(alpha = 0.36f))
 
@@ -47,7 +48,8 @@ fun PartyMemberScreen(onNavigateDetail: () -> Unit) {
             title = stringResource(R.string.partymember_performance_title),
             description = stringResource(R.string.partymember_performance_description),
             fontColor = White,
-            backgroundColor = Me_Pink
+            backgroundColor = Me_Pink,
+            onClick = onNavigateList
         )
 
         PartyMemberRecruitmentCard(
@@ -58,7 +60,8 @@ fun PartyMemberScreen(onNavigateDetail: () -> Unit) {
             title = stringResource(R.string.partymember_restaurant_title),
             description = stringResource(R.string.partymember_restaurant_description),
             fontColor = Cetacean_Blue,
-            backgroundColor = Corn
+            backgroundColor = Corn,
+            onClick = onNavigateList
         )
 
         PartyMemberRecruitmentCard(
@@ -69,7 +72,8 @@ fun PartyMemberScreen(onNavigateDetail: () -> Unit) {
             title = stringResource(R.string.partymember_etc_title),
             description = stringResource(R.string.partymember_etc_description),
             fontColor = White,
-            backgroundColor = Cetacean_Blue
+            backgroundColor = Cetacean_Blue,
+            onClick = onNavigateList
         )
     }
 }
@@ -81,9 +85,14 @@ private fun ColumnScope.PartyMemberRecruitmentCard(
     description: String,
     fontColor: Color,
     backgroundColor: Color,
-    @DrawableRes backgroundRes: Int? = null
+    @DrawableRes backgroundRes: Int? = null,
+    onClick: () -> Unit
 ) {
-    Box(modifier = modifier.background(backgroundColor, RoundedCornerShape(10.dp))) {
+    Box(
+        modifier = modifier
+            .background(backgroundColor, RoundedCornerShape(10.dp))
+            .clickable { onClick() }
+    ) {
         Column {
             Text(
                 text = title,
