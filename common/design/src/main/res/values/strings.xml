@@ -38,4 +38,12 @@
     <string name="signup_input_next">다음</string>
     <string name="signup_welcome_description">이제 커튼콜 이용을\n시작해볼까요?</string>기
     <string name="signup_welcome_start">시작하기</string>
+
+    <string name="partymember_recruitment">파티원 모집</string>
+    <string name="partymember_performance_title">공연 관람</string>
+    <string name="partymember_performance_description">혼자보다는 함께 관람할 때\n더 즐거운 공연!</string>
+    <string name="partymember_restaurant_title">식사/카페</string>
+    <string name="partymember_restaurant_description">공연장 근처의 맛집이나 카페에서\n맛있는 음식을 즐기며 이야기를\n나눌 수 있어요!</string>
+    <string name="partymember_etc_title">기타</string>
+    <string name="partymember_etc_description">이벤트, 굿즈 제작 등 자유롭게\n파티원들을 모집할 수 있어요!</string>
 </resources>
