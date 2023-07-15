@@ -89,7 +89,7 @@ private fun PartyMemberList(
                 poster = "",
                 date = "2023.6.24(토)",
                 time = "19:30",
-                location = "링크아트센터",
+                location = "링크아트센터"
             )
         }
 
@@ -106,7 +106,7 @@ private fun PartyMemberList(
                 poster = "",
                 date = "2023.6.24(토)",
                 time = "19:30",
-                location = "링크아트센터",
+                location = "링크아트센터"
             )
         }
 
@@ -123,7 +123,7 @@ private fun PartyMemberList(
                 poster = "",
                 date = "2023.6.24(토)",
                 time = "19:30",
-                location = "링크아트센터",
+                location = "링크아트센터"
             )
         }
     }
@@ -373,6 +373,7 @@ private fun TopAppBarWithSearch(
                         .height(36.dp)
                         .background(White, RoundedCornerShape(8.dp)),
                     textStyle = TextStyle(
+                        color = Eerie_Black,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Medium,
                         fontFamily = spoqahansanseeo
@@ -391,7 +392,7 @@ private fun TopAppBarWithSearch(
                                     color = Silver_Chalice,
                                     fontSize = 16.sp,
                                     fontWeight = FontWeight.Medium,
-                                    fontFamily = spoqahansanseeo,
+                                    fontFamily = spoqahansanseeo
                                 )
                             } else {
                                 innerTextField()
