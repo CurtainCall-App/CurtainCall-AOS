@@ -1,17 +1,12 @@
 package com.cmc.curtaincall.feature.home
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -20,6 +15,7 @@ import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.feature.home.ui.HomeBottomBar
+import com.cmc.curtaincall.feature.home.ui.HomeFloatingButton
 import com.cmc.curtaincall.feature.home.ui.HomeScreen
 import com.cmc.curtaincall.feature.livetalk.LiveTalkDestination
 import com.cmc.curtaincall.feature.livetalk.livetalkNavGraph
@@ -45,18 +41,8 @@ object HomeDestination : CurtainCallDestination, BottomDestination {
 @Composable
 fun HomeNavHost(navHostController: NavHostController = rememberNavController()) {
     Scaffold(
-        bottomBar = {
-            HomeBottomBar(navHostController)
-        },
-        floatingActionButton = {
-            Image(
-                painter = painterResource(R.drawable.ic_livetalk),
-                contentDescription = LiveTalkDestination.LiveTalk.route,
-                modifier = Modifier
-                    .offset(y = 60.dp)
-                    .clickable { navHostController.navigate(LiveTalkDestination.LiveTalk.route) }
-            )
-        },
+        bottomBar = { HomeBottomBar(navHostController) },
+        floatingActionButton = { HomeFloatingButton(navHostController) },
         floatingActionButtonPosition = FabPosition.Center
     ) { innerPadding ->
         NavHost(

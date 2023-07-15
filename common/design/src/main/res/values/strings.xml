@@ -46,4 +46,6 @@
     <string name="partymember_restaurant_description">공연장 근처의 맛집이나 카페에서\n맛있는 음식을 즐기며 이야기를\n나눌 수 있어요!</string>
     <string name="partymember_etc_title">기타</string>
     <string name="partymember_etc_description">이벤트, 굿즈 제작 등 자유롭게\n파티원들을 모집할 수 있어요!</string>
+    <string name="partymember_list_top_appbar_placeholder">작품명 또는 장소 입력</string>
+    <string name="partymember_list_description">모든 게시물은 최신순으로 제공됩니다.</string>
 </resources>

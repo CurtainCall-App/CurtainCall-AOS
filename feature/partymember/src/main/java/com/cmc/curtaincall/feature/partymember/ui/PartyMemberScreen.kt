@@ -3,6 +3,7 @@ package com.cmc.curtaincall.feature.partymember.ui
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -17,10 +18,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.feature.partymember.PartyType
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
-fun PartymemberScreen(onNavigateDetail: () -> Unit) {
+fun PartyMemberScreen(onNavigateList: (PartyType) -> Unit) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(Black.copy(alpha = 0.36f))
 
@@ -39,7 +41,7 @@ fun PartymemberScreen(onNavigateDetail: () -> Unit) {
             fontFamily = spoqahansanseeo
         )
 
-        PartymemberRecruitmentCard(
+        PartyMemberRecruitmentCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
@@ -47,10 +49,13 @@ fun PartymemberScreen(onNavigateDetail: () -> Unit) {
             title = stringResource(R.string.partymember_performance_title),
             description = stringResource(R.string.partymember_performance_description),
             fontColor = White,
-            backgroundColor = Me_Pink
+            backgroundColor = Me_Pink,
+            onClick = {
+                onNavigateList(PartyType.PERFORMANCE)
+            }
         )
 
-        PartymemberRecruitmentCard(
+        PartyMemberRecruitmentCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
@@ -58,10 +63,13 @@ fun PartymemberScreen(onNavigateDetail: () -> Unit) {
             title = stringResource(R.string.partymember_restaurant_title),
             description = stringResource(R.string.partymember_restaurant_description),
             fontColor = Cetacean_Blue,
-            backgroundColor = Corn
+            backgroundColor = Corn,
+            onClick = {
+                onNavigateList(PartyType.MEAL)
+            }
         )
 
-        PartymemberRecruitmentCard(
+        PartyMemberRecruitmentCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
@@ -69,21 +77,29 @@ fun PartymemberScreen(onNavigateDetail: () -> Unit) {
             title = stringResource(R.string.partymember_etc_title),
             description = stringResource(R.string.partymember_etc_description),
             fontColor = White,
-            backgroundColor = Cetacean_Blue
+            backgroundColor = Cetacean_Blue,
+            onClick = {
+                onNavigateList(PartyType.ETC)
+            }
         )
     }
 }
 
 @Composable
-private fun ColumnScope.PartymemberRecruitmentCard(
+private fun ColumnScope.PartyMemberRecruitmentCard(
     modifier: Modifier = Modifier,
     title: String,
     description: String,
     fontColor: Color,
     backgroundColor: Color,
-    @DrawableRes backgroundRes: Int? = null
+    @DrawableRes backgroundRes: Int? = null,
+    onClick: () -> Unit
 ) {
-    Box(modifier = modifier.background(backgroundColor, RoundedCornerShape(10.dp))) {
+    Box(
+        modifier = modifier
+            .background(backgroundColor, RoundedCornerShape(10.dp))
+            .clickable { onClick() }
+    ) {
         Column {
             Text(
                 text = title,
