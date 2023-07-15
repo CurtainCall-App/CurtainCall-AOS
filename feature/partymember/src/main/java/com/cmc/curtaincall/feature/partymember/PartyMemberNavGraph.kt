@@ -76,7 +76,9 @@ fun NavGraphBuilder.partymemberNavGraph(navHostController: NavHostController) {
         }
 
         composable(route = PartyMemberDestination.Detail.route) {
-            PartyMemberDetailScreen()
+            PartyMemberDetailScreen {
+                navHostController.popBackStack()
+            }
         }
     }
 }
