@@ -18,10 +18,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.feature.partymember.PartyType
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
-fun PartyMemberScreen(onNavigateList: () -> Unit) {
+fun PartyMemberScreen(onNavigateList: (PartyType) -> Unit) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(Black.copy(alpha = 0.36f))
 
@@ -49,7 +50,9 @@ fun PartyMemberScreen(onNavigateList: () -> Unit) {
             description = stringResource(R.string.partymember_performance_description),
             fontColor = White,
             backgroundColor = Me_Pink,
-            onClick = onNavigateList
+            onClick = {
+                onNavigateList(PartyType.PERFORMANCE)
+            }
         )
 
         PartyMemberRecruitmentCard(
@@ -61,7 +64,9 @@ fun PartyMemberScreen(onNavigateList: () -> Unit) {
             description = stringResource(R.string.partymember_restaurant_description),
             fontColor = Cetacean_Blue,
             backgroundColor = Corn,
-            onClick = onNavigateList
+            onClick = {
+                onNavigateList(PartyType.MEAL)
+            }
         )
 
         PartyMemberRecruitmentCard(
@@ -73,7 +78,9 @@ fun PartyMemberScreen(onNavigateList: () -> Unit) {
             description = stringResource(R.string.partymember_etc_description),
             fontColor = White,
             backgroundColor = Cetacean_Blue,
-            onClick = onNavigateList
+            onClick = {
+                onNavigateList(PartyType.ETC)
+            }
         )
     }
 }
