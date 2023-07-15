@@ -20,7 +20,7 @@ import com.cmc.curtaincall.common.design.theme.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
-fun PartymemberScreen(onNavigateDetail: () -> Unit) {
+fun PartyMemberScreen(onNavigateDetail: () -> Unit) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(Black.copy(alpha = 0.36f))
 
@@ -39,7 +39,7 @@ fun PartymemberScreen(onNavigateDetail: () -> Unit) {
             fontFamily = spoqahansanseeo
         )
 
-        PartymemberRecruitmentCard(
+        PartyMemberRecruitmentCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
@@ -50,7 +50,7 @@ fun PartymemberScreen(onNavigateDetail: () -> Unit) {
             backgroundColor = Me_Pink
         )
 
-        PartymemberRecruitmentCard(
+        PartyMemberRecruitmentCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
@@ -61,7 +61,7 @@ fun PartymemberScreen(onNavigateDetail: () -> Unit) {
             backgroundColor = Corn
         )
 
-        PartymemberRecruitmentCard(
+        PartyMemberRecruitmentCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
@@ -75,7 +75,7 @@ fun PartymemberScreen(onNavigateDetail: () -> Unit) {
 }
 
 @Composable
-private fun ColumnScope.PartymemberRecruitmentCard(
+private fun ColumnScope.PartyMemberRecruitmentCard(
     modifier: Modifier = Modifier,
     title: String,
     description: String,
