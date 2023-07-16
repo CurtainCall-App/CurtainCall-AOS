@@ -102,7 +102,7 @@ private fun PartyMemberDetailContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 32.dp)
-                .padding(horizontal = 22.dp),
+                .padding(horizontal = 22.dp)
         )
     }
 }
