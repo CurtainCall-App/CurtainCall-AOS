@@ -28,7 +28,7 @@ import com.cmc.curtaincall.feature.partymember.PartyType
 @Composable
 internal fun PartyMemberListScreen(
     partyType: PartyType,
-    onNavigateDetail: () -> Unit,
+    onNavigateDetail: (PartyType) -> Unit,
     onBack: () -> Unit
 ) {
     var queryString by remember { mutableStateOf("") }
@@ -62,7 +62,7 @@ internal fun PartyMemberListScreen(
 private fun PartyMemberList(
     partyType: PartyType,
     modifier: Modifier = Modifier,
-    onNavigateDetail: () -> Unit
+    onNavigateDetail: (PartyType) -> Unit
 ) {
     LazyColumn(modifier = modifier.background(Black.copy(alpha = 0.36f))) {
         item {
@@ -146,7 +146,7 @@ private fun PartyMemberItemCard(
     date: String,
     time: String,
     location: String,
-    onNavigateDetail: () -> Unit,
+    onNavigateDetail: (PartyType) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -154,7 +154,7 @@ private fun PartyMemberItemCard(
             .padding(horizontal = 22.dp, vertical = 10.dp)
             .wrapContentHeight()
             .clickable {
-                onNavigateDetail()
+                onNavigateDetail(partyType)
             }
     ) {
         Column(
@@ -381,8 +381,8 @@ private fun TopAppBarWithSearch(
                         .background(White, RoundedCornerShape(8.dp)),
                     textStyle = TextStyle(
                         color = Eerie_Black,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium,
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Bold,
                         fontFamily = spoqahansanseeo
                     ),
                     decorationBox = { innerTextField ->

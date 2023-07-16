@@ -73,7 +73,7 @@ fun TopAppBarWithAction(
                 Text(
                     text = title,
                     color = Eerie_Black,
-                    fontSize = 18.sp,
+                    fontSize = 17.sp,
                     fontWeight = FontWeight.Bold,
                     fontFamily = spoqahansanseeo
                 )
