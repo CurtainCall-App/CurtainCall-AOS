@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
+import com.cmc.curtaincall.feature.partymember.ui.PartyMemberCreateScreen
 import com.cmc.curtaincall.feature.partymember.ui.PartyMemberDetailScreen
 import com.cmc.curtaincall.feature.partymember.ui.PartyMemberListScreen
 import com.cmc.curtaincall.feature.partymember.ui.PartyMemberScreen
@@ -16,6 +17,7 @@ const val PARTYMEMBER = "partymember"
 private const val PARTYMEMBER_LABEL = "파티원"
 private const val PARTYMEMBER_LIST = "partymember_list"
 private const val PARTYMEMBER_DETAIL = "partymemeber_detail"
+private const val PARTYMEMBER_CREATE = "partymemeber_create"
 
 enum class PartyType {
     PERFORMANCE, MEAL, ETC
@@ -50,6 +52,17 @@ sealed interface PartyMemberDestination : CurtainCallDestination {
             }
         )
     }
+
+    object Create : PartyMemberDestination {
+        override val route = PARTYMEMBER_CREATE
+        const val typeArg = "type"
+        val routeWithArgs = "$route/{$typeArg}"
+        val arguments = listOf(
+            navArgument(typeArg) {
+                type = NavType.EnumType(PartyType::class.java)
+            }
+        )
+    }
 }
 
 fun NavGraphBuilder.partymemberNavGraph(navHostController: NavHostController) {
@@ -67,6 +80,7 @@ fun NavGraphBuilder.partymemberNavGraph(navHostController: NavHostController) {
                 PartyMemberListScreen(
                     partyType = partyType,
                     onNavigateDetail = { navHostController.navigate("${PartyMemberDestination.Detail.route}/$it") },
+                    onNavigateCreate = { navHostController.navigate("${PartyMemberDestination.Create.route}/$it") },
                     onBack = { navHostController.popBackStack() }
                 )
             }
@@ -79,6 +93,19 @@ fun NavGraphBuilder.partymemberNavGraph(navHostController: NavHostController) {
             val partyType: PartyType? = getPartyType(entry.arguments)
             if (partyType != null) {
                 PartyMemberDetailScreen(
+                    partyType = partyType,
+                    onBack = { navHostController.popBackStack() }
+                )
+            }
+        }
+
+        composable(
+            route = PartyMemberDestination.Create.routeWithArgs,
+            arguments = PartyMemberDestination.Create.arguments
+        ) { entry ->
+            val partyType: PartyType? = getPartyType(entry.arguments)
+            if (partyType != null) {
+                PartyMemberCreateScreen(
                     partyType = partyType,
                     onBack = { navHostController.popBackStack() }
                 )

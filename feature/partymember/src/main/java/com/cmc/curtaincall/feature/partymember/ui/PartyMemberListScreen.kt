@@ -29,6 +29,7 @@ import com.cmc.curtaincall.feature.partymember.PartyType
 internal fun PartyMemberListScreen(
     partyType: PartyType,
     onNavigateDetail: (PartyType) -> Unit,
+    onNavigateCreate: (PartyType) -> Unit,
     onBack: () -> Unit
 ) {
     var queryString by remember { mutableStateOf("") }
@@ -46,6 +47,18 @@ internal fun PartyMemberListScreen(
                 onChangeText = { queryString = it },
                 onBack = onBack
             )
+        },
+        floatingActionButton = {
+            IconButton(
+                onClick = { onNavigateCreate(partyType) },
+                modifier = Modifier.size(85.dp)
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_fab_write),
+                    contentDescription = null,
+                    tint = Color.Unspecified
+                )
+            }
         }
     ) { paddingValues ->
         PartyMemberList(
