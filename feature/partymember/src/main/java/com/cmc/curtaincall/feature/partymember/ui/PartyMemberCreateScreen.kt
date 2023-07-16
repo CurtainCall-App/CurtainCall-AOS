@@ -1,11 +1,11 @@
 package com.cmc.curtaincall.feature.partymember.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,10 +16,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.TopAppBarWithBack
-import com.cmc.curtaincall.common.design.theme.Bright_Gray
-import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
-import com.cmc.curtaincall.common.design.theme.White
-import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
+import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.feature.partymember.PartyPerformanceType
 import com.cmc.curtaincall.feature.partymember.PartyType
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -59,25 +57,111 @@ private fun PartyMemberCreateContent(
     modifier: Modifier = Modifier
 ) {
     var step by remember { mutableStateOf(1) }
-    Column(modifier) {
-        PartyMemberCreatePhrase(
-            partyType = partyType,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 28.dp)
-                .padding(horizontal = 22.dp),
-            currentStep = step
-        ) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        modifier = modifier
+    ) {
+        item(span = { GridItemSpan(3) }) {
+            PartyMemberCreateStep(
+                partyType = partyType,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 28.dp)
+                    .padding(horizontal = 22.dp),
+                currentStep = step
+            )
+        }
+
+        when (step) {
+            1 -> {
+                item(span = { GridItemSpan(3) }) {
+                    PartyMemberCreateClassify(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 15.dp)
+                            .padding(horizontal = 22.dp)
+                    )
+                }
+            }
         }
     }
 }
 
 @Composable
-private fun PartyMemberCreatePhrase(
+private fun PartyMemberCreateClassify(
+    modifier: Modifier = Modifier
+) {
+    var performanceType by remember { mutableStateOf(PartyPerformanceType.THEATER) }
+    Column(modifier) {
+        Text(
+            text = stringResource(R.string.partymember_create_classification),
+            color = Eerie_Black,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            fontFamily = spoqahansanseeo
+        )
+
+        Row {
+            Button(
+                onClick = {
+                    /*TODO*/
+                    performanceType = PartyPerformanceType.THEATER
+                },
+                modifier = Modifier.weight(1f),
+                shape = RoundedCornerShape(topStart = 10.dp, bottomStart = 10.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (performanceType == PartyPerformanceType.THEATER) Me_Pink else White
+                ),
+                border = BorderStroke(1.dp, if (performanceType == PartyPerformanceType.THEATER) French_Pink else Silver_Sand)
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = stringResource(R.string.partymember_create_classification_theater),
+                        color = if (performanceType == PartyPerformanceType.THEATER) White else Silver_Sand,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = spoqahansanseeo
+                    )
+                }
+            }
+
+            Button(
+                onClick = {
+                    /*TODO*/
+                    performanceType = PartyPerformanceType.MUSICAL
+                },
+                modifier = Modifier.weight(1f),
+                shape = RoundedCornerShape(topEnd = 10.dp, bottomEnd = 10.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (performanceType == PartyPerformanceType.MUSICAL) Me_Pink else White
+                ),
+                border = BorderStroke(1.dp, if (performanceType == PartyPerformanceType.MUSICAL) French_Pink else Silver_Sand)
+            ) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = stringResource(R.string.partymember_create_classification_musical),
+                        color = if (performanceType == PartyPerformanceType.MUSICAL) White else Silver_Sand,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = spoqahansanseeo
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PartyMemberCreateStep(
     partyType: PartyType,
     modifier: Modifier = Modifier,
     currentStep: Int,
-    content: @Composable (Int) -> Unit
 ) {
     Column(modifier) {
         Row {
@@ -173,7 +257,5 @@ private fun PartyMemberCreatePhrase(
                 fontFamily = spoqahansanseeo
             )
         }
-
-        content(currentStep)
     }
 }

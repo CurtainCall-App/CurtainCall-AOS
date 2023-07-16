@@ -23,6 +23,10 @@ enum class PartyType {
     PERFORMANCE, MEAL, ETC
 }
 
+enum class PartyPerformanceType {
+    THEATER, MUSICAL
+}
+
 sealed interface PartyMemberDestination : CurtainCallDestination {
     object PartyMember : PartyMemberDestination, BottomDestination {
         override val route = PARTYMEMBER

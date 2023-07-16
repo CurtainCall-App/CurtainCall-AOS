@@ -58,4 +58,7 @@
     <string name="partymember_detail_performance_location">공연 장소</string>
     <string name="partymember_detail_date">날짜</string>
     <string name="partymember_create_appbar">파티원 모집</string>
+    <string name="partymember_create_classification">분류를 선택해주세요</string>
+    <string name="partymember_create_classification_theater">연극</string>
+    <string name="partymember_create_classification_musical">뮤지컬</string>
 </resources>
