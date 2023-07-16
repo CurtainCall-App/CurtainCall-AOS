@@ -3,6 +3,7 @@ package com.cmc.curtaincall.feature.partymember.ui
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -27,7 +28,7 @@ import com.cmc.curtaincall.feature.partymember.PartyType
 @Composable
 internal fun PartyMemberListScreen(
     partyType: PartyType,
-    onNavigateDetail: () -> Unit,
+    onNavigateDetail: (PartyType) -> Unit,
     onBack: () -> Unit
 ) {
     var queryString by remember { mutableStateOf("") }
@@ -41,9 +42,6 @@ internal fun PartyMemberListScreen(
                         PartyType.ETC -> R.string.partymember_etc_title
                     }
                 ),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(38.dp),
                 query = queryString,
                 onChangeText = { queryString = it },
                 onBack = onBack
@@ -54,7 +52,8 @@ internal fun PartyMemberListScreen(
             partyType = partyType,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .padding(paddingValues),
+            onNavigateDetail = onNavigateDetail
         )
     }
 }
@@ -62,7 +61,8 @@ internal fun PartyMemberListScreen(
 @Composable
 private fun PartyMemberList(
     partyType: PartyType,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateDetail: (PartyType) -> Unit
 ) {
     LazyColumn(modifier = modifier.background(Black.copy(alpha = 0.36f))) {
         item {
@@ -89,7 +89,8 @@ private fun PartyMemberList(
                 poster = "",
                 date = "2023.6.24(토)",
                 time = "19:30",
-                location = "링크아트센터"
+                location = "링크아트센터",
+                onNavigateDetail = onNavigateDetail
             )
         }
 
@@ -106,7 +107,8 @@ private fun PartyMemberList(
                 poster = "",
                 date = "2023.6.24(토)",
                 time = "19:30",
-                location = "링크아트센터"
+                location = "링크아트센터",
+                onNavigateDetail = onNavigateDetail
             )
         }
 
@@ -123,7 +125,8 @@ private fun PartyMemberList(
                 poster = "",
                 date = "2023.6.24(토)",
                 time = "19:30",
-                location = "링크아트센터"
+                location = "링크아트센터",
+                onNavigateDetail = onNavigateDetail
             )
         }
     }
@@ -142,13 +145,17 @@ private fun PartyMemberItemCard(
     poster: String,
     date: String,
     time: String,
-    location: String
+    location: String,
+    onNavigateDetail: (PartyType) -> Unit,
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 22.dp, vertical = 10.dp)
             .wrapContentHeight()
+            .clickable {
+                onNavigateDetail(partyType)
+            }
     ) {
         Column(
             modifier = Modifier
@@ -374,8 +381,8 @@ private fun TopAppBarWithSearch(
                         .background(White, RoundedCornerShape(8.dp)),
                     textStyle = TextStyle(
                         color = Eerie_Black,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium,
+                        fontSize = 17.sp,
+                        fontWeight = FontWeight.Bold,
                         fontFamily = spoqahansanseeo
                     ),
                     decorationBox = { innerTextField ->

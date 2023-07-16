@@ -48,4 +48,13 @@
     <string name="partymember_etc_description">이벤트, 굿즈 제작 등 자유롭게\n파티원들을 모집할 수 있어요!</string>
     <string name="partymember_list_top_appbar_placeholder">작품명 또는 장소 입력</string>
     <string name="partymember_list_description">모든 게시물은 최신순으로 제공됩니다.</string>
+    <string name="partymember_detail">상세 정보</string>
+    <string name="partymember_detail_join">참여하기</string>
+    <string name="partymember_detail_joined">참여 완료</string>
+    <string name="partymember_detail_performance_title">작품명</string>
+    <string name="partymember_detail_join_state">참여 상태</string>
+    <string name="partymember_detail_performance_date">공연 일자</string>
+    <string name="partymember_detail_performance_time">공연 시간</string>
+    <string name="partymember_detail_performance_location">공연 장소</string>
+    <string name="partymember_detail_date">날짜</string>
 </resources>
