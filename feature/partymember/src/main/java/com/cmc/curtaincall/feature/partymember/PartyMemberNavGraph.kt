@@ -1,6 +1,7 @@
 package com.cmc.curtaincall.feature.partymember
 
 import android.os.Build
+import android.os.Bundle
 import androidx.navigation.*
 import androidx.navigation.compose.composable
 import com.cmc.curtaincall.common.design.R
@@ -41,44 +42,54 @@ sealed interface PartyMemberDestination : CurtainCallDestination {
 
     object Detail : PartyMemberDestination {
         override val route = PARTYMEMBER_DETAIL
+        const val typeArg = "type"
+        val routeWithArgs = "$route/{$typeArg}"
+        val arguments = listOf(
+            navArgument(typeArg) {
+                type = NavType.EnumType(PartyType::class.java)
+            }
+        )
     }
 }
 
 fun NavGraphBuilder.partymemberNavGraph(navHostController: NavHostController) {
     navigation(startDestination = PartyMemberDestination.PartyMember.route, route = PARTYMEMBER_GRAPH) {
         composable(route = PartyMemberDestination.PartyMember.route) {
-            PartyMemberScreen { partyType ->
-                navHostController.navigate("${PartyMemberDestination.List.route}/$partyType")
-            }
+            PartyMemberScreen { navHostController.navigate("${PartyMemberDestination.List.route}/$it") }
         }
 
         composable(
             route = PartyMemberDestination.List.routeWithArgs,
             arguments = PartyMemberDestination.List.arguments
-        ) {
-            val partyType: PartyType? = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                it.arguments?.getSerializable(PartyMemberDestination.List.typeArg, PartyType::class.java)
-            } else {
-                it.arguments?.getSerializable(PartyMemberDestination.List.typeArg) as? PartyType?
-            }
-
+        ) { entry ->
+            val partyType: PartyType? = getPartyType(entry.arguments)
             if (partyType != null) {
                 PartyMemberListScreen(
                     partyType = partyType,
-                    onNavigateDetail = {
-                        navHostController.navigate(PartyMemberDestination.Detail.route)
-                    },
-                    onBack = {
-                        navHostController.popBackStack()
-                    }
+                    onNavigateDetail = { navHostController.navigate("${PartyMemberDestination.Detail.route}/$it") },
+                    onBack = { navHostController.popBackStack() }
                 )
             }
         }
 
-        composable(route = PartyMemberDestination.Detail.route) {
-            PartyMemberDetailScreen {
-                navHostController.popBackStack()
+        composable(
+            route = PartyMemberDestination.Detail.routeWithArgs,
+            arguments = PartyMemberDestination.Detail.arguments
+        ) { entry ->
+            val partyType: PartyType? = getPartyType(entry.arguments)
+            if (partyType != null) {
+                PartyMemberDetailScreen(
+                    partyType = partyType,
+                    onBack = { navHostController.popBackStack() }
+                )
             }
         }
     }
 }
+
+private fun getPartyType(bundle: Bundle?): PartyType? =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        bundle?.getSerializable(PartyMemberDestination.List.typeArg, PartyType::class.java)
+    } else {
+        bundle?.getSerializable(PartyMemberDestination.List.typeArg) as? PartyType?
+    }

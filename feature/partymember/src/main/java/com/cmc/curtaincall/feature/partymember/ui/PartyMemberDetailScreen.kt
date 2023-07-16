@@ -20,14 +20,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.cmc.curtaincall.common.design.component.TopAppBarWithAction
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.component.TopAppBarWithAction
 import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.feature.partymember.PartyType
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PartyMemberDetailScreen(
+    partyType: PartyType,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -36,7 +38,13 @@ internal fun PartyMemberDetailScreen(
     Scaffold(
         topBar = {
             TopAppBarWithAction(
-                title = "식사/카페",
+                title = stringResource(
+                    when (partyType) {
+                        PartyType.PERFORMANCE -> R.string.partymember_performance_title
+                        PartyType.MEAL -> R.string.partymember_restaurant_title
+                        PartyType.ETC -> R.string.partymember_etc_title
+                    }
+                ),
                 actionRes = R.drawable.ic_report,
                 onBack = onBack,
                 onClickAction = { /* TODO */ }
@@ -44,6 +52,7 @@ internal fun PartyMemberDetailScreen(
         }
     ) { paddingValues ->
         PartyMemberDetailContent(
+            partyType = partyType,
             modifier = Modifier
                 .fillMaxSize()
                 .background(White)
@@ -59,6 +68,7 @@ internal fun PartyMemberDetailScreen(
 
 @Composable
 private fun PartyMemberDetailContent(
+    partyType: PartyType,
     modifier: Modifier = Modifier,
     profile: String,
     name: String,
@@ -88,6 +98,7 @@ private fun PartyMemberDetailContent(
         )
 
         PartyMemberDetailPerformance(
+            partyType = partyType,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 32.dp)
@@ -163,6 +174,7 @@ private fun PartyMemberDetailUser(
 
 @Composable
 private fun PartyMemberDetailPerformance(
+    partyType: PartyType,
     modifier: Modifier = Modifier
 ) {
     var joinState by remember { mutableStateOf(false) }
@@ -176,66 +188,87 @@ private fun PartyMemberDetailPerformance(
             fontFamily = spoqahansanseeo
         )
 
-        PartyMemberDetailInfo(
-            modifier = Modifier.padding(top = 22.dp),
-            iconRes = R.drawable.ic_dns,
-            category = stringResource(R.string.partymember_detail_performance_title),
-            info = "리어왕"
-        )
+        if (partyType == PartyType.ETC) {
+            PartyMemberDetailInfo(
+                modifier = Modifier.padding(top = 22.dp),
+                iconRes = R.drawable.ic_calendar,
+                category = stringResource(R.string.partymember_detail_date),
+                info = "2023.6.24"
+            )
 
-        DottedLine(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 11.dp)
-        )
+            DottedLine(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 11.dp)
+            )
 
-        PartyMemberDetailInfo(
-            modifier = Modifier.padding(top = 11.dp),
-            iconRes = R.drawable.ic_party_state,
-            category = stringResource(R.string.partymember_detail_join_state),
-            info = "2/5"
-        )
+            PartyMemberDetailInfo(
+                modifier = Modifier.padding(top = 11.dp),
+                iconRes = R.drawable.ic_party_state,
+                category = stringResource(R.string.partymember_detail_join_state),
+                info = "2/5"
+            )
+        } else {
+            PartyMemberDetailInfo(
+                modifier = Modifier.padding(top = 22.dp),
+                iconRes = R.drawable.ic_dns,
+                category = stringResource(R.string.partymember_detail_performance_title),
+                info = "리어왕"
+            )
 
-        DottedLine(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 11.dp)
-        )
+            DottedLine(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 11.dp)
+            )
 
-        PartyMemberDetailInfo(
-            modifier = Modifier.padding(top = 11.dp),
-            iconRes = R.drawable.ic_calendar,
-            category = stringResource(R.string.partymember_detail_performance_date),
-            info = "2023.6.24"
-        )
+            PartyMemberDetailInfo(
+                modifier = Modifier.padding(top = 11.dp),
+                iconRes = R.drawable.ic_party_state,
+                category = stringResource(R.string.partymember_detail_join_state),
+                info = "2/5"
+            )
 
-        DottedLine(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 11.dp)
-        )
+            DottedLine(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 11.dp)
+            )
 
-        PartyMemberDetailInfo(
-            modifier = Modifier.padding(top = 11.dp),
-            iconRes = R.drawable.ic_clock,
-            category = stringResource(R.string.partymember_detail_performance_time),
-            info = "19:3019:3019:3019:3019:3019:3019:3019:3019:3019:3019:30"
-        )
-        DottedLine(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 11.dp)
-        )
+            PartyMemberDetailInfo(
+                modifier = Modifier.padding(top = 11.dp),
+                iconRes = R.drawable.ic_calendar,
+                category = stringResource(R.string.partymember_detail_performance_date),
+                info = "2023.6.24"
+            )
 
-        PartyMemberDetailInfo(
-            modifier = Modifier.padding(top = 11.dp),
-            iconRes = R.drawable.ic_location,
-            category = stringResource(R.string.partymember_detail_performance_location),
-            info = "LG아트센터 서울"
-        )
+            DottedLine(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 11.dp)
+            )
+
+            PartyMemberDetailInfo(
+                modifier = Modifier.padding(top = 11.dp),
+                iconRes = R.drawable.ic_clock,
+                category = stringResource(R.string.partymember_detail_performance_time),
+                info = "19:3019:3019:3019:3019:3019:3019:3019:3019:3019:3019:30"
+            )
+            DottedLine(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 11.dp)
+            )
+
+            PartyMemberDetailInfo(
+                modifier = Modifier.padding(top = 11.dp),
+                iconRes = R.drawable.ic_location,
+                category = stringResource(R.string.partymember_detail_performance_location),
+                info = "LG아트센터 서울"
+            )
+        }
 
         Spacer(Modifier.weight(1f))
-
         Button(
             onClick = { joinState = joinState.not() },
             modifier = Modifier
