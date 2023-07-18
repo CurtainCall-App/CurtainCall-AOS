@@ -29,6 +29,10 @@ import com.cmc.curtaincall.common.design.theme.*
 import com.cmc.curtaincall.feature.partymember.PartyPerformanceType
 import com.cmc.curtaincall.feature.partymember.PartyType
 
+enum class SortType {
+    Reservation, Korean
+}
+
 internal fun LazyGridScope.showFirstStep(
     modifier: Modifier = Modifier,
     partyType: PartyType,

@@ -19,10 +19,6 @@ import com.cmc.curtaincall.common.design.theme.*
 import com.cmc.curtaincall.feature.partymember.PartyType
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
-enum class SortType {
-    Reservation, Korean
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PartyMemberCreateScreen(
@@ -119,7 +115,7 @@ private fun LazyGridScope.createStep(
             Row {
                 Column(Modifier.weight(1f)) {
                     Text(
-                        text = "Step 1",
+                        text = stringResource(R.string.partymember_create_first_step),
                         color = Cetacean_Blue,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
@@ -141,7 +137,7 @@ private fun LazyGridScope.createStep(
                         .weight(1f)
                 ) {
                     Text(
-                        text = "Step 2",
+                        text = stringResource(R.string.partymember_create_second_step),
                         color = if (currentStep >= 2) Cetacean_Blue else Bright_Gray,
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
@@ -167,7 +163,7 @@ private fun LazyGridScope.createStep(
                             .weight(1f)
                     ) {
                         Text(
-                            text = "Step 3",
+                            text = stringResource(R.string.partymember_create_third_step),
                             color = if (currentStep == 3) Cetacean_Blue else Bright_Gray,
                             fontSize = 12.sp,
                             fontWeight = FontWeight.Bold,

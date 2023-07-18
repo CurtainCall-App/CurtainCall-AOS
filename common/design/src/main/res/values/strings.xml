@@ -67,4 +67,7 @@
     <string name="partymember_create_essential">필수</string>
     <string name="partymember_create_update_time_format">8:00 업데이트</string>
     <string name="partymember_create_next">다음</string>
+    <string name="partymember_create_first_step">Step 1</string>
+    <string name="partymember_create_second_step">Step 2</string>
+    <string name="partymember_create_third_step">Step 3</string>
 </resources>
