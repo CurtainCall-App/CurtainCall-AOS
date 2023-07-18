@@ -7,10 +7,10 @@ import androidx.navigation.compose.composable
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
-import com.cmc.curtaincall.feature.partymember.ui.PartyMemberCreateScreen
 import com.cmc.curtaincall.feature.partymember.ui.PartyMemberDetailScreen
 import com.cmc.curtaincall.feature.partymember.ui.PartyMemberListScreen
 import com.cmc.curtaincall.feature.partymember.ui.PartyMemberScreen
+import com.cmc.curtaincall.feature.partymember.ui.create.PartyMemberCreateScreen
 
 private const val PARTYMEMBER_GRAPH = "partymember_graph"
 const val PARTYMEMBER = "partymember"
