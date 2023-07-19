@@ -1,10 +1,8 @@
 package com.cmc.curtaincall.common.design.component
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -25,7 +23,7 @@ import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.YearMonth
 
-private const val UNSELECTED_INDEX = -1
+private const val UNSELECTED_INDEX = Int.MIN_VALUE
 
 @Composable
 fun CurtainCallCalendar(
@@ -139,22 +137,14 @@ private fun MonthHeader(
             }
             Spacer(modifier = Modifier.weight(1f))
 
-            Box(
-                modifier = Modifier
-                    .size(46.dp, 24.dp)
-                    .background(White, RoundedCornerShape(20.dp))
-                    .border(1.dp, Me_Pink, RoundedCornerShape(20.dp))
-                    .clickable { onClick() },
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(R.string.partymember_create_calendar_confirm),
-                    color = Me_Pink,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo
-                )
-            }
+            Text(
+                text = stringResource(R.string.partymember_create_calendar_confirm),
+                modifier = Modifier.clickable { onClick() },
+                color = Me_Pink,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+                fontFamily = spoqahansanseeo
+            )
         }
 
         Spacer(
@@ -200,7 +190,10 @@ private fun Day(
             Text(
                 text = day.date.dayOfMonth.toString(),
                 modifier = Modifier
-                    .background(if (day in calendarDays && selectedDayIndex == calendarDays.indexOf(day)) Me_Pink else Color.Transparent, CircleShape)
+                    .background(
+                        color = if (day in calendarDays && selectedDayIndex == calendarDays.indexOf(day)) Me_Pink else Color.Transparent,
+                        shape = RoundedCornerShape(12.dp)
+                    )
                     .clickable {
                         if (day in calendarDays) {
                             onClick(
@@ -208,22 +201,40 @@ private fun Day(
                             )
                         }
                     }
-                    .padding(5.dp),
-                color = if (day.date.dayOfWeek == DayOfWeek.SUNDAY) {
-                    Red_Salsa.copy(if (day in calendarDays) 1f else 0.5f)
-                } else if (day.date.dayOfWeek == DayOfWeek.SATURDAY) {
-                    Ultramarine_Blue.copy(if (day in calendarDays) 1f else 0.5f)
-                } else {
-                    if (day in calendarDays) {
-                        Gunmetal
-                    } else {
-                        Silver_Sand
-                    }
-                },
+                    .padding(9.dp),
+                color = getDayColor(
+                    enabled = day in calendarDays,
+                    isSelected = selectedDayIndex == calendarDays.indexOf(day),
+                    dayOfWeek = day.date.dayOfWeek
+                ),
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Medium,
                 fontFamily = spoqahansanseeo
             )
+        }
+    }
+}
+
+private fun getDayColor(
+    enabled: Boolean,
+    isSelected: Boolean,
+    dayOfWeek: DayOfWeek,
+): Color {
+    if (isSelected) {
+        return White
+    } else {
+        if (enabled) {
+            return when (dayOfWeek) {
+                DayOfWeek.SUNDAY -> Red_Salsa
+                DayOfWeek.SATURDAY -> Ultramarine_Blue
+                else -> Gunmetal
+            }
+        } else {
+            return when (dayOfWeek) {
+                DayOfWeek.SUNDAY -> Red_Salsa.copy(alpha = 0.5f)
+                DayOfWeek.SATURDAY -> Ultramarine_Blue.copy(alpha = 0.5f)
+                else -> Silver_Sand
+            }
         }
     }
 }
