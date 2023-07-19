@@ -73,5 +73,8 @@
     <string name="partymember_create_select_performance_date">공연 날짜를 선택해주세요</string>
     <string name="partymember_create_select_date">날짜를 선택해주세요.</string>
     <string name="partymember_create_select_time">시간대를 선택해주세요.</string>
-    <string name="partymember_ceatee_select_personnel">인원을 선택해주세요.</string>
+    <string name="partymember_create_select_personnel">인원을 선택해주세요.</string>
+    <string name="partymember_create_calendar_year_format">%d년 %d월</string>
+    <string name="partymember_create_calendar_date_format">%d년 %d월 %d일</string>
+    <string name="partymember_create_calendar_confirm">확인</string>
 </resources>
