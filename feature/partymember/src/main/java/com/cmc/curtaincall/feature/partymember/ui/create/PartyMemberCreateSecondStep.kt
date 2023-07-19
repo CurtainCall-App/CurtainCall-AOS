@@ -63,7 +63,7 @@ private fun LazyGridScope.showPerformanceSecondStep(
             ) {
                 var isClickedDate by remember { mutableStateOf(false) }
                 var isClickedTime by remember { mutableStateOf(false) }
-                SelectEditInput(
+                SelectInput(
                     modifier = Modifier.padding(top = 14.dp),
                     description = stringResource(R.string.partymember_create_select_performance_date),
                     subDescription = stringResource(R.string.partymember_create_select_date),
@@ -96,11 +96,12 @@ private fun LazyGridScope.showPerformanceSecondStep(
                     )
                 }
 
-                SelectEditInput(
+                SelectInput(
                     modifier = Modifier.padding(top = 123.dp),
                     description = stringResource(R.string.partymember_create_select_time),
                     subDescription = stringResource(R.string.partymember_create_select_time),
                     input = selectedTime,
+                    enabled = selectedDate.isNotEmpty(),
                     isClicked = isClickedTime,
                     onClick = { isClickedTime = isClickedTime.not() }
                 ) {
@@ -162,11 +163,12 @@ private fun DropDownTime(
 }
 
 @Composable
-private fun SelectEditInput(
+private fun SelectInput(
     modifier: Modifier = Modifier,
     description: String,
     subDescription: String,
     input: String,
+    enabled: Boolean = true,
     isClicked: Boolean,
     onClick: () -> Unit = {},
     content: @Composable () -> Unit = {}
@@ -205,7 +207,11 @@ private fun SelectEditInput(
                 .fillMaxWidth()
                 .padding(top = 9.dp)
                 .height(40.dp)
-                .clickable { onClick() },
+                .clickable {
+                    if (enabled) {
+                        onClick()
+                    }
+                },
             shape = RoundedCornerShape(10.dp),
             color = Cultured
         ) {

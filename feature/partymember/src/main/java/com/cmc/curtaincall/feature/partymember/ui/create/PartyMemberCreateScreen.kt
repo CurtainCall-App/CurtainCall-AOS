@@ -19,6 +19,8 @@ import com.cmc.curtaincall.common.design.theme.*
 import com.cmc.curtaincall.feature.partymember.PartyType
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
+private const val UNSELECTED_INDEX = -1
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PartyMemberCreateScreen(
@@ -27,7 +29,7 @@ internal fun PartyMemberCreateScreen(
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(White)
-
+    var step by remember { mutableStateOf(1) }
     Scaffold(
         topBar = {
             TopAppBarWithBack(
@@ -35,29 +37,39 @@ internal fun PartyMemberCreateScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(38.dp),
-                onClick = onBack
+                onClick = {
+                    if (step == 1) {
+                        onBack()
+                    } else {
+                        step--
+                    }
+                }
             )
         }
     ) { paddingValues ->
         PartyMemberCreateContent(
-            partyType = partyType,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(White)
+                .background(White),
+            partyType = partyType,
+            currentStep = step,
+            onChangeStep = { step = it }
         )
     }
 }
 
 @Composable
 private fun PartyMemberCreateContent(
+    modifier: Modifier = Modifier,
     partyType: PartyType,
-    modifier: Modifier = Modifier
+    currentStep: Int,
+    onChangeStep: (Int) -> Unit
 ) {
-    var step by remember { mutableStateOf(1) }
-    var selectedIndex by remember { mutableStateOf(-1) }
+    var selectedPerformanceIndex by remember { mutableStateOf(UNSELECTED_INDEX) }
     var dateState by remember { mutableStateOf("") }
     var timeState by remember { mutableStateOf("") }
+
     Box(modifier) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
@@ -69,15 +81,15 @@ private fun PartyMemberCreateContent(
                     .padding(top = 28.dp)
                     .padding(horizontal = 6.dp),
                 partyType = partyType,
-                currentStep = step
+                currentStep = currentStep
             )
 
-            when (step) {
+            when (currentStep) {
                 1 -> showFirstStep(
                     modifier = Modifier.fillMaxWidth(),
                     partyType = partyType,
-                    selectedIndex = selectedIndex,
-                    onChangeSelect = { selectedIndex = it }
+                    selectedIndex = selectedPerformanceIndex,
+                    onChangeSelect = { selectedPerformanceIndex = it }
                 )
                 2 -> showSecondStep(
                     modifier = Modifier.fillMaxWidth(),
@@ -90,25 +102,25 @@ private fun PartyMemberCreateContent(
             }
         }
 
-        when (step) {
+        when (currentStep) {
             1 -> {
                 Button(
-                    onClick = { step++ },
+                    onClick = { onChangeStep(currentStep + 1) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter)
                         .padding(horizontal = 22.dp)
                         .padding(bottom = 15.dp),
-                    enabled = selectedIndex != -1,
+                    enabled = selectedPerformanceIndex != UNSELECTED_INDEX,
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if (selectedIndex != -1) Me_Pink else Bright_Gray,
+                        containerColor = if (selectedPerformanceIndex != UNSELECTED_INDEX) Me_Pink else Bright_Gray,
                         disabledContainerColor = Bright_Gray
                     )
                 ) {
                     Text(
                         text = stringResource(R.string.partymember_create_next),
-                        color = if (selectedIndex != -1) White else Silver_Sand,
+                        color = if (selectedPerformanceIndex != UNSELECTED_INDEX) White else Silver_Sand,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Medium,
                         fontFamily = spoqahansanseeo
@@ -117,7 +129,7 @@ private fun PartyMemberCreateContent(
             }
             2 -> {
                 Button(
-                    onClick = { step++ },
+                    onClick = { onChangeStep(currentStep + 1) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter)
