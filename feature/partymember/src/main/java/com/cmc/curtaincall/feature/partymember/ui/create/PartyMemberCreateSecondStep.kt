@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -20,8 +21,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.component.CurtainCallCalendar
 import com.cmc.curtaincall.common.design.theme.*
 import com.cmc.curtaincall.feature.partymember.PartyType
+import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.DayPosition
+import java.time.LocalDate
 
 fun LazyGridScope.showSecondStep(
     modifier: Modifier = Modifier,
@@ -29,7 +34,7 @@ fun LazyGridScope.showSecondStep(
     selectedDate: String,
     selectedTime: String,
     onSelectDate: (String) -> Unit = {},
-    onSelectTime: (String) -> Unit
+    onSelectTime: (String) -> Unit = {}
 ) {
     if (partyType == PartyType.ETC) {
     } else {
@@ -51,6 +56,7 @@ private fun LazyGridScope.showPerformanceSecondStep(
     onSelectTime: (String) -> Unit
 ) {
     item(span = { GridItemSpan(3) }) {
+        val context = LocalContext.current
         CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
             Box(
                 modifier = modifier.padding(horizontal = 6.dp),
@@ -64,7 +70,31 @@ private fun LazyGridScope.showPerformanceSecondStep(
                     input = selectedDate,
                     isClicked = isClickedDate,
                     onClick = { isClickedDate = isClickedDate.not() }
-                )
+                ) {
+                    CurtainCallCalendar(
+                        modifier = Modifier.padding(top = 10.dp),
+                        calendarDays = listOf(
+                            CalendarDay(LocalDate.now(), DayPosition.MonthDate),
+                            CalendarDay(LocalDate.of(2023, 7, 18), DayPosition.MonthDate),
+                            CalendarDay(LocalDate.of(2023, 7, 17), DayPosition.MonthDate),
+                            CalendarDay(LocalDate.of(2023, 7, 16), DayPosition.MonthDate),
+                            CalendarDay(LocalDate.of(2023, 7, 15), DayPosition.MonthDate),
+                            CalendarDay(LocalDate.of(2023, 7, 14), DayPosition.MonthDate),
+                            CalendarDay(LocalDate.of(2023, 7, 13), DayPosition.MonthDate),
+                        ),
+                        onDateClick = {
+                            onSelectDate(
+                                String.format(
+                                    context.getString(R.string.partymember_create_calendar_date_format),
+                                    it.date.year,
+                                    it.date.month.value,
+                                    it.date.dayOfMonth
+                                )
+                            )
+                            isClickedDate = false
+                        }
+                    )
+                }
 
                 SelectEditInput(
                     modifier = Modifier.padding(top = 123.dp),
@@ -205,7 +235,7 @@ private fun PersonnelButton(
     Column(modifier = modifier) {
         Row {
             Text(
-                text = stringResource(R.string.partymember_ceatee_select_personnel),
+                text = stringResource(R.string.partymember_create_select_personnel),
                 color = Eerie_Black,
                 fontSize = 18.sp,
                 fontWeight = FontWeight.Bold,

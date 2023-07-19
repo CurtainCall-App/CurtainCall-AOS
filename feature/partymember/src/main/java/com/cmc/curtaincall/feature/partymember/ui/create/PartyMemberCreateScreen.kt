@@ -84,6 +84,7 @@ private fun PartyMemberCreateContent(
                     partyType = partyType,
                     selectedDate = dateState,
                     selectedTime = timeState,
+                    onSelectDate = { dateState = it },
                     onSelectTime = { timeState = it }
                 )
             }
