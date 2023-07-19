@@ -24,12 +24,12 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @Composable
 fun PartyMemberScreen(onNavigateList: (PartyType) -> Unit) {
     val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(Black.copy(alpha = 0.36f))
+    systemUiController.setStatusBarColor(Cultured)
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Black.copy(alpha = 0.36f))
+            .background(Cultured)
             .padding(bottom = 30.dp)
     ) {
         Text(

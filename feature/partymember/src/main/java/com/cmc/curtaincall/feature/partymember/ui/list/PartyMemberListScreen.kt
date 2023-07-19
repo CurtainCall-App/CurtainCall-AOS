@@ -77,7 +77,7 @@ private fun PartyMemberList(
     modifier: Modifier = Modifier,
     onNavigateDetail: (PartyType) -> Unit
 ) {
-    LazyColumn(modifier = modifier.background(Black.copy(alpha = 0.36f))) {
+    LazyColumn(modifier = modifier.background(Cultured)) {
         item {
             Text(
                 text = stringResource(R.string.partymember_list_description),
@@ -467,6 +467,6 @@ private fun TopAppBarWithSearch(
                 }
             }
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Black.copy(0.36f))
+        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Cultured)
     )
 }
