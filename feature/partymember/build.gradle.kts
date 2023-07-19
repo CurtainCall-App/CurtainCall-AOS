@@ -37,6 +37,9 @@ dependencies {
     implementation(libs.bundles.androidx.compose)
     implementation(libs.accompanist.systemuicontroller)
 
+    // 3rd party
+    implementation(libs.calendar.compose)
+
     implementation(libs.androidx.core.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
