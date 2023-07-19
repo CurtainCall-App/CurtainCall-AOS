@@ -70,4 +70,8 @@
     <string name="partymember_create_first_step">Step 1</string>
     <string name="partymember_create_second_step">Step 2</string>
     <string name="partymember_create_third_step">Step 3</string>
+    <string name="partymember_create_select_performance_date">공연 날짜를 선택해주세요</string>
+    <string name="partymember_create_select_date">날짜를 선택해주세요.</string>
+    <string name="partymember_create_select_time">시간대를 선택해주세요.</string>
+    <string name="partymember_ceatee_select_personnel">인원을 선택해주세요.</string>
 </resources>

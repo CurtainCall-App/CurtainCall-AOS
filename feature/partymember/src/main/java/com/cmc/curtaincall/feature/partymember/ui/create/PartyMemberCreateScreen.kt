@@ -56,6 +56,8 @@ private fun PartyMemberCreateContent(
 ) {
     var step by remember { mutableStateOf(1) }
     var selectedIndex by remember { mutableStateOf(-1) }
+    var dateState by remember { mutableStateOf("") }
+    var timeState by remember { mutableStateOf("") }
     Box(modifier) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
@@ -77,30 +79,65 @@ private fun PartyMemberCreateContent(
                     selectedIndex = selectedIndex,
                     onChangeSelect = { selectedIndex = it }
                 )
+                2 -> showSecondStep(
+                    modifier = Modifier.fillMaxWidth(),
+                    partyType = partyType,
+                    selectedDate = dateState,
+                    selectedTime = timeState,
+                    onSelectTime = { timeState = it }
+                )
             }
         }
 
-        Button(
-            onClick = { /*TODO*/ },
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomCenter)
-                .padding(horizontal = 22.dp)
-                .padding(bottom = 15.dp),
-            enabled = selectedIndex != -1,
-            shape = RoundedCornerShape(12.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = if (selectedIndex != -1) Me_Pink else Bright_Gray,
-                disabledContainerColor = Bright_Gray
-            )
-        ) {
-            Text(
-                text = stringResource(R.string.partymember_create_next),
-                color = if (selectedIndex != -1) White else Silver_Sand,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Medium,
-                fontFamily = spoqahansanseeo
-            )
+        when (step) {
+            1 -> {
+                Button(
+                    onClick = { step++ },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                        .padding(horizontal = 22.dp)
+                        .padding(bottom = 15.dp),
+                    enabled = selectedIndex != -1,
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (selectedIndex != -1) Me_Pink else Bright_Gray,
+                        disabledContainerColor = Bright_Gray
+                    )
+                ) {
+                    Text(
+                        text = stringResource(R.string.partymember_create_next),
+                        color = if (selectedIndex != -1) White else Silver_Sand,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = spoqahansanseeo
+                    )
+                }
+            }
+            2 -> {
+                Button(
+                    onClick = { step++ },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                        .padding(horizontal = 22.dp)
+                        .padding(bottom = 15.dp),
+                    enabled = dateState.isNotEmpty() and timeState.isNotEmpty(),
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (dateState.isNotEmpty() and timeState.isNotEmpty()) Me_Pink else Bright_Gray,
+                        disabledContainerColor = Bright_Gray
+                    )
+                ) {
+                    Text(
+                        text = stringResource(R.string.partymember_create_next),
+                        color = if (dateState.isNotEmpty() and timeState.isNotEmpty()) White else Silver_Sand,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = spoqahansanseeo
+                    )
+                }
+            }
         }
     }
 }
