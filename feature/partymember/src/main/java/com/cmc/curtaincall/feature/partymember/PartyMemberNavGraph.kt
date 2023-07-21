@@ -11,13 +11,15 @@ import com.cmc.curtaincall.feature.partymember.ui.PartyMemberDetailScreen
 import com.cmc.curtaincall.feature.partymember.ui.PartyMemberListScreen
 import com.cmc.curtaincall.feature.partymember.ui.PartyMemberScreen
 import com.cmc.curtaincall.feature.partymember.ui.create.PartyMemberCreateScreen
+import com.cmc.curtaincall.feature.partymember.ui.upload.PartyMemberUploadScreen
 
 private const val PARTYMEMBER_GRAPH = "partymember_graph"
 const val PARTYMEMBER = "partymember"
 private const val PARTYMEMBER_LABEL = "파티원"
 private const val PARTYMEMBER_LIST = "partymember_list"
-private const val PARTYMEMBER_DETAIL = "partymemeber_detail"
-private const val PARTYMEMBER_CREATE = "partymemeber_create"
+private const val PARTYMEMBER_DETAIL = "partymember_detail"
+private const val PARTYMEMBER_CREATE = "partymember_create"
+private const val PARTYMEMBER_UPLOAD = "partymember_upload"
 
 enum class PartyType {
     PERFORMANCE, MEAL, ETC
@@ -67,9 +69,23 @@ sealed interface PartyMemberDestination : CurtainCallDestination {
             }
         )
     }
+
+    object Upload : PartyMemberDestination {
+        override val route = PARTYMEMBER_UPLOAD
+        const val typeArg = "type"
+        val routeWithArgs = "$route/{$typeArg}"
+        val arguments = listOf(
+            navArgument(typeArg) {
+                type = NavType.EnumType(PartyType::class.java)
+            }
+        )
+    }
 }
 
-fun NavGraphBuilder.partymemberNavGraph(navHostController: NavHostController) {
+fun NavGraphBuilder.partymemberNavGraph(
+    navHostController: NavHostController,
+    onNavigateHome: () -> Unit
+) {
     navigation(startDestination = PartyMemberDestination.PartyMember.route, route = PARTYMEMBER_GRAPH) {
         composable(route = PartyMemberDestination.PartyMember.route) {
             PartyMemberScreen { navHostController.navigate("${PartyMemberDestination.List.route}/$it") }
@@ -111,7 +127,29 @@ fun NavGraphBuilder.partymemberNavGraph(navHostController: NavHostController) {
             if (partyType != null) {
                 PartyMemberCreateScreen(
                     partyType = partyType,
+                    onNavigateUpload = { navHostController.navigate("${PartyMemberDestination.Upload.route}/$it") },
                     onBack = { navHostController.popBackStack() }
+                )
+            }
+        }
+
+        composable(
+            route = PartyMemberDestination.Upload.routeWithArgs,
+            arguments = PartyMemberDestination.Upload.arguments
+        ) { entry ->
+            val partyType: PartyType? = getPartyType(entry.arguments)
+            if (partyType != null) {
+                PartyMemberUploadScreen(
+                    partyType = partyType,
+                    onNavigateList = {
+                        navHostController.navigate("${PartyMemberDestination.List.route}/$it") {
+                            popUpTo(PartyMemberDestination.List.routeWithArgs) {
+                                inclusive = false
+                            }
+                            launchSingleTop = true
+                        }
+                    },
+                    onNavigateHome = onNavigateHome
                 )
             }
         }

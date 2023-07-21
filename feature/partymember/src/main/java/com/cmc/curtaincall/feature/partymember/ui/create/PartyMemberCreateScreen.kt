@@ -29,6 +29,7 @@ enum class STEP(val prevStep: STEP) {
 @Composable
 internal fun PartyMemberCreateScreen(
     partyType: PartyType,
+    onNavigateUpload: (PartyType) -> Unit,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -59,7 +60,8 @@ internal fun PartyMemberCreateScreen(
                 .background(White),
             partyType = partyType,
             currentStep = step,
-            onChangeStep = { step = it }
+            onChangeStep = { step = it },
+            onNavigateUpload = onNavigateUpload
         )
     }
 }
@@ -69,7 +71,8 @@ private fun PartyMemberCreateContent(
     modifier: Modifier = Modifier,
     partyType: PartyType,
     currentStep: STEP,
-    onChangeStep: (STEP) -> Unit
+    onChangeStep: (STEP) -> Unit,
+    onNavigateUpload: (PartyType) -> Unit
 ) {
     var selectedPerformanceIndex by remember { mutableStateOf(UNSELECTED_INDEX) }
     var selectedDateState by remember { mutableStateOf("") }
@@ -177,7 +180,7 @@ private fun PartyMemberCreateContent(
             }
             STEP.PHASE3 -> {
                 Button(
-                    onClick = { },
+                    onClick = { onNavigateUpload(partyType) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter)
