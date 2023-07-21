@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.common.design.component.CurtainCallCalendar
+import com.cmc.curtaincall.common.design.component.SelectedDateCalender
 import com.cmc.curtaincall.common.design.theme.*
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
@@ -50,7 +50,7 @@ fun LazyGridScope.showPerformanceSecondStep(
                     isClicked = isClickedDate,
                     onClick = { isClickedDate = isClickedDate.not() }
                 ) {
-                    CurtainCallCalendar(
+                    SelectedDateCalender(
                         modifier = Modifier.padding(top = 10.dp),
                         calendarDays = listOf(
                             CalendarDay(LocalDate.now(), DayPosition.MonthDate),

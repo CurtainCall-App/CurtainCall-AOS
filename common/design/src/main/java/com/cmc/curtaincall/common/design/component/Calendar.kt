@@ -26,7 +26,7 @@ import java.time.YearMonth
 private const val UNSELECTED_INDEX = Int.MIN_VALUE
 
 @Composable
-fun CurtainCallCalendar(
+fun SelectedDateCalender(
     modifier: Modifier = Modifier,
     calendarDays: List<CalendarDay> = listOf(),
     onDateClick: (CalendarDay) -> Unit = { }
