@@ -191,7 +191,7 @@ private fun PartyMemberCreateContent(
                     )
                 ) {
                     Text(
-                        text = stringResource(R.string.partymember_create_next),
+                        text = stringResource(R.string.partymember_create_write_complete),
                         color = if (titleTextState.isNotEmpty() && contentTextState.isNotEmpty()) White else Silver_Sand,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Medium,
@@ -213,8 +213,8 @@ private fun LazyGridScope.createClip(
         Row(modifier) {
             Box(
                 modifier = Modifier
-                    .size(71.dp, 24.dp)
-                    .background(Cetacean_Blue, RoundedCornerShape(12.dp)),
+                    .background(Cetacean_Blue, RoundedCornerShape(12.dp))
+                    .padding(vertical = 4.dp, horizontal = 12.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Text(

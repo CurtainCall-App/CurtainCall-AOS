@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cmc.curtaincall.common.design.R
@@ -97,18 +98,19 @@ private fun ContentTextField(
                 fontWeight = FontWeight.Medium,
                 fontFamily = spoqahansanseeo
             ),
-            singleLine = true,
-            maxLines = 1,
             decorationBox = { innerTextField ->
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 18.dp)
-                        .padding(top = 12.dp),
+                        .padding(horizontal = 12.dp)
+                        .padding(vertical = 12.dp),
                 ) {
                     if (text.isEmpty()) {
                         Text(
                             text = stringResource(R.string.partymember_create_write_content_placeholder),
+                            modifier = Modifier
+                                .width(284.dp)
+                                .wrapContentHeight(),
                             color = Roman_Silver,
                             fontSize = 15.sp,
                             fontWeight = FontWeight.Medium,
@@ -118,6 +120,21 @@ private fun ContentTextField(
                     innerTextField()
                 }
             }
+        )
+
+        Text(
+            text = String.format(
+                stringResource(R.string.partymember_create_write_number_of_text),
+                text.length
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
+            color = Roman_Silver,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Medium,
+            fontFamily = spoqahansanseeo,
+            textAlign = TextAlign.End
         )
     }
 }
