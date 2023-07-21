@@ -23,32 +23,11 @@ import androidx.compose.ui.zIndex
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.CurtainCallCalendar
 import com.cmc.curtaincall.common.design.theme.*
-import com.cmc.curtaincall.feature.partymember.PartyType
 import com.kizitonwose.calendar.core.CalendarDay
 import com.kizitonwose.calendar.core.DayPosition
 import java.time.LocalDate
 
-fun LazyGridScope.showSecondStep(
-    modifier: Modifier = Modifier,
-    partyType: PartyType,
-    selectedDate: String,
-    selectedTime: String,
-    onSelectDate: (String) -> Unit = {},
-    onSelectTime: (String) -> Unit = {}
-) {
-    if (partyType == PartyType.ETC) {
-    } else {
-        showPerformanceSecondStep(
-            modifier = modifier,
-            selectedDate = selectedDate,
-            selectedTime = selectedTime,
-            onSelectDate = onSelectDate,
-            onSelectTime = onSelectTime
-        )
-    }
-}
-
-private fun LazyGridScope.showPerformanceSecondStep(
+fun LazyGridScope.showPerformanceSecondStep(
     modifier: Modifier = Modifier,
     selectedDate: String,
     selectedTime: String,

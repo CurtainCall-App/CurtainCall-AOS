@@ -27,30 +27,12 @@ import androidx.compose.ui.unit.sp
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.theme.*
 import com.cmc.curtaincall.feature.partymember.PartyPerformanceType
-import com.cmc.curtaincall.feature.partymember.PartyType
 
 enum class SortType {
     Reservation, Korean
 }
 
-internal fun LazyGridScope.showFirstStep(
-    modifier: Modifier = Modifier,
-    partyType: PartyType,
-    selectedIndex: Int,
-    onChangeSelect: (Int) -> Unit
-) {
-    if (partyType == PartyType.ETC) {
-        showEtcFirstStep(modifier)
-    } else {
-        showPerformanceFirstStep(
-            modifier = modifier,
-            selectedIndex = selectedIndex,
-            onChangeSelect = onChangeSelect
-        )
-    }
-}
-
-private fun LazyGridScope.showPerformanceFirstStep(
+fun LazyGridScope.showPerformanceFirstStep(
     modifier: Modifier = Modifier,
     selectedIndex: Int,
     onChangeSelect: (Int) -> Unit
@@ -103,7 +85,7 @@ private fun LazyGridScope.showPerformanceFirstStep(
     }
 }
 
-private fun LazyGridScope.showEtcFirstStep(
+fun LazyGridScope.showEtcFirstStep(
     modifier: Modifier = Modifier
 ) {
 }
