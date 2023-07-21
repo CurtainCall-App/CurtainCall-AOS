@@ -77,4 +77,8 @@
     <string name="partymember_create_calendar_year_format">%d년 %d월</string>
     <string name="partymember_create_calendar_date_format">%d년 %d월 %d일</string>
     <string name="partymember_create_calendar_confirm">확인</string>
+    <string name="partymember_create_write_title">제목을 적어주세요.</string>
+    <string name="partymember_create_write_title_placeholder">예시)OOO 함께 볼 사람 구해요!</string>
+    <string name="partymember_create_write_content">내용을 적어주세요.</string>
+    <string name="partymember_create_write_content_placeholder">예시)\n이번주 공연 같이 볼 4명 구합니다.\n구체적인 내용은 톡방 생성되면 얘기할 예정입니다.</string>
 </resources>
