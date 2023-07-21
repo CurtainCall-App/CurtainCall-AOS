@@ -55,8 +55,8 @@ fun LazyGridScope.showPerformanceSecondStep(
                         calendarDays = listOf(
                             CalendarDay(LocalDate.now(), DayPosition.MonthDate),
                             CalendarDay(LocalDate.of(2023, 7, 18), DayPosition.MonthDate),
-                            CalendarDay(LocalDate.of(2023, 7, 17), DayPosition.MonthDate),
-                            CalendarDay(LocalDate.of(2023, 7, 16), DayPosition.MonthDate),
+                            CalendarDay(LocalDate.of(2023, 8, 17), DayPosition.MonthDate),
+                            CalendarDay(LocalDate.of(2023, 6, 16), DayPosition.MonthDate),
                             CalendarDay(LocalDate.of(2023, 7, 15), DayPosition.MonthDate),
                             CalendarDay(LocalDate.of(2023, 7, 14), DayPosition.MonthDate),
                             CalendarDay(LocalDate.of(2023, 7, 13), DayPosition.MonthDate),

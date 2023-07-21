@@ -18,12 +18,16 @@ import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.theme.*
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
-import com.kizitonwose.calendar.core.*
+import com.kizitonwose.calendar.core.CalendarDay
+import com.kizitonwose.calendar.core.CalendarMonth
+import com.kizitonwose.calendar.core.DayPosition
+import com.kizitonwose.calendar.core.firstDayOfWeekFromLocale
 import kotlinx.coroutines.launch
 import java.time.DayOfWeek
+import java.time.LocalDate
 import java.time.YearMonth
 
-private const val UNSELECTED_INDEX = Int.MIN_VALUE
+private val UNSELECTED_CALENDARDAY = CalendarDay(LocalDate.MIN, DayPosition.InDate)
 
 @Composable
 fun SelectedDateCalender(
@@ -43,7 +47,8 @@ fun SelectedDateCalender(
         firstVisibleMonth = currentMonth,
         firstDayOfWeek = firstDayOfWeek
     )
-    var selectedDayIndex by remember { mutableStateOf(UNSELECTED_INDEX) }
+    var selectedCalendarDay by remember { mutableStateOf(UNSELECTED_CALENDARDAY) }
+
     Card(
         modifier = modifier.padding(bottom = 10.dp),
         shape = RoundedCornerShape(10.dp),
@@ -51,13 +56,14 @@ fun SelectedDateCalender(
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         HorizontalCalendar(
+            modifier = Modifier.padding(bottom = 13.dp),
             state = calendarState,
             dayContent = { day ->
                 Day(
                     day = day,
                     calendarDays = calendarDays,
-                    selectedDayIndex = selectedDayIndex,
-                    onClick = { selectedDayIndex = it }
+                    selectedCalendarDay = selectedCalendarDay,
+                    onClick = { selectedCalendarDay = it }
                 )
             },
             monthHeader = { calendarMonth ->
@@ -76,8 +82,8 @@ fun SelectedDateCalender(
                         }
                     },
                     onClick = {
-                        if (selectedDayIndex != UNSELECTED_INDEX) {
-                            onDateClick(calendarDays[selectedDayIndex])
+                        if (selectedCalendarDay != UNSELECTED_CALENDARDAY) {
+                            onDateClick(selectedCalendarDay)
                         }
                     }
                 )
@@ -178,33 +184,37 @@ private fun MonthHeader(
 @Composable
 private fun Day(
     day: CalendarDay,
-    selectedDayIndex: Int,
+    selectedCalendarDay: CalendarDay,
     calendarDays: List<CalendarDay> = listOf(),
-    onClick: (Int) -> Unit
+    onClick: (CalendarDay) -> Unit
 ) {
     Box(
-        modifier = Modifier.aspectRatio(1.2f),
+        modifier = Modifier
+            .background(
+                color = if (((day in calendarDays) or calendarDays.isEmpty()) and (day == selectedCalendarDay)) Me_Pink else Color.Transparent,
+                shape = RoundedCornerShape(12.dp)
+            )
+            .clickable {
+                if (day.position == DayPosition.MonthDate) {
+                    if (calendarDays.isEmpty()) {
+                        onClick(day)
+                    } else {
+                        if (day in calendarDays) {
+                            onClick(if (selectedCalendarDay == day) UNSELECTED_CALENDARDAY else day)
+                        }
+                    }
+                }
+            }
+            .size(40.dp),
         contentAlignment = Alignment.Center
     ) {
         if (day.position == DayPosition.MonthDate) {
             Text(
                 text = day.date.dayOfMonth.toString(),
-                modifier = Modifier
-                    .background(
-                        color = if (day in calendarDays && selectedDayIndex == calendarDays.indexOf(day)) Me_Pink else Color.Transparent,
-                        shape = RoundedCornerShape(12.dp)
-                    )
-                    .clickable {
-                        if (day in calendarDays) {
-                            onClick(
-                                if (selectedDayIndex == calendarDays.indexOf(day)) UNSELECTED_INDEX else calendarDays.indexOf(day)
-                            )
-                        }
-                    }
-                    .padding(9.dp),
+                modifier = Modifier.align(Alignment.Center),
                 color = getDayColor(
-                    enabled = day in calendarDays,
-                    isSelected = selectedDayIndex == calendarDays.indexOf(day),
+                    enabled = if (calendarDays.isEmpty()) true else day in calendarDays,
+                    isSelected = selectedCalendarDay == day,
                     dayOfWeek = day.date.dayOfWeek
                 ),
                 fontSize = 16.sp,
