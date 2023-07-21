@@ -83,4 +83,8 @@
     <string name="partymember_create_write_content_placeholder">예시)\n이번주 공연 같이 볼 4명 구합니다.\n구체적인 내용은 톡방 생성되면 얘기할 예정입니다.</string>
     <string name="partymember_create_write_number_of_text">글자수 제한 (%d/400)</string>
     <string name="partymember_create_write_complete">작성 완료</string>
+    <string name="partymember_upload_complete">파티원 모집글이 게시되었습니다.</string>
+    <string name="partymember_upload_complete_description">해당 게시물은 파티원 모집과\n마이페이지에서 확인할 수 있습니다.</string>
+    <string name="partymember_upload_checking_article">게시물 확인하기</string>
+    <string name="partymember_upload_move_to_home">홈으로 이동</string>
 </resources>
