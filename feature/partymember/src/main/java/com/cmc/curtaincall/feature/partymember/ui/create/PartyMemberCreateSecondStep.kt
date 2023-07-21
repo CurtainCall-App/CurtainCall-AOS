@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ripple.LocalRippleTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -36,68 +35,66 @@ fun LazyGridScope.showPerformanceSecondStep(
 ) {
     item(span = { GridItemSpan(3) }) {
         val context = LocalContext.current
-        CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
-            Box(
-                modifier = modifier.padding(horizontal = 6.dp),
+        Box(
+            modifier = modifier.padding(horizontal = 6.dp),
+        ) {
+            var isClickedDate by remember { mutableStateOf(false) }
+            var isClickedTime by remember { mutableStateOf(false) }
+            SelectInput(
+                modifier = Modifier.padding(top = 14.dp),
+                description = stringResource(R.string.partymember_create_select_performance_date),
+                subDescription = stringResource(R.string.partymember_create_select_date),
+                input = selectedDate,
+                isClicked = isClickedDate,
+                onClick = { isClickedDate = isClickedDate.not() }
             ) {
-                var isClickedDate by remember { mutableStateOf(false) }
-                var isClickedTime by remember { mutableStateOf(false) }
-                SelectInput(
-                    modifier = Modifier.padding(top = 14.dp),
-                    description = stringResource(R.string.partymember_create_select_performance_date),
-                    subDescription = stringResource(R.string.partymember_create_select_date),
-                    input = selectedDate,
-                    isClicked = isClickedDate,
-                    onClick = { isClickedDate = isClickedDate.not() }
-                ) {
-                    SelectedDateCalender(
-                        modifier = Modifier.padding(top = 10.dp),
-                        calendarDays = listOf(
-                            CalendarDay(LocalDate.now(), DayPosition.MonthDate),
-                            CalendarDay(LocalDate.of(2023, 7, 18), DayPosition.MonthDate),
-                            CalendarDay(LocalDate.of(2023, 8, 17), DayPosition.MonthDate),
-                            CalendarDay(LocalDate.of(2023, 6, 16), DayPosition.MonthDate),
-                            CalendarDay(LocalDate.of(2023, 7, 15), DayPosition.MonthDate),
-                            CalendarDay(LocalDate.of(2023, 7, 14), DayPosition.MonthDate),
-                            CalendarDay(LocalDate.of(2023, 7, 13), DayPosition.MonthDate),
-                        ),
-                        onDateClick = {
-                            onSelectDate(
-                                String.format(
-                                    context.getString(R.string.partymember_create_calendar_date_format),
-                                    it.date.year,
-                                    it.date.month.value,
-                                    it.date.dayOfMonth
-                                )
+                SelectedDateCalender(
+                    modifier = Modifier.padding(top = 10.dp),
+                    calendarDays = listOf(
+                        CalendarDay(LocalDate.now(), DayPosition.MonthDate),
+                        CalendarDay(LocalDate.of(2023, 7, 18), DayPosition.MonthDate),
+                        CalendarDay(LocalDate.of(2023, 8, 17), DayPosition.MonthDate),
+                        CalendarDay(LocalDate.of(2023, 6, 16), DayPosition.MonthDate),
+                        CalendarDay(LocalDate.of(2023, 7, 15), DayPosition.MonthDate),
+                        CalendarDay(LocalDate.of(2023, 7, 14), DayPosition.MonthDate),
+                        CalendarDay(LocalDate.of(2023, 7, 13), DayPosition.MonthDate),
+                    ),
+                    onDateClick = {
+                        onSelectDate(
+                            String.format(
+                                context.getString(R.string.partymember_create_calendar_date_format),
+                                it.date.year,
+                                it.date.month.value,
+                                it.date.dayOfMonth
                             )
-                            isClickedDate = false
-                        }
-                    )
-                }
-
-                SelectInput(
-                    modifier = Modifier.padding(top = 123.dp),
-                    description = stringResource(R.string.partymember_create_select_time),
-                    subDescription = stringResource(R.string.partymember_create_select_time),
-                    input = selectedTime,
-                    enabled = selectedDate.isNotEmpty(),
-                    isClicked = isClickedTime,
-                    onClick = { isClickedTime = isClickedTime.not() }
-                ) {
-                    DropDownTime(
-                        modifier = Modifier.padding(top = 10.dp),
-                        times = listOf("14:00", "19:00", "20:00"),
-                        onClick = {
-                            onSelectTime(it)
-                            isClickedTime = false
-                        }
-                    )
-                }
-
-                PersonnelButton(
-                    modifier = Modifier.padding(top = 232.dp)
+                        )
+                        isClickedDate = false
+                    }
                 )
             }
+
+            SelectInput(
+                modifier = Modifier.padding(top = 123.dp),
+                description = stringResource(R.string.partymember_create_select_time),
+                subDescription = stringResource(R.string.partymember_create_select_time),
+                input = selectedTime,
+                enabled = selectedDate.isNotEmpty(),
+                isClicked = isClickedTime,
+                onClick = { isClickedTime = isClickedTime.not() }
+            ) {
+                DropDownTime(
+                    modifier = Modifier.padding(top = 10.dp),
+                    times = listOf("14:00", "19:00", "20:00"),
+                    onClick = {
+                        onSelectTime(it)
+                        isClickedTime = false
+                    }
+                )
+            }
+
+            PersonnelButton(
+                modifier = Modifier.padding(top = 232.dp)
+            )
         }
     }
 }
