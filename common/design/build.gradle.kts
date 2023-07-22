@@ -36,6 +36,9 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.androidx.compose)
 
+    // 3rd party
+    implementation(libs.calendar.compose)
+
     // test
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

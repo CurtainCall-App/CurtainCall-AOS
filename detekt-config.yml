@@ -3,6 +3,8 @@ complexity:
     active: false
   LongMethod:
     active: false
+  CyclomaticComplexMethod:
+    active: false
 
 style:
   MagicNumber:
@@ -17,12 +19,16 @@ style:
     active: false
   UseCheckOrError:
     active: false
+  ReturnCount:
+    active: false
 
 naming:
   TopLevelPropertyNaming:
     constantPattern: '[A-Z][A-Za-z0-9_]*'
   FunctionNaming:
     ignoreAnnotated: [ 'Composable' ]
+  MatchingDeclarationName:
+    active: false
 
 empty-blocks:
   EmptyClassBlock:

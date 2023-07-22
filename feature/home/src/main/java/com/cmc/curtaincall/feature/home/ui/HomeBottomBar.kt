@@ -3,12 +3,8 @@ package com.cmc.curtaincall.feature.home.ui
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.material.ripple.LocalRippleTheme
-import androidx.compose.material.ripple.RippleAlpha
-import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,15 +25,6 @@ import com.cmc.curtaincall.feature.mypage.MyPageDestination
 import com.cmc.curtaincall.feature.partymember.PartyMemberDestination
 import com.cmc.curtaincall.feature.performance.PerformanceDestination
 
-private object NoRippleTheme : RippleTheme {
-
-    @Composable
-    override fun defaultColor(): Color = Color.Transparent
-
-    @Composable
-    override fun rippleAlpha(): RippleAlpha = RippleAlpha(0f, 0f, 0f, 0f)
-}
-
 @Composable
 fun HomeBottomBar(navHostController: NavHostController) {
     val bottomDestinations = listOf(
@@ -53,18 +40,16 @@ fun HomeBottomBar(navHostController: NavHostController) {
     val hasBottomNavigation = bottomDestinations.any { it.route == currentDestination?.route }
 
     if (hasBottomNavigation) {
-        CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
-            NavigationBar(containerColor = White) {
-                bottomDestinations.forEach { bottomDestination ->
-                    if (bottomDestination.route == LiveTalkDestination.LiveTalk.route) {
-                        Spacer(Modifier.weight(1f))
-                    } else {
-                        HomeBottomBarItem(
-                            bottomDestination = bottomDestination,
-                            currentDestination = currentDestination,
-                            navHostController = navHostController
-                        )
-                    }
+        NavigationBar(containerColor = White) {
+            bottomDestinations.forEach { bottomDestination ->
+                if (bottomDestination.route == LiveTalkDestination.LiveTalk.route) {
+                    Spacer(Modifier.weight(1f))
+                } else {
+                    HomeBottomBarItem(
+                        bottomDestination = bottomDestination,
+                        currentDestination = currentDestination,
+                        navHostController = navHostController
+                    )
                 }
             }
         }

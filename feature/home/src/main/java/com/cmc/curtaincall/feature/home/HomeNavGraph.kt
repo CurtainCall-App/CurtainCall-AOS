@@ -72,7 +72,17 @@ fun HomeNavHost(navHostController: NavHostController = rememberNavController()) 
 
             performanceNavGraph(navHostController)
             livetalkNavGraph(navHostController)
-            partymemberNavGraph(navHostController)
+            partymemberNavGraph(
+                navHostController = navHostController,
+                onNavigateHome = {
+                    navHostController.navigate(HomeDestination.route) {
+                        popUpTo(HomeDestination.route) {
+                            inclusive = false
+                        }
+                        launchSingleTop = true
+                    }
+                }
+            )
             mypageNavGraph(navHostController)
         }
     }

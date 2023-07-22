@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.partymember.ui
+package com.cmc.curtaincall.feature.partymember.ui.list
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
@@ -29,6 +29,7 @@ import com.cmc.curtaincall.feature.partymember.PartyType
 internal fun PartyMemberListScreen(
     partyType: PartyType,
     onNavigateDetail: (PartyType) -> Unit,
+    onNavigateCreate: (PartyType) -> Unit,
     onBack: () -> Unit
 ) {
     var queryString by remember { mutableStateOf("") }
@@ -46,6 +47,18 @@ internal fun PartyMemberListScreen(
                 onChangeText = { queryString = it },
                 onBack = onBack
             )
+        },
+        floatingActionButton = {
+            IconButton(
+                onClick = { onNavigateCreate(partyType) },
+                modifier = Modifier.size(85.dp)
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_fab_write),
+                    contentDescription = null,
+                    tint = Color.Unspecified
+                )
+            }
         }
     ) { paddingValues ->
         PartyMemberList(
@@ -64,7 +77,7 @@ private fun PartyMemberList(
     modifier: Modifier = Modifier,
     onNavigateDetail: (PartyType) -> Unit
 ) {
-    LazyColumn(modifier = modifier.background(Black.copy(alpha = 0.36f))) {
+    LazyColumn(modifier = modifier.background(Cultured)) {
         item {
             Text(
                 text = stringResource(R.string.partymember_list_description),
@@ -454,6 +467,6 @@ private fun TopAppBarWithSearch(
                 }
             }
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Black.copy(0.36f))
+        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Cultured)
     )
 }
