@@ -7,8 +7,8 @@ import androidx.navigation.compose.composable
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
-import com.cmc.curtaincall.feature.partymember.ui.PartyMemberDetailScreen
-import com.cmc.curtaincall.feature.partymember.ui.PartyMemberListScreen
+import com.cmc.curtaincall.feature.partymember.ui.detail.PartyMemberDetailScreen
+import com.cmc.curtaincall.feature.partymember.ui.list.PartyMemberListScreen
 import com.cmc.curtaincall.feature.partymember.ui.PartyMemberScreen
 import com.cmc.curtaincall.feature.partymember.ui.create.PartyMemberCreateScreen
 import com.cmc.curtaincall.feature.partymember.ui.upload.PartyMemberUploadScreen
