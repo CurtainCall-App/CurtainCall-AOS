@@ -3,6 +3,7 @@ package com.cmc.curtaincall.feature.partymember.ui.upload
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -61,7 +62,8 @@ internal fun PartyMemberUploadScreen(
         Box(
             modifier = Modifier
                 .padding(top = 20.dp)
-                .border(BorderStroke(1.dp, Roman_Silver), RoundedCornerShape(30.dp)),
+                .border(BorderStroke(1.dp, Roman_Silver), RoundedCornerShape(30.dp))
+                .clickable { onNavigateList(partyType) },
             contentAlignment = Alignment.Center
         ) {
             Text(
