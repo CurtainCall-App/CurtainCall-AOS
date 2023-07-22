@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.partymember.ui
+package com.cmc.curtaincall.feature.partymember.ui.list
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
