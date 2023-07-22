@@ -173,7 +173,7 @@ private fun MonthHeader(
                         color = Gunmetal,
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Medium,
-                        fontFamily = spoqahansanseeo,
+                        fontFamily = spoqahansanseeo
                     )
                 }
             }

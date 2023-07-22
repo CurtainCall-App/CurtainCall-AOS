@@ -501,7 +501,7 @@ private fun PerformanceCard(
         ) {
             Image(
                 painter = painterResource(imageRes),
-                contentDescription = null,
+                contentDescription = null
             )
         }
 

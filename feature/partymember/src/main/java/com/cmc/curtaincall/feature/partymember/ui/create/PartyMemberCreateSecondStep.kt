@@ -35,9 +35,7 @@ fun LazyGridScope.showPerformanceSecondStep(
 ) {
     item(span = { GridItemSpan(3) }) {
         val context = LocalContext.current
-        Box(
-            modifier = modifier.padding(horizontal = 6.dp),
-        ) {
+        Box(modifier = modifier.padding(horizontal = 6.dp)) {
             var isClickedDate by remember { mutableStateOf(false) }
             var isClickedTime by remember { mutableStateOf(false) }
             SelectInput(
@@ -57,7 +55,7 @@ fun LazyGridScope.showPerformanceSecondStep(
                         CalendarDay(LocalDate.of(2023, 6, 16), DayPosition.MonthDate),
                         CalendarDay(LocalDate.of(2023, 7, 15), DayPosition.MonthDate),
                         CalendarDay(LocalDate.of(2023, 7, 14), DayPosition.MonthDate),
-                        CalendarDay(LocalDate.of(2023, 7, 13), DayPosition.MonthDate),
+                        CalendarDay(LocalDate.of(2023, 7, 13), DayPosition.MonthDate)
                     ),
                     onDateClick = {
                         onSelectDate(
