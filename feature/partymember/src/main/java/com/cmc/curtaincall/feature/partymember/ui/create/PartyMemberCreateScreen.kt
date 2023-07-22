@@ -20,6 +20,7 @@ import com.cmc.curtaincall.feature.partymember.PartyType
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private const val UNSELECTED_INDEX = -1
+const val DEFAULT_PERSONNEL_COUNT = 0
 
 enum class STEP(val prevStep: STEP) {
     PHASE1(PHASE1), PHASE2(PHASE1), PHASE3(PHASE2), PHASE1_1(PHASE1_1), PHASE1_2(PHASE1_1)
@@ -79,6 +80,8 @@ private fun PartyMemberCreateContent(
     var selectedTimeState by remember { mutableStateOf("") }
     var titleTextState by remember { mutableStateOf("") }
     var contentTextState by remember { mutableStateOf("") }
+    var clickedUndeterminDateState by remember { mutableStateOf(false) }
+    var personnelCountState by remember { mutableStateOf(DEFAULT_PERSONNEL_COUNT) }
 
     Box(modifier) {
         LazyVerticalGrid(
@@ -114,7 +117,7 @@ private fun PartyMemberCreateContent(
                     onSelectDate = { selectedDateState = it },
                     onSelectTime = { selectedTimeState = it }
                 )
-                STEP.PHASE3 -> showThirdStep(
+                STEP.PHASE3, STEP.PHASE1_2 -> showLastStep(
                     modifier = Modifier.fillMaxWidth(),
                     title = titleTextState,
                     content = contentTextState,
@@ -122,10 +125,14 @@ private fun PartyMemberCreateContent(
                     onChangeContent = { contentTextState = it }
                 )
                 STEP.PHASE1_1 -> showEtcFirstStep(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    selectedDate = selectedDateState,
+                    personnelCount = personnelCountState,
+                    clickedUndeterminedDate = clickedUndeterminDateState,
+                    onSelectDate = { selectedDateState = it },
+                    onClickUndeterminedDate = { clickedUndeterminDateState = it },
+                    onClickPersonnel = { personnelCountState = it }
                 )
-                STEP.PHASE1_2 -> {
-                }
             }
         }
 
@@ -136,8 +143,9 @@ private fun PartyMemberCreateContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter)
-                        .padding(horizontal = 22.dp)
-                        .padding(bottom = 15.dp),
+                        .padding(horizontal = 20.dp)
+                        .padding(bottom = 19.dp)
+                        .height(52.dp),
                     enabled = selectedPerformanceIndex != UNSELECTED_INDEX,
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
@@ -160,8 +168,9 @@ private fun PartyMemberCreateContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter)
-                        .padding(horizontal = 22.dp)
-                        .padding(bottom = 15.dp),
+                        .padding(horizontal = 20.dp)
+                        .padding(bottom = 19.dp)
+                        .height(52.dp),
                     enabled = selectedDateState.isNotEmpty() and selectedTimeState.isNotEmpty(),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
@@ -178,14 +187,15 @@ private fun PartyMemberCreateContent(
                     )
                 }
             }
-            STEP.PHASE3 -> {
+            STEP.PHASE3, STEP.PHASE1_2 -> {
                 Button(
                     onClick = { onNavigateUpload(partyType) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter)
-                        .padding(horizontal = 22.dp)
-                        .padding(bottom = 15.dp),
+                        .padding(horizontal = 20.dp)
+                        .padding(bottom = 19.dp)
+                        .height(52.dp),
                     enabled = titleTextState.isNotEmpty() && contentTextState.isNotEmpty(),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
@@ -202,7 +212,31 @@ private fun PartyMemberCreateContent(
                     )
                 }
             }
-            else -> {
+            STEP.PHASE1_1 -> {
+                var validation = (selectedDateState.isNotEmpty() or clickedUndeterminDateState) and (personnelCountState > DEFAULT_PERSONNEL_COUNT)
+                Button(
+                    onClick = { onChangeStep(STEP.PHASE1_2) },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                        .padding(horizontal = 20.dp)
+                        .padding(bottom = 19.dp)
+                        .height(52.dp),
+                    enabled = validation,
+                    shape = RoundedCornerShape(12.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = if (validation) Me_Pink else Bright_Gray,
+                        disabledContainerColor = Bright_Gray
+                    )
+                ) {
+                    Text(
+                        text = stringResource(R.string.partymember_create_next),
+                        color = if (validation) White else Silver_Sand,
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = spoqahansanseeo
+                    )
+                }
             }
         }
     }
@@ -284,7 +318,14 @@ private fun LazyGridScope.createStep(
                             .height(8.dp)
                             .background(
                                 if (currentStep !in listOf(STEP.PHASE1, STEP.PHASE1_1)) Cetacean_Blue else Bright_Gray,
-                                if (currentStep == STEP.PHASE1_2) RoundedCornerShape(topEnd = 30.dp, bottomEnd = 30.dp) else RectangleShape
+                                if (currentStep in listOf(STEP.PHASE1_1, STEP.PHASE1_2)) {
+                                    RoundedCornerShape(
+                                        topEnd = 30.dp,
+                                        bottomEnd = 30.dp
+                                    )
+                                } else {
+                                    RectangleShape
+                                }
                             )
                     )
                 }
