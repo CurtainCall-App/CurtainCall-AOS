@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.sp
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.theme.*
 
-fun LazyGridScope.showThirdStep(
+fun LazyGridScope.showLastStep(
     modifier: Modifier = Modifier,
     title: String,
     content: String,
