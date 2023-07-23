@@ -39,6 +39,7 @@
     <string name="signup_welcome_description">이제 커튼콜 이용을\n시작해볼까요?</string>기
     <string name="signup_welcome_start">시작하기</string>
 
+    <!-- partymember -->
     <string name="partymember_recruitment">파티원 모집</string>
     <string name="partymember_performance_title">공연 관람</string>
     <string name="partymember_performance_description">혼자보다는 함께 관람할 때\n더 즐거운 공연!</string>
@@ -88,4 +89,10 @@
     <string name="partymember_upload_complete_description">해당 게시물은 파티원 모집과\n마이페이지에서 확인할 수 있습니다.</string>
     <string name="partymember_upload_checking_article">게시물 확인하기</string>
     <string name="partymember_upload_move_to_home">홈으로 이동</string>
+
+    <!-- performance-->
+    <string name="performance_search">작품 탐색</string>
+    <string name="performance_search_description">현재 상영 중인 작품 정보가 제공됩니다.</string>
+    <string name="performance_search_popular_sort">인기순</string>
+    <string name="performance_search_korean_sort">가나다순</string>
 </resources>
