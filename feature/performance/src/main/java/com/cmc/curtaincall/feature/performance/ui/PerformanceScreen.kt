@@ -24,12 +24,16 @@ import androidx.compose.ui.unit.sp
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PerformanceScreen(
     onNavigateDetail: () -> Unit
 ) {
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setStatusBarColor(Whisper)
+
     var queryString by remember { mutableStateOf("") }
     Scaffold(
         topBar = {
@@ -85,7 +89,11 @@ private fun PerformanceContent(
         }
 
         itemsIndexed(Array(10) {}) { index, item ->
-            PerformanceCard(modifier = Modifier.fillMaxWidth())
+            PerformanceCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onNavigateDetail() }
+            )
             if (index != 9) {
                 Spacer(
                     modifier = Modifier
