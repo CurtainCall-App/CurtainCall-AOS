@@ -46,6 +46,9 @@ fun NavGraphBuilder.performanceNavGraph(navHostController: NavHostController) {
             PerformanceDetailScreen(
                 onNavigateReview = {
                     navHostController.navigate(PerformanceDestination.Review.route)
+                },
+                onBack = {
+                    navHostController.popBackStack()
                 }
             )
         }
