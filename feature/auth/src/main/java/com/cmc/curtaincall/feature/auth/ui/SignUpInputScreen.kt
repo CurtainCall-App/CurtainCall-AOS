@@ -37,6 +37,8 @@ internal fun SignUpInputScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(38.dp),
+                containerColor = White,
+                contentColor = Eerie_Black,
                 onClick = onBack
             )
         }

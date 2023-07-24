@@ -36,6 +36,8 @@ internal fun SignUpTermsScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(38.dp),
+                containerColor = White,
+                contentColor = Eerie_Black,
                 onClick = onBack
             )
         }
