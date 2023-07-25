@@ -79,11 +79,7 @@ internal fun PerformanceDetailScreen(
                 .fillMaxSize()
                 .background(White, RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
         ) {
-            PerformanceDetailTab(
-                modifier = Modifier
-                    .padding(top = 26.dp)
-                    .padding(horizontal = 20.dp)
-            )
+            PerformanceDetailTab(Modifier.padding(top = 26.dp))
         }
     }
 }
@@ -96,7 +92,7 @@ private fun PerformanceDetailTab(
     Column(modifier) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceAround
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 IconButton(
