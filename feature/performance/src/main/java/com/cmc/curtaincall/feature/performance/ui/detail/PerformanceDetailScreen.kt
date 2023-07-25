@@ -1,10 +1,12 @@
-package com.cmc.curtaincall.feature.performance.ui
+package com.cmc.curtaincall.feature.performance.ui.detail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -18,7 +20,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.extensions.toSp
@@ -37,8 +38,11 @@ internal fun PerformanceDetailScreen(
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(Nero)
 
+    val scrollState = rememberScrollState()
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState),
         contentAlignment = Alignment.TopCenter
     ) {
         Box(
@@ -77,7 +81,6 @@ internal fun PerformanceDetailScreen(
         ) {
             PerformanceDetailTab(
                 modifier = Modifier
-                    .fillMaxSize()
                     .padding(top = 26.dp)
                     .padding(horizontal = 20.dp)
             )
@@ -180,6 +183,11 @@ private fun PerformanceDetailTab(
 
         when (tabType) {
             TabType.DETAIL -> {
+                PerformanceDetailTabScreen(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 40.dp)
+                )
             }
             TabType.REVIEW -> {
             }
@@ -231,7 +239,7 @@ private fun PerformanceDetailBody(
         Row {
             Text(
                 text = stringResource(R.string.performance_detail_period),
-                modifier = Modifier.width(54.dp),
+                modifier = Modifier.width(66.dp),
                 color = White,
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.dp.toSp(),
@@ -239,7 +247,6 @@ private fun PerformanceDetailBody(
             )
             Text(
                 text = "2023.6.1 - 2023.6.18",
-                modifier = Modifier.padding(start = 14.dp),
                 color = White,
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.dp.toSp(),
@@ -249,7 +256,7 @@ private fun PerformanceDetailBody(
         Row(Modifier.padding(top = 4.dp)) {
             Text(
                 text = stringResource(R.string.performance_detail_viewing_time),
-                modifier = Modifier.width(54.dp),
+                modifier = Modifier.width(66.dp),
                 color = White,
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.dp.toSp(),
@@ -257,7 +264,6 @@ private fun PerformanceDetailBody(
             )
             Text(
                 text = "200분",
-                modifier = Modifier.padding(start = 14.dp),
                 color = White,
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.dp.toSp(),
@@ -267,7 +273,7 @@ private fun PerformanceDetailBody(
         Row(Modifier.padding(top = 4.dp)) {
             Text(
                 text = stringResource(R.string.performance_detail_viewing_age),
-                modifier = Modifier.width(54.dp),
+                modifier = Modifier.width(66.dp),
                 color = White,
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.dp.toSp(),
@@ -275,7 +281,6 @@ private fun PerformanceDetailBody(
             )
             Text(
                 text = "14세 이상 관람가",
-                modifier = Modifier.padding(start = 14.dp),
                 color = White,
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.dp.toSp(),
@@ -285,7 +290,7 @@ private fun PerformanceDetailBody(
         Row(Modifier.padding(top = 4.dp)) {
             Text(
                 text = stringResource(R.string.performance_detail_ticket_price),
-                modifier = Modifier.width(54.dp),
+                modifier = Modifier.width(66.dp),
                 color = White,
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.dp.toSp(),
@@ -293,18 +298,17 @@ private fun PerformanceDetailBody(
             )
             Text(
                 text = "R석 99,000원 | S석 77,000원 |\nA석 44,000원",
-                modifier = Modifier.padding(start = 14.dp),
                 color = White,
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.dp.toSp(),
                 fontFamily = spoqahansanseeo,
-                lineHeight = 22.sp
+                lineHeight = 22.dp.toSp()
             )
         }
         Row(Modifier.padding(top = 4.dp)) {
             Text(
                 text = stringResource(R.string.performance_detail_location),
-                modifier = Modifier.width(54.dp),
+                modifier = Modifier.width(66.dp),
                 color = White,
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.dp.toSp(),
@@ -312,7 +316,6 @@ private fun PerformanceDetailBody(
             )
             Text(
                 text = "LG아트센터 서울 LG SISNATURE 홀",
-                modifier = Modifier.padding(start = 14.dp),
                 color = White,
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.dp.toSp(),
