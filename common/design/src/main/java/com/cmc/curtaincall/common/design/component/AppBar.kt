@@ -17,13 +17,16 @@ import com.cmc.curtaincall.common.design.theme.Eerie_Black
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.extensions.toSp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopAppBarWithBack(
     title: String,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    containerColor: Color,
+    contentColor: Color,
+    onClick: () -> Unit,
 ) {
     CenterAlignedTopAppBar(
         title = {
@@ -33,8 +36,8 @@ fun TopAppBarWithBack(
             ) {
                 Text(
                     text = title,
-                    color = Eerie_Black,
-                    fontSize = 18.sp,
+                    color = contentColor,
+                    fontSize = 17.dp.toSp(),
                     fontWeight = FontWeight.Bold,
                     fontFamily = spoqahansanseeo
                 )
@@ -47,11 +50,11 @@ fun TopAppBarWithBack(
                     painter = painterResource(R.drawable.ic_arrow_back),
                     contentDescription = null,
                     modifier = Modifier.size(22.dp, 22.dp),
-                    tint = Eerie_Black
+                    tint = contentColor
                 )
             }
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = White)
+        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = containerColor)
     )
 }
 

@@ -44,6 +44,8 @@ internal fun PartyMemberCreateScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(38.dp),
+                containerColor = White,
+                contentColor = Eerie_Black,
                 onClick = {
                     if ((step == STEP.PHASE1) or (step == STEP.PHASE1_1)) {
                         onBack()

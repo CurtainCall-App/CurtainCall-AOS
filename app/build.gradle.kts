@@ -12,6 +12,7 @@ android {
 
     defaultConfig {
         buildConfigField("String", "KAKAO_APP_KEY", gradleLocalProperties(rootDir).getProperty("KAKAO_APP_KEY"))
+        resValue("string", "NAVER_API_MAP_KEY", gradleLocalProperties(rootDir).getProperty("NAVER_API_MAP_KEY"))
         vectorDrawables {
             useSupportLibrary = true
         }

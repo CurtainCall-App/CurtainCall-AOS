@@ -7,7 +7,7 @@ import androidx.navigation.navigation
 import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.feature.performance.ui.PerformanceDetailScreen
+import com.cmc.curtaincall.feature.performance.ui.detail.PerformanceDetailScreen
 import com.cmc.curtaincall.feature.performance.ui.PerformanceReviewScreen
 import com.cmc.curtaincall.feature.performance.ui.PerformanceScreen
 
@@ -46,6 +46,9 @@ fun NavGraphBuilder.performanceNavGraph(navHostController: NavHostController) {
             PerformanceDetailScreen(
                 onNavigateReview = {
                     navHostController.navigate(PerformanceDestination.Review.route)
+                },
+                onBack = {
+                    navHostController.popBackStack()
                 }
             )
         }

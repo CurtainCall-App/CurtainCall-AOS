@@ -95,4 +95,19 @@
     <string name="performance_search_description">현재 상영 중인 작품 정보가 제공됩니다.</string>
     <string name="performance_search_popular_sort">인기순</string>
     <string name="performance_search_korean_sort">가나다순</string>
+    <string name="performance_detail_period">공연기간</string>
+    <string name="performance_detail_viewing_time">관람시간</string>
+    <string name="performance_detail_viewing_age">관람연령</string>
+    <string name="performance_detail_ticket_price">티켓가격</string>
+    <string name="performance_detail_location">장소</string>
+    <string name="performance_detail_story_introduction">스토리 소개</string>
+    <string name="performance_detail_time">공연시간</string>
+    <string name="performance_detail_casting">캐스팅</string>
+    <string name="performance_detail_related_image_or_video">관련 이미지 및 영상</string>
+    <string name="performance_detail_announcement">공지사항</string>
+    <string name="performance_detail_place_information">장소 정보</string>
+    <string name="performance_detail_place_name">공연장명</string>
+    <string name="performance_detail_address">주소</string>
+    <string name="performance_detail_phone_number">전화번호</string>
+    <string name="performance_detail_website">웹사이트</string>
 </resources>

@@ -60,6 +60,12 @@ jobs:
         env:
           CLIENT_TOKEN: ${{ secrets.FACEBOOK_CLIENT_TOKEN }}
 
+      - name: Access NAVER_API_MAP_KEY
+        run: echo NAVER_API_MAP_KEY=\"API_KEY\" >> local.properties
+        shell: bash
+        env:
+          API_KEY: ${{ secrets.NAVER_API_MAP_KEY }}
+
       - name: Run ktlint
         run: ./gradlew ktlintCheck
 
