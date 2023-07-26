@@ -18,6 +18,9 @@ import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraPosition
+import com.naver.maps.map.compose.*
 
 @Composable
 internal fun PerformanceDetailTabScreen(
@@ -68,6 +71,7 @@ internal fun PerformanceDetailTabScreen(
     }
 }
 
+@OptIn(ExperimentalNaverMapApi::class)
 @Composable
 private fun PerformancePlace(
     modifier: Modifier = Modifier
@@ -147,6 +151,26 @@ private fun PerformancePlace(
                 fontWeight = FontWeight.Normal,
                 fontFamily = spoqahansanseeo
             )
+        }
+        NaverMap(
+            modifier = Modifier
+                .padding(top = 20.dp, bottom = 30.dp)
+                .fillMaxWidth()
+                .height(142.dp)
+                .clip(RoundedCornerShape(10.dp)),
+            cameraPositionState = CameraPositionState(
+                CameraPosition(LatLng(37.56480446250912, 126.82722338487427), 12.0)
+            ),
+            uiSettings = MapUiSettings(
+                isScrollGesturesEnabled = false,
+                isZoomGesturesEnabled = false,
+                isTiltGesturesEnabled = false,
+                isRotateGesturesEnabled = false,
+                isZoomControlEnabled = false,
+                isLogoClickEnabled = false
+            )
+        ) {
+            Marker(MarkerState(LatLng(37.56480446250912, 126.82722338487427)))
         }
     }
 }
