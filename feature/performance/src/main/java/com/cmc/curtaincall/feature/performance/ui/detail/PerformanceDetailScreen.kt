@@ -24,6 +24,7 @@ import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.feature.performance.ui.review.PerformanceReviewTabScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 enum class TabType(val label: String) {
@@ -186,6 +187,11 @@ private fun PerformanceDetailTab(
                 )
             }
             TabType.REVIEW -> {
+                PerformanceReviewTabScreen(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 32.dp)
+                )
             }
             TabType.LOST_ITEM -> {
             }
