@@ -80,14 +80,18 @@ internal fun PerformanceDetailScreen(
                 .fillMaxSize()
                 .background(White, RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
         ) {
-            PerformanceDetailTab(Modifier.padding(top = 26.dp))
+            PerformanceDetailTab(
+                Modifier.padding(top = 26.dp),
+                onNavigateReview = onNavigateReview
+            )
         }
     }
 }
 
 @Composable
 private fun PerformanceDetailTab(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateReview: () -> Unit
 ) {
     var tabType by remember { mutableStateOf(TabType.DETAIL) }
     Column(modifier) {
@@ -190,7 +194,8 @@ private fun PerformanceDetailTab(
                 PerformanceReviewTabScreen(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 32.dp)
+                        .padding(top = 32.dp),
+                    onNavigateReview = onNavigateReview
                 )
             }
             TabType.LOST_ITEM -> {
