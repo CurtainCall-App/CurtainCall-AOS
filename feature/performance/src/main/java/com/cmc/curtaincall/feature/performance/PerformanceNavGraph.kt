@@ -4,12 +4,12 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
-import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.feature.performance.ui.detail.PerformanceDetailScreen
-import com.cmc.curtaincall.feature.performance.ui.PerformanceReviewScreen
 import com.cmc.curtaincall.feature.performance.ui.PerformanceScreen
+import com.cmc.curtaincall.feature.performance.ui.detail.PerformanceDetailScreen
+import com.cmc.curtaincall.feature.performance.ui.review.PerformanceReviewScreen
 
 private const val PERFORMANCE_GRAPH = "performance_graph"
 const val PERFORMANCE = "performance"
@@ -54,7 +54,11 @@ fun NavGraphBuilder.performanceNavGraph(navHostController: NavHostController) {
         }
 
         composable(route = PerformanceDestination.Review.route) {
-            PerformanceReviewScreen()
+            PerformanceReviewScreen(
+                onBack = {
+                    navHostController.popBackStack()
+                }
+            )
         }
     }
 }

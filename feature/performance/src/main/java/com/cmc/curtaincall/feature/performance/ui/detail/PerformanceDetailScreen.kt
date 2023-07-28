@@ -24,6 +24,7 @@ import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.feature.performance.ui.review.PerformanceReviewTabScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 enum class TabType(val label: String) {
@@ -79,14 +80,18 @@ internal fun PerformanceDetailScreen(
                 .fillMaxSize()
                 .background(White, RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
         ) {
-            PerformanceDetailTab(Modifier.padding(top = 26.dp))
+            PerformanceDetailTab(
+                Modifier.padding(top = 26.dp),
+                onNavigateReview = onNavigateReview
+            )
         }
     }
 }
 
 @Composable
 private fun PerformanceDetailTab(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateReview: () -> Unit
 ) {
     var tabType by remember { mutableStateOf(TabType.DETAIL) }
     Column(modifier) {
@@ -186,6 +191,12 @@ private fun PerformanceDetailTab(
                 )
             }
             TabType.REVIEW -> {
+                PerformanceReviewTabScreen(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 32.dp),
+                    onNavigateReview = onNavigateReview
+                )
             }
             TabType.LOST_ITEM -> {
             }

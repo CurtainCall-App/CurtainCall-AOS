@@ -110,4 +110,7 @@
     <string name="performance_detail_address">주소</string>
     <string name="performance_detail_phone_number">전화번호</string>
     <string name="performance_detail_website">웹사이트</string>
+    <string name="performance_detail_show_all_review">모두 보기</string>
+    <string name="performance_review">한 줄 리뷰</string>
+    <string name="performance_review_repot">신고</string>
 </resources>
