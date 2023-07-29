@@ -35,6 +35,7 @@ enum class TabType(val label: String) {
 @Composable
 internal fun PerformanceDetailScreen(
     onNavigateReview: () -> Unit,
+    onNavigateLostItem: () -> Unit,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -83,7 +84,8 @@ internal fun PerformanceDetailScreen(
         ) {
             PerformanceDetailTab(
                 Modifier.padding(top = 26.dp),
-                onNavigateReview = onNavigateReview
+                onNavigateReview = onNavigateReview,
+                onNavigateLostItem = onNavigateLostItem
             )
         }
     }
@@ -92,7 +94,8 @@ internal fun PerformanceDetailScreen(
 @Composable
 private fun PerformanceDetailTab(
     modifier: Modifier = Modifier,
-    onNavigateReview: () -> Unit
+    onNavigateReview: () -> Unit,
+    onNavigateLostItem: () -> Unit
 ) {
     var tabType by remember { mutableStateOf(TabType.DETAIL) }
     Column(modifier) {
@@ -203,7 +206,8 @@ private fun PerformanceDetailTab(
                 PerformanceLostItemTabScreen(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 32.dp)
+                        .padding(top = 32.dp),
+                    onNavigateLostItem = onNavigateLostItem
                 )
             }
         }

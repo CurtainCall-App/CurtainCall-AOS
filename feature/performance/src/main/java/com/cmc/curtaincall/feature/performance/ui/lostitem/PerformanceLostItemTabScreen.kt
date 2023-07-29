@@ -3,6 +3,7 @@ package com.cmc.curtaincall.feature.performance.ui.lostitem
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -19,7 +20,8 @@ import com.cmc.curtaincall.common.design.theme.*
 
 @Composable
 internal fun PerformanceLostItemTabScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateLostItem: () -> Unit
 ) {
     Column(modifier.padding(horizontal = 20.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -34,7 +36,8 @@ internal fun PerformanceLostItemTabScreen(
             Box(
                 modifier = Modifier
                     .size(71.dp, 28.dp)
-                    .border(BorderStroke(1.dp, Me_Pink), RoundedCornerShape(14.dp)),
+                    .border(BorderStroke(1.dp, Me_Pink), RoundedCornerShape(14.dp))
+                    .clickable { onNavigateLostItem() },
                 contentAlignment = Alignment.Center
             ) {
                 Text(
