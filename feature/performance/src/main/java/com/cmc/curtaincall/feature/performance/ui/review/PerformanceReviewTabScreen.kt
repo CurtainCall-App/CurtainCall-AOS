@@ -73,7 +73,10 @@ private fun PerformanceReviewSimpleItem(
             .border(BorderStroke(1.dp, Bright_Gray), RoundedCornerShape(10.dp))
             .padding(start = 12.dp, top = 14.dp, bottom = 16.dp)
     ) {
-        RatingBar(rating = 4)
+        RatingBar(
+            modifier = Modifier.size(14.dp),
+            rating = 4
+        )
         Text(
             text = "zkvpzkvpzk | 2023.6.28",
             modifier = Modifier.padding(top = 6.dp),
