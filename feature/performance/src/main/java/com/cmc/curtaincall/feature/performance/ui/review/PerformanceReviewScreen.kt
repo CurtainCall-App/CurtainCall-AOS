@@ -25,6 +25,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PerformanceReviewScreen(
+    onNavigateReviewCreate: () -> Unit,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -43,7 +44,7 @@ internal fun PerformanceReviewScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /*TODO*/ },
+                onClick = { onNavigateReviewCreate() },
                 modifier = Modifier
                     .padding(bottom = 40.dp)
                     .size(58.dp),

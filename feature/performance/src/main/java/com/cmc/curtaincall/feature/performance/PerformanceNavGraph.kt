@@ -9,6 +9,7 @@ import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.feature.performance.ui.PerformanceScreen
 import com.cmc.curtaincall.feature.performance.ui.detail.PerformanceDetailScreen
+import com.cmc.curtaincall.feature.performance.ui.review.PerformanceReviewCreateScreen
 import com.cmc.curtaincall.feature.performance.ui.review.PerformanceReviewScreen
 
 private const val PERFORMANCE_GRAPH = "performance_graph"
@@ -16,6 +17,7 @@ const val PERFORMANCE = "performance"
 private const val PERFORMANCE_LABEL = "작품"
 private const val PERFORMANCE_DETAIL = "performance_detail"
 private const val PERFORMANCE_REVIEW = "performance_review"
+private const val PERFORMANCE_REVIEW_CREATE = "performance_review_create"
 
 sealed interface PerformanceDestination : CurtainCallDestination {
     object Performance : PerformanceDestination, BottomDestination {
@@ -31,6 +33,10 @@ sealed interface PerformanceDestination : CurtainCallDestination {
 
     object Review : PerformanceDestination {
         override val route = PERFORMANCE_REVIEW
+    }
+
+    object ReviewCreate : PerformanceDestination {
+        override val route = PERFORMANCE_REVIEW_CREATE
     }
 }
 
@@ -55,10 +61,19 @@ fun NavGraphBuilder.performanceNavGraph(navHostController: NavHostController) {
 
         composable(route = PerformanceDestination.Review.route) {
             PerformanceReviewScreen(
+                onNavigateReviewCreate = {
+                    navHostController.navigate(PerformanceDestination.ReviewCreate.route)
+                },
                 onBack = {
                     navHostController.popBackStack()
                 }
             )
+        }
+
+        composable(route = PerformanceDestination.ReviewCreate.route) {
+            PerformanceReviewCreateScreen {
+                navHostController.popBackStack()
+            }
         }
     }
 }
