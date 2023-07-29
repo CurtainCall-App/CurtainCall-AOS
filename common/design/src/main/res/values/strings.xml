@@ -113,4 +113,9 @@
     <string name="performance_detail_show_all_review">모두 보기</string>
     <string name="performance_review">한 줄 리뷰</string>
     <string name="performance_review_repot">신고</string>
+    <string name="performance_review_create_satisfaction_question">공연은 만족스러우셨나요?</string>
+    <string name="performance_review_create_request">한 줄 리뷰를 남겨주세요!</string>
+    <string name="performance_review_create_request_placeholder">공연 후기를 남겨주세요.</string>
+    <string name="performance_review_create_write_number_of_text">글자수 제한 (%d/30)</string>
+    <string name="performance_review_create_write_complete">작성 완료</string>
 </resources>

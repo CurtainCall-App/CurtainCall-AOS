@@ -25,6 +25,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PerformanceReviewScreen(
+    onNavigateReviewCreate: () -> Unit,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -43,7 +44,7 @@ internal fun PerformanceReviewScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /*TODO*/ },
+                onClick = { onNavigateReviewCreate() },
                 modifier = Modifier
                     .padding(bottom = 40.dp)
                     .size(58.dp),
@@ -109,7 +110,10 @@ private fun PerformanceReviewItem(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column {
-                    RatingBar(rating = 4)
+                    RatingBar(
+                        modifier = Modifier.size(14.dp),
+                        rating = 4
+                    )
                     Text(
                         text = "이디야커피맛없서 | 2023.6.24",
                         modifier = Modifier.padding(top = 4.dp),
