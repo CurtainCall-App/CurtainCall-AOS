@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -67,7 +68,8 @@ internal fun PerformanceDetailScreen(
             Image(
                 painter = painterResource(R.drawable.bg_performance_detail),
                 contentDescription = null,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.FillWidth
             )
             PerformanceDetailContent(
                 modifier = Modifier
