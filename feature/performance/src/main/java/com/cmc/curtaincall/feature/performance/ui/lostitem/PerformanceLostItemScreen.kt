@@ -30,6 +30,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PerformanceLostItemScreen(
+    onNavigateLostItemDetail: () -> Unit,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -70,14 +71,16 @@ internal fun PerformanceLostItemScreen(
                 .fillMaxSize()
                 .background(White)
                 .padding(top = 23.dp)
-                .padding(horizontal = 20.dp)
+                .padding(horizontal = 20.dp),
+            onNavigateLostItemDetail = onNavigateLostItemDetail
         )
     }
 }
 
 @Composable
 private fun PerformanceLostItemContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateLostItemDetail: () -> Unit
 ) {
     var isClickedDate by remember { mutableStateOf(false) }
     var isClickedType by remember { mutableStateOf(false) }
@@ -114,6 +117,7 @@ private fun PerformanceLostItemContent(
             itemsIndexed(List(9) { it }) { index, item ->
                 LostItemContent(
                     modifier = Modifier
+                        .clickable { onNavigateLostItemDetail() }
                         .padding(start = if (index % 2 == 1) 6.dp else 0.dp)
                         .padding(end = if (index % 2 == 0) 6.dp else 0.dp)
                         .padding(bottom = 18.dp)
