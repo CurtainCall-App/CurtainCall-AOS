@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -24,6 +25,7 @@ import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.feature.performance.ui.lostitem.PerformanceLostItemTabScreen
 import com.cmc.curtaincall.feature.performance.ui.review.PerformanceReviewTabScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -34,6 +36,7 @@ enum class TabType(val label: String) {
 @Composable
 internal fun PerformanceDetailScreen(
     onNavigateReview: () -> Unit,
+    onNavigateLostItem: () -> Unit,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -65,7 +68,8 @@ internal fun PerformanceDetailScreen(
             Image(
                 painter = painterResource(R.drawable.bg_performance_detail),
                 contentDescription = null,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.FillWidth
             )
             PerformanceDetailContent(
                 modifier = Modifier
@@ -82,7 +86,8 @@ internal fun PerformanceDetailScreen(
         ) {
             PerformanceDetailTab(
                 Modifier.padding(top = 26.dp),
-                onNavigateReview = onNavigateReview
+                onNavigateReview = onNavigateReview,
+                onNavigateLostItem = onNavigateLostItem
             )
         }
     }
@@ -91,7 +96,8 @@ internal fun PerformanceDetailScreen(
 @Composable
 private fun PerformanceDetailTab(
     modifier: Modifier = Modifier,
-    onNavigateReview: () -> Unit
+    onNavigateReview: () -> Unit,
+    onNavigateLostItem: () -> Unit
 ) {
     var tabType by remember { mutableStateOf(TabType.DETAIL) }
     Column(modifier) {
@@ -199,6 +205,12 @@ private fun PerformanceDetailTab(
                 )
             }
             TabType.LOST_ITEM -> {
+                PerformanceLostItemTabScreen(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 32.dp),
+                    onNavigateLostItem = onNavigateLostItem
+                )
             }
         }
     }

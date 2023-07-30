@@ -118,4 +118,16 @@
     <string name="performance_review_create_request_placeholder">공연 후기를 남겨주세요.</string>
     <string name="performance_review_create_write_number_of_text">글자수 제한 (%d/30)</string>
     <string name="performance_review_create_write_complete">작성 완료</string>
+    <string name="performance_find_lost_item">분실물 찾기</string>
+    <string name="performance_find_lost_item_date">잃어버린 날짜</string>
+    <string name="performance_find_lost_item_type">물건 분류</string>
+    <string name="performance_find_lost_item_bag">가방</string>
+    <string name="performance_find_lost_item_wallet">지갑</string>
+    <string name="performance_find_lost_item_money">현금</string>
+    <string name="performance_find_lost_item_card">카드</string>
+    <string name="performance_find_lost_item_jewelry">귀금속</string>
+    <string name="performance_find_lost_item_electronics">전자기기</string>
+    <string name="performance_find_lost_item_books">도서</string>
+    <string name="performance_find_lost_item_clothes">의류</string>
+    <string name="performance_find_lost_item_etc">기타</string>
 </resources>
