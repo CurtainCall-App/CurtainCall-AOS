@@ -31,6 +31,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @Composable
 internal fun PerformanceLostItemScreen(
     onNavigateLostItemDetail: () -> Unit,
+    onNavigateLostItemCreate: () -> Unit,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -49,7 +50,7 @@ internal fun PerformanceLostItemScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { },
+                onClick = { onNavigateLostItemCreate() },
                 modifier = Modifier
                     .padding(bottom = 40.dp)
                     .size(58.dp),

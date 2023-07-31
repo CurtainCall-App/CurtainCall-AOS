@@ -9,6 +9,7 @@ import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.feature.performance.ui.PerformanceScreen
 import com.cmc.curtaincall.feature.performance.ui.detail.PerformanceDetailScreen
+import com.cmc.curtaincall.feature.performance.ui.lostitem.PerformanceLostItemCreateScreen
 import com.cmc.curtaincall.feature.performance.ui.lostitem.PerformanceLostItemDetailScreen
 import com.cmc.curtaincall.feature.performance.ui.lostitem.PerformanceLostItemScreen
 import com.cmc.curtaincall.feature.performance.ui.review.PerformanceReviewCreateScreen
@@ -22,6 +23,7 @@ private const val PERFORMANCE_REVIEW = "performance_review"
 private const val PERFORMANCE_REVIEW_CREATE = "performance_review_create"
 private const val PERFORMANCE_LOST_ITEM = "performance_lost_item"
 private const val PERFORMANCE_LOST_ITEM_DETAIL = "performance_lost_item_detail"
+private const val PERFORMANCE_LOST_ITEM_CREATE = "performance_lost_item_create"
 
 sealed interface PerformanceDestination : CurtainCallDestination {
     object Performance : PerformanceDestination, BottomDestination {
@@ -49,6 +51,10 @@ sealed interface PerformanceDestination : CurtainCallDestination {
 
     object LostItemDetail : PerformanceDestination {
         override val route = PERFORMANCE_LOST_ITEM_DETAIL
+    }
+
+    object LostItemCreate : PerformanceDestination {
+        override val route = PERFORMANCE_LOST_ITEM_CREATE
     }
 }
 
@@ -92,6 +98,9 @@ fun NavGraphBuilder.performanceNavGraph(navHostController: NavHostController) {
                 onNavigateLostItemDetail = {
                     navHostController.navigate(PerformanceDestination.LostItemDetail.route)
                 },
+                onNavigateLostItemCreate = {
+                    navHostController.navigate(PerformanceDestination.LostItemCreate.route)
+                },
                 onBack = {
                     navHostController.popBackStack()
                 }
@@ -99,6 +108,11 @@ fun NavGraphBuilder.performanceNavGraph(navHostController: NavHostController) {
         }
         composable(route = PerformanceDestination.LostItemDetail.route) {
             PerformanceLostItemDetailScreen {
+                navHostController.popBackStack()
+            }
+        }
+        composable(route = PerformanceDestination.LostItemCreate.route) {
+            PerformanceLostItemCreateScreen {
                 navHostController.popBackStack()
             }
         }
