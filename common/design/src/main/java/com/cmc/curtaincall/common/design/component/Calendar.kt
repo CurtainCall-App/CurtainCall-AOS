@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.kizitonwose.calendar.compose.HorizontalCalendar
 import com.kizitonwose.calendar.compose.rememberCalendarState
@@ -59,12 +60,17 @@ fun SelectedDateCalender(
             modifier = Modifier.padding(bottom = 13.dp),
             state = calendarState,
             dayContent = { day ->
-                Day(
-                    day = day,
-                    calendarDays = calendarDays,
-                    selectedCalendarDay = selectedCalendarDay,
-                    onClick = { selectedCalendarDay = it }
-                )
+                Box(
+                    modifier = Modifier.aspectRatio(1.2f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Day(
+                        day = day,
+                        calendarDays = calendarDays,
+                        selectedCalendarDay = selectedCalendarDay,
+                        onClick = { selectedCalendarDay = it }
+                    )
+                }
             },
             monthHeader = { calendarMonth ->
                 MonthHeader(
@@ -126,7 +132,7 @@ private fun MonthHeader(
                 ),
                 modifier = Modifier.padding(horizontal = 9.dp),
                 color = Chinese_Black,
-                fontSize = 16.sp,
+                fontSize = 16.dp.toSp(),
                 fontWeight = FontWeight.Bold,
                 fontFamily = spoqahansanseeo
             )
@@ -147,7 +153,7 @@ private fun MonthHeader(
                 text = stringResource(R.string.partymember_create_calendar_confirm),
                 modifier = Modifier.clickable { onClick() },
                 color = Me_Pink,
-                fontSize = 16.sp,
+                fontSize = 16.dp.toSp(),
                 fontWeight = FontWeight.Bold,
                 fontFamily = spoqahansanseeo
             )
@@ -205,7 +211,7 @@ private fun Day(
                     }
                 }
             }
-            .size(40.dp),
+            .aspectRatio(1f),
         contentAlignment = Alignment.Center
     ) {
         if (day.position == DayPosition.MonthDate) {

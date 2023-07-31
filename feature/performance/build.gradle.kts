@@ -38,6 +38,9 @@ dependencies {
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.naver.map.compose)
 
+    // 3rd party
+    implementation(libs.calendar.compose)
+
     implementation(libs.androidx.core.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
