@@ -26,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.component.CurtainCallTimePicker
 import com.cmc.curtaincall.common.design.component.SelectedDateCalender
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
@@ -67,6 +68,7 @@ private fun PerformanceLostItemCreateContent(
     var dateAcquisition by remember { mutableStateOf("") }
     var isClickDateAcquisition by remember { mutableStateOf(false) }
     var timeAcquisition by remember { mutableStateOf("") }
+    var isClickTimeAcquisition by remember { mutableStateOf(false) }
     var significant by remember { mutableStateOf("") }
     var attachmentFile by remember { mutableStateOf("") }
     var isClickAttachmentFile by remember { mutableStateOf(false) }
@@ -80,13 +82,14 @@ private fun PerformanceLostItemCreateContent(
             title = stringResource(R.string.performance_find_lost_item_create_title),
             placeholder = stringResource(R.string.performance_find_lost_item_create_title_placeholder),
             isEssential = true,
-            onClickChange = {
-                isClickLostItemType = it
-                isClickDateAcquisition = it
-                isClickAttachmentFile = it
-            },
             value = lostItemName,
-            onValueChange = { lostItemName = it }
+            onValueChange = { lostItemName = it },
+            onFocused = {
+                isClickLostItemType = false
+                isClickDateAcquisition = false
+                isClickAttachmentFile = false
+                isClickTimeAcquisition = false
+            }
         )
         LostItemTypeDropDown(
             modifier = Modifier
@@ -99,10 +102,13 @@ private fun PerformanceLostItemCreateContent(
                 if (isClick) {
                     focusManager.clearFocus()
                     isClickDateAcquisition = false
+                    isClickAttachmentFile = false
+                    isClickTimeAcquisition = false
                 }
             },
             title = stringResource(R.string.performance_find_lost_item_create_classification),
             placeholder = stringResource(R.string.performance_find_lost_item_create_classification_placeholder),
+            isEssential = true,
             value = lostItemType
         ) {
             LostItemTypeGrid(
@@ -114,7 +120,6 @@ private fun PerformanceLostItemCreateContent(
                 onTypeChange = {
                     lostItemType = it.label
                     isClickLostItemType = false
-                    isClickAttachmentFile = false
                 }
             )
         }
@@ -126,13 +131,14 @@ private fun PerformanceLostItemCreateContent(
             title = stringResource(R.string.performance_find_lost_item_create_place_of_acquisition),
             placeholder = stringResource(R.string.performance_find_lost_item_create_place_of_acquisition_placeholder),
             isEssential = true,
-            onClickChange = {
-                isClickLostItemType = it
-                isClickDateAcquisition = it
-                isClickAttachmentFile = it
-            },
             value = placeAcquisition,
-            onValueChange = { placeAcquisition = it }
+            onValueChange = { placeAcquisition = it },
+            onFocused = {
+                isClickLostItemType = false
+                isClickDateAcquisition = false
+                isClickTimeAcquisition = false
+                isClickAttachmentFile = false
+            }
         )
         LostItemInfoTextField(
             modifier = Modifier
@@ -141,13 +147,14 @@ private fun PerformanceLostItemCreateContent(
                 .padding(horizontal = 20.dp),
             title = stringResource(R.string.performance_find_lost_item_create_place),
             placeholder = stringResource(R.string.performance_find_lost_item_create_place_placeholder),
-            onClickChange = {
-                isClickLostItemType = it
-                isClickDateAcquisition = it
-                isClickAttachmentFile = it
-            },
             value = detailPlaceAcquisition,
-            onValueChange = { detailPlaceAcquisition = it }
+            onValueChange = { detailPlaceAcquisition = it },
+            onFocused = {
+                isClickLostItemType = false
+                isClickDateAcquisition = false
+                isClickTimeAcquisition = false
+                isClickAttachmentFile = false
+            }
         )
         LostItemTypeDropDown(
             modifier = Modifier
@@ -160,11 +167,13 @@ private fun PerformanceLostItemCreateContent(
                 if (isClick) {
                     focusManager.clearFocus()
                     isClickLostItemType = false
+                    isClickTimeAcquisition = false
                     isClickAttachmentFile = false
                 }
             },
             title = stringResource(R.string.performance_find_lost_item_create_acquistion_date),
             placeholder = stringResource(R.string.performance_find_lost_item_create_acquistion_date_placeholder),
+            isEssential = true,
             value = dateAcquisition
         ) {
             SelectedDateCalender(
@@ -180,21 +189,38 @@ private fun PerformanceLostItemCreateContent(
                 }
             )
         }
-        LostItemInfoTextField(
+        LostItemTypeDropDown(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 306.dp)
                 .padding(horizontal = 20.dp),
+            isClicked = isClickTimeAcquisition,
+            onClickChange = { isClick ->
+                isClickTimeAcquisition = isClick
+                if (isClick) {
+                    focusManager.clearFocus()
+                    isClickLostItemType = false
+                    isClickDateAcquisition = false
+                    isClickAttachmentFile = false
+                }
+            },
             title = stringResource(R.string.performance_find_lost_item_create_acquistion_time),
             placeholder = stringResource(R.string.performance_find_lost_item_create_acquistion_time_placeholder),
-            onClickChange = {
-                isClickLostItemType = it
-                isClickDateAcquisition = it
-                isClickAttachmentFile = it
-            },
-            value = timeAcquisition,
-            onValueChange = { timeAcquisition = it }
-        )
+            value = timeAcquisition
+        ) {
+            CurtainCallTimePicker(
+                modifier = Modifier.padding(top = 10.dp),
+                onClick = {
+                    timeAcquisition = String.format(
+                        context.getString(R.string.performance_find_lost_item_create_time_format),
+                        it.hour,
+                        it.minute,
+                        it.meridiem
+                    )
+                    isClickTimeAcquisition = false
+                }
+            )
+        }
         LostItemInfoTextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -202,13 +228,14 @@ private fun PerformanceLostItemCreateContent(
                 .padding(horizontal = 20.dp),
             title = stringResource(R.string.performance_find_lost_item_create_significant),
             placeholder = stringResource(R.string.performance_find_lost_item_create_significant_placeholder),
-            onClickChange = {
-                isClickLostItemType = it
-                isClickDateAcquisition = it
-                isClickAttachmentFile = it
-            },
             value = significant,
-            onValueChange = { significant = it }
+            onValueChange = { significant = it },
+            onFocused = {
+                isClickLostItemType = false
+                isClickDateAcquisition = false
+                isClickTimeAcquisition = false
+                isClickAttachmentFile = false
+            }
         )
         LostItemAttachmentDropDown(
             modifier = Modifier
@@ -222,12 +249,12 @@ private fun PerformanceLostItemCreateContent(
                     focusManager.clearFocus()
                     isClickLostItemType = false
                     isClickDateAcquisition = false
+                    isClickTimeAcquisition = false
                 }
             },
             value = attachmentFile,
             onValueChange = { attachmentFile = it }
         )
-
         Button(
             onClick = { /*TODO*/ },
             modifier = Modifier
@@ -236,8 +263,18 @@ private fun PerformanceLostItemCreateContent(
                 .padding(horizontal = 20.dp)
                 .padding(bottom = 19.dp)
                 .height(52.dp),
+            enabled = lostItemName.isNotEmpty() && lostItemType.isNotEmpty() &&
+                placeAcquisition.isNotEmpty() && dateAcquisition.isNotEmpty(),
             shape = RoundedCornerShape(12.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Me_Pink)
+            colors = ButtonDefaults.buttonColors(
+                containerColor = if (lostItemName.isNotEmpty() && lostItemType.isNotEmpty() &&
+                    placeAcquisition.isNotEmpty() && dateAcquisition.isNotEmpty()
+                ) {
+                    Me_Pink
+                } else {
+                    Philippine_Gray
+                }
+            )
         ) {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -245,7 +282,13 @@ private fun PerformanceLostItemCreateContent(
             ) {
                 Text(
                     text = stringResource(R.string.performance_find_lost_item_create_write_complete),
-                    color = White,
+                    color = if (lostItemName.isNotEmpty() && lostItemType.isNotEmpty() &&
+                        placeAcquisition.isNotEmpty() && dateAcquisition.isNotEmpty()
+                    ) {
+                        White
+                    } else {
+                        Silver_Sand
+                    },
                     fontSize = 16.dp.toSp(),
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo
@@ -385,6 +428,7 @@ private fun LostItemTypeDropDown(
     onClickChange: (Boolean) -> Unit,
     title: String,
     placeholder: String,
+    isEssential: Boolean = false,
     value: String,
     content: @Composable () -> Unit,
 ) {
@@ -398,12 +442,14 @@ private fun LostItemTypeDropDown(
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo
                 )
-                Spacer(
-                    modifier = Modifier
-                        .padding(start = 2.dp)
-                        .size(4.dp)
-                        .background(Me_Pink, CircleShape)
-                )
+                if (isEssential) {
+                    Spacer(
+                        modifier = Modifier
+                            .padding(start = 2.dp)
+                            .size(4.dp)
+                            .background(Me_Pink, CircleShape)
+                    )
+                }
             }
             Box(
                 modifier = Modifier
@@ -448,9 +494,9 @@ private fun LostItemInfoTextField(
     title: String,
     placeholder: String,
     isEssential: Boolean = false,
-    onClickChange: (Boolean) -> Unit,
     value: String,
-    onValueChange: (String) -> Unit
+    onValueChange: (String) -> Unit,
+    onFocused: () -> Unit,
 ) {
     val focusRequester = FocusRequester()
     var isFocused by remember { mutableStateOf(false) }
@@ -482,7 +528,7 @@ private fun LostItemInfoTextField(
                 .focusRequester(focusRequester)
                 .onFocusChanged {
                     isFocused = it.isFocused
-                    if (it.isFocused) onClickChange(false)
+                    if (it.isFocused) onFocused()
                 }
                 .fillMaxWidth()
                 .height(42.dp)
