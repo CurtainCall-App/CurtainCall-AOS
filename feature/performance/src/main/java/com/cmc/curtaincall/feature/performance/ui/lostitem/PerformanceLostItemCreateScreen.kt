@@ -75,6 +75,7 @@ private fun PerformanceLostItemCreateContent(
     var significant by remember { mutableStateOf("") }
     var attachmentFile by remember { mutableStateOf("") }
     var isClickAttachmentFile by remember { mutableStateOf(false) }
+    val isValidation = lostItemName.isNotEmpty() && lostItemType.isNotEmpty() && placeAcquisition.isNotEmpty() && dateAcquisition.isNotEmpty()
 
     Box(modifier) {
         LostItemInfoTextField(
@@ -270,13 +271,7 @@ private fun PerformanceLostItemCreateContent(
                 placeAcquisition.isNotEmpty() && dateAcquisition.isNotEmpty(),
             shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = if (lostItemName.isNotEmpty() && lostItemType.isNotEmpty() &&
-                    placeAcquisition.isNotEmpty() && dateAcquisition.isNotEmpty()
-                ) {
-                    Me_Pink
-                } else {
-                    Philippine_Gray
-                }
+                containerColor = if (isValidation) Me_Pink else Philippine_Gray
             )
         ) {
             Box(
@@ -285,13 +280,7 @@ private fun PerformanceLostItemCreateContent(
             ) {
                 Text(
                     text = stringResource(R.string.performance_find_lost_item_create_write_complete),
-                    color = if (lostItemName.isNotEmpty() && lostItemType.isNotEmpty() &&
-                        placeAcquisition.isNotEmpty() && dateAcquisition.isNotEmpty()
-                    ) {
-                        White
-                    } else {
-                        Silver_Sand
-                    },
+                    color = if (isValidation) White else Silver_Sand,
                     fontSize = 16.dp.toSp(),
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo
@@ -369,7 +358,7 @@ private fun LostItemAttachmentDropDown(
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(vertical = 20.dp),
-                        horizontalArrangement = Arrangement.SpaceEvenly,
+                        horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         Column(horizontalAlignment = Alignment.CenterHorizontally) {
                             IconButton(
@@ -542,7 +531,7 @@ private fun LostItemInfoTextField(
                 color = Nero,
                 fontSize = 14.dp.toSp(),
                 fontWeight = FontWeight.Medium,
-                fontFamily = spoqahansanseeo,
+                fontFamily = spoqahansanseeo
             ),
             singleLine = true,
             maxLines = 1,
