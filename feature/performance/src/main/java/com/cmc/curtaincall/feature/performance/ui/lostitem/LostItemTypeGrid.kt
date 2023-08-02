@@ -1,6 +1,8 @@
 package com.cmc.curtaincall.feature.performance.ui.lostitem
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
@@ -24,10 +25,20 @@ import com.cmc.curtaincall.common.design.theme.Black_Pearl
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 
+enum class LostItemType(
+    val label: String,
+    @DrawableRes val drawableRes: Int
+) {
+    BAG("가방", R.drawable.ic_bag), WALLET("지갑", R.drawable.ic_wallet), MONEY("현금", R.drawable.ic_money),
+    CARD("카드", R.drawable.ic_card), JEWELRY("귀금속", R.drawable.ic_jewelry), ELECTRONICS("전자기기", R.drawable.ic_electronics),
+    BOOKS("도서", R.drawable.ic_books), CLOTHES("의류", R.drawable.ic_clothes), ETC("기타", R.drawable.ic_etc)
+}
+
 @Composable
 fun LostItemTypeGrid(
     modifier: Modifier = Modifier,
-    itemModifier: Modifier = Modifier
+    itemModifier: Modifier = Modifier,
+    onTypeChange: (LostItemType) -> Unit = {}
 ) {
     Card(
         modifier = Modifier.padding(top = 10.dp, bottom = 10.dp),
@@ -43,60 +54,60 @@ fun LostItemTypeGrid(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                LostItemType(
-                    modifier = itemModifier,
-                    name = stringResource(R.string.performance_find_lost_item_bag),
-                    icon = painterResource(R.drawable.ic_bag)
+                LostItemTypeCard(
+                    modifier = itemModifier.clickable { onTypeChange(LostItemType.BAG) },
+                    name = LostItemType.BAG.label,
+                    icon = painterResource(LostItemType.BAG.drawableRes)
                 )
-                LostItemType(
-                    modifier = itemModifier,
-                    name = stringResource(R.string.performance_find_lost_item_wallet),
-                    icon = painterResource(R.drawable.ic_wallet)
+                LostItemTypeCard(
+                    modifier = itemModifier.clickable { onTypeChange(LostItemType.WALLET) },
+                    name = LostItemType.WALLET.label,
+                    icon = painterResource(LostItemType.WALLET.drawableRes)
                 )
-                LostItemType(
-                    modifier = itemModifier,
-                    name = stringResource(R.string.performance_find_lost_item_money),
-                    icon = painterResource(R.drawable.ic_money)
-                )
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                LostItemType(
-                    modifier = itemModifier,
-                    name = stringResource(R.string.performance_find_lost_item_card),
-                    icon = painterResource(R.drawable.ic_card)
-                )
-                LostItemType(
-                    modifier = itemModifier,
-                    name = stringResource(R.string.performance_find_lost_item_jewelry),
-                    icon = painterResource(R.drawable.ic_jewelry)
-                )
-                LostItemType(
-                    modifier = itemModifier,
-                    name = stringResource(R.string.performance_find_lost_item_electronics),
-                    icon = painterResource(R.drawable.ic_electronics)
+                LostItemTypeCard(
+                    modifier = itemModifier.clickable { onTypeChange(LostItemType.MONEY) },
+                    name = LostItemType.MONEY.label,
+                    icon = painterResource(LostItemType.MONEY.drawableRes)
                 )
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                LostItemType(
-                    modifier = itemModifier,
-                    name = stringResource(R.string.performance_find_lost_item_books),
-                    icon = painterResource(R.drawable.ic_books)
+                LostItemTypeCard(
+                    modifier = itemModifier.clickable { onTypeChange(LostItemType.CARD) },
+                    name = LostItemType.CARD.label,
+                    icon = painterResource(LostItemType.CARD.drawableRes)
                 )
-                LostItemType(
-                    modifier = itemModifier,
-                    name = stringResource(R.string.performance_find_lost_item_clothes),
-                    icon = painterResource(R.drawable.ic_clothes)
+                LostItemTypeCard(
+                    modifier = itemModifier.clickable { onTypeChange(LostItemType.JEWELRY) },
+                    name = LostItemType.JEWELRY.label,
+                    icon = painterResource(LostItemType.JEWELRY.drawableRes)
                 )
-                LostItemType(
-                    modifier = itemModifier,
-                    name = stringResource(R.string.performance_find_lost_item_etc),
-                    icon = painterResource(R.drawable.ic_etc)
+                LostItemTypeCard(
+                    modifier = itemModifier.clickable { onTypeChange(LostItemType.ELECTRONICS) },
+                    name = LostItemType.ELECTRONICS.label,
+                    icon = painterResource(LostItemType.ELECTRONICS.drawableRes)
+                )
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                LostItemTypeCard(
+                    modifier = itemModifier.clickable { onTypeChange(LostItemType.BOOKS) },
+                    name = LostItemType.BOOKS.label,
+                    icon = painterResource(LostItemType.BOOKS.drawableRes)
+                )
+                LostItemTypeCard(
+                    modifier = itemModifier.clickable { onTypeChange(LostItemType.CLOTHES) },
+                    name = LostItemType.CLOTHES.label,
+                    icon = painterResource(LostItemType.CLOTHES.drawableRes)
+                )
+                LostItemTypeCard(
+                    modifier = itemModifier.clickable { onTypeChange(LostItemType.ETC) },
+                    name = LostItemType.ETC.label,
+                    icon = painterResource(LostItemType.ETC.drawableRes)
                 )
             }
         }
@@ -104,7 +115,7 @@ fun LostItemTypeGrid(
 }
 
 @Composable
-fun LostItemType(
+fun LostItemTypeCard(
     modifier: Modifier = Modifier,
     name: String,
     icon: Painter

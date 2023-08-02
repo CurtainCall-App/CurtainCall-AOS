@@ -9,10 +9,12 @@ import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.feature.performance.ui.PerformanceScreen
 import com.cmc.curtaincall.feature.performance.ui.detail.PerformanceDetailScreen
+import com.cmc.curtaincall.feature.performance.ui.lostitem.PerformanceLostItemCreateScreen
 import com.cmc.curtaincall.feature.performance.ui.lostitem.PerformanceLostItemDetailScreen
 import com.cmc.curtaincall.feature.performance.ui.lostitem.PerformanceLostItemScreen
 import com.cmc.curtaincall.feature.performance.ui.review.PerformanceReviewCreateScreen
 import com.cmc.curtaincall.feature.performance.ui.review.PerformanceReviewScreen
+import com.cmc.curtaincall.feature.performance.ui.upload.PerformanceUploadScreen
 
 private const val PERFORMANCE_GRAPH = "performance_graph"
 const val PERFORMANCE = "performance"
@@ -22,6 +24,8 @@ private const val PERFORMANCE_REVIEW = "performance_review"
 private const val PERFORMANCE_REVIEW_CREATE = "performance_review_create"
 private const val PERFORMANCE_LOST_ITEM = "performance_lost_item"
 private const val PERFORMANCE_LOST_ITEM_DETAIL = "performance_lost_item_detail"
+private const val PERFORMANCE_LOST_ITEM_CREATE = "performance_lost_item_create"
+private const val PERFORMANCE_UPLOAD = "performance_upload"
 
 sealed interface PerformanceDestination : CurtainCallDestination {
     object Performance : PerformanceDestination, BottomDestination {
@@ -50,9 +54,20 @@ sealed interface PerformanceDestination : CurtainCallDestination {
     object LostItemDetail : PerformanceDestination {
         override val route = PERFORMANCE_LOST_ITEM_DETAIL
     }
+
+    object LostItemCreate : PerformanceDestination {
+        override val route = PERFORMANCE_LOST_ITEM_CREATE
+    }
+
+    object Upload : PerformanceDestination {
+        override val route = PERFORMANCE_UPLOAD
+    }
 }
 
-fun NavGraphBuilder.performanceNavGraph(navHostController: NavHostController) {
+fun NavGraphBuilder.performanceNavGraph(
+    navHostController: NavHostController,
+    onNavigateHome: () -> Unit
+) {
     navigation(startDestination = PerformanceDestination.Performance.route, route = PERFORMANCE_GRAPH) {
         composable(route = PerformanceDestination.Performance.route) {
             PerformanceScreen {
@@ -92,6 +107,9 @@ fun NavGraphBuilder.performanceNavGraph(navHostController: NavHostController) {
                 onNavigateLostItemDetail = {
                     navHostController.navigate(PerformanceDestination.LostItemDetail.route)
                 },
+                onNavigateLostItemCreate = {
+                    navHostController.navigate(PerformanceDestination.LostItemCreate.route)
+                },
                 onBack = {
                     navHostController.popBackStack()
                 }
@@ -101,6 +119,29 @@ fun NavGraphBuilder.performanceNavGraph(navHostController: NavHostController) {
             PerformanceLostItemDetailScreen {
                 navHostController.popBackStack()
             }
+        }
+        composable(route = PerformanceDestination.LostItemCreate.route) {
+            PerformanceLostItemCreateScreen(
+                onNavigateUpload = {
+                    navHostController.navigate(PerformanceDestination.Upload.route)
+                },
+                onBack = {
+                    navHostController.popBackStack()
+                }
+            )
+        }
+        composable(route = PerformanceDestination.Upload.route) {
+            PerformanceUploadScreen(
+                onNavigateLostItem = {
+                    navHostController.navigate(PerformanceDestination.LostItem.route) {
+                        popUpTo(PerformanceDestination.LostItem.route) {
+                            inclusive = false
+                        }
+                        launchSingleTop = true
+                    }
+                },
+                onNavigateHome = onNavigateHome
+            )
         }
     }
 }
