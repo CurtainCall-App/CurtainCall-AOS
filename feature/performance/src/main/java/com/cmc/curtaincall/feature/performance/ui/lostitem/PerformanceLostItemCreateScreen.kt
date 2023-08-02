@@ -34,6 +34,7 @@ import com.cmc.curtaincall.common.design.theme.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PerformanceLostItemCreateScreen(
+    onNavigateUpload: () -> Unit,
     onBack: () -> Unit
 ) {
     Scaffold(
@@ -49,14 +50,16 @@ internal fun PerformanceLostItemCreateScreen(
         PerformanceLostItemCreateContent(
             modifier = Modifier
                 .padding(paddingValues)
-                .fillMaxSize()
+                .fillMaxSize(),
+            onNavigateUpload = onNavigateUpload
         )
     }
 }
 
 @Composable
 private fun PerformanceLostItemCreateContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateUpload: () -> Unit
 ) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
@@ -256,7 +259,7 @@ private fun PerformanceLostItemCreateContent(
             onValueChange = { attachmentFile = it }
         )
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { onNavigateUpload() },
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
