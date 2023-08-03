@@ -19,3 +19,9 @@ val gmarketsans = FontFamily(
     Font(R.font.gmarketsans_medium, FontWeight.Medium, FontStyle.Normal),
     Font(R.font.gmarketsans_light, FontWeight.Light, FontStyle.Normal)
 )
+
+val avenirnext = FontFamily(
+    Font(R.font.avenir_next_bold, FontWeight.Bold, FontStyle.Normal),
+    Font(R.font.avenir_next_regular, FontWeight.Normal, FontStyle.Normal),
+    Font(R.font.gmarketsans_light, FontWeight.Light, FontStyle.Normal)
+)
