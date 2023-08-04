@@ -154,4 +154,14 @@
     <string name="performance_find_lost_item_create_time_format">%d : %d %s</string>
     <string name="performance_lost_item_upload_complete">분실물 작성이 모두 끝났습니다.</string>
     <string name="performance_lost_item_upload_complete_description">해당 게시물은 작품 상세페이지 및\n마이페이지에서 확인할 수 있습니다.</string>
+
+    <!-- home-->
+    <string name="home_appbar_title">CURTAIN CALL</string>
+    <string name="home_banner_word_dictionary_title">알쏭달쏭 용어 사전</string>
+    <string name="home_banner_word_dictionary_description">연극과 뮤지컬에 관해\n모르는 용어가 있다면?</string>
+    <string name="home_banner_ticketing_guide_title">티켓팅 안내</string>
+    <string name="home_banner_ticketing_guide_description">티켓팅 고수가 되는 방법!</string>
+    <string name="home_banner_gift_title">할인 꿀팁</string>
+    <string name="home_banner_gift_description">더 좋은 가격으로 즐기기!</string>
+    <string name="home_banner_showing">보기</string>
 </resources>
