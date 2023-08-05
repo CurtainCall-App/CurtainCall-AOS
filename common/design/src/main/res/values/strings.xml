@@ -164,4 +164,7 @@
     <string name="home_banner_gift_title">할인 꿀팁</string>
     <string name="home_banner_gift_description">더 좋은 가격으로 즐기기!</string>
     <string name="home_banner_showing">보기</string>
+    <string name="home_my_gathering_tab">My 모집</string>
+    <string name="home_my_participation_tab">My 참여</string>
+    <string name="home_my_number_of_member_format">%d/%d</string>
 </resources>
