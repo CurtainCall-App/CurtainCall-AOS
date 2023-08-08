@@ -167,4 +167,5 @@
     <string name="home_my_gathering_tab">My 모집</string>
     <string name="home_my_participation_tab">My 참여</string>
     <string name="home_my_number_of_member_format">%d/%d</string>
+    <string name="home_coming_livetalk">커밍순 라이브톡</string>
 </resources>

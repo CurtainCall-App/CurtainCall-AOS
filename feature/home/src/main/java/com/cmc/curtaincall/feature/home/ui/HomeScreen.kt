@@ -2,6 +2,7 @@ package com.cmc.curtaincall.feature.home.ui
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.component.LiveTalkCard
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.google.accompanist.pager.HorizontalPagerIndicator
@@ -67,6 +69,7 @@ private fun HomeContent(
         HomeMyTab(
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(horizontal = 20.dp)
                 .padding(top = 50.dp),
             icon = painterResource(R.drawable.ic_gather),
             title = stringResource(R.string.home_my_gathering_tab)
@@ -86,6 +89,7 @@ private fun HomeContent(
         HomeMyTab(
             modifier = Modifier
                 .fillMaxWidth()
+                .padding(horizontal = 20.dp)
                 .padding(top = 40.dp),
             icon = painterResource(R.drawable.ic_my_participation),
             title = stringResource(R.string.home_my_participation_tab)
@@ -113,6 +117,53 @@ private fun HomeContent(
                 time = "19:30"
             )
         }
+        HomeLiveTalkTab(
+            modifier = Modifier
+                .padding(top = 50.dp)
+                .fillMaxWidth()
+                .height(204.dp)
+        )
+    }
+}
+
+@Composable
+private fun HomeLiveTalkTab(
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .background(Cultured)
+            .padding(start = 20.dp, top = 24.dp, bottom = 16.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                painter = painterResource(R.drawable.ic_chatting),
+                contentDescription = null,
+                modifier = Modifier.size(22.dp),
+                tint = Color.Unspecified
+            )
+            Text(
+                text = stringResource(R.string.home_coming_livetalk),
+                modifier = Modifier.padding(start = 6.dp),
+                color = Chinese_Black,
+                fontSize = 22.dp.toSp(),
+                fontWeight = FontWeight.Bold,
+                fontFamily = spoqahansanseeo
+            )
+        }
+        LazyRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 10.dp)
+        ) {
+            items(10) {
+                LiveTalkCard(
+                    name = "비스타",
+                    image = painterResource(R.drawable.img_poster),
+                    time = "19:30~"
+                )
+            }
+        }
     }
 }
 
@@ -123,7 +174,7 @@ private fun HomeMyTab(
     title: String,
     content: @Composable () -> Unit
 ) {
-    Column(modifier.padding(horizontal = 20.dp)) {
+    Column(modifier) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
                 painter = icon,
