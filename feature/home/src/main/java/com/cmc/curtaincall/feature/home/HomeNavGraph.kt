@@ -14,8 +14,8 @@ import androidx.navigation.compose.rememberNavController
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
-import com.cmc.curtaincall.feature.home.ui.HomeBottomBar
-import com.cmc.curtaincall.feature.home.ui.HomeFloatingButton
+import com.cmc.curtaincall.feature.home.ui.component.HomeBottomBar
+import com.cmc.curtaincall.feature.home.ui.component.HomeFloatingButton
 import com.cmc.curtaincall.feature.home.ui.HomeScreen
 import com.cmc.curtaincall.feature.livetalk.LiveTalkDestination
 import com.cmc.curtaincall.feature.livetalk.livetalkNavGraph
