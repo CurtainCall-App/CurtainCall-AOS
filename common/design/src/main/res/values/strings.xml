@@ -168,4 +168,7 @@
     <string name="home_my_participation_tab">My 참여</string>
     <string name="home_my_number_of_member_format">%d/%d</string>
     <string name="home_coming_livetalk">커밍순 라이브톡</string>
+    <string name="home_top10_popular_performance">TOP10 인기 작품</string>
+    <string name="home_scheduled_open_performance">오픈 예정 공연</string>
+    <string name="home_value_for_money_performance">가성비 좋은 공연</string>
 </resources>
