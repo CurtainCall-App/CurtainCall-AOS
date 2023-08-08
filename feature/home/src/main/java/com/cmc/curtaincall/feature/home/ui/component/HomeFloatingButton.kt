@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.home.ui
+package com.cmc.curtaincall.feature.home.ui.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
