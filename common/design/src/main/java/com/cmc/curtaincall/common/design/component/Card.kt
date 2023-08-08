@@ -92,7 +92,7 @@ fun PerformanceCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp)
-                .padding(vertical = 8.dp),
+                .padding(vertical = 8.dp)
         ) {
             Text(
                 text = name,
