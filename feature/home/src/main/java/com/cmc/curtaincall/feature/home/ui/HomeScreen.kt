@@ -11,9 +11,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.component.CardType
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.cmc.curtaincall.feature.home.ui.component.HomeBanner
+import com.cmc.curtaincall.feature.home.ui.tab.HomeContentTab
 import com.cmc.curtaincall.feature.home.ui.tab.HomeLiveTalkTab
 import com.cmc.curtaincall.feature.home.ui.tab.HomeMyTab
 import com.cmc.curtaincall.feature.home.ui.tab.HomeMyTabItem
@@ -117,6 +119,34 @@ private fun HomeContent(
                 .fillMaxWidth()
                 .height(204.dp)
         )
+        HomeContentTab(
+            modifier = Modifier
+                .padding(top = 50.dp)
+                .padding(start = 20.dp)
+                .fillMaxWidth(),
+            icon = painterResource(R.drawable.ic_fire),
+            title = stringResource(R.string.home_top10_popular_performance),
+            cardType = CardType.TOP10
+        )
+        HomeContentTab(
+            modifier = Modifier
+                .padding(top = 50.dp)
+                .padding(start = 20.dp)
+                .fillMaxWidth(),
+            icon = painterResource(R.drawable.ic_open_clock),
+            title = stringResource(R.string.home_scheduled_open_performance),
+            cardType = CardType.OPEN_SOON
+        )
+        HomeContentTab(
+            modifier = Modifier
+                .padding(top = 50.dp)
+                .padding(start = 20.dp)
+                .fillMaxWidth(),
+            icon = painterResource(R.drawable.ic_value_of_money),
+            title = stringResource(R.string.home_value_for_money_performance),
+            cardType = CardType.CHEAP
+        )
+        Spacer(modifier = Modifier.height(50.dp))
     }
 }
 
