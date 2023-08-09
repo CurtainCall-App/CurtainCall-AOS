@@ -76,22 +76,41 @@ private fun GuideContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 27.dp, start = 19.dp),
-            icon = painterResource(R.drawable.ic_dictionary_guide),
-            title = stringResource(R.string.home_banner_word_dictionary_title)
+            icon = painterResource(getGuideIcon(guideType)),
+            title = stringResource(getGuideTitle(guideType))
         )
-        GuideMenuTab(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 10.dp),
-            menus = listOf(
-                stringResource(R.string.home_guide_total_menu) to { GuideTotalExpressionContent() },
-                stringResource(R.string.home_guide_ticketing_menu) to { GuideTicketingExpressionContent() },
-                stringResource(R.string.home_guide_performance_menu) to { GuidePerformanceExpressionContent() },
-                stringResource(R.string.home_guide_theater_menu) to { GuideTheaterExpressionContent() },
-                stringResource(R.string.home_guide_audience_menu) to { GuideAudienceExpressionContent() },
-                stringResource(R.string.home_guide_etc_menu) to { GuideEtcExpressionContent() }
-            )
-        )
+        when (guideType) {
+            GuideType.DICTIONARY -> {
+                GuideMenuTab(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 10.dp),
+                    menus = listOf(
+                        stringResource(R.string.home_guide_total_menu) to { GuideTotalExpressionContent() },
+                        stringResource(R.string.home_guide_ticketing_menu) to { GuideTicketingExpressionContent() },
+                        stringResource(R.string.home_guide_performance_menu) to { GuidePerformanceExpressionContent() },
+                        stringResource(R.string.home_guide_theater_menu) to { GuideTheaterExpressionContent() },
+                        stringResource(R.string.home_guide_audience_menu) to { GuideAudienceExpressionContent() },
+                        stringResource(R.string.home_guide_etc_menu) to { GuideEtcExpressionContent() }
+                    )
+                )
+            }
+
+            GuideType.TICKETING -> {
+                GuideMenuTab(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 10.dp),
+                    menus = listOf(
+                        stringResource(R.string.home_guide_before_ticketing) to { GuideBeforeTicketingContent() },
+                        stringResource(R.string.home_guide_after_tickketing) to { GuideAfterTicketingContent() }
+                    )
+                )
+            }
+
+            else -> {
+            }
+        }
     }
 }
 
@@ -120,4 +139,16 @@ private fun GuideHeader(
             fontFamily = spoqahansanseeo
         )
     }
+}
+
+private fun getGuideTitle(guideType: GuideType) = when (guideType) {
+    GuideType.DICTIONARY -> R.string.home_banner_word_dictionary_title
+    GuideType.TICKETING -> R.string.home_banner_ticketing_guide_title
+    GuideType.DISCOUNT -> R.string.home_banner_gift_title
+}
+
+private fun getGuideIcon(guideType: GuideType) = when (guideType) {
+    GuideType.DICTIONARY -> R.drawable.ic_dictionary_guide
+    GuideType.TICKETING -> R.drawable.ic_ticketing_guide
+    GuideType.DISCOUNT -> R.drawable.ic_ticketing_guide
 }
