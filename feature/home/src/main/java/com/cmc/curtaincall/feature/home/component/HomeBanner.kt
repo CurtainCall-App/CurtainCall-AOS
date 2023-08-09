@@ -33,60 +33,71 @@ import com.cmc.curtaincall.common.design.theme.Pale_Lavendar
 import com.cmc.curtaincall.common.design.theme.Water
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
+import com.cmc.curtaincall.feature.home.guide.GuideType
 import com.google.accompanist.pager.HorizontalPagerIndicator
 
 data class BannerItem(
     val title: String,
     val description: String,
     val color: Color,
-    val content: @Composable BoxScope.() -> Unit
+    val content: @Composable BoxScope.() -> Unit,
+    val onClick: () -> Unit
 )
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun HomeBanner(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateGuide: (GuideType) -> Unit
 ) {
     val bannerItems = listOf(
         BannerItem(
-            stringResource(R.string.home_banner_word_dictionary_title),
-            stringResource(R.string.home_banner_word_dictionary_description),
-            Navajo_White
-        ) {
-            Image(
-                painter = painterResource(R.drawable.ic_dictionary),
-                contentDescription = null,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 18.dp, bottom = (14.63).dp)
-            )
-        },
+            title = stringResource(R.string.home_banner_word_dictionary_title),
+            description = stringResource(R.string.home_banner_word_dictionary_description),
+            color = Navajo_White,
+            content = {
+                Image(
+                    painter = painterResource(R.drawable.ic_dictionary),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(end = 18.dp, bottom = (14.63).dp)
+                )
+            },
+            onClick = { onNavigateGuide(GuideType.DICTIONARY) }
+        ),
         BannerItem(
-            stringResource(R.string.home_banner_ticketing_guide_title),
-            stringResource(R.string.home_banner_ticketing_guide_description),
-            Pale_Lavendar
-        ) {
-            Image(
-                painter = painterResource(R.drawable.ic_ticket),
-                contentDescription = null,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = (18.5).dp, bottom = (28.37).dp)
-            )
-        },
+            title = stringResource(R.string.home_banner_ticketing_guide_title),
+            description = stringResource(R.string.home_banner_ticketing_guide_description),
+            color = Pale_Lavendar,
+            content = {
+                Image(
+                    painter = painterResource(R.drawable.ic_ticket),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(end = (18.5).dp, bottom = (28.37).dp)
+                )
+            },
+            onClick = {
+            }
+        ),
         BannerItem(
-            stringResource(R.string.home_banner_gift_title),
-            stringResource(R.string.home_banner_gift_description),
-            Water
-        ) {
-            Image(
-                painter = painterResource(R.drawable.ic_gift),
-                contentDescription = null,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 16.dp, bottom = (15.35).dp)
-            )
-        }
+            title = stringResource(R.string.home_banner_gift_title),
+            description = stringResource(R.string.home_banner_gift_description),
+            color = Water,
+            content = {
+                Image(
+                    painter = painterResource(R.drawable.ic_gift),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(end = 16.dp, bottom = (15.35).dp)
+                )
+            },
+            onClick = {
+            }
+        )
     )
 
     val pagerState = rememberPagerState { bannerItems.size }
@@ -115,7 +126,8 @@ internal fun HomeBanner(
                         .background(bannerItems[position].color),
                     title = bannerItems[position].title,
                     description = bannerItems[position].description,
-                    content = bannerItems[position].content
+                    content = bannerItems[position].content,
+                    onClick = bannerItems[position].onClick
                 )
             }
         }
@@ -139,8 +151,8 @@ private fun HomeBannerPagerItem(
     modifier: Modifier = Modifier,
     title: String,
     description: String,
+    content: @Composable BoxScope.() -> Unit = {},
     onClick: () -> Unit = {},
-    content: @Composable BoxScope.() -> Unit = {}
 ) {
     Box(modifier) {
         Column(
