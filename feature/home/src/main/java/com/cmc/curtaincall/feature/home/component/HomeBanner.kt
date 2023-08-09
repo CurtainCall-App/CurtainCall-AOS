@@ -153,7 +153,7 @@ private fun HomeBannerPagerItem(
     content: @Composable BoxScope.() -> Unit = {},
     onClick: () -> Unit = {},
 ) {
-    Box(modifier) {
+    Box(modifier.clickable { onClick() }) {
         Column(
             modifier = Modifier
                 .padding(start = 16.dp)
@@ -177,8 +177,7 @@ private fun HomeBannerPagerItem(
             Box(
                 modifier = Modifier
                     .size(50.dp, 30.dp)
-                    .background(Cetacean_Blue, RoundedCornerShape(16.dp))
-                    .clickable { onClick() },
+                    .background(Cetacean_Blue, RoundedCornerShape(16.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
