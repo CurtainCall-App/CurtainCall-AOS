@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.home.ui.component
+package com.cmc.curtaincall.feature.home.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -20,7 +20,7 @@ import com.cmc.curtaincall.feature.performance.PerformanceDestination
 @Composable
 fun HomeFloatingButton(navHostController: NavHostController) {
     val bottomDestinations = listOf(
-        HomeDestination,
+        HomeDestination.Home,
         PerformanceDestination.Performance,
         LiveTalkDestination.LiveTalk,
         PartyMemberDestination.PartyMember,

@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.home.ui
+package com.cmc.curtaincall.feature.home
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -14,16 +14,18 @@ import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.CardType
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
-import com.cmc.curtaincall.feature.home.ui.component.HomeBanner
-import com.cmc.curtaincall.feature.home.ui.tab.HomeContentTab
-import com.cmc.curtaincall.feature.home.ui.tab.HomeLiveTalkTab
-import com.cmc.curtaincall.feature.home.ui.tab.HomeMyTab
-import com.cmc.curtaincall.feature.home.ui.tab.HomeMyTabItem
+import com.cmc.curtaincall.feature.home.component.HomeBanner
+import com.cmc.curtaincall.feature.home.guide.GuideType
+import com.cmc.curtaincall.feature.home.tab.HomeContentTab
+import com.cmc.curtaincall.feature.home.tab.HomeLiveTalkTab
+import com.cmc.curtaincall.feature.home.tab.HomeMyTab
+import com.cmc.curtaincall.feature.home.tab.HomeMyTabItem
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
+    onNavigateGuide: (GuideType) -> Unit,
     onNavigatePerformance: () -> Unit,
     onNavigateLiveTalk: () -> Unit,
     onNavigatePartyMember: () -> Unit,
@@ -46,21 +48,24 @@ fun HomeScreen(
         HomeContent(
             modifier = Modifier
                 .padding(paddingValues)
-                .fillMaxSize()
+                .fillMaxSize(),
+            onNavigateGuide = onNavigateGuide
         )
     }
 }
 
 @Composable
 private fun HomeContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateGuide: (GuideType) -> Unit
 ) {
     val scrollState = rememberScrollState()
     Column(modifier.verticalScroll(scrollState)) {
         HomeBanner(
             modifier = Modifier
                 .background(Cetacean_Blue)
-                .height(284.dp)
+                .height(284.dp),
+            onNavigateGuide = onNavigateGuide
         )
         HomeMyTab(
             modifier = Modifier

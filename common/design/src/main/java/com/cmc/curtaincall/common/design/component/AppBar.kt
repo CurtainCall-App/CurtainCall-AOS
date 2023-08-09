@@ -49,13 +49,18 @@ fun TopAppBarWithBack(
         },
         modifier = modifier,
         navigationIcon = {
-            IconButton(onClick = onClick) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_arrow_back),
-                    contentDescription = null,
-                    modifier = Modifier.size(22.dp, 22.dp),
-                    tint = contentColor
-                )
+            Box(
+                modifier = Modifier.fillMaxHeight(),
+                contentAlignment = Alignment.Center
+            ) {
+                IconButton(onClick = onClick) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_arrow_back),
+                        contentDescription = null,
+                        modifier = Modifier.size(22.dp, 22.dp),
+                        tint = contentColor
+                    )
+                }
             }
         },
         colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = containerColor)

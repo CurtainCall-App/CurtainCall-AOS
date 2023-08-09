@@ -1,9 +1,13 @@
-package com.cmc.curtaincall.feature.home.ui.component
+package com.cmc.curtaincall.feature.home.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -28,7 +32,7 @@ import com.cmc.curtaincall.feature.performance.PerformanceDestination
 @Composable
 fun HomeBottomBar(navHostController: NavHostController) {
     val bottomDestinations = listOf(
-        HomeDestination,
+        HomeDestination.Home,
         PerformanceDestination.Performance,
         LiveTalkDestination.LiveTalk,
         PartyMemberDestination.PartyMember,

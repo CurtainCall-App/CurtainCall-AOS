@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.home.ui.tab
+package com.cmc.curtaincall.feature.home.tab
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
