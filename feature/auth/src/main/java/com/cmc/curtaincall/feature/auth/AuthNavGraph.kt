@@ -43,7 +43,7 @@ fun NavGraphBuilder.authNavGraph(navHostController: NavHostController) {
                     navHostController.navigate(AuthDestination.SignUpTerms.route)
                 },
                 onNavigateHome = {
-                    navHostController.navigate(HomeDestination.route) {
+                    navHostController.navigate(HomeDestination.Home.route) {
                         popUpTo(AuthDestination.Login.route) {
                             inclusive = true
                         }
@@ -80,7 +80,7 @@ fun NavGraphBuilder.authNavGraph(navHostController: NavHostController) {
 
         composable(route = AuthDestination.Welcome.route) {
             WelComeScreen {
-                navHostController.navigate(HomeDestination.route) {
+                navHostController.navigate(HomeDestination.Home.route) {
                     popUpTo(AuthDestination.Login.route) {
                         inclusive = true
                     }

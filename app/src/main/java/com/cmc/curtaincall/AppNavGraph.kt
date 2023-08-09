@@ -55,7 +55,7 @@ internal fun AppNavHost(navHostController: NavHostController = rememberNavContro
                     }
                 },
                 onNavigateHome = {
-                    navHostController.navigate(HomeDestination.route) {
+                    navHostController.navigate(HomeDestination.Home.route) {
                         popUpTo(OnBoarding.route) {
                             inclusive = true
                         }
@@ -64,7 +64,7 @@ internal fun AppNavHost(navHostController: NavHostController = rememberNavContro
             )
         }
 
-        composable(route = HomeDestination.route) {
+        composable(route = HomeDestination.Home.route) {
             HomeNavHost()
         }
 

@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.home.ui.component
+package com.cmc.curtaincall.feature.home.component
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image

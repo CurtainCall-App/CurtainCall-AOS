@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.home.ui
+package com.cmc.curtaincall.feature.home
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -14,11 +14,11 @@ import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.CardType
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
-import com.cmc.curtaincall.feature.home.ui.component.HomeBanner
-import com.cmc.curtaincall.feature.home.ui.tab.HomeContentTab
-import com.cmc.curtaincall.feature.home.ui.tab.HomeLiveTalkTab
-import com.cmc.curtaincall.feature.home.ui.tab.HomeMyTab
-import com.cmc.curtaincall.feature.home.ui.tab.HomeMyTabItem
+import com.cmc.curtaincall.feature.home.component.HomeBanner
+import com.cmc.curtaincall.feature.home.tab.HomeContentTab
+import com.cmc.curtaincall.feature.home.tab.HomeLiveTalkTab
+import com.cmc.curtaincall.feature.home.tab.HomeMyTab
+import com.cmc.curtaincall.feature.home.tab.HomeMyTabItem
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalMaterial3Api::class)
