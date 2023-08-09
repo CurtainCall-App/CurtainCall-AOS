@@ -49,9 +49,7 @@ fun PerformanceCard(
     meta: String = ""
 ) {
     Card(
-        modifier = Modifier
-            .padding(end = 12.dp)
-            .size(120.dp, 218.dp),
+        modifier = Modifier.size(120.dp, 218.dp),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             contentColor = White,
@@ -140,10 +138,7 @@ fun LiveTalkCard(
     image: Painter,
     time: String
 ) {
-    Column(
-        modifier = Modifier.padding(end = 6.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Box(
             modifier = Modifier
                 .size(72.dp, 96.dp)
