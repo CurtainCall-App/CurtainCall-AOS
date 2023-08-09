@@ -94,8 +94,7 @@ internal fun HomeBanner(
                         .padding(end = 16.dp, bottom = (15.35).dp)
                 )
             },
-            onClick = {
-            }
+            onClick = { onNavigateGuide(GuideType.DISCOUNT) }
         )
     )
 

@@ -108,7 +108,12 @@ private fun GuideContent(
                 )
             }
 
-            else -> {
+            GuideType.DISCOUNT -> {
+                GuideDiscountContent(
+                    modifier = Modifier
+                        .padding(top = 10.dp)
+                        .fillMaxSize()
+                )
             }
         }
     }
@@ -150,5 +155,5 @@ private fun getGuideTitle(guideType: GuideType) = when (guideType) {
 private fun getGuideIcon(guideType: GuideType) = when (guideType) {
     GuideType.DICTIONARY -> R.drawable.ic_dictionary_guide
     GuideType.TICKETING -> R.drawable.ic_ticketing_guide
-    GuideType.DISCOUNT -> R.drawable.ic_ticketing_guide
+    GuideType.DISCOUNT -> R.drawable.ic_gift_guide
 }
