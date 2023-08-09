@@ -140,10 +140,7 @@ fun LiveTalkCard(
     image: Painter,
     time: String
 ) {
-    Column(
-        modifier = Modifier.padding(end = 6.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Box(
             modifier = Modifier
                 .size(72.dp, 96.dp)

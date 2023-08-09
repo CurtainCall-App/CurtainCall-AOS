@@ -3,10 +3,12 @@ package com.cmc.curtaincall.feature.home.tab
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,9 +33,12 @@ internal fun HomeLiveTalkTab(
     Column(
         modifier = modifier
             .background(Cultured)
-            .padding(start = 20.dp, top = 24.dp, bottom = 16.dp)
+            .padding(top = 24.dp, bottom = 16.dp)
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = Modifier.padding(start = 20.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Icon(
                 painter = painterResource(R.drawable.ic_chatting),
                 contentDescription = null,
@@ -54,12 +59,16 @@ internal fun HomeLiveTalkTab(
                 .fillMaxWidth()
                 .padding(top = 10.dp)
         ) {
-            items(10) {
-                LiveTalkCard(
-                    name = "비스타",
-                    image = painterResource(R.drawable.img_poster),
-                    time = "19:30~"
-                )
+            itemsIndexed(List(10) {}) { index, item ->
+                if (index == 0) Spacer(Modifier.size(20.dp))
+                Row {
+                    LiveTalkCard(
+                        name = "비스타",
+                        image = painterResource(R.drawable.img_poster),
+                        time = "19:30~"
+                    )
+                    Spacer(Modifier.size(6.dp))
+                }
             }
         }
     }
