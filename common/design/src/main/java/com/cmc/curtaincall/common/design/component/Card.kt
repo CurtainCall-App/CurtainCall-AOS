@@ -49,9 +49,7 @@ fun PerformanceCard(
     meta: String = ""
 ) {
     Card(
-        modifier = Modifier
-            .padding(end = 12.dp)
-            .size(120.dp, 218.dp),
+        modifier = Modifier.size(120.dp, 218.dp),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             contentColor = White,

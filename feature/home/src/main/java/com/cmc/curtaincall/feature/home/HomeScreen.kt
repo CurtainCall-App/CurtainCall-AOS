@@ -131,7 +131,6 @@ private fun HomeContent(
             HomeContentTab(
                 modifier = Modifier
                     .padding(top = 50.dp)
-                    .padding(start = 20.dp)
                     .fillMaxWidth(),
                 icon = painterResource(R.drawable.ic_fire),
                 title = stringResource(R.string.home_top10_popular_performance),
@@ -140,7 +139,6 @@ private fun HomeContent(
             HomeContentTab(
                 modifier = Modifier
                     .padding(top = 50.dp)
-                    .padding(start = 20.dp)
                     .fillMaxWidth(),
                 icon = painterResource(R.drawable.ic_open_clock),
                 title = stringResource(R.string.home_scheduled_open_performance),
@@ -149,7 +147,6 @@ private fun HomeContent(
             HomeContentTab(
                 modifier = Modifier
                     .padding(top = 50.dp)
-                    .padding(start = 20.dp)
                     .fillMaxWidth(),
                 icon = painterResource(R.drawable.ic_value_of_money),
                 title = stringResource(R.string.home_value_for_money_performance),
