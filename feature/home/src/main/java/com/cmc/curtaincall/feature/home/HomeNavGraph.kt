@@ -1,5 +1,7 @@
 package com.cmc.curtaincall.feature.home
 
+import android.os.Build
+import android.os.Bundle
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -8,14 +10,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.feature.home.component.HomeBottomBar
 import com.cmc.curtaincall.feature.home.component.HomeFloatingButton
+import com.cmc.curtaincall.feature.home.guide.GuideScreen
+import com.cmc.curtaincall.feature.home.guide.GuideType
 import com.cmc.curtaincall.feature.livetalk.LiveTalkDestination
 import com.cmc.curtaincall.feature.livetalk.livetalkNavGraph
 import com.cmc.curtaincall.feature.mypage.MyPageDestination
@@ -40,6 +46,13 @@ sealed interface HomeDestination : CurtainCallDestination {
 
     object Guide : HomeDestination {
         override val route = HOME_GUIDE
+        const val typeArg = "type"
+        val routeWithArgs = "$route/{$typeArg}"
+        val arguments = listOf(
+            navArgument(typeArg) {
+                type = NavType.EnumType(GuideType::class.java)
+            }
+        )
     }
 }
 
@@ -61,6 +74,9 @@ fun HomeNavHost(navHostController: NavHostController = rememberNavController()) 
         ) {
             composable(route = HomeDestination.Home.route) {
                 HomeScreen(
+                    onNavigateGuide = {
+                        navHostController.navigate("${HomeDestination.Guide.route}/$it")
+                    },
                     onNavigatePerformance = {
                         navHostController.navigate(PerformanceDestination.Performance.route)
                     },
@@ -74,6 +90,18 @@ fun HomeNavHost(navHostController: NavHostController = rememberNavController()) 
                         navHostController.navigate(MyPageDestination.MyPage.route)
                     }
                 )
+            }
+            composable(
+                route = HomeDestination.Guide.routeWithArgs,
+                arguments = HomeDestination.Guide.arguments
+            ) { entry ->
+                val guideType: GuideType? = getGuideType(entry.arguments)
+                if (guideType != null) {
+                    GuideScreen(
+                        guideType = guideType,
+                        onBack = { navHostController.popBackStack() }
+                    )
+                }
             }
 
             performanceNavGraph(
@@ -103,3 +131,10 @@ fun HomeNavHost(navHostController: NavHostController = rememberNavController()) 
         }
     }
 }
+
+private fun getGuideType(bundle: Bundle?): GuideType? =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        bundle?.getSerializable(HomeDestination.Guide.typeArg, GuideType::class.java)
+    } else {
+        bundle?.getSerializable(HomeDestination.Guide.typeArg) as? GuideType
+    }
