@@ -79,8 +79,7 @@ internal fun HomeBanner(
                         .padding(end = (18.5).dp, bottom = (28.37).dp)
                 )
             },
-            onClick = {
-            }
+            onClick = { onNavigateGuide(GuideType.TICKETING) }
         ),
         BannerItem(
             title = stringResource(R.string.home_banner_gift_title),
