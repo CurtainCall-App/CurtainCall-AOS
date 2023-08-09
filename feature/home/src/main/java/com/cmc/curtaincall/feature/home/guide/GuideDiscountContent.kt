@@ -132,6 +132,24 @@ internal fun GuideDiscountContent(
             title = "현장 할인점",
             descriptions = listOf("서울 연극센터 티켓판매소: 당일 티켓 최대 50% 할인")
         )
+        Spacer(
+            modifier = Modifier
+                .padding(top = 94.dp)
+                .fillMaxWidth()
+                .height(12.dp)
+                .background(Cultured)
+        )
+        Text(
+            text = "* 위의 정보들은 공연/현장별로 실제 할인 정보와 상이할 수 있습니다.\n자세한 정보는 사이트 방문 후 확인하시길 바랍니다.",
+            modifier = Modifier
+                .padding(vertical = 24.dp)
+                .padding(horizontal = 20.dp)
+                .fillMaxWidth(),
+            color = Black_Coral,
+            fontSize = 14.dp.toSp(),
+            fontWeight = FontWeight.Normal,
+            fontFamily = spoqahansanseeo
+        )
     }
 }
 
