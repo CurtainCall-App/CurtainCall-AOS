@@ -27,11 +27,11 @@ import com.cmc.curtaincall.common.design.theme.Cultured
 import com.cmc.curtaincall.common.design.theme.Me_Pink
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
-import com.cmc.curtaincall.feature.home.guide.Expression.audience_words
-import com.cmc.curtaincall.feature.home.guide.Expression.etc_words
-import com.cmc.curtaincall.feature.home.guide.Expression.performance_words
-import com.cmc.curtaincall.feature.home.guide.Expression.theater_words
-import com.cmc.curtaincall.feature.home.guide.Expression.ticketing_words
+import com.cmc.curtaincall.feature.home.guide.GuideConstants.audience_words
+import com.cmc.curtaincall.feature.home.guide.GuideConstants.etc_words
+import com.cmc.curtaincall.feature.home.guide.GuideConstants.performance_words
+import com.cmc.curtaincall.feature.home.guide.GuideConstants.theater_words
+import com.cmc.curtaincall.feature.home.guide.GuideConstants.ticketing_words
 
 @Composable
 internal fun GuideTotalExpressionContent() {
@@ -52,6 +52,7 @@ internal fun GuideTotalExpressionContent() {
             if (index < totalList.keys.toList().lastIndex) {
                 Spacer(
                     modifier = Modifier
+                        .padding(horizontal = 20.dp)
                         .fillMaxWidth()
                         .height(1.dp)
                         .background(Cultured)
@@ -79,6 +80,7 @@ internal fun GuideTicketingExpressionContent() {
             if (index < ticketing_words.keys.toList().lastIndex) {
                 Spacer(
                     modifier = Modifier
+                        .padding(horizontal = 20.dp)
                         .fillMaxWidth()
                         .height(1.dp)
                         .background(Cultured)
@@ -106,6 +108,7 @@ internal fun GuidePerformanceExpressionContent() {
             if (index < performance_words.keys.toList().lastIndex) {
                 Spacer(
                     modifier = Modifier
+                        .padding(horizontal = 20.dp)
                         .fillMaxWidth()
                         .height(1.dp)
                         .background(Cultured)
@@ -133,6 +136,7 @@ internal fun GuideTheaterExpressionContent() {
             if (index < theater_words.keys.toList().lastIndex) {
                 Spacer(
                     modifier = Modifier
+                        .padding(horizontal = 20.dp)
                         .fillMaxWidth()
                         .height(1.dp)
                         .background(Cultured)
@@ -160,6 +164,7 @@ internal fun GuideAudienceExpressionContent() {
             if (index < audience_words.keys.toList().lastIndex) {
                 Spacer(
                     modifier = Modifier
+                        .padding(horizontal = 20.dp)
                         .fillMaxWidth()
                         .height(1.dp)
                         .background(Cultured)
@@ -187,6 +192,7 @@ internal fun GuideEtcExpressionContent() {
             if (index < etc_words.keys.toList().lastIndex) {
                 Spacer(
                     modifier = Modifier
+                        .padding(horizontal = 20.dp)
                         .fillMaxWidth()
                         .height(1.dp)
                         .background(Cultured)
