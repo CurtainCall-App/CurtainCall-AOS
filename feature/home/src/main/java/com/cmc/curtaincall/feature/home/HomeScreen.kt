@@ -48,7 +48,8 @@ fun HomeScreen(
         HomeContent(
             modifier = Modifier
                 .padding(paddingValues)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .background(Cetacean_Blue),
             onNavigateGuide = onNavigateGuide
         )
     }
@@ -62,96 +63,100 @@ private fun HomeContent(
     val scrollState = rememberScrollState()
     Column(modifier.verticalScroll(scrollState)) {
         HomeBanner(
-            modifier = Modifier
-                .background(Cetacean_Blue)
-                .height(284.dp),
+            modifier = Modifier.height(284.dp),
             onNavigateGuide = onNavigateGuide
         )
-        HomeMyTab(
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-                .padding(top = 50.dp),
-            icon = painterResource(R.drawable.ic_gather),
-            title = stringResource(R.string.home_my_gathering_tab)
+                .fillMaxSize()
+                .background(White)
         ) {
-            HomeMyTabItem(
+            HomeMyTab(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 10.dp),
-                image = painterResource(R.drawable.img_poster),
-                description = "공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹",
-                numberOfMember = 2,
-                numberOfTotal = 4,
-                date = "23.6.24",
-                time = "19:30"
+                    .padding(horizontal = 20.dp)
+                    .padding(top = 50.dp),
+                icon = painterResource(R.drawable.ic_gather),
+                title = stringResource(R.string.home_my_gathering_tab)
+            ) {
+                HomeMyTabItem(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 10.dp),
+                    image = painterResource(R.drawable.img_poster),
+                    description = "공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹",
+                    numberOfMember = 2,
+                    numberOfTotal = 4,
+                    date = "23.6.24",
+                    time = "19:30"
+                )
+            }
+            HomeMyTab(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+                    .padding(top = 40.dp),
+                icon = painterResource(R.drawable.ic_my_participation),
+                title = stringResource(R.string.home_my_participation_tab)
+            ) {
+                HomeMyTabItem(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 10.dp),
+                    image = painterResource(R.drawable.img_poster),
+                    description = "같이 볼 사람들 모여라~ ",
+                    numberOfMember = 3,
+                    numberOfTotal = 4,
+                    date = "23.6.24",
+                    time = "19:30"
+                )
+                HomeMyTabItem(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.dp),
+                    image = painterResource(R.drawable.img_poster),
+                    description = "같이 볼 사람들 모여라~ ",
+                    numberOfMember = 3,
+                    numberOfTotal = 4,
+                    date = "23.6.24",
+                    time = "19:30"
+                )
+            }
+            HomeLiveTalkTab(
+                modifier = Modifier
+                    .padding(top = 50.dp)
+                    .fillMaxWidth()
+                    .height(204.dp)
             )
+            HomeContentTab(
+                modifier = Modifier
+                    .padding(top = 50.dp)
+                    .padding(start = 20.dp)
+                    .fillMaxWidth(),
+                icon = painterResource(R.drawable.ic_fire),
+                title = stringResource(R.string.home_top10_popular_performance),
+                cardType = CardType.TOP10
+            )
+            HomeContentTab(
+                modifier = Modifier
+                    .padding(top = 50.dp)
+                    .padding(start = 20.dp)
+                    .fillMaxWidth(),
+                icon = painterResource(R.drawable.ic_open_clock),
+                title = stringResource(R.string.home_scheduled_open_performance),
+                cardType = CardType.OPEN_SOON
+            )
+            HomeContentTab(
+                modifier = Modifier
+                    .padding(top = 50.dp)
+                    .padding(start = 20.dp)
+                    .fillMaxWidth(),
+                icon = painterResource(R.drawable.ic_value_of_money),
+                title = stringResource(R.string.home_value_for_money_performance),
+                cardType = CardType.CHEAP
+            )
+            Spacer(modifier = Modifier.height(50.dp))
         }
-        HomeMyTab(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-                .padding(top = 40.dp),
-            icon = painterResource(R.drawable.ic_my_participation),
-            title = stringResource(R.string.home_my_participation_tab)
-        ) {
-            HomeMyTabItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 10.dp),
-                image = painterResource(R.drawable.img_poster),
-                description = "같이 볼 사람들 모여라~ ",
-                numberOfMember = 3,
-                numberOfTotal = 4,
-                date = "23.6.24",
-                time = "19:30"
-            )
-            HomeMyTabItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 12.dp),
-                image = painterResource(R.drawable.img_poster),
-                description = "같이 볼 사람들 모여라~ ",
-                numberOfMember = 3,
-                numberOfTotal = 4,
-                date = "23.6.24",
-                time = "19:30"
-            )
-        }
-        HomeLiveTalkTab(
-            modifier = Modifier
-                .padding(top = 50.dp)
-                .fillMaxWidth()
-                .height(204.dp)
-        )
-        HomeContentTab(
-            modifier = Modifier
-                .padding(top = 50.dp)
-                .padding(start = 20.dp)
-                .fillMaxWidth(),
-            icon = painterResource(R.drawable.ic_fire),
-            title = stringResource(R.string.home_top10_popular_performance),
-            cardType = CardType.TOP10
-        )
-        HomeContentTab(
-            modifier = Modifier
-                .padding(top = 50.dp)
-                .padding(start = 20.dp)
-                .fillMaxWidth(),
-            icon = painterResource(R.drawable.ic_open_clock),
-            title = stringResource(R.string.home_scheduled_open_performance),
-            cardType = CardType.OPEN_SOON
-        )
-        HomeContentTab(
-            modifier = Modifier
-                .padding(top = 50.dp)
-                .padding(start = 20.dp)
-                .fillMaxWidth(),
-            icon = painterResource(R.drawable.ic_value_of_money),
-            title = stringResource(R.string.home_value_for_money_performance),
-            cardType = CardType.CHEAP
-        )
-        Spacer(modifier = Modifier.height(50.dp))
     }
 }
 
