@@ -180,4 +180,9 @@
     <string name="home_guide_etc_menu">기타</string>
     <string name="home_guide_before_ticketing">티켓팅 이전</string>
     <string name="home_guide_after_tickketing">티켓팅 이후</string>
+
+    <!-- mypage -->
+    <string name="mypage_title">MY"</string>
+    <string name="mypage_my_gathering_tab">MY 모집</string>
+    <string name="mypage_my_participation_tab">MY 참여</string>
 </resources>
