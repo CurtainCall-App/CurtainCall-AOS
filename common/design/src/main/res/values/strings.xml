@@ -187,4 +187,10 @@
     <string name="mypage_my_participation_tab">MY 참여</string>
     <string name="mypage_my_writing">내가 쓴 글</string>
     <string name="mypage_saved_performance_list">저장된 작품 목록</string>
+    <string name="mypage_announcement">공지사항</string>
+    <string name="mypage_the_most_frequently_question">자주 묻는 질문</string>
+    <string name="mypage_curtaincall_customer_center">[커튼콜 고객센터]</string>
+    <string name="mypage_curtaincall_email">curtaincall@gmail.com</string>
+    <string name="mypage_can_consult_time">평일: 전체 문의 상담 가능</string>
+    <string name="mypage_source_of_performance_information">작품 정보 출처\n(재)예술경영지원센터 공연예술통합전산망, www.kopis.or.kr</string>
 </resources>

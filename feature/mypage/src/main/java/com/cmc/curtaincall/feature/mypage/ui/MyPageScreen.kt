@@ -37,10 +37,14 @@ import com.cmc.curtaincall.common.design.theme.Nero
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.extensions.toSp
+import com.cmc.curtaincall.common.design.theme.Arsenic
 import com.cmc.curtaincall.common.design.theme.Black
+import com.cmc.curtaincall.common.design.theme.Black_Coral
+import com.cmc.curtaincall.common.design.theme.Bright_Gray
 import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
 import com.cmc.curtaincall.common.design.theme.Cultured
 import com.cmc.curtaincall.common.design.theme.Me_Pink
+import com.cmc.curtaincall.common.design.theme.Roman_Silver
 import com.cmc.curtaincall.common.design.theme.Silver_Sand
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -120,6 +124,110 @@ private fun MyPageContent(
                 .fillMaxWidth()
                 .height(12.dp)
                 .background(Cultured)
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp)
+                .padding(horizontal = 20.dp)
+        ) {
+            MyPageInfoItem(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp),
+                title = stringResource(R.string.mypage_announcement)
+            )
+            MyPageInfoItem(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp),
+                title = stringResource(R.string.mypage_the_most_frequently_question)
+            )
+            Spacer(
+                modifier = Modifier.height(48.dp)
+            )
+        }
+        MyPageFooter(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Cultured)
+        )
+    }
+}
+
+@Composable
+private fun MyPageFooter(
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier.padding(horizontal = 20.dp)
+    ) {
+        Text(
+            text = stringResource(R.string.mypage_curtaincall_customer_center),
+            modifier = Modifier.padding(top = 24.dp),
+            color = Arsenic,
+            fontSize = 12.dp.toSp(),
+            fontWeight = FontWeight.Medium,
+            fontFamily = spoqahansanseeo
+        )
+        Text(
+            text = stringResource(R.string.mypage_curtaincall_email),
+            modifier = Modifier.padding(top = 4.dp),
+            color = Arsenic,
+            fontSize = 12.dp.toSp(),
+            fontWeight = FontWeight.Medium,
+            fontFamily = spoqahansanseeo
+        )
+        Text(
+            text = stringResource(R.string.mypage_can_consult_time),
+            modifier = Modifier.padding(top = 14.dp),
+            color = Black_Coral,
+            fontSize = 10.dp.toSp(),
+            fontWeight = FontWeight.Normal,
+            fontFamily = spoqahansanseeo
+        )
+        Spacer(
+            modifier = Modifier
+                .padding(top = 20.dp, bottom = 18.dp)
+                .fillMaxWidth()
+                .height(1.dp)
+                .background(Bright_Gray)
+        )
+        Text(
+            text = stringResource(R.string.mypage_source_of_performance_information),
+            modifier = Modifier.padding(bottom = 50.dp),
+            color = Roman_Silver,
+            fontSize = 10.dp.toSp(),
+            fontWeight = FontWeight.Normal,
+            fontFamily = spoqahansanseeo,
+            lineHeight = 18.dp.toSp()
+        )
+    }
+}
+
+@Composable
+private fun MyPageInfoItem(
+    modifier: Modifier = Modifier,
+    title: String,
+    onClick: () -> Unit = {}
+) {
+    Row(
+        modifier = modifier.clickable { onClick() },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = title,
+            modifier = Modifier.weight(1f),
+            color = Roman_Silver,
+            fontSize = 16.dp.toSp(),
+            fontWeight = FontWeight.Medium,
+            fontFamily = spoqahansanseeo
+        )
+        Icon(
+            painter = painterResource(R.drawable.ic_arrow_right_pink),
+            contentDescription = null,
+            modifier = Modifier.size(12.dp),
+            tint = Arsenic
         )
     }
 }
