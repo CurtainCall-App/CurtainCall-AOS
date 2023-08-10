@@ -1,39 +1,51 @@
 package com.cmc.curtaincall.feature.mypage.ui
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.cmc.curtaincall.common.design.component.TopAppBarOnlyAction
+import com.cmc.curtaincall.common.design.theme.Nero
+import com.cmc.curtaincall.common.design.theme.White
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyPageScreen(
     onNavigateRecruitment: () -> Unit,
-    onNavigateParticipant: () -> Unit
+    onNavigateParticipant: () -> Unit,
+    onBack: () -> Unit
 ) {
-    Column {
-        Text(
-            text = "mypage",
-            modifier = Modifier.size(100.dp, 100.dp)
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setStatusBarColor(White)
+
+    Scaffold(
+        topBar = {
+            TopAppBarOnlyAction(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(54.dp),
+                containerColor = White,
+                contentColor = Nero,
+                onClick = onBack
+            )
+        }
+    ) { paddingValues ->
+        MyPageContent(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
         )
-
-        Button(
-            onClick = { onNavigateRecruitment() },
-            modifier = Modifier.size(100.dp, 50.dp),
-            shape = RoundedCornerShape(10.dp)
-        ) {
-            Text(text = "recruitment")
-        }
-
-        Button(
-            onClick = { onNavigateParticipant() },
-            modifier = Modifier.size(100.dp, 50.dp),
-            shape = RoundedCornerShape(10.dp)
-        ) {
-            Text(text = "participant")
-        }
     }
+}
+
+@Composable
+private fun MyPageContent(
+    modifier: Modifier = Modifier
+) {
 }

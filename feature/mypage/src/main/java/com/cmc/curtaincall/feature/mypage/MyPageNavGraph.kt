@@ -68,6 +68,9 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
                 },
                 onNavigateParticipant = {
                     navHostController.navigate(MyPageDestination.Participant.route)
+                },
+                onBack = {
+                    navHostController.popBackStack()
                 }
             )
         }

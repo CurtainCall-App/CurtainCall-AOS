@@ -25,6 +25,34 @@ import com.cmc.curtaincall.common.design.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+fun TopAppBarOnlyAction(
+    modifier: Modifier = Modifier,
+    containerColor: Color,
+    contentColor: Color,
+    onClick: () -> Unit
+) {
+    CenterAlignedTopAppBar(
+        title = { },
+        modifier = modifier,
+        actions = {
+            IconButton(
+                onClick = onClick,
+                modifier = Modifier.fillMaxHeight()
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_settings),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                    tint = contentColor
+                )
+            }
+        },
+        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = containerColor)
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun TopAppBarWithBack(
     title: String,
     modifier: Modifier = Modifier,
