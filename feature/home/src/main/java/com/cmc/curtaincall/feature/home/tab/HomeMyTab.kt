@@ -5,6 +5,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -19,6 +22,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
@@ -63,6 +67,7 @@ internal fun HomeMyTab(
 internal fun HomeMyTabItem(
     modifier: Modifier = Modifier,
     image: Painter,
+    title: String,
     description: String,
     numberOfMember: Int,
     numberOfTotal: Int,
@@ -72,24 +77,26 @@ internal fun HomeMyTabItem(
     Row(
         modifier = modifier
             .background(Cultured, RoundedCornerShape(10.dp))
-            .height(94.dp)
-            .padding(vertical = 10.dp, horizontal = 12.dp)
+            .height(97.dp)
+            .padding(9.dp)
     ) {
         Image(
             painter = image,
             contentDescription = null,
-            modifier = Modifier.size(56.dp, 74.dp)
+            modifier = Modifier
+                .fillMaxHeight()
+                .aspectRatio(58 / 77f)
         )
-        Column(Modifier.padding(start = 12.dp)) {
+        Column(Modifier.padding(start = 10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = description,
+                    text = String.format("[%s]", title),
                     modifier = Modifier
                         .weight(1f)
                         .padding(end = 16.dp),
                     color = Nero,
                     fontSize = 14.dp.toSp(),
-                    fontWeight = FontWeight.Medium,
+                    fontWeight = FontWeight.Bold,
                     fontFamily = spoqahansanseeo,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 1
@@ -106,18 +113,30 @@ internal fun HomeMyTabItem(
                     fontFamily = spoqahansanseeo
                 )
             }
+            Text(
+                text = description,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp),
+                color = Nero,
+                fontSize = 14.dp.toSp(),
+                fontWeight = FontWeight.Medium,
+                fontFamily = spoqahansanseeo,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
             Spacer(Modifier.weight(1f))
-            Row(Modifier.padding(bottom = 2.dp)) {
+            Row {
                 Row(
                     modifier = Modifier
-                        .background(Me_Pink, RoundedCornerShape(11.dp))
-                        .padding(horizontal = 8.dp, vertical = 4.dp),
+                        .background(Me_Pink, RoundedCornerShape(4.dp))
+                        .padding(horizontal = 6.dp, vertical = 4.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_calendar),
                         contentDescription = null,
-                        modifier = Modifier.size(14.dp),
+                        modifier = Modifier.size(16.dp),
                         tint = White
                     )
                     Text(
@@ -126,20 +145,21 @@ internal fun HomeMyTabItem(
                         color = White,
                         fontSize = 12.dp.toSp(),
                         fontWeight = FontWeight.Medium,
-                        fontFamily = spoqahansanseeo
+                        fontFamily = spoqahansanseeo,
+                        textAlign = TextAlign.Center
                     )
                 }
                 Row(
                     modifier = Modifier
                         .padding(start = 6.dp)
-                        .background(Me_Pink, RoundedCornerShape(11.dp))
-                        .padding(horizontal = 8.dp, vertical = 4.dp),
+                        .background(Me_Pink, RoundedCornerShape(4.dp))
+                        .padding(horizontal = 6.dp, vertical = 4.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
                         painter = painterResource(R.drawable.ic_clock),
                         contentDescription = null,
-                        modifier = Modifier.size(14.dp),
+                        modifier = Modifier.size(16.dp),
                         tint = White
                     )
                     Text(
@@ -148,7 +168,8 @@ internal fun HomeMyTabItem(
                         color = White,
                         fontSize = 12.dp.toSp(),
                         fontWeight = FontWeight.Medium,
-                        fontFamily = spoqahansanseeo
+                        fontFamily = spoqahansanseeo,
+                        textAlign = TextAlign.Center
                     )
                 }
             }
