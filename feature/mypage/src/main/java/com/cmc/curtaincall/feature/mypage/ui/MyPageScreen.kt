@@ -2,6 +2,7 @@ package com.cmc.curtaincall.feature.mypage.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -69,6 +71,7 @@ fun MyPageScreen(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
+                .background(White)
         )
     }
 }
@@ -84,6 +87,69 @@ private fun MyPageContent(
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
                 .padding(top = 6.dp)
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp)
+                .padding(horizontal = 20.dp)
+        ) {
+            MyPageContentItem(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 30.dp),
+                icon = painterResource(R.drawable.ic_edit_square),
+                title = stringResource(R.string.mypage_my_writing)
+            )
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(Cultured)
+            )
+            MyPageContentItem(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 30.dp),
+                icon = painterResource(R.drawable.ic_border_all),
+                title = stringResource(R.string.mypage_saved_performance_list)
+            )
+        }
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(12.dp)
+                .background(Cultured)
+        )
+    }
+}
+
+@Composable
+private fun MyPageContentItem(
+    modifier: Modifier = Modifier,
+    icon: Painter,
+    title: String,
+    onClick: () -> Unit = {}
+) {
+    Row(
+        modifier = modifier.clickable { onClick() },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = icon,
+            contentDescription = null,
+            modifier = Modifier
+                .padding(start = 6.dp)
+                .size(24.dp),
+            tint = Color.Unspecified
+        )
+        Text(
+            text = title,
+            modifier = Modifier.padding(start = 12.dp),
+            color = Nero,
+            fontSize = 16.dp.toSp(),
+            fontWeight = FontWeight.Medium,
+            fontFamily = spoqahansanseeo
         )
     }
 }

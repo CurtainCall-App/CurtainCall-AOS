@@ -185,4 +185,6 @@
     <string name="mypage_title">MY"</string>
     <string name="mypage_my_gathering_tab">MY 모집</string>
     <string name="mypage_my_participation_tab">MY 참여</string>
+    <string name="mypage_my_writing">내가 쓴 글</string>
+    <string name="mypage_saved_performance_list">저장된 작품 목록</string>
 </resources>
