@@ -84,10 +84,11 @@ private fun HomeContent(
                         .fillMaxWidth()
                         .padding(top = 10.dp),
                     image = painterResource(R.drawable.img_poster),
+                    title = "시카고",
                     description = "공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹",
                     numberOfMember = 2,
                     numberOfTotal = 4,
-                    date = "23.6.24",
+                    date = "2023.7.16(토)",
                     time = "19:30"
                 )
             }
@@ -104,10 +105,11 @@ private fun HomeContent(
                         .fillMaxWidth()
                         .padding(top = 10.dp),
                     image = painterResource(R.drawable.img_poster),
+                    title = "시카고",
                     description = "같이 볼 사람들 모여라~ ",
                     numberOfMember = 3,
                     numberOfTotal = 4,
-                    date = "23.6.24",
+                    date = "2023.7.16(토)",
                     time = "19:30"
                 )
                 HomeMyTabItem(
@@ -115,10 +117,11 @@ private fun HomeContent(
                         .fillMaxWidth()
                         .padding(top = 12.dp),
                     image = painterResource(R.drawable.img_poster),
+                    title = "시카고",
                     description = "같이 볼 사람들 모여라~ ",
                     numberOfMember = 3,
                     numberOfTotal = 4,
-                    date = "23.6.24",
+                    date = "2023.7.16(토)",
                     time = "19:30"
                 )
             }
