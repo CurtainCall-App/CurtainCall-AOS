@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.mypage.ui
+package com.cmc.curtaincall.feature.mypage.editprofile
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult

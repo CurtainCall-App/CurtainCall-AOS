@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.mypage.ui
+package com.cmc.curtaincall.feature.mypage
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
