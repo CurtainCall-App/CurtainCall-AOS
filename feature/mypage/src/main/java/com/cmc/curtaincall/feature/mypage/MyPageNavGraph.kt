@@ -8,13 +8,13 @@ import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.feature.mypage.editprofile.MyPageProfileEditScreen
-import com.cmc.curtaincall.feature.mypage.saveperformance.MyPageSavedPerformance
+import com.cmc.curtaincall.feature.mypage.saveperformance.MyPageSavedPerformanceScreen
 
 private const val MYPAGE_GRAPH = "mypage_graph"
 const val MYPAGE = "mypage"
 private const val MYPAGE_LABEL = "MY"
 private const val MYPAGE_PROFILE_EDIT = "mypage_profile_edit"
-private const val MYPAGE_SAVE_PERFORMANCE = "mypage_save_performance"
+private const val MYPAGE_SAVED_PERFORMANCE = "mypage_saved_performance"
 private const val MYPAGE_RECRUITMENT = "mypage_recruitment"
 private const val MYPAGE_PARTICIPANT = "mypage_participant"
 private const val MYPAGE_WRITE = "mypage_write"
@@ -34,8 +34,8 @@ sealed interface MyPageDestination : CurtainCallDestination {
         override val route = MYPAGE_PROFILE_EDIT
     }
 
-    object SavePerformance : MyPageDestination {
-        override val route = MYPAGE_SAVE_PERFORMANCE
+    object SavedPerformance : MyPageDestination {
+        override val route = MYPAGE_SAVED_PERFORMANCE
     }
 
     object Recruitment : MyPageDestination {
@@ -69,6 +69,9 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
             MyPageScreen(
                 onNavigateProfileEdit = {
                     navHostController.navigate(MyPageDestination.ProfileEdit.route)
+                },
+                onNavigateSavedPerformance = {
+                    navHostController.navigate(MyPageDestination.SavedPerformance.route)
                 }
             )
         }
@@ -81,8 +84,8 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
             )
         }
 
-        composable(MyPageDestination.SavePerformance.route) {
-            MyPageSavedPerformance(
+        composable(MyPageDestination.SavedPerformance.route) {
+            MyPageSavedPerformanceScreen(
                 onBack = {
                     navHostController.popBackStack()
                 }
