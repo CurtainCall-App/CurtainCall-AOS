@@ -38,6 +38,7 @@ kakao-user = "2.14.0"
 facebook-login = "16.0.0"
 calendar-compose = "2.4.0-beta01"
 naver-map-compose = "1.2.3"
+coil-compose = "2.4.0"
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidPlugin" }
@@ -95,6 +96,7 @@ kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao-u
 facebook-login = { group = "com.facebook.android", name = "facebook-login", version.ref = "facebook-login" }
 calendar-compose = { group = "com.kizitonwose.calendar", name = "compose", version.ref = "calendar-compose" }
 naver-map-compose = { group = "io.github.fornewid", name = "naver-map-compose", version.ref = "naver-map-compose" }
+coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil-compose" }
 
 
 [bundles]

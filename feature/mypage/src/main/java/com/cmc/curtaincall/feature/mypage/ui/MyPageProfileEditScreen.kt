@@ -1,6 +1,8 @@
 package com.cmc.curtaincall.feature.mypage.ui
 
-import androidx.compose.foundation.Image
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -36,6 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.design.component.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.extensions.toSp
@@ -128,6 +131,45 @@ private fun MyPageNickName(
 }
 
 @Composable
+private fun MyPageProfile() {
+    var profileUri by remember { mutableStateOf<Uri?>(null) }
+    val takePhotoFromAlbum = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
+        profileUri = it
+    }
+
+    Box(
+        modifier = Modifier
+            .padding(top = 75.dp, bottom = 50.dp)
+            .size(92.dp)
+    ) {
+        AsyncImage(
+            model = profileUri,
+            contentDescription = null,
+            error = painterResource(R.drawable.img_example_detail),
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .size(80.dp)
+                .clip(RoundedCornerShape(27.dp)),
+            contentScale = ContentScale.FillBounds
+        )
+        IconButton(
+            onClick = { takePhotoFromAlbum.launch("image/*") },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .size(32.dp)
+                .background(Cetacean_Blue, CircleShape)
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_photo_library),
+                contentDescription = null,
+                modifier = Modifier.size(18.dp),
+                tint = Color.Unspecified
+            )
+        }
+    }
+}
+
+@Composable
 private fun MyPageProfileEditContent(
     modifier: Modifier = Modifier
 ) {
@@ -135,35 +177,7 @@ private fun MyPageProfileEditContent(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Box(
-            modifier = Modifier
-                .padding(top = 75.dp, bottom = 50.dp)
-                .size(92.dp)
-        ) {
-            Image(
-                painter = painterResource(R.drawable.img_example_detail),
-                contentDescription = null,
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .size(80.dp)
-                    .clip(RoundedCornerShape(27.dp)),
-                contentScale = ContentScale.FillBounds
-            )
-            IconButton(
-                onClick = { },
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .size(32.dp)
-                    .background(Cetacean_Blue, CircleShape)
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_photo_library),
-                    contentDescription = null,
-                    modifier = Modifier.size(18.dp),
-                    tint = Color.Unspecified
-                )
-            }
-        }
+        MyPageProfile()
         MyPageNickName(
             modifier = Modifier
                 .fillMaxWidth()
