@@ -10,10 +10,12 @@ import com.cmc.curtaincall.feature.mypage.ui.MyPageScreen
 import com.cmc.curtaincall.feature.mypage.ui.ParticipantScreen
 import com.cmc.curtaincall.feature.mypage.ui.RecruitmentScreen
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.feature.mypage.ui.MyPageProfileEditScreen
 
 private const val MYPAGE_GRAPH = "mypage_graph"
 const val MYPAGE = "mypage"
 private const val MYPAGE_LABEL = "MY"
+private const val MYPAGE_PROFILE_EDIT = "mypage_profile_edit"
 private const val MYPAGE_RECRUITMENT = "mypage_recruitment"
 private const val MYPAGE_PARTICIPANT = "mypage_participant"
 private const val MYPAGE_WRITE = "mypage_write"
@@ -28,6 +30,10 @@ sealed interface MyPageDestination : CurtainCallDestination {
         override val icon = R.drawable.ic_my
         override val selectIcon = R.drawable.ic_my_sel
         override val label = MYPAGE_LABEL
+    }
+
+    object ProfileEdit : MyPageDestination {
+        override val route = MYPAGE_PROFILE_EDIT
     }
 
     object Recruitment : MyPageDestination {
@@ -63,12 +69,14 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
     navigation(startDestination = MyPageDestination.MyPage.route, MYPAGE_GRAPH) {
         composable(MyPageDestination.MyPage.route) {
             MyPageScreen(
-                onNavigateRecruitment = {
-                    navHostController.navigate(MyPageDestination.Recruitment.route)
-                },
-                onNavigateParticipant = {
-                    navHostController.navigate(MyPageDestination.Participant.route)
-                },
+                onNavigateProfileEdit = {
+                    navHostController.navigate(MyPageDestination.ProfileEdit.route)
+                }
+            )
+        }
+
+        composable(MyPageDestination.ProfileEdit.route) {
+            MyPageProfileEditScreen(
                 onBack = {
                     navHostController.popBackStack()
                 }

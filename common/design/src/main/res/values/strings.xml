@@ -193,4 +193,7 @@
     <string name="mypage_curtaincall_email">curtaincall@gmail.com</string>
     <string name="mypage_can_consult_time">평일: 전체 문의 상담 가능</string>
     <string name="mypage_source_of_performance_information">작품 정보 출처\n(재)예술경영지원센터 공연예술통합전산망, www.kopis.or.kr</string>
+    <string name="mypage_profile_edit_appbar_title">내 정보 수정</string>
+    <string name="mypage_nickname_duplicate_check">중복 확인</string>
+    <string name="mypage_nickname_change_complete">변경 완료</string>
 </resources>

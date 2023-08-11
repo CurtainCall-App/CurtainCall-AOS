@@ -52,9 +52,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyPageScreen(
-    onNavigateRecruitment: () -> Unit,
-    onNavigateParticipant: () -> Unit,
-    onBack: () -> Unit
+    onNavigateProfileEdit: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(White)
@@ -67,7 +65,7 @@ fun MyPageScreen(
                     .height(54.dp),
                 containerColor = White,
                 contentColor = Nero,
-                onClick = onBack
+                onClick = {}
             )
         }
     ) { paddingValues ->
@@ -75,14 +73,16 @@ fun MyPageScreen(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
-                .background(White)
+                .background(White),
+            onNavigateProfileEdit = onNavigateProfileEdit
         )
     }
 }
 
 @Composable
 private fun MyPageContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateProfileEdit: () -> Unit
 ) {
     val verticalScrollState = rememberScrollState()
     Column(modifier.verticalScroll(verticalScrollState)) {
@@ -90,7 +90,8 @@ private fun MyPageContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
-                .padding(top = 6.dp)
+                .padding(top = 6.dp),
+            onNavigateProfileEdit = onNavigateProfileEdit
         )
         Column(
             modifier = Modifier
@@ -264,7 +265,8 @@ private fun MyPageContentItem(
 
 @Composable
 private fun MyPageProfile(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateProfileEdit: () -> Unit
 ) {
     Column(modifier) {
         Text(
@@ -288,11 +290,12 @@ private fun MyPageProfile(
                         modifier = Modifier
                             .align(Alignment.TopStart)
                             .size(80.dp)
-                            .clip(RoundedCornerShape(27.dp)),
+                            .clip(RoundedCornerShape(27.dp))
+                            .clickable { onNavigateProfileEdit() },
                         contentScale = ContentScale.FillBounds
                     )
                     IconButton(
-                        onClick = { /*TODO*/ },
+                        onClick = { onNavigateProfileEdit() },
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
                             .size(32.dp)
