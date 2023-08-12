@@ -98,9 +98,10 @@ fun NavGraphBuilder.performanceNavGraph(
             )
         }
         composable(route = PerformanceDestination.ReviewCreate.route) {
-            PerformanceReviewCreateScreen {
-                navHostController.popBackStack()
-            }
+            PerformanceReviewCreateScreen(
+                fromMyPage = navHostController.previousBackStackEntry?.destination?.route != PerformanceDestination.Review.route,
+                onBack = { navHostController.popBackStack() }
+            )
         }
         composable(route = PerformanceDestination.LostItem.route) {
             PerformanceLostItemScreen(

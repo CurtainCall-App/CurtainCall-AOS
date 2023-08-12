@@ -99,8 +99,11 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
 
         composable(MyPageDestination.Write.route) {
             MyPageWriteScreen(
-                onNavigateWriteEdit = {
+                onNavigateLostItemEdit = {
                     navHostController.navigate(PerformanceDestination.LostItemCreate.route)
+                },
+                onNavigateReviewEdit = {
+                    navHostController.navigate(PerformanceDestination.ReviewCreate.route)
                 },
                 onBack = {
                     navHostController.popBackStack()

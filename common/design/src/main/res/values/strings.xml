@@ -201,4 +201,5 @@
     <string name="mypage_writing_lost_item_find_location_format">습득 장소 | %s</string>
     <string name="mypage_writing_lost_item_find_date_format">습득 일자 | %s</string>
     <string name="mypage_writing_find_lost_item_edit">분실물 게시물 수정</string>
+    <string name="mypage_writing_review_edit">한 줄 리뷰 수정</string>
 </resources>

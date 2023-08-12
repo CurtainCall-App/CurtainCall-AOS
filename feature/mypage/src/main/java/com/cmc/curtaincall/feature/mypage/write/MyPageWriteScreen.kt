@@ -33,8 +33,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import com.cmc.curtaincall.common.design.component.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.component.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.Black_Coral
 import com.cmc.curtaincall.common.design.theme.Black_Pearl
@@ -73,7 +73,8 @@ val writeModels = listOf(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MyPageWriteScreen(
-    onNavigateWriteEdit: () -> Unit,
+    onNavigateLostItemEdit: () -> Unit,
+    onNavigateReviewEdit: () -> Unit,
     onBack: () -> Unit
 ) {
     Scaffold(
@@ -94,7 +95,8 @@ internal fun MyPageWriteScreen(
                 .padding(paddingValues)
                 .fillMaxSize()
                 .background(White),
-            onNavigateWriteEdit = onNavigateWriteEdit
+            onNavigateLostItemEdit = onNavigateLostItemEdit,
+            onNavigateReviewEdit = onNavigateReviewEdit
         )
     }
 }
@@ -102,7 +104,8 @@ internal fun MyPageWriteScreen(
 @Composable
 private fun MyPageWriteContent(
     modifier: Modifier = Modifier,
-    onNavigateWriteEdit: () -> Unit
+    onNavigateLostItemEdit: () -> Unit,
+    onNavigateReviewEdit: () -> Unit
 ) {
     var writeTypeState by remember { mutableStateOf(WriteType.TOTAL) }
     Column(modifier) {
@@ -127,7 +130,8 @@ private fun MyPageWriteContent(
                             .fillMaxWidth()
                             .padding(bottom = 16.dp),
                         writeModel = it,
-                        onNavigateWriteEdit = onNavigateWriteEdit
+                        onNavigateLostItemEdit = onNavigateLostItemEdit,
+                        onNavigateReviewEdit = onNavigateReviewEdit
                     )
                 }
             }
@@ -139,7 +143,8 @@ private fun MyPageWriteContent(
 private fun MyPageWriteItem(
     modifier: Modifier = Modifier,
     writeModel: MyWriteModel,
-    onNavigateWriteEdit: () -> Unit
+    onNavigateLostItemEdit: () -> Unit,
+    onNavigateReviewEdit: () -> Unit
 ) {
     var isClickMoreTab by remember { mutableStateOf(false) }
     Box(
@@ -198,7 +203,13 @@ private fun MyPageWriteItem(
                         modifier = Modifier
                             .background(Me_Pink.copy(0.15f), RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
                             .padding(horizontal = 24.dp, vertical = 12.dp)
-                            .clickable { onNavigateWriteEdit() },
+                            .clickable {
+                                if (writeModel.writeType == WriteType.LOST_ITEM) {
+                                    onNavigateLostItemEdit()
+                                } else {
+                                    onNavigateReviewEdit()
+                                }
+                            },
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
