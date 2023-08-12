@@ -34,6 +34,7 @@ import com.cmc.curtaincall.common.design.theme.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PerformanceLostItemCreateScreen(
+    fromMyPage: Boolean = false,
     onNavigateUpload: () -> Unit,
     onBack: () -> Unit
 ) {
@@ -43,6 +44,11 @@ internal fun PerformanceLostItemCreateScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(54.dp),
+                title = if (fromMyPage) {
+                    stringResource(R.string.mypage_writing_find_lost_item_edit)
+                } else {
+                    stringResource(R.string.performance_find_lost_item_create)
+                },
                 onClose = onBack
             )
         }
@@ -557,6 +563,7 @@ private fun LostItemInfoTextField(
 @Composable
 private fun TopAppBarWithClose(
     modifier: Modifier = Modifier,
+    title: String,
     onClose: () -> Unit
 ) {
     CenterAlignedTopAppBar(
@@ -566,7 +573,7 @@ private fun TopAppBarWithClose(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = stringResource(R.string.performance_find_lost_item_create),
+                    text = title,
                     color = Nero,
                     fontSize = 17.dp.toSp(),
                     fontWeight = FontWeight.Bold,

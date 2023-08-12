@@ -24,6 +24,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PerformanceReviewCreateScreen(
+    fromMyPage: Boolean = false,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -32,7 +33,11 @@ internal fun PerformanceReviewCreateScreen(
     Scaffold(
         topBar = {
             TopAppBarWithBack(
-                title = stringResource(R.string.performance_review),
+                title = if (fromMyPage) {
+                    stringResource(R.string.mypage_writing_review_edit)
+                } else {
+                    stringResource(R.string.performance_review)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(54.dp),
