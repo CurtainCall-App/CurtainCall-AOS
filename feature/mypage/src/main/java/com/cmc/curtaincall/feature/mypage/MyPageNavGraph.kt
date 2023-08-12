@@ -9,6 +9,7 @@ import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.feature.mypage.editprofile.MyPageProfileEditScreen
 import com.cmc.curtaincall.feature.mypage.saveperformance.MyPageSavedPerformanceScreen
+import com.cmc.curtaincall.feature.mypage.write.MyPageWriteScreen
 
 private const val MYPAGE_GRAPH = "mypage_graph"
 const val MYPAGE = "mypage"
@@ -38,16 +39,16 @@ sealed interface MyPageDestination : CurtainCallDestination {
         override val route = MYPAGE_SAVED_PERFORMANCE
     }
 
+    object Write : MyPageDestination {
+        override val route = MYPAGE_WRITE
+    }
+
     object Recruitment : MyPageDestination {
         override val route = MYPAGE_RECRUITMENT
     }
 
     object Participant : MyPageDestination {
         override val route = MYPAGE_PARTICIPANT
-    }
-
-    object Write : MyPageDestination {
-        override val route = MYPAGE_WRITE
     }
 
     object Announcement : MyPageDestination {
@@ -72,6 +73,9 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
                 },
                 onNavigateSavedPerformance = {
                     navHostController.navigate(MyPageDestination.SavedPerformance.route)
+                },
+                onNavigateWrite = {
+                    navHostController.navigate(MyPageDestination.Write.route)
                 }
             )
         }
@@ -86,6 +90,14 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
 
         composable(MyPageDestination.SavedPerformance.route) {
             MyPageSavedPerformanceScreen(
+                onBack = {
+                    navHostController.popBackStack()
+                }
+            )
+        }
+
+        composable(MyPageDestination.Write.route) {
+            MyPageWriteScreen(
                 onBack = {
                     navHostController.popBackStack()
                 }

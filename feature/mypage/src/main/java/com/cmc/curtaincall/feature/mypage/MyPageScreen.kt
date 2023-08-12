@@ -53,7 +53,8 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @Composable
 fun MyPageScreen(
     onNavigateProfileEdit: () -> Unit,
-    onNavigateSavedPerformance: () -> Unit
+    onNavigateSavedPerformance: () -> Unit,
+    onNavigateWrite: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(White)
@@ -76,7 +77,8 @@ fun MyPageScreen(
                 .fillMaxSize()
                 .background(White),
             onNavigateProfileEdit = onNavigateProfileEdit,
-            onNavigateSavedPerformance = onNavigateSavedPerformance
+            onNavigateSavedPerformance = onNavigateSavedPerformance,
+            onNavigateWrite = onNavigateWrite
         )
     }
 }
@@ -85,7 +87,8 @@ fun MyPageScreen(
 private fun MyPageContent(
     modifier: Modifier = Modifier,
     onNavigateProfileEdit: () -> Unit,
-    onNavigateSavedPerformance: () -> Unit
+    onNavigateSavedPerformance: () -> Unit,
+    onNavigateWrite: () -> Unit
 ) {
     val verticalScrollState = rememberScrollState()
     Column(modifier.verticalScroll(verticalScrollState)) {
@@ -107,7 +110,8 @@ private fun MyPageContent(
                     .fillMaxWidth()
                     .padding(vertical = 30.dp),
                 icon = painterResource(R.drawable.ic_edit_square),
-                title = stringResource(R.string.mypage_my_writing)
+                title = stringResource(R.string.mypage_my_writing),
+                onClick = onNavigateWrite
             )
             Spacer(
                 modifier = Modifier
