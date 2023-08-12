@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.mypage.ui
+package com.cmc.curtaincall.feature.mypage
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -52,7 +52,8 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyPageScreen(
-    onNavigateProfileEdit: () -> Unit
+    onNavigateProfileEdit: () -> Unit,
+    onNavigateSavedPerformance: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(White)
@@ -74,7 +75,8 @@ fun MyPageScreen(
                 .padding(paddingValues)
                 .fillMaxSize()
                 .background(White),
-            onNavigateProfileEdit = onNavigateProfileEdit
+            onNavigateProfileEdit = onNavigateProfileEdit,
+            onNavigateSavedPerformance = onNavigateSavedPerformance
         )
     }
 }
@@ -82,7 +84,8 @@ fun MyPageScreen(
 @Composable
 private fun MyPageContent(
     modifier: Modifier = Modifier,
-    onNavigateProfileEdit: () -> Unit
+    onNavigateProfileEdit: () -> Unit,
+    onNavigateSavedPerformance: () -> Unit
 ) {
     val verticalScrollState = rememberScrollState()
     Column(modifier.verticalScroll(verticalScrollState)) {
@@ -117,7 +120,8 @@ private fun MyPageContent(
                     .fillMaxWidth()
                     .padding(vertical = 30.dp),
                 icon = painterResource(R.drawable.ic_border_all),
-                title = stringResource(R.string.mypage_saved_performance_list)
+                title = stringResource(R.string.mypage_saved_performance_list),
+                onClick = onNavigateSavedPerformance
             )
         }
         Spacer(
@@ -298,13 +302,13 @@ private fun MyPageProfile(
                         onClick = { onNavigateProfileEdit() },
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
-                            .size(32.dp)
                             .background(Cetacean_Blue, CircleShape)
+                            .size(32.dp)
                     ) {
                         Icon(
                             painter = painterResource(R.drawable.ic_pen),
                             contentDescription = null,
-                            modifier = Modifier.size(18.dp),
+                            modifier = Modifier.size(16.dp),
                             tint = Color.Unspecified
                         )
                     }

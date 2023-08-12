@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.mypage.ui
+package com.cmc.curtaincall.feature.mypage
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
@@ -8,11 +8,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun RecruitmentScreen() {
+fun ParticipantScreen() {
     Column {
         Text(
-            text = "recruitment",
-            modifier = Modifier.size(150.dp, 100.dp)
+            text = "participant",
+            modifier = Modifier.size(100.dp, 100.dp)
         )
     }
 }

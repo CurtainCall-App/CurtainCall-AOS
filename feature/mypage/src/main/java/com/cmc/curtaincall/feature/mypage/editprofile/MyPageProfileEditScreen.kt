@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.mypage.ui
+package com.cmc.curtaincall.feature.mypage.editprofile
 
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -156,13 +156,13 @@ private fun MyPageProfile() {
             onClick = { takePhotoFromAlbum.launch("image/*") },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .size(32.dp)
                 .background(Cetacean_Blue, CircleShape)
+                .size(32.dp)
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_photo_library),
                 contentDescription = null,
-                modifier = Modifier.size(18.dp),
+                modifier = Modifier.size(16.dp),
                 tint = Color.Unspecified
             )
         }
