@@ -4,9 +4,11 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
-import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.feature.mypage.announcemnet.MyPageNoticeDetailScreen
+import com.cmc.curtaincall.feature.mypage.announcemnet.MyPageNoticeScreen
 import com.cmc.curtaincall.feature.mypage.editprofile.MyPageProfileEditScreen
 import com.cmc.curtaincall.feature.mypage.saveperformance.MyPageSavedPerformanceScreen
 import com.cmc.curtaincall.feature.mypage.setting.MyPageSettingScreen
@@ -20,10 +22,11 @@ private const val MYPAGE_PROFILE_EDIT = "mypage_profile_edit"
 private const val MYPAGE_SAVED_PERFORMANCE = "mypage_saved_performance"
 private const val MYPAGE_WRITE = "mypage_write"
 private const val MYPAGE_SETTING = "mypage_setting"
+private const val MYPAGE_NOTICE = "mypage_notice"
+private const val MYPAGE_NOTICE_DETAIL = "mypage_notice_detail"
 
 private const val MYPAGE_RECRUITMENT = "mypage_recruitment"
 private const val MYPAGE_PARTICIPANT = "mypage_participant"
-private const val MYPAGE_ANNOUNCEMENT = "mypage_announcement"
 private const val MYPAGE_CONTACT = "mypage_contact"
 private const val MYPAGE_LOGOUT = "mypage_logout"
 
@@ -51,16 +54,20 @@ sealed interface MyPageDestination : CurtainCallDestination {
         override val route = MYPAGE_SETTING
     }
 
+    object Notice : MyPageDestination {
+        override val route = MYPAGE_NOTICE
+    }
+
+    object NoticeDetail : MyPageDestination {
+        override val route = MYPAGE_NOTICE_DETAIL
+    }
+
     object Recruitment : MyPageDestination {
         override val route = MYPAGE_RECRUITMENT
     }
 
     object Participant : MyPageDestination {
         override val route = MYPAGE_PARTICIPANT
-    }
-
-    object Announcement : MyPageDestination {
-        override val route = MYPAGE_ANNOUNCEMENT
     }
 
     object Contact : MyPageDestination {
@@ -87,6 +94,9 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
                 },
                 onNavigateWrite = {
                     navHostController.navigate(MyPageDestination.Write.route)
+                },
+                onNavigateAnnouncement = {
+                    navHostController.navigate(MyPageDestination.Notice.route)
                 }
             )
         }
@@ -127,6 +137,23 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
                     navHostController.popBackStack()
                 }
             )
+        }
+
+        composable(MyPageDestination.Notice.route) {
+            MyPageNoticeScreen(
+                onNavigateNoticeDetail = {
+                    navHostController.navigate(MyPageDestination.NoticeDetail.route)
+                },
+                onBack = {
+                    navHostController.popBackStack()
+                }
+            )
+        }
+
+        composable(MyPageDestination.NoticeDetail.route) {
+            MyPageNoticeDetailScreen {
+                navHostController.popBackStack()
+            }
         }
 
         composable(MyPageDestination.Recruitment.route) {
