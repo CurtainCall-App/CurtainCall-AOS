@@ -1,6 +1,7 @@
 package com.cmc.curtaincall.feature.mypage.announcemnet
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -35,7 +36,8 @@ import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun MyPageAnnouncementScreen(
+internal fun MyPageNoticeScreen(
+    onNavigateNoticeDetail: () -> Unit,
     onBack: () -> Unit
 ) {
     Scaffold(
@@ -51,18 +53,20 @@ internal fun MyPageAnnouncementScreen(
             )
         }
     ) { paddingValues ->
-        MyPageAnnouncementContent(
+        MyPageNoticeContent(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
-                .background(White)
+                .background(White),
+            onNavigateNoticeDetail = onNavigateNoticeDetail
         )
     }
 }
 
 @Composable
-private fun MyPageAnnouncementContent(
-    modifier: Modifier = Modifier
+private fun MyPageNoticeContent(
+    modifier: Modifier = Modifier,
+    onNavigateNoticeDetail: () -> Unit
 ) {
     val news = listOf(true, true, false, false)
     Column(modifier) {
@@ -72,13 +76,14 @@ private fun MyPageAnnouncementContent(
                 .padding(top = 10.dp)
         ) {
             itemsIndexed(news) { index, item ->
-                AnnouncementItem(
+                NoticeItem(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp),
                     title = "커튼콜 서비스 개편 안내",
                     date = "2023.6.17",
-                    isNew = news[index]
+                    isNew = news[index],
+                    onClick = onNavigateNoticeDetail
                 )
                 Spacer(
                     modifier = Modifier
@@ -92,13 +97,18 @@ private fun MyPageAnnouncementContent(
 }
 
 @Composable
-private fun AnnouncementItem(
+fun NoticeItem(
     modifier: Modifier = Modifier,
     title: String,
     date: String,
-    isNew: Boolean = false
+    isNew: Boolean = false,
+    onClick: () -> Unit = {}
 ) {
-    Column(modifier.padding(vertical = 20.dp)) {
+    Column(
+        modifier = modifier
+            .clickable { onClick() }
+            .padding(vertical = 20.dp)
+    ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = title,
