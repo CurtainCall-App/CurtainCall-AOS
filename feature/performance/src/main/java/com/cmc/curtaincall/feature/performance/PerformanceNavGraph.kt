@@ -122,6 +122,7 @@ fun NavGraphBuilder.performanceNavGraph(
         }
         composable(route = PerformanceDestination.LostItemCreate.route) {
             PerformanceLostItemCreateScreen(
+                fromMyPage = navHostController.previousBackStackEntry?.destination?.route != PerformanceDestination.LostItem.route,
                 onNavigateUpload = {
                     navHostController.navigate(PerformanceDestination.Upload.route)
                 },

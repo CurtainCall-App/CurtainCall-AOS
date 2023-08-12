@@ -73,6 +73,7 @@ val writeModels = listOf(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MyPageWriteScreen(
+    onNavigateWriteEdit: () -> Unit,
     onBack: () -> Unit
 ) {
     Scaffold(
@@ -92,14 +93,16 @@ internal fun MyPageWriteScreen(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
-                .background(White)
+                .background(White),
+            onNavigateWriteEdit = onNavigateWriteEdit
         )
     }
 }
 
 @Composable
 private fun MyPageWriteContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateWriteEdit: () -> Unit
 ) {
     var writeTypeState by remember { mutableStateOf(WriteType.TOTAL) }
     Column(modifier) {
@@ -123,7 +126,8 @@ private fun MyPageWriteContent(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 16.dp),
-                        writeModel = it
+                        writeModel = it,
+                        onNavigateWriteEdit = onNavigateWriteEdit
                     )
                 }
             }
@@ -134,7 +138,8 @@ private fun MyPageWriteContent(
 @Composable
 private fun MyPageWriteItem(
     modifier: Modifier = Modifier,
-    writeModel: MyWriteModel
+    writeModel: MyWriteModel,
+    onNavigateWriteEdit: () -> Unit
 ) {
     var isClickMoreTab by remember { mutableStateOf(false) }
     Box(
@@ -192,7 +197,8 @@ private fun MyPageWriteItem(
                     Box(
                         modifier = Modifier
                             .background(Me_Pink.copy(0.15f), RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
-                            .padding(horizontal = 24.dp, vertical = 12.dp),
+                            .padding(horizontal = 24.dp, vertical = 12.dp)
+                            .clickable { onNavigateWriteEdit() },
                         contentAlignment = Alignment.Center
                     ) {
                         Text(

@@ -10,6 +10,7 @@ import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.feature.mypage.editprofile.MyPageProfileEditScreen
 import com.cmc.curtaincall.feature.mypage.saveperformance.MyPageSavedPerformanceScreen
 import com.cmc.curtaincall.feature.mypage.write.MyPageWriteScreen
+import com.cmc.curtaincall.feature.performance.PerformanceDestination
 
 private const val MYPAGE_GRAPH = "mypage_graph"
 const val MYPAGE = "mypage"
@@ -98,6 +99,9 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
 
         composable(MyPageDestination.Write.route) {
             MyPageWriteScreen(
+                onNavigateWriteEdit = {
+                    navHostController.navigate(PerformanceDestination.LostItemCreate.route)
+                },
                 onBack = {
                     navHostController.popBackStack()
                 }
