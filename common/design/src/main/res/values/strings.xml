@@ -202,4 +202,10 @@
     <string name="mypage_writing_lost_item_find_date_format">습득 일자 | %s</string>
     <string name="mypage_writing_find_lost_item_edit">분실물 게시물 수정</string>
     <string name="mypage_writing_review_edit">한 줄 리뷰 수정</string>
+    <string name="mypage_setting">설정</string>
+    <string name="mypage_setting_account">계정</string>
+    <string name="mypage_setting_logout">로그아웃</string>
+    <string name="mypage_setting_information">정보</string>
+    <string name="mypage_setting_privacy_information_policy">개인정보 처리방침</string>
+    <string name="mypage_setting_service_use_terms">서비스 이용약관</string>
 </resources>

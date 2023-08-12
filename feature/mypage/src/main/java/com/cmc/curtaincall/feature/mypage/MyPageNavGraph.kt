@@ -9,6 +9,7 @@ import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.feature.mypage.editprofile.MyPageProfileEditScreen
 import com.cmc.curtaincall.feature.mypage.saveperformance.MyPageSavedPerformanceScreen
+import com.cmc.curtaincall.feature.mypage.setting.MyPageSettingScreen
 import com.cmc.curtaincall.feature.mypage.write.MyPageWriteScreen
 import com.cmc.curtaincall.feature.performance.PerformanceDestination
 
@@ -17,9 +18,11 @@ const val MYPAGE = "mypage"
 private const val MYPAGE_LABEL = "MY"
 private const val MYPAGE_PROFILE_EDIT = "mypage_profile_edit"
 private const val MYPAGE_SAVED_PERFORMANCE = "mypage_saved_performance"
+private const val MYPAGE_WRITE = "mypage_write"
+private const val MYPAGE_SETTING = "mypage_setting"
+
 private const val MYPAGE_RECRUITMENT = "mypage_recruitment"
 private const val MYPAGE_PARTICIPANT = "mypage_participant"
-private const val MYPAGE_WRITE = "mypage_write"
 private const val MYPAGE_ANNOUNCEMENT = "mypage_announcement"
 private const val MYPAGE_CONTACT = "mypage_contact"
 private const val MYPAGE_LOGOUT = "mypage_logout"
@@ -42,6 +45,10 @@ sealed interface MyPageDestination : CurtainCallDestination {
 
     object Write : MyPageDestination {
         override val route = MYPAGE_WRITE
+    }
+
+    object Setting : MyPageDestination {
+        override val route = MYPAGE_SETTING
     }
 
     object Recruitment : MyPageDestination {
@@ -69,6 +76,9 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
     navigation(startDestination = MyPageDestination.MyPage.route, MYPAGE_GRAPH) {
         composable(MyPageDestination.MyPage.route) {
             MyPageScreen(
+                onNavigateSetting = {
+                    navHostController.navigate(MyPageDestination.Setting.route)
+                },
                 onNavigateProfileEdit = {
                     navHostController.navigate(MyPageDestination.ProfileEdit.route)
                 },
@@ -105,6 +115,14 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
                 onNavigateReviewEdit = {
                     navHostController.navigate(PerformanceDestination.ReviewCreate.route)
                 },
+                onBack = {
+                    navHostController.popBackStack()
+                }
+            )
+        }
+
+        composable(MyPageDestination.Setting.route) {
+            MyPageSettingScreen(
                 onBack = {
                     navHostController.popBackStack()
                 }

@@ -52,6 +52,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyPageScreen(
+    onNavigateSetting: () -> Unit,
     onNavigateProfileEdit: () -> Unit,
     onNavigateSavedPerformance: () -> Unit,
     onNavigateWrite: () -> Unit
@@ -67,7 +68,7 @@ fun MyPageScreen(
                     .height(54.dp),
                 containerColor = White,
                 contentColor = Nero,
-                onClick = {}
+                onClick = { onNavigateSetting() }
             )
         }
     ) { paddingValues ->
