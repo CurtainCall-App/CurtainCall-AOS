@@ -7,6 +7,7 @@ import androidx.navigation.navigation
 import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.feature.mypage.announcemnet.MyPageAnnouncementScreen
 import com.cmc.curtaincall.feature.mypage.editprofile.MyPageProfileEditScreen
 import com.cmc.curtaincall.feature.mypage.saveperformance.MyPageSavedPerformanceScreen
 import com.cmc.curtaincall.feature.mypage.setting.MyPageSettingScreen
@@ -20,10 +21,10 @@ private const val MYPAGE_PROFILE_EDIT = "mypage_profile_edit"
 private const val MYPAGE_SAVED_PERFORMANCE = "mypage_saved_performance"
 private const val MYPAGE_WRITE = "mypage_write"
 private const val MYPAGE_SETTING = "mypage_setting"
+private const val MYPAGE_ANNOUNCEMENT = "mypage_announcement"
 
 private const val MYPAGE_RECRUITMENT = "mypage_recruitment"
 private const val MYPAGE_PARTICIPANT = "mypage_participant"
-private const val MYPAGE_ANNOUNCEMENT = "mypage_announcement"
 private const val MYPAGE_CONTACT = "mypage_contact"
 private const val MYPAGE_LOGOUT = "mypage_logout"
 
@@ -51,16 +52,16 @@ sealed interface MyPageDestination : CurtainCallDestination {
         override val route = MYPAGE_SETTING
     }
 
+    object Announcement : MyPageDestination {
+        override val route = MYPAGE_ANNOUNCEMENT
+    }
+
     object Recruitment : MyPageDestination {
         override val route = MYPAGE_RECRUITMENT
     }
 
     object Participant : MyPageDestination {
         override val route = MYPAGE_PARTICIPANT
-    }
-
-    object Announcement : MyPageDestination {
-        override val route = MYPAGE_ANNOUNCEMENT
     }
 
     object Contact : MyPageDestination {
@@ -87,6 +88,9 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
                 },
                 onNavigateWrite = {
                     navHostController.navigate(MyPageDestination.Write.route)
+                },
+                onNavigateAnnouncement = {
+                    navHostController.navigate(MyPageDestination.Announcement.route)
                 }
             )
         }
@@ -123,6 +127,14 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
 
         composable(MyPageDestination.Setting.route) {
             MyPageSettingScreen(
+                onBack = {
+                    navHostController.popBackStack()
+                }
+            )
+        }
+
+        composable(MyPageDestination.Announcement.route) {
+            MyPageAnnouncementScreen(
                 onBack = {
                     navHostController.popBackStack()
                 }

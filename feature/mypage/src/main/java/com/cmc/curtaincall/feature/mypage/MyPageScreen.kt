@@ -55,7 +55,8 @@ fun MyPageScreen(
     onNavigateSetting: () -> Unit,
     onNavigateProfileEdit: () -> Unit,
     onNavigateSavedPerformance: () -> Unit,
-    onNavigateWrite: () -> Unit
+    onNavigateWrite: () -> Unit,
+    onNavigateAnnouncement: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(White)
@@ -79,7 +80,8 @@ fun MyPageScreen(
                 .background(White),
             onNavigateProfileEdit = onNavigateProfileEdit,
             onNavigateSavedPerformance = onNavigateSavedPerformance,
-            onNavigateWrite = onNavigateWrite
+            onNavigateWrite = onNavigateWrite,
+            onNavigateAnnouncement = onNavigateAnnouncement
         )
     }
 }
@@ -89,7 +91,8 @@ private fun MyPageContent(
     modifier: Modifier = Modifier,
     onNavigateProfileEdit: () -> Unit,
     onNavigateSavedPerformance: () -> Unit,
-    onNavigateWrite: () -> Unit
+    onNavigateWrite: () -> Unit,
+    onNavigateAnnouncement: () -> Unit
 ) {
     val verticalScrollState = rememberScrollState()
     Column(modifier.verticalScroll(verticalScrollState)) {
@@ -145,7 +148,8 @@ private fun MyPageContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 12.dp),
-                title = stringResource(R.string.mypage_announcement)
+                title = stringResource(R.string.mypage_announcement),
+                onClick = { onNavigateAnnouncement() }
             )
             MyPageInfoItem(
                 modifier = Modifier
