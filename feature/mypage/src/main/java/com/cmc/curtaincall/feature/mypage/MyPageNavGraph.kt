@@ -10,6 +10,7 @@ import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.feature.mypage.announcemnet.MyPageNoticeDetailScreen
 import com.cmc.curtaincall.feature.mypage.announcemnet.MyPageNoticeScreen
 import com.cmc.curtaincall.feature.mypage.editprofile.MyPageProfileEditScreen
+import com.cmc.curtaincall.feature.mypage.party.participation.MyPageParticipationScreen
 import com.cmc.curtaincall.feature.mypage.party.recruitment.MyPageRecruitmentScreen
 import com.cmc.curtaincall.feature.mypage.saveperformance.MyPageSavedPerformanceScreen
 import com.cmc.curtaincall.feature.mypage.setting.MyPageSettingScreen
@@ -27,10 +28,7 @@ private const val MYPAGE_SETTING = "mypage_setting"
 private const val MYPAGE_NOTICE = "mypage_notice"
 private const val MYPAGE_NOTICE_DETAIL = "mypage_notice_detail"
 private const val MYPAGE_RECRUITMENT = "mypage_recruitment"
-
-private const val MYPAGE_PARTICIPANT = "mypage_participant"
-private const val MYPAGE_CONTACT = "mypage_contact"
-private const val MYPAGE_LOGOUT = "mypage_logout"
+private const val MYPAGE_PARTICIPATION = "mypage_participantion"
 
 sealed interface MyPageDestination : CurtainCallDestination {
     object MyPage : MyPageDestination, BottomDestination {
@@ -68,16 +66,8 @@ sealed interface MyPageDestination : CurtainCallDestination {
         override val route = MYPAGE_RECRUITMENT
     }
 
-    object Participant : MyPageDestination {
-        override val route = MYPAGE_PARTICIPANT
-    }
-
-    object Contact : MyPageDestination {
-        override val route = MYPAGE_CONTACT
-    }
-
-    object Logout : MyPageDestination {
-        override val route = MYPAGE_LOGOUT
+    object Participation : MyPageDestination {
+        override val route = MYPAGE_PARTICIPATION
     }
 }
 
@@ -93,6 +83,9 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
                 },
                 onNavigateRecruitment = {
                     navHostController.navigate(MyPageDestination.Recruitment.route)
+                },
+                onNavigateParticipation = {
+                    navHostController.navigate(MyPageDestination.Participation.route)
                 },
                 onNavigateSavedPerformance = {
                     navHostController.navigate(MyPageDestination.SavedPerformance.route)
@@ -177,8 +170,20 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
             )
         }
 
-        composable(MyPageDestination.Participant.route) {
-            ParticipantScreen()
+        composable(MyPageDestination.Participation.route) {
+            MyPageParticipationScreen(
+                onNavigateParticipationDetail = {
+                    navHostController.navigate(
+                        PartyMemberDestination.Detail.route + "?" +
+                            "${PartyMemberDestination.Detail.typeArg}=$it" + "&" +
+                            "${PartyMemberDestination.Detail.fromRecruitmentArg}=false" + "&" +
+                            "${PartyMemberDestination.Detail.fromParticipationArg}=true"
+                    )
+                },
+                onBack = {
+                    navHostController.popBackStack()
+                }
+            )
         }
     }
 }

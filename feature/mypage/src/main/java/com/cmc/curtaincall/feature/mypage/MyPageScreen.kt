@@ -55,6 +55,7 @@ fun MyPageScreen(
     onNavigateSetting: () -> Unit,
     onNavigateProfileEdit: () -> Unit,
     onNavigateRecruitment: () -> Unit,
+    onNavigateParticipation: () -> Unit,
     onNavigateSavedPerformance: () -> Unit,
     onNavigateWrite: () -> Unit,
     onNavigateAnnouncement: () -> Unit
@@ -81,6 +82,7 @@ fun MyPageScreen(
                 .background(White),
             onNavigateProfileEdit = onNavigateProfileEdit,
             onNavigateRecruitment = onNavigateRecruitment,
+            onNavigateParticipation = onNavigateParticipation,
             onNavigateSavedPerformance = onNavigateSavedPerformance,
             onNavigateWrite = onNavigateWrite,
             onNavigateAnnouncement = onNavigateAnnouncement
@@ -93,6 +95,7 @@ private fun MyPageContent(
     modifier: Modifier = Modifier,
     onNavigateProfileEdit: () -> Unit,
     onNavigateRecruitment: () -> Unit,
+    onNavigateParticipation: () -> Unit,
     onNavigateSavedPerformance: () -> Unit,
     onNavigateWrite: () -> Unit,
     onNavigateAnnouncement: () -> Unit
@@ -105,7 +108,8 @@ private fun MyPageContent(
                 .padding(horizontal = 20.dp)
                 .padding(top = 6.dp),
             onNavigateProfileEdit = onNavigateProfileEdit,
-            onNavigateRecruitment = onNavigateRecruitment
+            onNavigateRecruitment = onNavigateRecruitment,
+            onNavigateParticipation = onNavigateParticipation
         )
         Column(
             modifier = Modifier
@@ -284,7 +288,8 @@ private fun MyPageContentItem(
 private fun MyPageProfile(
     modifier: Modifier = Modifier,
     onNavigateProfileEdit: () -> Unit,
-    onNavigateRecruitment: () -> Unit
+    onNavigateRecruitment: () -> Unit,
+    onNavigateParticipation: () -> Unit
 ) {
     Column(modifier) {
         Text(
@@ -375,7 +380,8 @@ private fun MyPageProfile(
             Column(
                 modifier = Modifier
                     .padding(vertical = 18.dp)
-                    .weight(1f),
+                    .weight(1f)
+                    .clickable { onNavigateParticipation() },
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
