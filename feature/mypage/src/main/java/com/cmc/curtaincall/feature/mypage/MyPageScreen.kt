@@ -54,6 +54,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 fun MyPageScreen(
     onNavigateSetting: () -> Unit,
     onNavigateProfileEdit: () -> Unit,
+    onNavigateRecruitment: () -> Unit,
     onNavigateSavedPerformance: () -> Unit,
     onNavigateWrite: () -> Unit,
     onNavigateAnnouncement: () -> Unit
@@ -79,6 +80,7 @@ fun MyPageScreen(
                 .fillMaxSize()
                 .background(White),
             onNavigateProfileEdit = onNavigateProfileEdit,
+            onNavigateRecruitment = onNavigateRecruitment,
             onNavigateSavedPerformance = onNavigateSavedPerformance,
             onNavigateWrite = onNavigateWrite,
             onNavigateAnnouncement = onNavigateAnnouncement
@@ -90,6 +92,7 @@ fun MyPageScreen(
 private fun MyPageContent(
     modifier: Modifier = Modifier,
     onNavigateProfileEdit: () -> Unit,
+    onNavigateRecruitment: () -> Unit,
     onNavigateSavedPerformance: () -> Unit,
     onNavigateWrite: () -> Unit,
     onNavigateAnnouncement: () -> Unit
@@ -101,7 +104,8 @@ private fun MyPageContent(
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
                 .padding(top = 6.dp),
-            onNavigateProfileEdit = onNavigateProfileEdit
+            onNavigateProfileEdit = onNavigateProfileEdit,
+            onNavigateRecruitment = onNavigateRecruitment
         )
         Column(
             modifier = Modifier
@@ -279,7 +283,8 @@ private fun MyPageContentItem(
 @Composable
 private fun MyPageProfile(
     modifier: Modifier = Modifier,
-    onNavigateProfileEdit: () -> Unit
+    onNavigateProfileEdit: () -> Unit,
+    onNavigateRecruitment: () -> Unit
 ) {
     Column(modifier) {
         Text(
@@ -341,7 +346,8 @@ private fun MyPageProfile(
             Column(
                 modifier = Modifier
                     .padding(vertical = 18.dp)
-                    .weight(1f),
+                    .weight(1f)
+                    .clickable { onNavigateRecruitment() },
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(

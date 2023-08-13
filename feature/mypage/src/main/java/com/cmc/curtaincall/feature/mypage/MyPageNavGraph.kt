@@ -10,6 +10,7 @@ import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.feature.mypage.announcemnet.MyPageNoticeDetailScreen
 import com.cmc.curtaincall.feature.mypage.announcemnet.MyPageNoticeScreen
 import com.cmc.curtaincall.feature.mypage.editprofile.MyPageProfileEditScreen
+import com.cmc.curtaincall.feature.mypage.party.recruitment.MyPageRecruitmentScreen
 import com.cmc.curtaincall.feature.mypage.saveperformance.MyPageSavedPerformanceScreen
 import com.cmc.curtaincall.feature.mypage.setting.MyPageSettingScreen
 import com.cmc.curtaincall.feature.mypage.write.MyPageWriteScreen
@@ -24,8 +25,8 @@ private const val MYPAGE_WRITE = "mypage_write"
 private const val MYPAGE_SETTING = "mypage_setting"
 private const val MYPAGE_NOTICE = "mypage_notice"
 private const val MYPAGE_NOTICE_DETAIL = "mypage_notice_detail"
-
 private const val MYPAGE_RECRUITMENT = "mypage_recruitment"
+
 private const val MYPAGE_PARTICIPANT = "mypage_participant"
 private const val MYPAGE_CONTACT = "mypage_contact"
 private const val MYPAGE_LOGOUT = "mypage_logout"
@@ -88,6 +89,9 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
                 },
                 onNavigateProfileEdit = {
                     navHostController.navigate(MyPageDestination.ProfileEdit.route)
+                },
+                onNavigateRecruitment = {
+                    navHostController.navigate(MyPageDestination.Recruitment.route)
                 },
                 onNavigateSavedPerformance = {
                     navHostController.navigate(MyPageDestination.SavedPerformance.route)
@@ -157,7 +161,11 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
         }
 
         composable(MyPageDestination.Recruitment.route) {
-            RecruitmentScreen()
+            MyPageRecruitmentScreen(
+                onBack = {
+                    navHostController.popBackStack()
+                }
+            )
         }
 
         composable(MyPageDestination.Participant.route) {

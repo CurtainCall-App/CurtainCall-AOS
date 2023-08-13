@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.cmc.curtaincall.feature.partymember.PartyType
 
@@ -146,7 +147,7 @@ private fun PartyMemberList(
 }
 
 @Composable
-private fun PartyMemberItemCard(
+fun PartyMemberItemCard(
     partyType: PartyType,
     cardName: String,
     profile: String,
@@ -159,12 +160,14 @@ private fun PartyMemberItemCard(
     date: String,
     time: String,
     location: String,
-    onNavigateDetail: (PartyType) -> Unit,
+    fromMyPage: Boolean = false,
+    onNavigateDetail: (PartyType) -> Unit = {},
+    onNavigateLiveTalk: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 22.dp, vertical = 10.dp)
+            .padding(horizontal = 20.dp, vertical = 15.dp)
             .wrapContentHeight()
             .clickable {
                 onNavigateDetail(partyType)
@@ -211,7 +214,7 @@ private fun PartyMemberItemCard(
             if (partyType == PartyType.ETC) {
                 PartyMemberItemCardBottomText(
                     modifier = Modifier
-                        .padding(top = 15.dp, bottom = 18.dp)
+                        .padding(top = 15.dp, bottom = 20.dp)
                         .background(Bright_Gray, RoundedCornerShape(4.dp)),
                     iconRes = R.drawable.ic_calendar,
                     text = date
@@ -220,12 +223,34 @@ private fun PartyMemberItemCard(
                 PartyMemberItemCardBottom(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 15.dp, bottom = 18.dp),
+                        .padding(top = 15.dp, bottom = 20.dp),
                     poster = poster,
                     date = date,
                     time = time,
                     location = location
                 )
+            }
+
+            if (fromMyPage) {
+                Button(
+                    onClick = { onNavigateLiveTalk() },
+                    modifier = Modifier
+                        .padding(bottom = 20.dp)
+                        .fillMaxWidth()
+                        .height(40.dp),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Me_Pink
+                    )
+                ) {
+                    Text(
+                        text = stringResource(R.string.mypage_livetalk_entrance),
+                        color = White,
+                        fontSize = 14.dp.toSp(),
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = spoqahansanseeo
+                    )
+                }
             }
         }
 
