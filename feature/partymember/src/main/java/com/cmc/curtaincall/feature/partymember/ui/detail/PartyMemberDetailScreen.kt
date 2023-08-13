@@ -28,7 +28,9 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun PartyMemberDetailScreen(
+fun PartyMemberDetailScreen(
+    fromRecruitment: Boolean = false,
+    fromParticipation: Boolean = false,
     partyType: PartyType,
     onBack: () -> Unit
 ) {
@@ -39,15 +41,45 @@ internal fun PartyMemberDetailScreen(
         topBar = {
             TopAppBarWithAction(
                 title = stringResource(
-                    when (partyType) {
-                        PartyType.PERFORMANCE -> R.string.partymember_performance_title
-                        PartyType.MEAL -> R.string.partymember_restaurant_title
-                        PartyType.ETC -> R.string.partymember_etc_title
+                    if (fromRecruitment) {
+                        R.string.mypage_my_gathering_tab
+                    } else if (fromParticipation) {
+                        R.string.mypage_my_participation_tab
+                    } else {
+                        when (partyType) {
+                            PartyType.PERFORMANCE -> R.string.partymember_performance_title
+                            PartyType.MEAL -> R.string.partymember_restaurant_title
+                            PartyType.ETC -> R.string.partymember_etc_title
+                        }
                     }
                 ),
-                actionRes = R.drawable.ic_report,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(54.dp),
+                containerColor = White,
+                contentColor = Eerie_Black,
                 onBack = onBack,
-                onClickAction = { /* TODO */ }
+                actionContent = {
+                    if (fromRecruitment) {
+                        IconButton(onClick = {}) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_more_vert),
+                                contentDescription = null,
+                                modifier = Modifier.size(37.dp, 22.dp),
+                                tint = Roman_Silver
+                            )
+                        }
+                    } else {
+                        IconButton(onClick = {}) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_report),
+                                contentDescription = null,
+                                modifier = Modifier.size(37.dp, 22.dp),
+                                tint = Roman_Silver
+                            )
+                        }
+                    }
+                }
             )
         }
     ) { paddingValues ->

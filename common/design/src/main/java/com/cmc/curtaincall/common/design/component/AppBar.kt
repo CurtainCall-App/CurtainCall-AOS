@@ -1,10 +1,10 @@
 package com.cmc.curtaincall.common.design.component
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -18,7 +18,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
@@ -100,9 +99,10 @@ fun TopAppBarWithBack(
 fun TopAppBarWithAction(
     title: String,
     modifier: Modifier = Modifier,
-    @DrawableRes actionRes: Int,
+    containerColor: Color,
+    contentColor: Color,
     onBack: () -> Unit,
-    onClickAction: () -> Unit
+    actionContent: @Composable RowScope.() -> Unit
 ) {
     CenterAlignedTopAppBar(
         title = {
@@ -112,8 +112,8 @@ fun TopAppBarWithAction(
             ) {
                 Text(
                     text = title,
-                    color = Eerie_Black,
-                    fontSize = 17.sp,
+                    color = contentColor,
+                    fontSize = 17.dp.toSp(),
                     fontWeight = FontWeight.Bold,
                     fontFamily = spoqahansanseeo
                 )
@@ -125,22 +125,15 @@ fun TopAppBarWithAction(
                 Icon(
                     painter = painterResource(R.drawable.ic_arrow_back),
                     contentDescription = null,
-                    modifier = Modifier.size(22.dp, 22.dp),
-                    tint = Eerie_Black
+                    modifier = Modifier.size(22.dp),
+                    tint = contentColor
                 )
             }
         },
         actions = {
-            IconButton(onClick = onClickAction) {
-                Icon(
-                    painter = painterResource(actionRes),
-                    contentDescription = null,
-                    modifier = Modifier.size(37.dp, 22.dp),
-                    tint = Color.Unspecified
-                )
-            }
+            actionContent()
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = White)
+        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = containerColor)
     )
 }
 
