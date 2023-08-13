@@ -21,8 +21,8 @@ private const val PARTYMEMBER_DETAIL = "partymember_detail"
 private const val PARTYMEMBER_CREATE = "partymember_create"
 private const val PARTYMEMBER_UPLOAD = "partymember_upload"
 
-enum class PartyType {
-    PERFORMANCE, MEAL, ETC
+enum class PartyType(val value: String) {
+    PERFORMANCE("공연 관람"), MEAL("식사/카페"), ETC("기타")
 }
 
 enum class PartyPerformanceType {
