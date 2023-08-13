@@ -69,7 +69,7 @@ fun MyPageScreen(
                     .fillMaxWidth()
                     .height(54.dp),
                 containerColor = White,
-                contentColor = Nero,
+                contentColor = Roman_Silver,
                 onClick = { onNavigateSetting() }
             )
         }

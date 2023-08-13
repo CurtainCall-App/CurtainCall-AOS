@@ -29,6 +29,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MyPageRecruitmentScreen(
+    onNavigatRecruitmentDetail: (PartyType) -> Unit,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -51,14 +52,16 @@ internal fun MyPageRecruitmentScreen(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
-                .background(Bright_Gray)
+                .background(Bright_Gray),
+            onNavigatRecruitmentDetail = onNavigatRecruitmentDetail
         )
     }
 }
 
 @Composable
 private fun MyPageRecruitmentContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigatRecruitmentDetail: (PartyType) -> Unit
 ) {
     var partyTypeState by remember { mutableStateOf(PartyType.PERFORMANCE) }
     Column(modifier) {
@@ -89,7 +92,8 @@ private fun MyPageRecruitmentContent(
                     date = "2023.6.24(토)",
                     time = "19:30",
                     location = "링크아트센터",
-                    fromMyPage = true
+                    fromMyPage = true,
+                    onNavigateDetail = { onNavigatRecruitmentDetail(partyTypeState) }
                 )
             }
             item {
@@ -106,7 +110,8 @@ private fun MyPageRecruitmentContent(
                     date = "2023.6.24(토)",
                     time = "19:30",
                     location = "링크아트센터",
-                    fromMyPage = true
+                    fromMyPage = true,
+                    onNavigateDetail = { onNavigatRecruitmentDetail(partyTypeState) }
                 )
             }
             item {
@@ -123,7 +128,8 @@ private fun MyPageRecruitmentContent(
                     date = "2023.6.24(토)",
                     time = "19:30",
                     location = "링크아트센터",
-                    fromMyPage = true
+                    fromMyPage = true,
+                    onNavigateDetail = { onNavigatRecruitmentDetail(partyTypeState) }
                 )
             }
         }

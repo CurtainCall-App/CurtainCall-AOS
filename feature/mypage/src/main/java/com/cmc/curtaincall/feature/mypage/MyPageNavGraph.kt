@@ -14,6 +14,7 @@ import com.cmc.curtaincall.feature.mypage.party.recruitment.MyPageRecruitmentScr
 import com.cmc.curtaincall.feature.mypage.saveperformance.MyPageSavedPerformanceScreen
 import com.cmc.curtaincall.feature.mypage.setting.MyPageSettingScreen
 import com.cmc.curtaincall.feature.mypage.write.MyPageWriteScreen
+import com.cmc.curtaincall.feature.partymember.PartyMemberDestination
 import com.cmc.curtaincall.feature.performance.PerformanceDestination
 
 private const val MYPAGE_GRAPH = "mypage_graph"
@@ -162,6 +163,14 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
 
         composable(MyPageDestination.Recruitment.route) {
             MyPageRecruitmentScreen(
+                onNavigatRecruitmentDetail = {
+                    navHostController.navigate(
+                        PartyMemberDestination.Detail.route + "?" +
+                            "${PartyMemberDestination.Detail.typeArg}=$it" + "&" +
+                            "${PartyMemberDestination.Detail.fromRecruitmentArg}=true" + "&" +
+                            "${PartyMemberDestination.Detail.fromParticipationArg}={${PartyMemberDestination.Detail.fromParticipationArg}}"
+                    )
+                },
                 onBack = {
                     navHostController.popBackStack()
                 }
