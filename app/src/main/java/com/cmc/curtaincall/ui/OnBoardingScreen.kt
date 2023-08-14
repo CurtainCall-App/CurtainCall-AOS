@@ -1,6 +1,7 @@
 package com.cmc.curtaincall.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
@@ -13,13 +14,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.common.design.theme.French_Rose
-import com.cmc.curtaincall.common.design.theme.Gunmetal
+import com.cmc.curtaincall.common.design.extensions.toSp
+import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
+import com.cmc.curtaincall.common.design.theme.Me_Pink
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 import com.google.accompanist.pager.HorizontalPagerIndicator
@@ -36,20 +39,40 @@ internal fun OnBoardingScreen(
         stringResource(R.string.onboarding_partymember_gathering) to stringResource(R.string.onboarding_partymember_gathering_description),
         stringResource(R.string.onboarding_livetalk) to stringResource(R.string.onboarding_livetalk_description)
     )
+    val painterItems = listOf(
+        painterResource(R.drawable.ic_onboarding_performance),
+        painterResource(R.drawable.ic_onboarding_partymember),
+        painterResource(R.drawable.ic_onboarding_livetalk)
+    )
 
     val pagerState = rememberPagerState { pagerItems.size }
     val coroutineScopre = rememberCoroutineScope()
-    Box {
-        HorizontalPager(
-            state = pagerState,
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Cetacean_Blue)
+    ) {
+        HorizontalPagerIndicator(
+            pagerState = pagerState,
+            pageCount = pagerItems.size,
             modifier = Modifier
-                .fillMaxSize()
-                .background(Gunmetal)
+                .align(Alignment.End)
+                .padding(top = 50.dp, end = 20.dp),
+            activeColor = White,
+            inactiveColor = White.copy(0.2f)
+        )
+        HorizontalPager(
+            state = pagerState
         ) { position ->
             val isSkip = position != pagerItems.lastIndex
             OnBoardingPagerItem(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 20.dp)
+                    .padding(top = 36.dp, bottom = 67.dp),
                 title = pagerItems[position].first,
                 description = pagerItems[position].second,
+                painter = painterItems[position],
                 isSkipButton = isSkip
             ) {
                 if (isSkip) {
@@ -61,61 +84,63 @@ internal fun OnBoardingScreen(
                 }
             }
         }
-
-        HorizontalPagerIndicator(
-            pagerState = pagerState,
-            pageCount = pagerItems.size,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(top = 28.dp, end = 22.dp),
-            activeColor = White,
-            inactiveColor = White.copy(alpha = 0.2f)
-        )
     }
 }
 
 @Composable
 private fun OnBoardingPagerItem(
+    modifier: Modifier = Modifier,
     title: String,
     description: String,
+    painter: Painter,
     isSkipButton: Boolean,
     onClick: () -> Unit
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier) {
         Text(
             text = title,
-            modifier = Modifier.padding(top = 68.dp, start = 22.dp),
             color = White,
-            fontSize = 26.sp,
-            fontFamily = spoqahansanseeo,
-            fontWeight = FontWeight.Bold
+            fontSize = 24.dp.toSp(),
+            fontWeight = FontWeight.Bold,
+            fontFamily = spoqahansanseeo
         )
         Text(
             text = description,
-            modifier = Modifier.padding(top = 47.dp, start = 22.dp),
+            modifier = Modifier.padding(top = 30.dp),
             color = White,
-            fontSize = 18.sp,
-            fontFamily = spoqahansanseeo,
+            fontSize = 16.dp.toSp(),
             fontWeight = FontWeight.Medium,
-            lineHeight = 28.sp
+            fontFamily = spoqahansanseeo,
+            lineHeight = 22.dp.toSp()
         )
-        Spacer(Modifier.weight(1f))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            Image(
+                painter = painter,
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(bottom = 185.dp)
+                    .width(145.dp)
+            )
+        }
         Button(
             onClick = onClick,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 22.dp)
-                .padding(bottom = 17.dp)
                 .height(52.dp),
-            shape = RoundedCornerShape(15.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = French_Rose)
+            shape = RoundedCornerShape(12.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = Me_Pink)
         ) {
             Text(
                 text = stringResource(if (isSkipButton) R.string.onboarding_skip else R.string.onboarding_login),
-                color = White,
-                fontSize = 18.sp,
-                fontFamily = spoqahansanseeo,
-                fontWeight = FontWeight.Medium
+                color = Cetacean_Blue,
+                fontSize = 16.dp.toSp(),
+                fontWeight = FontWeight.Medium,
+                fontFamily = spoqahansanseeo
             )
         }
     }
