@@ -6,9 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -20,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.component.CurtainCallRoundedTextButton
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
 import com.cmc.curtaincall.common.design.theme.Me_Pink
@@ -127,21 +125,14 @@ private fun OnBoardingPagerItem(
                     .width(145.dp)
             )
         }
-        Button(
+        CurtainCallRoundedTextButton(
             onClick = onClick,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp),
-            shape = RoundedCornerShape(12.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Me_Pink)
-        ) {
-            Text(
-                text = stringResource(if (isSkipButton) R.string.onboarding_skip else R.string.onboarding_login),
-                color = Cetacean_Blue,
-                fontSize = 16.dp.toSp(),
-                fontWeight = FontWeight.Medium,
-                fontFamily = spoqahansanseeo
-            )
-        }
+            title = stringResource(if (isSkipButton) R.string.onboarding_skip else R.string.onboarding_login),
+            containerColor = Me_Pink,
+            contentColor = Cetacean_Blue
+        )
     }
 }
