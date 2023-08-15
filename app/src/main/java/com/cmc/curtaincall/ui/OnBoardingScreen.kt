@@ -131,6 +131,7 @@ private fun OnBoardingPagerItem(
                 .fillMaxWidth()
                 .height(52.dp),
             title = stringResource(if (isSkipButton) R.string.onboarding_skip else R.string.onboarding_login),
+            fontSize = 16.dp.toSp(),
             containerColor = Me_Pink,
             contentColor = Cetacean_Blue
         )

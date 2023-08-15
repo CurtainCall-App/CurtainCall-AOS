@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.auth.ui
+package com.cmc.curtaincall.feature.auth.login
 
 import android.app.Activity.RESULT_OK
 import android.content.Context
@@ -8,23 +8,31 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.common.design.theme.French_Rose
-import com.cmc.curtaincall.common.design.theme.Gunmetal
+import com.cmc.curtaincall.common.design.extensions.toSp
+import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 import com.facebook.CallbackManager
@@ -32,7 +40,6 @@ import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -54,36 +61,32 @@ fun LoginScreen(
     onNavigateSignUpTerms: () -> Unit,
     onNavigateHome: () -> Unit
 ) {
-    val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(Gunmetal)
-
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Gunmetal),
+            .background(Cetacean_Blue),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(Modifier.weight(244f))
         Image(
-            painter = painterResource(R.drawable.ic_app),
-            contentDescription = stringResource(R.string.login_logo_image_description),
-            modifier = Modifier.padding(top = 217.dp)
+            painter = painterResource(R.drawable.ic_logo),
+            contentDescription = null,
+            modifier = Modifier.size(60.dp, (67.79).dp),
+            contentScale = ContentScale.FillBounds
         )
-
-        Text(
-            text = stringResource(R.string.login_start),
-            modifier = Modifier
-                .padding(top = 111.dp)
-                .background(French_Rose, RoundedCornerShape(22.dp))
-                .padding(vertical = 11.dp, horizontal = 17.dp)
-                .clickable { onNavigateHome() },
-            color = White,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.Bold,
-            fontFamily = spoqahansanseeo
+        Spacer(Modifier.weight(224f))
+        Image(
+            painter = painterResource(R.drawable.ic_social_login),
+            contentDescription = null,
+            modifier = Modifier.size(180.dp, 47.dp)
+                .clickable {
+                    // 추후 제거
+                    onNavigateHome()
+                },
+            contentScale = ContentScale.FillBounds
         )
-
         Row(
-            modifier = Modifier.fillMaxWidth().padding(top = 21.dp),
+            modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -93,6 +96,16 @@ fun LoginScreen(
             Spacer(Modifier.width(16.dp))
             LoginFacebook(onNavigateSignUpTerms, onNavigateHome)
         }
+        Spacer(Modifier.weight(65f))
+        Text(
+            text = stringResource(R.string.login_inquire),
+            color = White.copy(0.7f),
+            fontSize = 12.dp.toSp(),
+            fontWeight = FontWeight.Medium,
+            fontFamily = spoqahansanseeo,
+            textAlign = TextAlign.Center
+        )
+        Spacer(Modifier.weight(78f))
     }
 }
 
@@ -105,16 +118,18 @@ private fun LoginKaKao(
     val coroutineScope = rememberCoroutineScope()
     Image(
         painter = painterResource(R.drawable.ic_kakao_login),
-        contentDescription = stringResource(R.string.login_kakao),
+        contentDescription = null,
         modifier = Modifier
-            .size(48.dp)
+            .size(50.dp)
             .clickable {
                 coroutineScope.launch {
-                    when (loginKaKao(context)) {
+                    val result = loginKaKao(context)
+                    when (result) {
                         is AuthResult.Success -> {
                             // TODO 카카오 AccessToken 서버 전달
                             onNavigateSignUpTerms()
                         }
+
                         is AuthResult.Failure -> {
                             // TODO 카카오 로그인 에러 메세지 정의
                         }
@@ -146,9 +161,9 @@ private fun LoginGoogle(
 
     Image(
         painter = painterResource(R.drawable.ic_google_login),
-        contentDescription = stringResource(R.string.login_google),
+        contentDescription = null,
         modifier = Modifier
-            .size(48.dp)
+            .size(50.dp)
             .clickable {
                 val signInClient = getGoogleSignInClient(context)
                 registerGoogleLogin.launch(signInClient.signInIntent)
@@ -171,9 +186,9 @@ private fun LoginFacebook(
 
     Image(
         painter = painterResource(R.drawable.ic_facebook_login),
-        contentDescription = stringResource(R.string.login_facebook),
+        contentDescription = null,
         modifier = Modifier
-            .size(48.dp)
+            .size(50.dp)
             .clickable {
                 coroutineScope.launch {
                     when (loginFacebook(loginManager, callbackManager, registerFacebookLogin)) {
@@ -181,6 +196,7 @@ private fun LoginFacebook(
                             // TODO 페이스북 AccessToken 전달
                             onNavigateSignUpTerms()
                         }
+
                         is AuthResult.Failure -> {
                             // TODO 페이스북 로그인 에러 메세지 정의
                         }

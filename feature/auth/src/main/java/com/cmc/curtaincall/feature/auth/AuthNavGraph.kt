@@ -5,10 +5,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.cmc.curtaincall.core.base.CurtainCallDestination
-import com.cmc.curtaincall.feature.auth.ui.LoginScreen
-import com.cmc.curtaincall.feature.auth.ui.SignUpInputScreen
-import com.cmc.curtaincall.feature.auth.ui.SignUpTermsScreen
-import com.cmc.curtaincall.feature.auth.ui.WelComeScreen
+import com.cmc.curtaincall.feature.auth.login.LoginScreen
+import com.cmc.curtaincall.feature.auth.signup.SignUpInputScreen
+import com.cmc.curtaincall.feature.auth.signup.SignUpTermsScreen
+import com.cmc.curtaincall.feature.auth.welcome.WelComeScreen
 import com.cmc.curtaincall.feature.home.HomeDestination
 
 private const val AUTH_GRAPH = "auth_graph"
