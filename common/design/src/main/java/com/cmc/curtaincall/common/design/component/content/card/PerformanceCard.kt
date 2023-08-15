@@ -1,10 +1,11 @@
-package com.cmc.curtaincall.common.design.component
+package com.cmc.curtaincall.common.design.component.content.card
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,55 +26,53 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.extensions.toSp
-import com.cmc.curtaincall.common.design.theme.Cadet_Grey
-import com.cmc.curtaincall.common.design.theme.Charcoal
+import com.cmc.curtaincall.common.design.theme.Arsenic
 import com.cmc.curtaincall.common.design.theme.Chinese_Black
 import com.cmc.curtaincall.common.design.theme.Coal
-import com.cmc.curtaincall.common.design.theme.Red
+import com.cmc.curtaincall.common.design.theme.Roman_Silver
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 
-enum class CardType {
-    TOP10, OPEN_SOON, CHEAP
-}
-
 @Composable
 fun PerformanceCard(
-    cardType: CardType,
-    name: String,
-    image: Painter,
+    modifier: Modifier = Modifier,
+    title: String,
+    painter: Painter,
     rate: Float,
-    numberOfRate: Int,
+    numberOfTotal: Int,
+    isShowMetadata: Boolean = false,
     meta: String = ""
 ) {
     Card(
-        modifier = Modifier.size(120.dp, 218.dp),
+        modifier = modifier.aspectRatio(120 / 218f),
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
-            contentColor = White,
-            containerColor = White
+            containerColor = White,
+            contentColor = White
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
     ) {
         Box(
             modifier = Modifier
-                .size(120.dp, 160.dp)
-                .background(Red)
+                .fillMaxWidth()
+                .aspectRatio(120 / 160f)
                 .clip(RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
         ) {
-            Image(
-                painter = image,
+            AsyncImage(
+                model = null,
+                error = painter,
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.FillBounds
             )
-            if ((cardType == CardType.TOP10 || cardType == CardType.OPEN_SOON) && meta.isNotEmpty()) {
+            if (isShowMetadata) {
                 Box(
                     modifier = Modifier
                         .background(Coal.copy(0.7f), RoundedCornerShape(topStart = 10.dp, bottomEnd = 10.dp))
-                        .padding(horizontal = 9.dp, vertical = 7.dp),
+                        .padding(horizontal = 10.dp, vertical = 7.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -90,10 +89,11 @@ fun PerformanceCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp)
-                .padding(vertical = 8.dp)
+                .padding(vertical = 8.dp),
+            verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = name,
+                text = title,
                 color = Chinese_Black,
                 fontSize = 15.dp.toSp(),
                 fontWeight = FontWeight.Medium,
@@ -113,65 +113,21 @@ fun PerformanceCard(
                 )
                 Text(
                     text = String.format("%.1f", rate),
-                    modifier = Modifier.padding(start = 3.dp),
-                    color = Charcoal,
-                    fontSize = 13.dp.toSp(),
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = spoqahansanseeo
-                )
-                Text(
-                    text = String.format("(%d)", numberOfRate),
                     modifier = Modifier.padding(start = 2.dp),
-                    color = Cadet_Grey,
+                    color = Arsenic,
+                    fontSize = 13.dp.toSp(),
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = spoqahansanseeo
+                )
+                Text(
+                    text = String.format("(%d)", numberOfTotal),
+                    modifier = Modifier.padding(start = 2.dp),
+                    color = Roman_Silver,
                     fontSize = 13.dp.toSp(),
                     fontWeight = FontWeight.Bold,
                     fontFamily = spoqahansanseeo
                 )
             }
         }
-    }
-}
-
-@Composable
-fun LiveTalkCard(
-    name: String,
-    image: Painter,
-    time: String
-) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Box(
-            modifier = Modifier
-                .size(72.dp, 96.dp)
-                .clip(RoundedCornerShape(7.dp))
-        ) {
-            Image(
-                painter = image,
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.FillBounds
-            )
-            Box(
-                modifier = Modifier
-                    .background(Red, RoundedCornerShape(topStart = 7.dp, bottomEnd = 7.dp))
-                    .padding(vertical = 4.dp, horizontal = 6.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = time,
-                    color = White,
-                    fontSize = 12.dp.toSp(),
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo
-                )
-            }
-        }
-        Text(
-            text = name,
-            modifier = Modifier.padding(top = 8.dp),
-            color = Chinese_Black,
-            fontSize = 14.dp.toSp(),
-            fontWeight = FontWeight.Medium,
-            fontFamily = spoqahansanseeo
-        )
     }
 }

@@ -40,6 +40,7 @@ import com.facebook.FacebookCallback
 import com.facebook.FacebookException
 import com.facebook.login.LoginManager
 import com.facebook.login.LoginResult
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -61,6 +62,9 @@ fun LoginScreen(
     onNavigateSignUpTerms: () -> Unit,
     onNavigateHome: () -> Unit
 ) {
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setStatusBarColor(Cetacean_Blue)
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -215,7 +219,7 @@ private suspend fun loginKaKao(context: Context): AuthResult = suspendCancellabl
                 }
                 loginWithKaKaoAccount(context, continuation)
             } else if (token != null) {
-                token.idToken?.let { continuation.resume(AuthResult.Success(it)) }
+                continuation.resume(AuthResult.Success(token.accessToken))
             }
         }
     } else {
@@ -231,7 +235,7 @@ private fun loginWithKaKaoAccount(
         if (error != null) {
             continuation.resume(AuthResult.Failure(error.localizedMessage))
         } else if (token != null) {
-            token.idToken?.let { continuation.resume(AuthResult.Success(it)) }
+            continuation.resume(AuthResult.Success(token.accessToken))
         }
     }
 }
