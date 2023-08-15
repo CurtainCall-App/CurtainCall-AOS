@@ -9,8 +9,6 @@ complexity:
 style:
   MagicNumber:
     active: false
-  UnusedPrivateMember:
-    ignoreAnnotated: [ 'preview' ]
   WildcardImport:
     active: false
   UnusedParameter:
@@ -20,6 +18,8 @@ style:
   UseCheckOrError:
     active: false
   ReturnCount:
+    active: false
+  UnusedPrivateMember:
     active: false
 
 naming:

@@ -64,7 +64,7 @@ fun LoginScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = painterResource(R.drawable.ic_logo),
+            painter = painterResource(R.drawable.ic_app),
             contentDescription = stringResource(R.string.login_logo_image_description),
             modifier = Modifier.padding(top = 217.dp)
         )

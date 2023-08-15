@@ -6,13 +6,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import com.cmc.curtaincall.common.design.theme.Gunmetal
+import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun SplashScreen(onNavigateOnBoarding: () -> Unit) {
     val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(Gunmetal)
+    systemUiController.setStatusBarColor(Cetacean_Blue)
 
     LaunchedEffect(true) {
         onNavigateOnBoarding()
@@ -20,6 +20,6 @@ fun SplashScreen(onNavigateOnBoarding: () -> Unit) {
     Spacer(
         Modifier
             .fillMaxSize()
-            .background(Gunmetal)
+            .background(Cetacean_Blue)
     )
 }
