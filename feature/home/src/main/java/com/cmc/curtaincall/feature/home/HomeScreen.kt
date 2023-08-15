@@ -70,6 +70,7 @@ fun HomeScreen(
         }
     ) { paddingValues ->
         if (isActiveSearchState) {
+            // TODO
         } else {
             HomeContent(
                 modifier = Modifier
