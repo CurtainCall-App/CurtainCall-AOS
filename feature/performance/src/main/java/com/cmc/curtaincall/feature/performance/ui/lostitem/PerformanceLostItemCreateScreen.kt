@@ -26,8 +26,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.common.design.component.CurtainCallTimePicker
-import com.cmc.curtaincall.common.design.component.SelectedDateCalender
+import com.cmc.curtaincall.common.design.component.custom.CurtainCallTimePicker
+import com.cmc.curtaincall.common.design.component.custom.SelectedDateCalender
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 

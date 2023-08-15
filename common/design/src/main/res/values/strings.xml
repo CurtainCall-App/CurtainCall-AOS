@@ -16,6 +16,9 @@
     <!-- login -->
     <string name="login_inquire">[문의하기]\ncurtaincall@gmail.com</string>
 
+    <!-- search -->
+    <string name="search_performance_title">작품명 입력</string>
+
     <!-- signup -->
     <string name="signup_terms">약관 동의</string>
     <string name="signup_terms_description">커튼콜 서비스 이용을 위해\n약관 동의가 필요해요.</string>

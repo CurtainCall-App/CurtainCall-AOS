@@ -4,6 +4,10 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -12,6 +16,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.CardType
+import com.cmc.curtaincall.common.design.component.SearchAppBar
+import com.cmc.curtaincall.common.design.component.TopAppBarWithSearch
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.cmc.curtaincall.feature.home.component.HomeBanner
@@ -31,27 +37,42 @@ fun HomeScreen(
     onNavigatePartyMember: () -> Unit,
     onNavigateMyPage: () -> Unit
 ) {
+    var isActiveSearchState by remember { mutableStateOf(false) }
     val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(Cetacean_Blue)
+    systemUiController.setStatusBarColor(if (isActiveSearchState) White else Cetacean_Blue)
 
+    var queryState by remember { mutableStateOf("") }
     Scaffold(
         topBar = {
-            HomeSearchAppbar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp),
-                onSearchClick = {
-                }
-            )
+            if (isActiveSearchState) {
+                SearchAppBar(
+                    value = queryState,
+                    onValueChange = { queryState = it },
+                    containerColor = White,
+                    contentColor = Nero,
+                    placeholder = stringResource(R.string.search_performance_title),
+                    onClick = { isActiveSearchState = false }
+                )
+            } else {
+                TopAppBarWithSearch(
+                    title = stringResource(R.string.home_appbar_title),
+                    containerColor = Cetacean_Blue,
+                    contentColor = White,
+                    onClick = { isActiveSearchState = true }
+                )
+            }
         }
     ) { paddingValues ->
-        HomeContent(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
-                .background(Cetacean_Blue),
-            onNavigateGuide = onNavigateGuide
-        )
+        if (isActiveSearchState) {
+        } else {
+            HomeContent(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
+                    .background(Cetacean_Blue),
+                onNavigateGuide = onNavigateGuide
+            )
+        }
     }
 }
 
