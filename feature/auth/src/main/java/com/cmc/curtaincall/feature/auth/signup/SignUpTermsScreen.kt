@@ -1,10 +1,8 @@
 package com.cmc.curtaincall.feature.auth.signup
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -12,11 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.cmc.curtaincall.common.design.component.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.component.CurtainCallRoundedTextButton
+import com.cmc.curtaincall.common.design.component.TopAppBarWithBack
+import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -33,9 +31,6 @@ internal fun SignUpTermsScreen(
         topBar = {
             TopAppBarWithBack(
                 title = stringResource(R.string.signup_terms),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(38.dp),
                 containerColor = White,
                 contentColor = Eerie_Black,
                 onClick = onBack
@@ -44,8 +39,9 @@ internal fun SignUpTermsScreen(
     ) { paddingValues ->
         SignUpTermsContent(
             modifier = Modifier
+                .padding(paddingValues)
                 .fillMaxSize()
-                .padding(paddingValues),
+                .background(White),
             onNavigateSignUpInput = onNavigateSignUpInput
         )
     }
@@ -58,127 +54,94 @@ private fun SignUpTermsContent(
 ) {
     var allTermsState by remember { mutableStateOf(false) }
     var serviceTermsState by remember { mutableStateOf(false) }
-    var locationTermsState by remember { mutableStateOf(false) }
-    var notificationTermsState by remember { mutableStateOf(false) }
-    var marketingTermsState by remember { mutableStateOf(false) }
+    var privacyInfoTermsState by remember { mutableStateOf(false) }
+    var ageState by remember { mutableStateOf(false) }
 
-    Column(modifier.background(White)) {
+    Column(modifier.padding(horizontal = 20.dp)) {
         Text(
             text = stringResource(R.string.signup_terms_description),
-            modifier = Modifier.padding(top = 30.dp, start = 22.dp),
-            color = Chinese_Black,
-            fontSize = 26.sp,
+            modifier = Modifier.padding(top = 40.dp),
+            color = Black,
+            fontSize = 22.dp.toSp(),
             fontWeight = FontWeight.Bold,
             fontFamily = spoqahansanseeo,
-            lineHeight = 34.sp
+            lineHeight = 32.dp.toSp()
         )
-
         Text(
             text = stringResource(R.string.signup_terms_sub_description),
-            modifier = Modifier.padding(top = 11.dp, start = 22.dp),
-            color = Slate_Gray,
-            fontSize = 14.sp,
+            modifier = Modifier.padding(top = 14.dp),
+            color = Roman_Silver,
+            fontSize = 14.dp.toSp(),
             fontWeight = FontWeight.Medium,
-            fontFamily = spoqahansanseeo
+            fontFamily = spoqahansanseeo,
+            lineHeight = 22.dp.toSp()
         )
-
         SignUpTerms(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 45.dp, start = 25.dp),
+                .padding(top = 40.dp),
             description = stringResource(R.string.signup_terms_all_agree),
             checked = allTermsState,
-            bold = true,
+            isBold = true,
             onCheckedChange = {
                 allTermsState = allTermsState.not()
                 serviceTermsState = allTermsState
-                locationTermsState = allTermsState
-                notificationTermsState = allTermsState
-                marketingTermsState = allTermsState
+                privacyInfoTermsState = allTermsState
+                ageState = allTermsState
             }
         )
-
         Spacer(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 22.dp)
                 .padding(top = 24.dp)
                 .height(1.dp)
-                .background(Anti_Flash_White)
+                .background(Cultured)
         )
-
         SignUpTerms(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 24.dp, start = 25.dp, end = 22.dp),
+                .padding(top = 25.dp),
             description = stringResource(R.string.signup_terms_service),
             checked = serviceTermsState,
             onCheckedChange = {
                 serviceTermsState = serviceTermsState.not()
-                allTermsState = listOf(marketingTermsState, locationTermsState, notificationTermsState, marketingTermsState).all { it }
+                allTermsState = listOf(serviceTermsState, privacyInfoTermsState, ageState).all { it }
             }
         )
-
         SignUpTerms(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 24.dp, start = 25.dp, end = 22.dp),
-            description = stringResource(R.string.signup_terms_location),
-            checked = locationTermsState,
+                .padding(top = 25.dp),
+            description = stringResource(R.string.signup_terms_privacy_information_agree),
+            checked = privacyInfoTermsState,
             onCheckedChange = {
-                locationTermsState = locationTermsState.not()
-                allTermsState = listOf(marketingTermsState, locationTermsState, notificationTermsState, marketingTermsState).all { it }
+                privacyInfoTermsState = privacyInfoTermsState.not()
+                allTermsState = listOf(serviceTermsState, privacyInfoTermsState, ageState).all { it }
             }
         )
-
         SignUpTerms(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 24.dp, start = 25.dp, end = 22.dp),
-            description = stringResource(R.string.signup_terms_notification),
-            checked = notificationTermsState,
+                .padding(top = 25.dp),
+            description = stringResource(R.string.signup_terms_age_agree),
+            checked = ageState,
             onCheckedChange = {
-                notificationTermsState = notificationTermsState.not()
-                allTermsState = listOf(marketingTermsState, locationTermsState, notificationTermsState, marketingTermsState).all { it }
+                ageState = ageState.not()
+                allTermsState = listOf(serviceTermsState, privacyInfoTermsState, ageState).all { it }
             }
         )
-
-        SignUpTerms(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 24.dp, start = 25.dp, end = 22.dp),
-            description = stringResource(R.string.signup_terms_marketing),
-            checked = marketingTermsState,
-            onCheckedChange = {
-                marketingTermsState = marketingTermsState.not()
-                allTermsState = listOf(marketingTermsState, locationTermsState, notificationTermsState, marketingTermsState).all { it }
-            }
-        )
-
         Spacer(Modifier.weight(1f))
-
-        Button(
+        CurtainCallRoundedTextButton(
             onClick = onNavigateSignUpInput,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 22.dp)
-                .padding(bottom = 15.dp)
+                .padding(bottom = 19.dp)
                 .height(52.dp),
-            enabled = serviceTermsState,
-            shape = RoundedCornerShape(15.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = if (serviceTermsState) Me_Pink else Philippine_Gray
-            )
-        ) {
-            Text(
-                text = stringResource(R.string.signup_terms_next),
-                color = if (serviceTermsState) White else Cadet_Grey,
-                fontSize = 17.sp,
-                fontWeight = FontWeight.Bold,
-                fontFamily = spoqahansanseeo,
-                textAlign = TextAlign.Center
-            )
-        }
+            title = stringResource(R.string.signup_terms_next),
+            enabled = allTermsState,
+            containerColor = if (serviceTermsState) Me_Pink else Bright_Gray,
+            contentColor = if (allTermsState) White else Silver_Sand
+        )
     }
 }
 
@@ -187,7 +150,7 @@ private fun SignUpTerms(
     modifier: Modifier = Modifier,
     description: String,
     checked: Boolean = false,
-    bold: Boolean = false,
+    isBold: Boolean = false,
     onCheckedChange: () -> Unit = {},
     onClickDown: () -> Unit = {}
 ) {
@@ -198,36 +161,37 @@ private fun SignUpTerms(
         IconButton(
             onClick = onCheckedChange,
             modifier = Modifier
-                .background(if (checked) Me_Pink else Cultured, CircleShape)
+                .background(if (checked) Me_Pink else Bright_Gray, CircleShape)
                 .size(20.dp, 20.dp)
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_check),
-                contentDescription = description,
+                contentDescription = null,
                 modifier = Modifier.size(14.dp, 14.dp),
                 tint = White
             )
         }
-
         Text(
             text = description,
-            modifier = Modifier.padding(start = 12.dp),
-            color = if (bold) Chinese_Black else Charcoal,
-            fontSize = 16.sp,
-            fontWeight = if (bold) FontWeight.Bold else FontWeight.Medium,
+            modifier = Modifier.padding(start = 10.dp),
+            color = if (isBold) Nero else Arsenic,
+            fontSize = 16.dp.toSp(),
+            fontWeight = if (isBold) FontWeight.Bold else FontWeight.Medium,
             fontFamily = spoqahansanseeo
         )
-
         Spacer(Modifier.weight(1f))
-
-        if (bold.not()) {
-            Icon(
-                painter = painterResource(R.drawable.ic_arrow_down),
-                contentDescription = description,
-                modifier = Modifier
-                    .size(24.dp, 24.dp)
-                    .clickable { onClickDown() }
-            )
+        if (isBold.not()) {
+            IconButton(
+                onClick = onClickDown,
+                modifier = Modifier.size(20.dp)
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_arrow_right_pink),
+                    contentDescription = null,
+                    modifier = Modifier.size(12.dp),
+                    tint = Arsenic
+                )
+            }
         }
     }
 }

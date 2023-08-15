@@ -56,7 +56,6 @@ private sealed interface AuthResult {
     data class Failure(val errorMsg: String?) : AuthResult
 }
 
-// 232 150, 62 109
 @Composable
 fun LoginScreen(
     onNavigateSignUpTerms: () -> Unit,
@@ -68,18 +67,22 @@ fun LoginScreen(
             .background(Cetacean_Blue),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(Modifier.weight(232f))
+        Spacer(Modifier.weight(244f))
         Image(
             painter = painterResource(R.drawable.ic_logo),
             contentDescription = null,
             modifier = Modifier.size(60.dp, (67.79).dp),
             contentScale = ContentScale.FillBounds
         )
-        Spacer(Modifier.weight(150f))
+        Spacer(Modifier.weight(224f))
         Image(
             painter = painterResource(R.drawable.ic_social_login),
             contentDescription = null,
-            modifier = Modifier.size(180.dp, 47.dp),
+            modifier = Modifier.size(180.dp, 47.dp)
+                .clickable {
+                    // 추후 제거
+                    onNavigateHome()
+                },
             contentScale = ContentScale.FillBounds
         )
         Row(
@@ -93,7 +96,7 @@ fun LoginScreen(
             Spacer(Modifier.width(16.dp))
             LoginFacebook(onNavigateSignUpTerms, onNavigateHome)
         }
-        Spacer(Modifier.weight(62f))
+        Spacer(Modifier.weight(65f))
         Text(
             text = stringResource(R.string.login_inquire),
             color = White.copy(0.7f),
@@ -102,7 +105,7 @@ fun LoginScreen(
             fontFamily = spoqahansanseeo,
             textAlign = TextAlign.Center
         )
-        Spacer(Modifier.weight(109f))
+        Spacer(Modifier.weight(78f))
     }
 }
 
