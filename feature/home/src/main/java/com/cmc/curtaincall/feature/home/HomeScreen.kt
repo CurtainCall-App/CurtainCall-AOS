@@ -22,16 +22,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.common.design.component.CardType
 import com.cmc.curtaincall.common.design.component.SearchAppBar
 import com.cmc.curtaincall.common.design.component.TopAppBarWithSearch
 import com.cmc.curtaincall.common.design.component.content.card.LiveTalkContentCard
-import com.cmc.curtaincall.common.design.component.content.row.ContentTitleRow
 import com.cmc.curtaincall.common.design.component.content.card.MyContentCard
+import com.cmc.curtaincall.common.design.component.content.card.PerformanceCard
+import com.cmc.curtaincall.common.design.component.content.row.ContentTitleRow
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.cmc.curtaincall.feature.home.guide.GuideType
-import com.cmc.curtaincall.feature.home.tab.HomeContentTab
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -190,31 +189,95 @@ private fun HomeContent(
                     }
                 }
             }
-            HomeContentTab(
+            HomeContentRow(
                 modifier = Modifier
-                    .padding(top = 50.dp)
+                    .padding(top = 40.dp)
                     .fillMaxWidth(),
-                icon = painterResource(R.drawable.ic_fire),
-                title = stringResource(R.string.home_top10_popular_performance),
-                cardType = CardType.TOP10
-            )
-            HomeContentTab(
+                titleModifier = Modifier.padding(start = 20.dp),
+                painter = painterResource(R.drawable.ic_fire),
+                title = stringResource(R.string.home_top10_popular_performance)
+            ) {
+                LazyRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.dp)
+                ) {
+                    itemsIndexed(List(10) {}) { index, item ->
+                        if (index == 0) Spacer(Modifier.size(20.dp))
+                        Row {
+                            PerformanceCard(
+                                modifier = Modifier.width(120.dp),
+                                title = "데스노트",
+                                painter = painterResource(R.drawable.dummy_poster),
+                                rate = 4.89f,
+                                numberOfTotal = 1012,
+                                isShowMetadata = true,
+                                meta = (index + 1).toString()
+                            )
+                            Spacer(Modifier.size(12.dp))
+                        }
+                    }
+                }
+            }
+            HomeContentRow(
                 modifier = Modifier
-                    .padding(top = 50.dp)
+                    .padding(top = 40.dp)
                     .fillMaxWidth(),
-                icon = painterResource(R.drawable.ic_open_clock),
-                title = stringResource(R.string.home_scheduled_open_performance),
-                cardType = CardType.OPEN_SOON
-            )
-            HomeContentTab(
+                titleModifier = Modifier.padding(start = 20.dp),
+                painter = painterResource(R.drawable.ic_open_clock),
+                title = stringResource(R.string.home_scheduled_open_performance)
+            ) {
+                LazyRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.dp)
+                ) {
+                    itemsIndexed(List(10) {}) { index, item ->
+                        if (index == 0) Spacer(Modifier.size(20.dp))
+                        Row {
+                            PerformanceCard(
+                                modifier = Modifier.width(120.dp),
+                                title = "데스노트",
+                                painter = painterResource(R.drawable.dummy_poster),
+                                rate = 4.89f,
+                                numberOfTotal = 1012,
+                                isShowMetadata = true,
+                                meta = "D-2"
+                            )
+                            Spacer(Modifier.size(12.dp))
+                        }
+                    }
+                }
+            }
+            HomeContentRow(
                 modifier = Modifier
-                    .padding(top = 50.dp)
+                    .padding(top = 40.dp)
                     .fillMaxWidth(),
-                icon = painterResource(R.drawable.ic_value_of_money),
-                title = stringResource(R.string.home_value_for_money_performance),
-                cardType = CardType.CHEAP
-            )
-            Spacer(modifier = Modifier.height(50.dp))
+                titleModifier = Modifier.padding(start = 20.dp),
+                painter = painterResource(R.drawable.ic_value_of_money),
+                title = stringResource(R.string.home_value_for_money_performance)
+            ) {
+                LazyRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.dp)
+                ) {
+                    itemsIndexed(List(10) {}) { index, item ->
+                        if (index == 0) Spacer(Modifier.size(20.dp))
+                        Row {
+                            PerformanceCard(
+                                modifier = Modifier.width(120.dp),
+                                title = "데스노트",
+                                painter = painterResource(R.drawable.dummy_poster),
+                                rate = 4.89f,
+                                numberOfTotal = 1012
+                            )
+                            Spacer(Modifier.size(12.dp))
+                        }
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(68.dp))
         }
     }
 }
