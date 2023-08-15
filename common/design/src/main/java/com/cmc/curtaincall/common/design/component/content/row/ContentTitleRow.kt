@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.common.design.component.content
+package com.cmc.curtaincall.common.design.component.content.row
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding

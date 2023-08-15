@@ -2,6 +2,8 @@ package com.cmc.curtaincall.feature.home
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,13 +25,13 @@ import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.CardType
 import com.cmc.curtaincall.common.design.component.SearchAppBar
 import com.cmc.curtaincall.common.design.component.TopAppBarWithSearch
-import com.cmc.curtaincall.common.design.component.content.ContentTitleRow
-import com.cmc.curtaincall.common.design.component.content.MyContentCard
+import com.cmc.curtaincall.common.design.component.content.card.LiveTalkContentCard
+import com.cmc.curtaincall.common.design.component.content.row.ContentTitleRow
+import com.cmc.curtaincall.common.design.component.content.card.MyContentCard
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.cmc.curtaincall.feature.home.guide.GuideType
 import com.cmc.curtaincall.feature.home.tab.HomeContentTab
-import com.cmc.curtaincall.feature.home.tab.HomeLiveTalkTab
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -97,7 +99,7 @@ private fun HomeContent(
                 .fillMaxSize()
                 .background(White)
         ) {
-            HomeMyRow(
+            HomeContentRow(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
@@ -120,7 +122,7 @@ private fun HomeContent(
                     time = "19:30"
                 )
             }
-            HomeMyRow(
+            HomeContentRow(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
@@ -159,12 +161,35 @@ private fun HomeContent(
                     time = "19:30"
                 )
             }
-            HomeLiveTalkTab(
+            HomeContentRow(
                 modifier = Modifier
-                    .padding(top = 50.dp)
+                    .padding(top = 40.dp)
                     .fillMaxWidth()
-                    .height(204.dp)
-            )
+                    .background(Cultured)
+                    .padding(vertical = 20.dp),
+                titleModifier = Modifier.padding(start = 20.dp),
+                painter = painterResource(R.drawable.ic_chatting),
+                title = stringResource(R.string.home_coming_livetalk)
+            ) {
+                LazyRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.dp)
+                ) {
+                    itemsIndexed(List(10) {}) { index, item ->
+                        if (index == 0) Spacer(Modifier.size(20.dp))
+                        Row {
+                            LiveTalkContentCard(
+                                modifier = Modifier.width(72.dp),
+                                title = "비스타",
+                                painter = painterResource(R.drawable.img_poster),
+                                time = "19:30"
+                            )
+                            Spacer(Modifier.size(9.dp))
+                        }
+                    }
+                }
+            }
             HomeContentTab(
                 modifier = Modifier
                     .padding(top = 50.dp)
@@ -195,14 +220,16 @@ private fun HomeContent(
 }
 
 @Composable
-internal fun HomeMyRow(
+internal fun HomeContentRow(
     modifier: Modifier = Modifier,
+    titleModifier: Modifier = Modifier,
     painter: Painter,
     title: String,
     content: @Composable () -> Unit
 ) {
     Column(modifier) {
         ContentTitleRow(
+            modifier = titleModifier,
             painter = painter,
             title = title
         )

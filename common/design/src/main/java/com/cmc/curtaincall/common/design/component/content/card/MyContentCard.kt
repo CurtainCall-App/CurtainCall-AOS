@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.common.design.component.content
+package com.cmc.curtaincall.common.design.component.content.card
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
