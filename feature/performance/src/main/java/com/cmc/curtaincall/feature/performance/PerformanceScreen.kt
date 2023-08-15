@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,11 +16,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.component.SearchAppBar
+import com.cmc.curtaincall.common.design.component.TopAppBarOnlySearch
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -32,25 +32,35 @@ fun PerformanceScreen(
     onNavigateDetail: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(Whisper)
+    systemUiController.setStatusBarColor(White)
 
-    var queryString by remember { mutableStateOf("") }
+    var isActiveSearchState by remember { mutableStateOf(false) }
+    var queryState by remember { mutableStateOf("") }
     Scaffold(
         topBar = {
-            SearchAppBar(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp),
-                query = queryString,
-                onChangeText = { queryString = it }
-            )
+            if (isActiveSearchState) {
+                SearchAppBar(
+                    value = queryState,
+                    onValueChange = { queryState = it },
+                    containerColor = White,
+                    contentColor = Nero,
+                    placeholder = stringResource(R.string.search_performance_title),
+                    onClick = { isActiveSearchState = false }
+                )
+            } else {
+                TopAppBarOnlySearch(
+                    containerColor = White,
+                    contentColor = Roman_Silver,
+                    onClick = { isActiveSearchState = true }
+                )
+            }
         }
     ) { paddingValues ->
         PerformanceContent(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
-                .padding(horizontal = 20.dp),
+                .background(White),
             onNavigateDetail = onNavigateDetail
         )
     }
@@ -369,98 +379,4 @@ private fun SelectTypeButton(
             )
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun SearchAppBar(
-    modifier: Modifier = Modifier,
-    query: String,
-    onChangeText: (String) -> Unit
-) {
-    var isActiveSearchBar by remember { mutableStateOf(false) }
-    CenterAlignedTopAppBar(
-        title = {
-            if (isActiveSearchBar) {
-                Row(
-                    modifier = modifier,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    IconButton(
-                        modifier = Modifier
-                            .padding(start = 20.dp)
-                            .size(24.dp),
-                        onClick = { isActiveSearchBar = false }
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_arrow_back),
-                            contentDescription = null,
-                            tint = Color.Unspecified
-                        )
-                    }
-                    BasicTextField(
-                        value = query,
-                        onValueChange = onChangeText,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 8.dp, end = 20.dp)
-                            .height(36.dp)
-                            .background(Cultured, RoundedCornerShape(8.dp))
-                            .padding(start = 10.dp, end = 12.dp),
-                        textStyle = TextStyle(
-                            color = Nero,
-                            fontSize = 16.dp.toSp(),
-                            fontWeight = FontWeight.Medium,
-                            fontFamily = spoqahansanseeo
-                        ),
-                        singleLine = true,
-                        maxLines = 1,
-                        decorationBox = { innerTextField ->
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Box(
-                                    modifier = Modifier.weight(1f),
-                                    contentAlignment = Alignment.CenterStart
-                                ) {
-                                    innerTextField()
-                                    if (query.isEmpty()) {
-                                        Text(
-                                            text = stringResource(R.string.partymember_list_top_appbar_placeholder),
-                                            modifier = Modifier.padding(start = 4.dp),
-                                            color = Silver_Sand,
-                                            fontSize = 16.dp.toSp(),
-                                            fontWeight = FontWeight.Medium,
-                                            fontFamily = spoqahansanseeo
-                                        )
-                                    }
-                                }
-                                IconButton(
-                                    modifier = Modifier.size(22.dp),
-                                    onClick = { onChangeText("") }
-                                ) {
-                                    Icon(
-                                        painter = painterResource(R.drawable.ic_close),
-                                        contentDescription = null,
-                                        tint = Color.Unspecified
-                                    )
-                                }
-                            }
-                        }
-                    )
-                }
-            }
-        },
-        modifier = modifier,
-        actions = {
-            if (isActiveSearchBar.not()) {
-                IconButton(onClick = { isActiveSearchBar = true }) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_search),
-                        modifier = Modifier.size(24.dp),
-                        contentDescription = null,
-                        tint = Color.Unspecified
-                    )
-                }
-            }
-        }
-    )
 }
