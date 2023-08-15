@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.home.component
+package com.cmc.curtaincall.feature.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -11,7 +11,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.feature.home.HomeDestination
 import com.cmc.curtaincall.feature.livetalk.LiveTalkDestination
 import com.cmc.curtaincall.feature.mypage.MyPageDestination
 import com.cmc.curtaincall.feature.partymember.PartyMemberDestination

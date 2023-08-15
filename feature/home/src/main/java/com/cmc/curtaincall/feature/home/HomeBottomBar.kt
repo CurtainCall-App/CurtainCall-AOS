@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.home.component
+package com.cmc.curtaincall.feature.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.RowScope
@@ -23,7 +23,6 @@ import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.gmarketsans
 import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
-import com.cmc.curtaincall.feature.home.HomeDestination
 import com.cmc.curtaincall.feature.livetalk.LiveTalkDestination
 import com.cmc.curtaincall.feature.mypage.MyPageDestination
 import com.cmc.curtaincall.feature.partymember.PartyMemberDestination

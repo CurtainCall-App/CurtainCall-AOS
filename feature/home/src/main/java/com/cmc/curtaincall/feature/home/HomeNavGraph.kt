@@ -18,8 +18,6 @@ import androidx.navigation.navArgument
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
-import com.cmc.curtaincall.feature.home.component.HomeBottomBar
-import com.cmc.curtaincall.feature.home.component.HomeFloatingButton
 import com.cmc.curtaincall.feature.home.guide.GuideScreen
 import com.cmc.curtaincall.feature.home.guide.GuideType
 import com.cmc.curtaincall.feature.livetalk.LiveTalkDestination
