@@ -1,6 +1,5 @@
-package com.cmc.curtaincall.feature.home.tab
+package com.cmc.curtaincall.common.design.component.content
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,16 +17,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.extensions.toSp
-import com.cmc.curtaincall.common.design.theme.Chinese_Black
 import com.cmc.curtaincall.common.design.theme.Cultured
 import com.cmc.curtaincall.common.design.theme.Me_Pink
 import com.cmc.curtaincall.common.design.theme.Nero
@@ -36,52 +35,27 @@ import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 
 @Composable
-internal fun HomeMyTab(
+fun MyContentCard(
     modifier: Modifier = Modifier,
-    icon: Painter,
-    title: String,
-    content: @Composable () -> Unit
-) {
-    Column(modifier) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                painter = icon,
-                contentDescription = null,
-                modifier = Modifier.size(22.dp),
-                tint = Color.Unspecified
-            )
-            Text(
-                text = title,
-                modifier = Modifier.padding(start = 6.dp),
-                color = Chinese_Black,
-                fontSize = 22.dp.toSp(),
-                fontWeight = FontWeight.Bold,
-                fontFamily = spoqahansanseeo
-            )
-        }
-        content()
-    }
-}
-
-@Composable
-internal fun HomeMyTabItem(
-    modifier: Modifier = Modifier,
-    image: Painter,
+    containColor: Color,
+    shape: Shape,
+    painter: Painter,
     title: String,
     description: String,
-    numberOfMember: Int,
-    numberOfTotal: Int,
+    numberOfPartyMember: Int,
+    numberOfTotalMember: Int,
     date: String,
     time: String
 ) {
     Row(
         modifier = modifier
-            .background(Cultured, RoundedCornerShape(10.dp))
+            .background(containColor, shape)
             .height(97.dp)
             .padding(9.dp)
     ) {
-        Image(
-            painter = image,
+        AsyncImage(
+            model = null,
+            error = painter,
             contentDescription = null,
             modifier = Modifier
                 .fillMaxHeight()
@@ -102,11 +76,7 @@ internal fun HomeMyTabItem(
                     maxLines = 1
                 )
                 Text(
-                    text = String.format(
-                        stringResource(R.string.home_my_number_of_member_format),
-                        numberOfMember,
-                        numberOfTotal
-                    ),
+                    text = String.format("%d/%d", numberOfPartyMember, numberOfTotalMember),
                     color = Roman_Silver,
                     fontSize = 12.dp.toSp(),
                     fontWeight = FontWeight.Medium,
@@ -122,8 +92,8 @@ internal fun HomeMyTabItem(
                 fontSize = 14.dp.toSp(),
                 fontWeight = FontWeight.Medium,
                 fontFamily = spoqahansanseeo,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1
             )
             Spacer(Modifier.weight(1f))
             Row {
@@ -145,8 +115,7 @@ internal fun HomeMyTabItem(
                         color = White,
                         fontSize = 12.dp.toSp(),
                         fontWeight = FontWeight.Medium,
-                        fontFamily = spoqahansanseeo,
-                        textAlign = TextAlign.Center
+                        fontFamily = spoqahansanseeo
                     )
                 }
                 Row(
@@ -168,11 +137,29 @@ internal fun HomeMyTabItem(
                         color = White,
                         fontSize = 12.dp.toSp(),
                         fontWeight = FontWeight.Medium,
-                        fontFamily = spoqahansanseeo,
-                        textAlign = TextAlign.Center
+                        fontFamily = spoqahansanseeo
                     )
                 }
             }
         }
     }
+}
+
+@Preview
+@Composable
+private fun MyContentCardPreview() {
+    MyContentCard(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 12.dp),
+        containColor = Cultured,
+        shape = RoundedCornerShape(10.dp),
+        painter = painterResource(R.drawable.img_poster),
+        title = "시카고",
+        description = "공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹",
+        numberOfPartyMember = 2,
+        numberOfTotalMember = 4,
+        date = "2023.7.16(토)",
+        time = "19:30"
+    )
 }
