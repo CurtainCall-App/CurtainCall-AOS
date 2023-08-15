@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.performance.ui
+package com.cmc.curtaincall.feature.performance
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

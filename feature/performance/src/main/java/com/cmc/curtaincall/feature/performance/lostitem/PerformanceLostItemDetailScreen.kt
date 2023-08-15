@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.performance.ui.lostitem
+package com.cmc.curtaincall.feature.performance.lostitem
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

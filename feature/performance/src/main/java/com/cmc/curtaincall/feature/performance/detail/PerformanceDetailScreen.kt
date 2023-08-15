@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.performance.ui.detail
+package com.cmc.curtaincall.feature.performance.detail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -25,8 +25,8 @@ import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
-import com.cmc.curtaincall.feature.performance.ui.lostitem.PerformanceLostItemTabScreen
-import com.cmc.curtaincall.feature.performance.ui.review.PerformanceReviewTabScreen
+import com.cmc.curtaincall.feature.performance.lostitem.PerformanceLostItemTabScreen
+import com.cmc.curtaincall.feature.performance.review.PerformanceReviewTabScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 enum class TabType(val label: String) {
