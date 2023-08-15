@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -76,7 +77,10 @@ private fun PerformanceContent(
     modifier: Modifier = Modifier,
     onNavigateDetail: () -> Unit
 ) {
+    val context = LocalContext.current
     var isCheckFirstType by remember { mutableStateOf(true) }
+    var sortType by remember { mutableStateOf(context.getString(R.string.performance_search_rank_sort)) }
+
     Column(modifier) {
         LazyColumn(
             modifier = Modifier
@@ -103,7 +107,10 @@ private fun PerformanceContent(
                         isCheckFirstType = isCheckFirstType,
                         onTypeChange = { isCheckFirstType = it }
                     )
-                    SelectSortButton(modifier = Modifier.padding(top = 26.dp))
+                    SortTypeRow(
+                        modifier = Modifier.padding(top = 28.dp),
+                        sortType = sortType
+                    )
                 }
             }
 
@@ -295,6 +302,34 @@ private fun PerformanceCard(
 }
 
 @Composable
+private fun SortTypeRow(
+    modifier: Modifier = Modifier,
+    sortType: String,
+    onClick: () -> Unit = {}
+) {
+    Row(
+        modifier = modifier.clickable { onClick() },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = sortType,
+            color = Nero,
+            fontSize = 13.dp.toSp(),
+            fontWeight = FontWeight.Medium,
+            fontFamily = spoqahansanseeo
+        )
+        Icon(
+            painter = painterResource(R.drawable.ic_sort),
+            contentDescription = null,
+            modifier = Modifier
+                .padding(start = 6.dp)
+                .size(14.dp, 11.dp),
+            tint = Color.Unspecified
+        )
+    }
+}
+
+@Composable
 private fun SelectSortButton(
     modifier: Modifier = Modifier
 ) {
@@ -309,7 +344,8 @@ private fun SelectSortButton(
                 .background(
                     if (sortType) Fiery_Rose else Color.Transparent,
                     CircleShape
-                ).clickable { sortType = true }
+                )
+                .clickable { sortType = true }
         )
         Text(
             text = stringResource(R.string.performance_search_popular_sort),
@@ -327,7 +363,8 @@ private fun SelectSortButton(
                 .background(
                     if (sortType.not()) Fiery_Rose else Color.Transparent,
                     CircleShape
-                ).clickable { sortType = false }
+                )
+                .clickable { sortType = false }
         )
         Text(
             text = stringResource(R.string.performance_search_korean_sort),
@@ -357,7 +394,8 @@ private fun SelectTypeButton(
                 .background(
                     if (selectType) Me_Pink else Cultured,
                     RoundedCornerShape(8.dp)
-                ).clickable { selectType = true },
+                )
+                .clickable { selectType = true },
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -377,7 +415,8 @@ private fun SelectTypeButton(
                 .background(
                     if (selectType.not()) Me_Pink else Cultured,
                     RoundedCornerShape(8.dp)
-                ).clickable { selectType = false },
+                )
+                .clickable { selectType = false },
             contentAlignment = Alignment.Center
         ) {
             Text(
