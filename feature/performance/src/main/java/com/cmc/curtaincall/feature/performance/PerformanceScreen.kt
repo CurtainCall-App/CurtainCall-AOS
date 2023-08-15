@@ -20,6 +20,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.component.CurtainCallSelectTypeButton
 import com.cmc.curtaincall.common.design.component.SearchAppBar
 import com.cmc.curtaincall.common.design.component.TopAppBarOnlySearch
 import com.cmc.curtaincall.common.design.extensions.toSp
@@ -56,13 +57,17 @@ fun PerformanceScreen(
             }
         }
     ) { paddingValues ->
-        PerformanceContent(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
-                .background(White),
-            onNavigateDetail = onNavigateDetail
-        )
+        if (isActiveSearchState) {
+            // TODO
+        } else {
+            PerformanceContent(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
+                    .background(White),
+                onNavigateDetail = onNavigateDetail
+            )
+        }
     }
 }
 
@@ -71,47 +76,52 @@ private fun PerformanceContent(
     modifier: Modifier = Modifier,
     onNavigateDetail: () -> Unit
 ) {
-    LazyColumn(modifier) {
-        item {
-            Column {
-                Text(
-                    text = stringResource(R.string.performance_search),
-                    color = Black,
-                    fontSize = 24.dp.toSp(),
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = spoqahansanseeo
-                )
-                Text(
-                    text = stringResource(R.string.performance_search_description),
-                    color = Black_Coral,
-                    fontSize = 14.dp.toSp(),
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo
-                )
-                SelectTypeButton(
-                    modifier = Modifier
-                        .padding(top = 18.dp)
-                        .fillMaxWidth()
-                        .height(45.dp)
-                )
-                SelectSortButton(modifier = Modifier.padding(top = 26.dp))
+    var isCheckFirstType by remember { mutableStateOf(true) }
+    Column(modifier) {
+        LazyColumn(
+            modifier = Modifier
+                .padding(top = 6.dp)
+                .padding(horizontal = 20.dp)
+                .fillMaxSize()
+        ) {
+            item {
+                Column {
+                    Text(
+                        text = stringResource(R.string.performance_search),
+                        color = Black,
+                        fontSize = 24.dp.toSp(),
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = spoqahansanseeo
+                    )
+                    CurtainCallSelectTypeButton(
+                        modifier = Modifier
+                            .padding(top = 16.dp)
+                            .fillMaxWidth()
+                            .height(45.dp),
+                        firstType = stringResource(R.string.partymember_create_classification_theater),
+                        lastType = stringResource(R.string.partymember_create_classification_musical),
+                        isCheckFirstType = isCheckFirstType,
+                        onTypeChange = { isCheckFirstType = it }
+                    )
+                    SelectSortButton(modifier = Modifier.padding(top = 26.dp))
+                }
             }
-        }
 
-        itemsIndexed(Array(10) {}) { index, item ->
-            PerformanceCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onNavigateDetail() }
-            )
-            if (index != 9) {
-                Spacer(
+            itemsIndexed(Array(10) {}) { index, item ->
+                PerformanceCard(
                     modifier = Modifier
-                        .padding(vertical = 16.dp)
                         .fillMaxWidth()
-                        .height(1.dp)
-                        .background(Cultured)
+                        .clickable { onNavigateDetail() }
                 )
+                if (index != 9) {
+                    Spacer(
+                        modifier = Modifier
+                            .padding(vertical = 16.dp)
+                            .fillMaxWidth()
+                            .height(1.dp)
+                            .background(Cultured)
+                    )
+                }
             }
         }
     }
