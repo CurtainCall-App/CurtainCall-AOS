@@ -94,7 +94,7 @@ private fun SignUpInputContent(
             containerColor = Cultured,
             contentColor = Roman_Silver,
             contentModifier = Modifier.padding(horizontal = 20.dp),
-            placeholder = stringResource(R.string.signup_input_nickname),
+            placeholder = stringResource(R.string.signup_input_nickname)
         )
         CurtainCallRoundedTextButton(
             onClick = {
