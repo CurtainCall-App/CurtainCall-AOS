@@ -32,7 +32,7 @@ internal fun SignUpTermsScreen(
             TopAppBarWithBack(
                 title = stringResource(R.string.signup_terms),
                 containerColor = White,
-                contentColor = Eerie_Black,
+                contentColor = Nero,
                 onClick = onBack
             )
         }
@@ -137,7 +137,8 @@ private fun SignUpTermsContent(
                 .fillMaxWidth()
                 .padding(bottom = 19.dp)
                 .height(52.dp),
-            title = stringResource(R.string.signup_terms_next),
+            title = stringResource(R.string.signup_next),
+            fontSize = 16.dp.toSp(),
             enabled = allTermsState,
             containerColor = if (serviceTermsState) Me_Pink else Bright_Gray,
             contentColor = if (allTermsState) White else Silver_Sand
