@@ -110,7 +110,7 @@ private fun SignUpInputContent(
             enabled = Regex(INPUT_CHECK_REGEX).matches(nicknameState),
             containerColor = if (Regex(INPUT_CHECK_REGEX).matches(nicknameState)) Me_Pink else Bright_Gray,
             contentColor = if (Regex(INPUT_CHECK_REGEX).matches(nicknameState)) White else Silver_Sand,
-            shape = RoundedCornerShape(8.dp)
+            radiusSize = 8.dp
         )
         Spacer(Modifier.weight(1f))
         CurtainCallRoundedTextButton(
