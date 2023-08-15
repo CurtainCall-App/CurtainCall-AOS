@@ -14,6 +14,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -22,13 +23,13 @@ import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.CardType
 import com.cmc.curtaincall.common.design.component.SearchAppBar
 import com.cmc.curtaincall.common.design.component.TopAppBarWithSearch
+import com.cmc.curtaincall.common.design.component.content.ContentTitleRow
+import com.cmc.curtaincall.common.design.component.content.MyContentCard
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.cmc.curtaincall.feature.home.guide.GuideType
 import com.cmc.curtaincall.feature.home.tab.HomeContentTab
 import com.cmc.curtaincall.feature.home.tab.HomeLiveTalkTab
-import com.cmc.curtaincall.feature.home.tab.HomeMyTab
-import com.cmc.curtaincall.feature.home.tab.HomeMyTabItem
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -96,56 +97,64 @@ private fun HomeContent(
                 .fillMaxSize()
                 .background(White)
         ) {
-            HomeMyTab(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .padding(top = 50.dp),
-                icon = painterResource(R.drawable.ic_gather),
-                title = stringResource(R.string.home_my_gathering_tab)
-            ) {
-                HomeMyTabItem(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 10.dp),
-                    image = painterResource(R.drawable.img_poster),
-                    title = "시카고",
-                    description = "공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹",
-                    numberOfMember = 2,
-                    numberOfTotal = 4,
-                    date = "2023.7.16(토)",
-                    time = "19:30"
-                )
-            }
-            HomeMyTab(
+            HomeMyRow(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
                     .padding(top = 40.dp),
-                icon = painterResource(R.drawable.ic_my_participation),
-                title = stringResource(R.string.home_my_participation_tab)
+                painter = painterResource(R.drawable.ic_gather),
+                title = stringResource(R.string.home_my_gathering_tab)
             ) {
-                HomeMyTabItem(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 10.dp),
-                    image = painterResource(R.drawable.img_poster),
-                    title = "시카고",
-                    description = "같이 볼 사람들 모여라~ ",
-                    numberOfMember = 3,
-                    numberOfTotal = 4,
-                    date = "2023.7.16(토)",
-                    time = "19:30"
-                )
-                HomeMyTabItem(
+                MyContentCard(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 12.dp),
-                    image = painterResource(R.drawable.img_poster),
+                    containColor = Cultured,
+                    shape = RoundedCornerShape(10.dp),
+                    painter = painterResource(R.drawable.img_poster),
                     title = "시카고",
-                    description = "같이 볼 사람들 모여라~ ",
-                    numberOfMember = 3,
-                    numberOfTotal = 4,
+                    description = "공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹",
+                    numberOfPartyMember = 2,
+                    numberOfTotalMember = 4,
+                    date = "2023.7.16(토)",
+                    time = "19:30"
+                )
+            }
+            HomeMyRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+                    .padding(top = 40.dp),
+                painter = painterResource(R.drawable.ic_my_participation),
+                title = stringResource(R.string.home_my_participation_tab)
+            ) {
+                MyContentCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.dp)
+                        .height(97.dp),
+                    containColor = Cultured,
+                    shape = RoundedCornerShape(10.dp),
+                    painter = painterResource(R.drawable.img_poster),
+                    title = "시카고",
+                    description = "공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹",
+                    numberOfPartyMember = 2,
+                    numberOfTotalMember = 4,
+                    date = "2023.7.16(토)",
+                    time = "19:30"
+                )
+                MyContentCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.dp)
+                        .height(97.dp),
+                    containColor = Cultured,
+                    shape = RoundedCornerShape(10.dp),
+                    painter = painterResource(R.drawable.img_poster),
+                    title = "시카고",
+                    description = "공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹",
+                    numberOfPartyMember = 2,
+                    numberOfTotalMember = 4,
                     date = "2023.7.16(토)",
                     time = "19:30"
                 )
@@ -182,6 +191,22 @@ private fun HomeContent(
             )
             Spacer(modifier = Modifier.height(50.dp))
         }
+    }
+}
+
+@Composable
+internal fun HomeMyRow(
+    modifier: Modifier = Modifier,
+    painter: Painter,
+    title: String,
+    content: @Composable () -> Unit
+) {
+    Column(modifier) {
+        ContentTitleRow(
+            painter = painter,
+            title = title
+        )
+        content()
     }
 }
 
