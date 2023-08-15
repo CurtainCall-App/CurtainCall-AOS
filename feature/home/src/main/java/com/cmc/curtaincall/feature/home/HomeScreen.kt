@@ -84,7 +84,7 @@ private fun HomeContent(
     val scrollState = rememberScrollState()
     Column(modifier.verticalScroll(scrollState)) {
         HomeBanner(
-            modifier = Modifier.height(284.dp),
+            modifier = Modifier.height(275.dp),
             onNavigateGuide = onNavigateGuide
         )
         Column(

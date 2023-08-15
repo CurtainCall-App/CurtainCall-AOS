@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -61,7 +61,7 @@ internal fun HomeBanner(
                     contentDescription = null,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
-                        .padding(end = 18.dp, bottom = (14.63).dp)
+                        .padding(end = 17.dp, bottom = (15.27).dp)
                 )
             },
             onClick = { onNavigateGuide(GuideType.DICTIONARY) }
@@ -76,7 +76,7 @@ internal fun HomeBanner(
                     contentDescription = null,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
-                        .padding(end = (18.5).dp, bottom = (28.37).dp)
+                        .padding(end = 20.dp, bottom = (18.37).dp)
                 )
             },
             onClick = { onNavigateGuide(GuideType.TICKETING) }
@@ -91,7 +91,7 @@ internal fun HomeBanner(
                     contentDescription = null,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
-                        .padding(end = 16.dp, bottom = (15.35).dp)
+                        .padding(end = (13.5).dp, bottom = (9.79).dp)
                 )
             },
             onClick = { onNavigateGuide(GuideType.DISCOUNT) }
@@ -99,35 +99,32 @@ internal fun HomeBanner(
     )
 
     val pagerState = rememberPagerState { bannerItems.size }
-    Column(
-        modifier = modifier.padding(horizontal = 20.dp)
-    ) {
+    Column(modifier) {
         Text(
             text = "안녕하세요. 고라파덕님:)",
-            modifier = Modifier.padding(top = 22.dp),
+            modifier = Modifier.padding(top = 22.dp, start = 20.dp),
             color = White,
             fontSize = 18.dp.toSp(),
             fontWeight = FontWeight.Bold,
             fontFamily = spoqahansanseeo
         )
-        Box(Modifier.padding(top = 14.dp)) {
-            HorizontalPager(
-                state = pagerState,
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 14.dp)
+                .height(170.dp)
+        ) { position ->
+            HomeBannerPagerItem(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clip(RoundedCornerShape(12.dp))
-                    .height(180.dp)
-            ) { position ->
-                HomeBannerPagerItem(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(bannerItems[position].color),
-                    title = bannerItems[position].title,
-                    description = bannerItems[position].description,
-                    content = bannerItems[position].content,
-                    onClick = bannerItems[position].onClick
-                )
-            }
+                    .padding(horizontal = 20.dp)
+                    .background(bannerItems[position].color, RoundedCornerShape(12.dp)),
+                title = bannerItems[position].title,
+                description = bannerItems[position].description,
+                content = bannerItems[position].content,
+                onClick = bannerItems[position].onClick
+            )
         }
         HorizontalPagerIndicator(
             pagerState = pagerState,
@@ -152,42 +149,49 @@ private fun HomeBannerPagerItem(
     content: @Composable BoxScope.() -> Unit = {},
     onClick: () -> Unit = {},
 ) {
-    Box(modifier.clickable { onClick() }) {
-        Column(
-            modifier = Modifier
-                .padding(start = 16.dp)
-                .padding(vertical = 20.dp)
-        ) {
-            Text(
-                text = title,
-                color = Cetacean_Blue,
-                fontSize = 22.dp.toSp(),
-                fontWeight = FontWeight.Bold,
-                fontFamily = spoqahansanseeo
-            )
-            Text(
-                text = description,
-                color = Cetacean_Blue,
-                fontSize = 13.dp.toSp(),
-                fontWeight = FontWeight.Medium,
-                fontFamily = spoqahansanseeo
-            )
-            Spacer(Modifier.weight(1f))
-            Box(
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Box(modifier.clickable { onClick() }) {
+            Column(
                 modifier = Modifier
-                    .size(50.dp, 30.dp)
-                    .background(Cetacean_Blue, RoundedCornerShape(16.dp)),
-                contentAlignment = Alignment.Center
+                    .padding(start = 16.dp)
+                    .padding(top = 18.dp, bottom = 16.dp)
             ) {
                 Text(
-                    text = stringResource(R.string.home_banner_showing),
-                    color = White,
-                    fontSize = 14.dp.toSp(),
+                    text = title,
+                    color = Cetacean_Blue,
+                    fontSize = 20.dp.toSp(),
                     fontWeight = FontWeight.Bold,
                     fontFamily = spoqahansanseeo
                 )
+                Text(
+                    text = description,
+                    modifier = Modifier.padding(top = 10.dp),
+                    color = Cetacean_Blue,
+                    fontSize = 13.dp.toSp(),
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = spoqahansanseeo,
+                    lineHeight = 17.dp.toSp()
+                )
+                Spacer(Modifier.weight(1f))
+                Box(
+                    modifier = Modifier
+                        .background(Cetacean_Blue, RoundedCornerShape(16.dp))
+                        .padding(horizontal = 12.dp, vertical = 4.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = stringResource(R.string.home_banner_showing),
+                        color = White,
+                        fontSize = 14.dp.toSp(),
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = spoqahansanseeo
+                    )
+                }
             }
+            content()
         }
-        content()
     }
 }
