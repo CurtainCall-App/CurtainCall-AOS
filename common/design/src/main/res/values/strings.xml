@@ -14,11 +14,7 @@
     <string name="onboarding_login">로그인 하기</string>
 
     <!-- login -->
-    <string name="login_logo_image_description">Login Logo Image</string>
-    <string name="login_start">3초만에 시작하기</string>
-    <string name="login_kakao">Login KaKao</string>
-    <string name="login_google">Login Google</string>
-    <string name="login_facebook">Login Facebook</string>
+    <string name="login_inquire">[문의하기]\ncurtaincall@gmail.com</string>
 
     <!-- signup -->
     <string name="signup_terms">약관 동의</string>
