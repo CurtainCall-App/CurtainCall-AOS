@@ -21,12 +21,14 @@ fun CurtainCallRoundedTextButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     title: String,
+    enabled: Boolean = true,
     containerColor: Color,
     contentColor: Color
 ) {
     Button(
         onClick = onClick,
         modifier = modifier,
+        enabled = enabled,
         shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(containerColor = containerColor)
     ) {
