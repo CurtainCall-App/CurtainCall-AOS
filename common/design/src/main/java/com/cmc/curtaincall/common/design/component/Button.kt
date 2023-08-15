@@ -8,8 +8,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
@@ -21,21 +23,23 @@ fun CurtainCallRoundedTextButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     title: String,
+    fontSize: TextUnit,
     enabled: Boolean = true,
     containerColor: Color,
-    contentColor: Color
+    contentColor: Color,
+    shape: Shape = RoundedCornerShape(12.dp)
 ) {
     Button(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        shape = RoundedCornerShape(12.dp),
+        shape = shape,
         colors = ButtonDefaults.buttonColors(containerColor = containerColor)
     ) {
         Text(
             text = title,
             color = contentColor,
-            fontSize = 16.dp.toSp(),
+            fontSize = fontSize,
             fontWeight = FontWeight.Medium,
             fontFamily = spoqahansanseeo
         )
@@ -49,6 +53,7 @@ private fun CurtainCallRoundedTextButtonPreview() {
         onClick = { },
         modifier = Modifier.fillMaxWidth(),
         title = "로그인하기",
+        fontSize = 16.dp.toSp(),
         containerColor = Me_Pink,
         contentColor = Cetacean_Blue
     )
