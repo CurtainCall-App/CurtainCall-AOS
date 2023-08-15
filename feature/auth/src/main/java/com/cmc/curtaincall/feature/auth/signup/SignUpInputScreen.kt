@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.auth.ui
+package com.cmc.curtaincall.feature.auth.signup
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*

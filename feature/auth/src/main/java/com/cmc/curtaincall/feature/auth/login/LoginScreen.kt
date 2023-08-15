@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.auth.ui
+package com.cmc.curtaincall.feature.auth.login
 
 import android.app.Activity.RESULT_OK
 import android.content.Context
