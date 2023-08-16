@@ -37,6 +37,7 @@ dependencies {
     implementation(libs.bundles.androidx.compose)
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.naver.map.compose)
+    implementation(libs.coil.compose)
 
     // 3rd party
     implementation(libs.calendar.compose)
