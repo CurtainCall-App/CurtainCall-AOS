@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.android.library)
@@ -10,6 +12,7 @@ android {
     namespace = "com.cmc.curtaincall.core.network"
 
     defaultConfig {
+        buildConfigField("String", "CURTAIN_CALL_BASE_URL", gradleLocalProperties(rootDir).getProperty("CURTAIN_CALL_BASE_URL"))
         consumerProguardFiles("consumer-rules.pro")
     }
 }

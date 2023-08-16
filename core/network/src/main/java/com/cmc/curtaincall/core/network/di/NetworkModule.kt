@@ -1,5 +1,6 @@
 package com.cmc.curtaincall.core.network.di
 
+import com.cmc.curtaincall.core.network.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -11,7 +12,7 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
-    private const val BASE_URL = "172.16.5.44:8080"
+    private const val BASE_URL = BuildConfig.CURTAIN_CALL_BASE_URL
 
     @Provides
     @Singleton
