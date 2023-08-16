@@ -7,14 +7,13 @@ import androidx.navigation.navigation
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
-import com.cmc.curtaincall.feature.performance.ui.PerformanceScreen
-import com.cmc.curtaincall.feature.performance.ui.detail.PerformanceDetailScreen
-import com.cmc.curtaincall.feature.performance.ui.lostitem.PerformanceLostItemCreateScreen
-import com.cmc.curtaincall.feature.performance.ui.lostitem.PerformanceLostItemDetailScreen
-import com.cmc.curtaincall.feature.performance.ui.lostitem.PerformanceLostItemScreen
-import com.cmc.curtaincall.feature.performance.ui.review.PerformanceReviewCreateScreen
-import com.cmc.curtaincall.feature.performance.ui.review.PerformanceReviewScreen
-import com.cmc.curtaincall.feature.performance.ui.upload.PerformanceUploadScreen
+import com.cmc.curtaincall.feature.performance.detail.PerformanceDetailScreen
+import com.cmc.curtaincall.feature.performance.lostitem.PerformanceLostItemCreateScreen
+import com.cmc.curtaincall.feature.performance.lostitem.PerformanceLostItemDetailScreen
+import com.cmc.curtaincall.feature.performance.lostitem.PerformanceLostItemScreen
+import com.cmc.curtaincall.feature.performance.review.PerformanceReviewCreateScreen
+import com.cmc.curtaincall.feature.performance.review.PerformanceReviewScreen
+import com.cmc.curtaincall.feature.performance.upload.PerformanceUploadScreen
 
 private const val PERFORMANCE_GRAPH = "performance_graph"
 const val PERFORMANCE = "performance"

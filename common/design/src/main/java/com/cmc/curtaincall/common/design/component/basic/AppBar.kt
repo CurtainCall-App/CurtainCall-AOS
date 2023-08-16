@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.common.design.component
+package com.cmc.curtaincall.common.design.component.basic
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -171,6 +171,34 @@ fun SearchAppBar(
             .height(54.dp)
             .background(containerColor)
             .padding(top = 13.dp, bottom = 5.dp),
+        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = containerColor)
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopAppBarOnlySearch(
+    containerColor: Color,
+    contentColor: Color,
+    onClick: () -> Unit
+) {
+    TopAppBar(
+        title = {},
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(54.dp)
+            .background(containerColor)
+            .padding(top = 20.dp, bottom = 10.dp),
+        actions = {
+            IconButton(onClick = onClick) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_search),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                    tint = contentColor
+                )
+            }
+        },
         colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = containerColor)
     )
 }

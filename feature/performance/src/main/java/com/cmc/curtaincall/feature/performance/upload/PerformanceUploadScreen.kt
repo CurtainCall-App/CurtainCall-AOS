@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.performance.ui.upload
+package com.cmc.curtaincall.feature.performance.upload
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image

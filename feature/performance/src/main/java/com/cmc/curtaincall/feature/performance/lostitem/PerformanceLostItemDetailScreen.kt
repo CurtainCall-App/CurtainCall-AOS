@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.performance.ui.lostitem
+package com.cmc.curtaincall.feature.performance.lostitem
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,7 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.common.design.component.TopAppBarWithReportAction
+import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithReportAction
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
