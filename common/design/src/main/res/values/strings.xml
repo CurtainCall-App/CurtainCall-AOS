@@ -120,6 +120,7 @@
     <string name="performance_review_create_request_placeholder">공연 후기를 남겨주세요.</string>
     <string name="performance_review_create_write_number_of_text">글자수 제한 (%d/30)</string>
     <string name="performance_review_create_write_complete">작성 완료</string>
+    <string name="performance_lostitem_empty">아직 분실물이 없어요!</string>
     <string name="performance_find_lost_item">분실물 찾기</string>
     <string name="performance_find_lost_item_date">잃어버린 날짜</string>
     <string name="performance_find_lost_item_type">물건 분류</string>
