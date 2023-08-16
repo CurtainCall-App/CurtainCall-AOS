@@ -4,7 +4,14 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,8 +22,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.component.items.LostItem
 import com.cmc.curtaincall.common.design.extensions.toSp
-import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.common.design.theme.Black_Coral
+import com.cmc.curtaincall.common.design.theme.Bright_Gray
+import com.cmc.curtaincall.common.design.theme.Chinese_Black
+import com.cmc.curtaincall.common.design.theme.Me_Pink
+import com.cmc.curtaincall.common.design.theme.Roman_Silver
+import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 
 @Composable
 internal fun PerformanceLostItemTabScreen(
@@ -35,8 +48,8 @@ internal fun PerformanceLostItemTabScreen(
             Spacer(Modifier.weight(1f))
             Box(
                 modifier = Modifier
-                    .size(71.dp, 28.dp)
                     .border(BorderStroke(1.dp, Me_Pink), RoundedCornerShape(14.dp))
+                    .padding(vertical = 6.dp, horizontal = 10.dp)
                     .clickable { onNavigateLostItem() },
                 contentAlignment = Alignment.Center
             ) {
@@ -49,17 +62,46 @@ internal fun PerformanceLostItemTabScreen(
                 )
             }
         }
-        Column(Modifier.padding(top = 14.dp, bottom = 59.dp)) {
-            PerformanceLostItem(Modifier.fillMaxWidth())
-            PerformanceLostItem(
+        Column(
+            modifier = Modifier
+                .padding(top = 14.dp)
+                .heightIn(min = 317.dp)
+        ) {
+//            EmptyItem(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(top = 70.dp),
+//                alert = stringResource(R.string.performance_lostitem_empty)
+//            )
+            LostItem(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 12.dp)
+                    .padding(bottom = 12.dp),
+                painter = painterResource(R.drawable.img_default_performance),
+                title = "닥스지갑",
+                date = "2023.6.15",
+                getLocation = "LG아트센터 서울",
+                storeLocation = "LG아트센터 서울"
             )
-            PerformanceLostItem(
+            LostItem(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 12.dp)
+                    .padding(bottom = 12.dp),
+                painter = painterResource(R.drawable.img_default_performance),
+                title = "닥스지갑",
+                date = "2023.6.15",
+                getLocation = "LG아트센터 서울",
+                storeLocation = "LG아트센터 서울"
+            )
+            LostItem(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 12.dp),
+                painter = painterResource(R.drawable.img_default_performance),
+                title = "닥스지갑",
+                date = "2023.6.15",
+                getLocation = "LG아트센터 서울",
+                storeLocation = "LG아트센터 서울"
             )
         }
     }

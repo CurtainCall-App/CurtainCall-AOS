@@ -2,7 +2,16 @@ package com.cmc.curtaincall.feature.performance.detail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,20 +20,33 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.extensions.toSp
-import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.common.design.theme.Black
+import com.cmc.curtaincall.common.design.theme.Bright_Gray
+import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
+import com.cmc.curtaincall.common.design.theme.Chinese_Black
+import com.cmc.curtaincall.common.design.theme.White
+import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 import com.cmc.curtaincall.feature.performance.lostitem.PerformanceLostItemTabScreen
 import com.cmc.curtaincall.feature.performance.review.PerformanceReviewTabScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -40,7 +62,7 @@ internal fun PerformanceDetailScreen(
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(Nero)
+    systemUiController.setStatusBarColor(Black)
 
     val scrollState = rememberScrollState()
     Box(
@@ -49,35 +71,13 @@ internal fun PerformanceDetailScreen(
             .verticalScroll(scrollState),
         contentAlignment = Alignment.TopCenter
     ) {
-        Box(
+        PerformanceDetailContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(668.dp)
-                .background(Raisin_Black),
-            contentAlignment = Alignment.TopCenter
-        ) {
-            TopAppBarWithBack(
-                title = "비스티",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp),
-                containerColor = Color.Transparent,
-                contentColor = White,
-                onClick = onBack
-            )
-            Image(
-                painter = painterResource(R.drawable.bg_performance_detail),
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.FillWidth
-            )
-            PerformanceDetailContent(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 54.dp)
-            )
-        }
-
+                .background(Cetacean_Blue.copy(0.8f)),
+            onBack = onBack
+        )
         Column(
             modifier = Modifier
                 .padding(top = 644.dp)
@@ -127,7 +127,7 @@ private fun PerformanceDetailTab(
                     text = TabType.DETAIL.label,
                     modifier = Modifier.padding(top = 10.dp),
                     color = Chinese_Black,
-                    fontSize = 16.dp.toSp(),
+                    fontSize = 15.dp.toSp(),
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo
                 )
@@ -154,7 +154,7 @@ private fun PerformanceDetailTab(
                     text = TabType.REVIEW.label,
                     modifier = Modifier.padding(top = 10.dp),
                     color = Chinese_Black,
-                    fontSize = 16.dp.toSp(),
+                    fontSize = 15.dp.toSp(),
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo
                 )
@@ -181,7 +181,7 @@ private fun PerformanceDetailTab(
                     text = TabType.LOST_ITEM.label,
                     modifier = Modifier.padding(top = 10.dp),
                     color = Chinese_Black,
-                    fontSize = 16.dp.toSp(),
+                    fontSize = 15.dp.toSp(),
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo
                 )
@@ -193,22 +193,24 @@ private fun PerformanceDetailTab(
                 PerformanceDetailTabScreen(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 40.dp)
+                        .padding(top = 50.dp)
                 )
             }
+
             TabType.REVIEW -> {
                 PerformanceReviewTabScreen(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 32.dp),
+                        .padding(top = 50.dp),
                     onNavigateReview = onNavigateReview
                 )
             }
+
             TabType.LOST_ITEM -> {
                 PerformanceLostItemTabScreen(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 32.dp),
+                        .padding(top = 50.dp),
                     onNavigateLostItem = onNavigateLostItem
                 )
             }
@@ -218,28 +220,59 @@ private fun PerformanceDetailTab(
 
 @Composable
 private fun PerformanceDetailContent(
+    modifier: Modifier = Modifier,
+    onBack: () -> Unit
+) {
+    Box(modifier) {
+        Image(
+            painter = painterResource(R.drawable.img_poster),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxSize()
+                .blur(50.dp)
+                .alpha(0.3f),
+            contentScale = ContentScale.FillBounds
+        )
+        TopAppBarWithBack(
+            title = "비스티",
+            containerColor = Color.Transparent,
+            contentColor = White,
+            onClick = onBack
+        )
+        PerformanceDetailInfoContent(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 54.dp)
+        )
+    }
+}
+
+@Composable
+private fun PerformanceDetailInfoContent(
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter = painterResource(R.drawable.img_poster),
+        AsyncImage(
+            model = null,
+            error = painterResource(R.drawable.img_poster),
             contentDescription = null,
             modifier = Modifier
                 .padding(top = 43.dp)
                 .size(160.dp, 212.dp)
+                .clip(RoundedCornerShape(15.dp)),
+            contentScale = ContentScale.FillBounds
         )
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
+                .padding(top = 30.dp)
         ) {
             PerformanceDetailHeader(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 30.dp)
+                modifier = Modifier.fillMaxWidth()
             )
             PerformanceDetailBody(
                 modifier = Modifier
@@ -348,12 +381,12 @@ private fun PerformanceDetailBody(
 private fun PerformanceDetailHeader(
     modifier: Modifier = Modifier
 ) {
-    var selectBookmark by remember { mutableStateOf(false) }
+    var isSelectBookmark by remember { mutableStateOf(false) }
     Column(modifier) {
         Box(
             modifier = Modifier
-                .size(56.dp, 24.dp)
-                .background(White, RoundedCornerShape(20.dp)),
+                .background(White, RoundedCornerShape(20.dp))
+                .padding(horizontal = 10.dp, vertical = 4.dp),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -371,11 +404,17 @@ private fun PerformanceDetailHeader(
                     color = White,
                     fontSize = 22.dp.toSp(),
                     fontWeight = FontWeight.Bold,
-                    fontFamily = spoqahansanseeo
+                    fontFamily = spoqahansanseeo,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
-                Row(Modifier.padding(top = 8.dp)) {
+                Row(
+                    modifier = Modifier.padding(top = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Text(
                         text = "예매율 29.0% |",
+                        modifier = Modifier.padding(end = 8.dp),
                         color = White,
                         fontSize = 13.dp.toSp(),
                         fontWeight = FontWeight.Medium,
@@ -384,13 +423,12 @@ private fun PerformanceDetailHeader(
                     Icon(
                         painter = painterResource(R.drawable.ic_star),
                         contentDescription = null,
-                        modifier = Modifier
-                            .padding(start = 5.dp, end = 2.dp)
-                            .size(14.dp),
+                        modifier = Modifier.size(14.dp),
                         tint = Color.Unspecified
                     )
                     Text(
                         text = "4.8 (324)",
+                        modifier = Modifier.padding(start = 2.dp),
                         color = White,
                         fontSize = 13.dp.toSp(),
                         fontWeight = FontWeight.Medium,
@@ -399,16 +437,16 @@ private fun PerformanceDetailHeader(
                 }
             }
             IconButton(
-                onClick = { selectBookmark = selectBookmark.not() },
+                onClick = { isSelectBookmark = isSelectBookmark.not() },
                 modifier = Modifier
                     .clip(CircleShape)
                     .size(30.dp),
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = if (selectBookmark) Cetacean_Blue else Bright_Gray
+                    containerColor = if (isSelectBookmark) Cetacean_Blue else Bright_Gray
                 )
             ) {
                 Icon(
-                    painter = painterResource(if (selectBookmark) R.drawable.ic_bookmark_sel else R.drawable.ic_bookmark),
+                    painter = painterResource(if (isSelectBookmark) R.drawable.ic_bookmark_sel else R.drawable.ic_bookmark),
                     contentDescription = null,
                     tint = Color.Unspecified
                 )
