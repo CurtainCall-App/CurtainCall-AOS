@@ -23,6 +23,7 @@ import com.cmc.curtaincall.common.design.component.content.card.PerformanceDetai
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.holix.android.bottomsheetdialog.compose.BottomSheetDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,6 +77,7 @@ private fun PerformanceContent(
     val context = LocalContext.current
     var isCheckFirstType by remember { mutableStateOf(true) }
     var sortType by remember { mutableStateOf(context.getString(R.string.performance_search_rank_sort)) }
+    var showDialog by remember { mutableStateOf(false) }
 
     Column(modifier) {
         LazyColumn(
@@ -105,7 +107,8 @@ private fun PerformanceContent(
                     )
                     SortTypeRow(
                         modifier = Modifier.padding(top = 28.dp),
-                        sortType = sortType
+                        sortType = sortType,
+                        onClick = { showDialog = true }
                     )
                 }
             }
