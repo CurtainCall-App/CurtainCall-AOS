@@ -2,7 +2,16 @@ package com.cmc.curtaincall.feature.performance.detail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -11,7 +20,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -28,7 +41,12 @@ import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.extensions.toSp
-import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.common.design.theme.Black
+import com.cmc.curtaincall.common.design.theme.Bright_Gray
+import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
+import com.cmc.curtaincall.common.design.theme.Chinese_Black
+import com.cmc.curtaincall.common.design.theme.White
+import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 import com.cmc.curtaincall.feature.performance.lostitem.PerformanceLostItemTabScreen
 import com.cmc.curtaincall.feature.performance.review.PerformanceReviewTabScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -109,7 +127,7 @@ private fun PerformanceDetailTab(
                     text = TabType.DETAIL.label,
                     modifier = Modifier.padding(top = 10.dp),
                     color = Chinese_Black,
-                    fontSize = 16.dp.toSp(),
+                    fontSize = 15.dp.toSp(),
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo
                 )
@@ -136,7 +154,7 @@ private fun PerformanceDetailTab(
                     text = TabType.REVIEW.label,
                     modifier = Modifier.padding(top = 10.dp),
                     color = Chinese_Black,
-                    fontSize = 16.dp.toSp(),
+                    fontSize = 15.dp.toSp(),
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo
                 )
@@ -163,7 +181,7 @@ private fun PerformanceDetailTab(
                     text = TabType.LOST_ITEM.label,
                     modifier = Modifier.padding(top = 10.dp),
                     color = Chinese_Black,
-                    fontSize = 16.dp.toSp(),
+                    fontSize = 15.dp.toSp(),
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo
                 )
@@ -175,7 +193,7 @@ private fun PerformanceDetailTab(
                 PerformanceDetailTabScreen(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 40.dp)
+                        .padding(top = 50.dp)
                 )
             }
 
@@ -183,7 +201,7 @@ private fun PerformanceDetailTab(
                 PerformanceReviewTabScreen(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 32.dp),
+                        .padding(top = 50.dp),
                     onNavigateReview = onNavigateReview
                 )
             }
@@ -192,7 +210,7 @@ private fun PerformanceDetailTab(
                 PerformanceLostItemTabScreen(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 32.dp),
+                        .padding(top = 50.dp),
                     onNavigateLostItem = onNavigateLostItem
                 )
             }

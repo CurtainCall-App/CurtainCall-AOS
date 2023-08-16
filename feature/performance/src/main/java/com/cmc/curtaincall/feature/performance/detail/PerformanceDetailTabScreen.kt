@@ -1,21 +1,29 @@
 package com.cmc.curtaincall.feature.performance.detail
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.component.basic.CurtainCallBorderTextButton
+import com.cmc.curtaincall.common.design.component.content.card.PerformanceCard
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.naver.maps.geometry.LatLng
@@ -27,47 +35,114 @@ internal fun PerformanceDetailTabScreen(
     modifier: Modifier = Modifier
 ) {
     Column(modifier) {
-        PerformanceStoryRow(Modifier.padding(horizontal = 20.dp))
-        Spacer(
+        // TODO PerformanceNotice
+        PerformanceNotice(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 30.dp)
-                .background(Bright_Gray)
-                .height(1.dp)
+                .padding(bottom = 40.dp)
         )
-        PerformanceTimeRow(Modifier.padding(start = 20.dp))
-        Spacer(
+        PerformanceTimeRow(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 30.dp)
-                .background(Bright_Gray)
-                .height(1.dp)
+                .padding(horizontal = 20.dp)
+                .padding(bottom = 40.dp)
         )
-        PerformanceCastingRow(Modifier.padding(start = 20.dp))
         Spacer(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 30.dp)
-                .background(Bright_Gray)
-                .height(1.dp)
-        )
-        PerformanceImageRow(Modifier.padding(start = 20.dp))
-        Spacer(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 40.dp, bottom = 30.dp)
                 .background(Ghost_White)
                 .height(7.dp)
         )
-        PerformanceAnnouncement(Modifier.padding(horizontal = 20.dp))
+        PerformancePlace(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .padding(vertical = 30.dp)
+        )
         Spacer(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 30.dp)
+                .padding(horizontal = 20.dp)
                 .background(Bright_Gray)
                 .height(1.dp)
         )
-        PerformancePlace(Modifier.padding(horizontal = 20.dp))
+        PerformanceSimilarContent(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 30.dp, bottom = 103.dp)
+        )
+    }
+}
+
+@Composable
+private fun PerformanceSimilarContent(
+    modifier: Modifier = Modifier
+) {
+    Column(modifier) {
+        Text(
+            text = stringResource(R.string.performance_detail_similar_content),
+            modifier = Modifier.padding(start = 20.dp),
+            color = Chinese_Black,
+            fontSize = 17.dp.toSp(),
+            fontWeight = FontWeight.Bold,
+            fontFamily = spoqahansanseeo
+        )
+        LazyRow(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 14.dp)
+        ) {
+            itemsIndexed(List(10) {}) { index, item ->
+                if (index == 0) Spacer(Modifier.size(20.dp))
+                Row {
+                    PerformanceCard(
+                        modifier = Modifier.width(120.dp),
+                        title = "데스노트",
+                        painter = painterResource(R.drawable.dummy_poster),
+                        rate = 4.89f,
+                        numberOfTotal = 1012
+                    )
+                    Spacer(Modifier.size(12.dp))
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PerformanceNotice(
+    modifier: Modifier = Modifier
+) {
+    var isClickMore by remember { mutableStateOf(false) }
+    Column(modifier) {
+        AsyncImage(
+            model = null,
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxWidth()
+                .then(
+                    if (isClickMore.not()) {
+                        Modifier.aspectRatio(360 / 300f)
+                    } else {
+                        Modifier
+                    }
+                ),
+            error = painterResource(R.drawable.dummy_performance_poster),
+            contentScale = ContentScale.FillWidth
+        )
+        CurtainCallBorderTextButton(
+            onClick = { isClickMore = isClickMore.not() },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 20.dp)
+                .padding(horizontal = 20.dp),
+            title = stringResource(R.string.performance_detail_more_view),
+            fontSize = 16.dp.toSp(),
+            containerColor = White,
+            contentColor = Me_Pink,
+            borderColor = Me_Pink,
+            radiusSize = 12.dp
+        )
     }
 }
 
@@ -84,7 +159,7 @@ private fun PerformancePlace(
             fontWeight = FontWeight.Bold,
             fontFamily = spoqahansanseeo
         )
-        Row(Modifier.padding(top = 10.dp)) {
+        Row(Modifier.padding(top = 14.dp)) {
             Text(
                 text = stringResource(R.string.performance_detail_place_name),
                 modifier = Modifier.width(72.dp),
@@ -154,7 +229,7 @@ private fun PerformancePlace(
         }
         NaverMap(
             modifier = Modifier
-                .padding(top = 20.dp, bottom = 30.dp)
+                .padding(top = 20.dp)
                 .fillMaxWidth()
                 .height(142.dp)
                 .clip(RoundedCornerShape(10.dp)),
@@ -163,112 +238,15 @@ private fun PerformancePlace(
             ),
             uiSettings = MapUiSettings(
                 isScrollGesturesEnabled = false,
-                isZoomGesturesEnabled = false,
                 isTiltGesturesEnabled = false,
                 isRotateGesturesEnabled = false,
+                isStopGesturesEnabled = false,
+                isZoomGesturesEnabled = false,
                 isZoomControlEnabled = false,
                 isLogoClickEnabled = false
             )
         ) {
             Marker(MarkerState(LatLng(37.56480446250912, 126.82722338487427)))
-        }
-    }
-}
-
-@Composable
-private fun PerformanceAnnouncement(
-    modifier: Modifier = Modifier
-) {
-    Column(modifier) {
-        Text(
-            text = stringResource(R.string.performance_detail_announcement),
-            color = Chinese_Black,
-            fontSize = 17.dp.toSp(),
-            fontWeight = FontWeight.Bold,
-            fontFamily = spoqahansanseeo
-        )
-        Text(
-            text = "※ 본 공연은 LG아트센터 서울 연동 공연으로, 예매대기 서비스 및 취소 후 재예매 서비스가 제공되지 않습니다.\n\n※ LG아트센터가 역삼에서 마곡으로 이전하였습니다.\n" +
-                "방문에 혼선이 없으시기 바랍니다.\n\n※ LG아트센터 서울, 강서구 마곡중앙로 136\n주차장이 협소하오니 대중교통을 이용하여 주시기 바랍니다.\n" +
-                "지하철 9호선 및 공항철도 '마곡나루역' 3-4번 출구를 통하시면 공연장 로비와 바로 연결됩니다.",
-            modifier = Modifier.padding(top = 10.dp),
-            color = Nero,
-            fontWeight = FontWeight.Normal,
-            fontFamily = spoqahansanseeo,
-            lineHeight = 20.dp.toSp()
-        )
-    }
-}
-
-@Composable
-private fun PerformanceImageRow(
-    modifier: Modifier = Modifier
-) {
-    Column(modifier) {
-        Text(
-            text = stringResource(R.string.performance_detail_related_image_or_video),
-            color = Chinese_Black,
-            fontSize = 17.dp.toSp(),
-            fontWeight = FontWeight.Bold,
-            fontFamily = spoqahansanseeo
-        )
-        LazyRow(Modifier.padding(top = 16.dp)) {
-            items(10) {
-                Image(
-                    painter = painterResource(R.drawable.img_example_detail),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .padding(end = 10.dp)
-                        .size(100.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun PerformanceCastingRow(
-    modifier: Modifier = Modifier
-) {
-    Column(modifier) {
-        Text(
-            text = stringResource(R.string.performance_detail_casting),
-            color = Chinese_Black,
-            fontSize = 17.dp.toSp(),
-            fontWeight = FontWeight.Bold,
-            fontFamily = spoqahansanseeo
-        )
-        LazyRow(Modifier.padding(top = 16.dp)) {
-            items(10) {
-                Column(
-                    modifier = Modifier.padding(end = 14.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.img_profile),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(52.dp)
-                            .clip(CircleShape)
-                    )
-                    Text(
-                        text = "김종구",
-                        modifier = Modifier.padding(top = 6.dp),
-                        color = Nero,
-                        fontSize = 14.dp.toSp(),
-                        fontWeight = FontWeight.Medium,
-                        fontFamily = spoqahansanseeo
-                    )
-                    Text(
-                        text = "이재현",
-                        color = Roman_Silver,
-                        fontSize = 12.dp.toSp(),
-                        fontWeight = FontWeight.Medium,
-                        fontFamily = spoqahansanseeo
-                    )
-                }
-            }
         }
     }
 }
@@ -311,7 +289,7 @@ private fun PerformanceTimeRow(
                     .background(Nero, CircleShape)
             )
             Text(
-                text = "화, 수, 목, 금 | 19:30\n주말 | 15:00\n* 단, 6/6화 | 15:00",
+                text = "화, 수, 목, 금 | 19:30\n주말 | 15:00\n공휴일 | 15:00",
                 modifier = Modifier.padding(start = 10.dp),
                 color = Nero,
                 fontSize = 14.dp.toSp(),
@@ -320,29 +298,5 @@ private fun PerformanceTimeRow(
                 lineHeight = 22.dp.toSp()
             )
         }
-    }
-}
-
-@Composable
-private fun PerformanceStoryRow(
-    modifier: Modifier = Modifier
-) {
-    Column(modifier) {
-        Text(
-            text = stringResource(R.string.performance_detail_story_introduction),
-            color = Chinese_Black,
-            fontSize = 17.dp.toSp(),
-            fontWeight = FontWeight.Bold,
-            fontFamily = spoqahansanseeo
-        )
-        Text(
-            text = "시끄러운 도시의 소음, 서울의 밤거리, 클랙슨 소리가 사방에 퍼진 적들처럼 쏟아지면, 개츠비의 간판이 켜진다.",
-            modifier = Modifier.padding(top = 16.dp),
-            color = Nero,
-            fontSize = 14.dp.toSp(),
-            fontWeight = FontWeight.Medium,
-            fontFamily = spoqahansanseeo,
-            lineHeight = 22.dp.toSp()
-        )
     }
 }
