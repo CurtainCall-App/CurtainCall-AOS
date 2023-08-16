@@ -3,7 +3,12 @@ package com.cmc.curtaincall.feature.performance.review
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,9 +18,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.common.design.component.custom.RatingBar
+import com.cmc.curtaincall.common.design.component.items.EmptyItem
 import com.cmc.curtaincall.common.design.extensions.toSp
-import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.common.design.theme.Chinese_Black
+import com.cmc.curtaincall.common.design.theme.Me_Pink
+import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 
 @Composable
 internal fun PerformanceReviewTabScreen(
@@ -23,19 +30,19 @@ internal fun PerformanceReviewTabScreen(
     onNavigateReview: () -> Unit
 ) {
     Column(modifier.padding(horizontal = 20.dp)) {
-        Row {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = "총 324개의 한 줄 리뷰",
+                modifier = Modifier.weight(1f),
                 color = Chinese_Black,
                 fontSize = 17.dp.toSp(),
                 fontWeight = FontWeight.Bold,
                 fontFamily = spoqahansanseeo
             )
-            Spacer(Modifier.weight(1f))
             Box(
                 modifier = Modifier
-                    .size(71.dp, 28.dp)
                     .border(BorderStroke(1.dp, Me_Pink), RoundedCornerShape(14.dp))
+                    .padding(vertical = 6.dp, horizontal = 10.dp)
                     .clickable { onNavigateReview() },
                 contentAlignment = Alignment.Center
             ) {
@@ -48,51 +55,44 @@ internal fun PerformanceReviewTabScreen(
                 )
             }
         }
-        Column(Modifier.padding(top = 14.dp, bottom = 20.dp)) {
-            PerformanceReviewSimpleItem(Modifier.fillMaxWidth())
-            PerformanceReviewSimpleItem(
+        Column(
+            modifier = Modifier
+                .padding(top = 14.dp)
+                .heightIn(min = 317.dp)
+        ) {
+            EmptyItem(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 12.dp)
+                    .padding(top = 70.dp),
+                alert = stringResource(R.string.performance_review_empty)
             )
-            PerformanceReviewSimpleItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 12.dp)
-            )
+//            ReviewItem(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(bottom = 12.dp),
+//                rating = 4,
+//                name = "zkvpzkvpzk",
+//                date = "2023.6.28",
+//                comment = "최고령 리어왕'으로 기네스북에 오를 예정이라시는~!"
+//            )
+//            ReviewItem(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(bottom = 12.dp),
+//                rating = 4,
+//                name = "zkvpzkvpzk",
+//                date = "2023.6.28",
+//                comment = "최고령 리어왕'으로 기네스북에 오를 예정이라시는~!"
+//            )
+//            ReviewItem(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(bottom = 12.dp),
+//                rating = 4,
+//                name = "zkvpzkvpzk",
+//                date = "2023.6.28",
+//                comment = "최고령 리어왕'으로 기네스북에 오를 예정이라시는~!"
+//            )
         }
-    }
-}
-
-@Composable
-private fun PerformanceReviewSimpleItem(
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-            .border(BorderStroke(1.dp, Bright_Gray), RoundedCornerShape(10.dp))
-            .padding(start = 12.dp, top = 14.dp, bottom = 16.dp)
-    ) {
-        RatingBar(
-            modifier = Modifier.size(14.dp),
-            rating = 4
-        )
-        Text(
-            text = "zkvpzkvpzk | 2023.6.28",
-            modifier = Modifier.padding(top = 6.dp),
-            color = Black_Coral,
-            fontSize = 13.dp.toSp(),
-            fontWeight = FontWeight.Medium,
-            fontFamily = spoqahansanseeo
-        )
-        Text(
-            text = "최고령 리어왕'으로 기네스북에 오를 예정이라시는~!",
-            modifier = Modifier.padding(top = 12.dp),
-            color = Nero,
-            fontSize = 13.dp.toSp(),
-            fontWeight = FontWeight.Medium,
-            fontFamily = spoqahansanseeo,
-            lineHeight = 16.dp.toSp()
-        )
     }
 }
