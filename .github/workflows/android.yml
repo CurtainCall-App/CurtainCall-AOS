@@ -66,6 +66,12 @@ jobs:
         env:
           API_KEY: ${{ secrets.NAVER_API_MAP_KEY }}
 
+      - name: Access CURTAIN_CALL_BASE_URL
+        run: echo CURTAIN_CALL_BASE_URL=\"BASE_URL\" >> local.properties
+        shell: bash
+        env:
+          BASE_URL: ${{ secrets.CURTAIN_CALL_BASE_URL }}
+
       - name: Run ktlint
         run: ./gradlew ktlintCheck
 

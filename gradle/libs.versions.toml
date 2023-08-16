@@ -30,6 +30,9 @@ logging-interceptor = "4.11.0"
 ## hilt
 hilt = "2.45"
 
+## coroutine
+corotine-core = "1.6.4"
+
 # 3rd party library
 timber = "5.0.1"
 firebase-bom = "32.1.1"
@@ -86,6 +89,9 @@ logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-intercep
 # hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+
+# coroutine
+coroutine-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "corotine-core" }
 
 # 3rd part library
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
