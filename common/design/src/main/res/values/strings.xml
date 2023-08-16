@@ -93,6 +93,10 @@
     <string name="performance_search_rank_sort">별점순</string>
     <string name="performance_search_popular_sort">인기순</string>
     <string name="performance_search_korean_sort">가나다순</string>
+    <string name="performance_period">기간</string>
+    <string name="performance_running_time">시간</string>
+    <string name="performance_date">일정</string>
+    <string name="performance_location">장소</string>
     <string name="performance_detail_period">공연기간</string>
     <string name="performance_detail_viewing_time">관람시간</string>
     <string name="performance_detail_viewing_age">관람연령</string>
