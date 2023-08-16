@@ -1,5 +1,6 @@
 package com.cmc.curtaincall.common.design.component.basic
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -30,6 +31,34 @@ import com.cmc.curtaincall.common.design.theme.Me_Pink
 import com.cmc.curtaincall.common.design.theme.Silver_Sand
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
+
+@Composable
+fun CurtainCallBorderTextButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    title: String,
+    fontSize: TextUnit,
+    containerColor: Color,
+    contentColor: Color,
+    borderColor: Color,
+    radiusSize: Dp
+) {
+    Button(
+        onClick = onClick,
+        modifier = modifier,
+        shape = RoundedCornerShape(radiusSize),
+        border = BorderStroke(1.dp, borderColor),
+        colors = ButtonDefaults.buttonColors(containerColor = containerColor)
+    ) {
+        Text(
+            text = title,
+            color = contentColor,
+            fontSize = fontSize,
+            fontWeight = FontWeight.Medium,
+            fontFamily = spoqahansanseeo
+        )
+    }
+}
 
 @Composable
 fun CurtainCallRoundedTextButton(
@@ -132,5 +161,20 @@ private fun CurtainCallSelectTypeButtonPreview() {
             .height(45.dp),
         firstType = "연극",
         lastType = "뮤지컬"
+    )
+}
+
+@Preview
+@Composable
+private fun CurtainCallBorderTextButtonPreview() {
+    CurtainCallBorderTextButton(
+        onClick = { },
+        modifier = Modifier.fillMaxWidth(),
+        title = stringResource(R.string.performance_detail_more_view),
+        fontSize = 16.dp.toSp(),
+        containerColor = White,
+        contentColor = Me_Pink,
+        borderColor = Me_Pink,
+        radiusSize = 12.dp
     )
 }
