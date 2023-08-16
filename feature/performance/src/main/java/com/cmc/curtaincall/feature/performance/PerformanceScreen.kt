@@ -16,14 +16,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.common.design.component.CurtainCallSelectTypeButton
-import com.cmc.curtaincall.common.design.component.SearchAppBar
-import com.cmc.curtaincall.common.design.component.TopAppBarOnlySearch
+import com.cmc.curtaincall.common.design.component.basic.CurtainCallSelectTypeButton
+import com.cmc.curtaincall.common.design.component.basic.SearchAppBar
+import com.cmc.curtaincall.common.design.component.basic.TopAppBarOnlySearch
 import com.cmc.curtaincall.common.design.component.content.card.PerformanceDetailCard
+import com.cmc.curtaincall.common.design.component.custom.SelectSortTypeBottomSheet
+import com.cmc.curtaincall.common.design.component.custom.SortType
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.holix.android.bottomsheetdialog.compose.BottomSheetDialog
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,9 +77,18 @@ private fun PerformanceContent(
 ) {
     val context = LocalContext.current
     var isCheckFirstType by remember { mutableStateOf(true) }
-    var sortType by remember { mutableStateOf(context.getString(R.string.performance_search_rank_sort)) }
+    var sortType by remember { mutableStateOf(SortType.STAR) }
     var showDialog by remember { mutableStateOf(false) }
 
+    if (showDialog) {
+        SelectSortTypeBottomSheet(
+            sortType = sortType,
+            onSelectSortType = {
+                sortType = it
+                showDialog = false
+            }
+        )
+    }
     Column(modifier) {
         LazyColumn(
             modifier = Modifier
@@ -145,7 +155,7 @@ private fun PerformanceContent(
 @Composable
 private fun SortTypeRow(
     modifier: Modifier = Modifier,
-    sortType: String,
+    sortType: SortType,
     onClick: () -> Unit = {}
 ) {
     Row(
@@ -153,7 +163,7 @@ private fun SortTypeRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = sortType,
+            text = sortType.value,
             color = Nero,
             fontSize = 13.dp.toSp(),
             fontWeight = FontWeight.Medium,

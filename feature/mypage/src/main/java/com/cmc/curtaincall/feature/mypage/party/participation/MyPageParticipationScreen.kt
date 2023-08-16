@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.common.design.component.TopAppBarWithBack
+import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.theme.Bright_Gray
 import com.cmc.curtaincall.common.design.theme.Nero
 import com.cmc.curtaincall.feature.mypage.party.MyPagePartyMenuTab

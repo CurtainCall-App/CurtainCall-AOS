@@ -40,7 +40,6 @@ dependencies {
 
     // 3rd party
     implementation(libs.calendar.compose)
-    implementation(libs.bottomsheet.dialog)
 
     implementation(libs.androidx.core.ktx)
     testImplementation(libs.junit)

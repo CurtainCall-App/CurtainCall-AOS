@@ -22,8 +22,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.common.design.component.SearchAppBar
-import com.cmc.curtaincall.common.design.component.TopAppBarWithSearch
+import com.cmc.curtaincall.common.design.component.basic.SearchAppBar
+import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithSearch
 import com.cmc.curtaincall.common.design.component.content.card.LiveTalkContentCard
 import com.cmc.curtaincall.common.design.component.content.card.MyContentCard
 import com.cmc.curtaincall.common.design.component.content.card.PerformanceCard

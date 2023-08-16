@@ -39,6 +39,7 @@ dependencies {
 
     // 3rd party
     implementation(libs.calendar.compose)
+    implementation(libs.bottomsheet.dialog)
 
     // test
     testImplementation(libs.junit)

@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.common.design.component
+package com.cmc.curtaincall.common.design.component.basic
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
