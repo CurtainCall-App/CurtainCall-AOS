@@ -18,6 +18,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":core:network"))
 
+    implementation(libs.bundles.retrofit)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
 
