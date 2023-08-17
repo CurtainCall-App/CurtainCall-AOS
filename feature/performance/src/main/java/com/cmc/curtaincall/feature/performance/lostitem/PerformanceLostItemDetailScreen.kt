@@ -1,6 +1,5 @@
 package com.cmc.curtaincall.feature.performance.lostitem
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -18,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithReportAction
 import com.cmc.curtaincall.common.design.extensions.toSp
@@ -36,10 +36,8 @@ internal fun PerformanceLostItemDetailScreen(
         topBar = {
             TopAppBarWithReportAction(
                 title = stringResource(R.string.performance_find_lost_item),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp),
                 containerColor = Cultured,
+                contentColor = Nero,
                 onBack = onBack
             )
         }
@@ -60,30 +58,32 @@ private fun PerformanceLostItemDetailContent(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Cultured)
-                .padding(top = 36.dp, bottom = 40.dp),
+                .background(Cultured),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = painterResource(R.drawable.img_poster),
+            AsyncImage(
+                model = null,
+                error = painterResource(R.drawable.img_poster),
                 contentDescription = null,
-                modifier = Modifier.size(200.dp),
+                modifier = Modifier
+                    .padding(top = 36.dp, bottom = 40.dp)
+                    .size(200.dp),
                 contentScale = ContentScale.FillBounds
             )
         }
-        LostItemDetail(
+        PerformanceLostItemDetailBody(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
                 .padding(top = 20.dp)
         )
         Spacer(Modifier.weight(1f))
-        LostItemPlaceInfo(Modifier.fillMaxWidth())
+        PerformanceLostItemDetailFooter(Modifier.fillMaxWidth())
     }
 }
 
 @Composable
-private fun LostItemPlaceInfo(
+private fun PerformanceLostItemDetailFooter(
     modifier: Modifier = Modifier
 ) {
     Column(modifier) {
@@ -95,28 +95,7 @@ private fun LostItemPlaceInfo(
         )
         Row(
             modifier = Modifier
-                .padding(top = 24.dp)
-                .padding(horizontal = 20.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.performance_find_lost_item_detail_management_number),
-                modifier = Modifier.width(64.dp),
-                color = Granite_Gray,
-                fontSize = 14.dp.toSp(),
-                fontWeight = FontWeight.Normal,
-                fontFamily = spoqahansanseeo
-            )
-            Text(
-                text = "000-0000-0000",
-                color = Granite_Gray,
-                fontSize = 14.dp.toSp(),
-                fontWeight = FontWeight.Normal,
-                fontFamily = spoqahansanseeo
-            )
-        }
-        Row(
-            modifier = Modifier
-                .padding(top = 8.dp)
+                .padding(top = 40.dp)
                 .padding(horizontal = 20.dp)
         ) {
             Text(
@@ -132,12 +111,14 @@ private fun LostItemPlaceInfo(
                 color = Granite_Gray,
                 fontSize = 14.dp.toSp(),
                 fontWeight = FontWeight.Normal,
-                fontFamily = spoqahansanseeo
+                fontFamily = spoqahansanseeo,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
         Row(
             modifier = Modifier
-                .padding(top = 8.dp, bottom = 12.dp)
+                .padding(top = 8.dp, bottom = 47.dp)
                 .padding(horizontal = 20.dp)
         ) {
             Text(
@@ -160,7 +141,7 @@ private fun LostItemPlaceInfo(
 }
 
 @Composable
-private fun LostItemDetail(
+private fun PerformanceLostItemDetailBody(
     modifier: Modifier = Modifier
 ) {
     Column(modifier) {
@@ -178,7 +159,7 @@ private fun LostItemDetail(
                 fontFamily = spoqahansanseeo
             )
         }
-        LostItemInfo(
+        LostItemDetailInfo(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 20.dp),
@@ -186,7 +167,7 @@ private fun LostItemDetail(
             content = "기타",
             icon = painterResource(R.drawable.ic_lost_item)
         )
-        LostItemInfo(
+        LostItemDetailInfo(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 15.dp),
@@ -194,7 +175,7 @@ private fun LostItemDetail(
             content = "LG아트센터 서울",
             icon = painterResource(R.drawable.ic_location_searching)
         )
-        LostItemInfo(
+        LostItemDetailInfo(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 15.dp),
@@ -202,27 +183,35 @@ private fun LostItemDetail(
             content = "LG아트센터 A동 13B 2열 8석",
             icon = painterResource(R.drawable.ic_my_location)
         )
-        LostItemInfo(
+        LostItemDetailInfo(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 15.dp),
             type = stringResource(R.string.performance_find_lost_item_detail_acquistion_date),
-            content = "습득일자",
+            content = "2023.6.9",
             icon = painterResource(R.drawable.ic_event_available)
         )
-        LostItemInfo(
+        LostItemDetailInfo(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 15.dp),
+            type = stringResource(R.string.performance_find_lost_item_create_acquistion_time),
+            content = "22:32",
+            icon = painterResource(R.drawable.ic_alarm_on)
+        )
+        LostItemDetailInfo(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 15.dp),
             type = stringResource(R.string.performance_find_lost_item_detail_significant),
-            content = "없음",
+            content = "거의 다 썼어요",
             icon = painterResource(R.drawable.ic_stars)
         )
     }
 }
 
 @Composable
-private fun LostItemInfo(
+private fun LostItemDetailInfo(
     modifier: Modifier = Modifier,
     type: String,
     content: String,
@@ -251,7 +240,7 @@ private fun LostItemInfo(
         Text(
             text = content,
             color = Nero,
-            fontSize = 16.dp.toSp(),
+            fontSize = 15.dp.toSp(),
             fontWeight = FontWeight.Medium,
             fontFamily = spoqahansanseeo,
             maxLines = 1,
