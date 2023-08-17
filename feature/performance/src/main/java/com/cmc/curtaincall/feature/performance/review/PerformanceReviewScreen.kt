@@ -79,7 +79,16 @@ private fun PerformanceReviewContent(
             onDismiss = { isShowRemoveDialog = false }
         )
     }
-
+//    Box(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .background(White),
+//        contentAlignment = Alignment.Center
+//    ) {
+//        EmptyItem(
+//            alert = stringResource(R.string.performance_review_detail_empty)
+//        )
+//    }
     LazyColumn(
         modifier = modifier
             .padding(top = 13.dp)

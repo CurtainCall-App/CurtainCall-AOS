@@ -113,6 +113,7 @@
     <string name="performance_detail_show_all_review">모두 보기</string>
     <string name="performance_detail_more_view">더보기</string>
     <string name="performance_review_empty">아직 한 줄 리뷰가 없어요!</string>
+    <string name="performance_review_detail_empty">아직 한 줄 리뷰가 없어요!\n간단한 리뷰 작성으로 감상 후기를\n공유해보세요:)</string>
     <string name="performance_review">한 줄 리뷰</string>
     <string name="performance_review_repot">신고</string>
     <string name="performance_review_create_satisfaction_question">공연은 만족스러우셨나요?</string>
