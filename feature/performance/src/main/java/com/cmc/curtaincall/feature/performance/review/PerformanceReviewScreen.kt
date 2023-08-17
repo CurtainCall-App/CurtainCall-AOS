@@ -59,14 +59,16 @@ internal fun PerformanceReviewScreen(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
-                .background(White)
+                .background(White),
+            onNavigateReviewCreate = onNavigateReviewCreate
         )
     }
 }
 
 @Composable
 private fun PerformanceReviewContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateReviewCreate: () -> Unit
 ) {
     var isShowRemoveDialog by remember { mutableStateOf(false) }
 
@@ -106,6 +108,7 @@ private fun PerformanceReviewContent(
                 comment = "고전연극은 처음인데 엄청 재미있게 봤어요!",
                 numberOfLike = 37,
                 isMyWriting = true,
+                onChangeWriting = { onNavigateReviewCreate() },
                 onRemoveWriting = { isShowRemoveDialog = true }
             )
             if (index < 9) {
