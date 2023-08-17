@@ -161,13 +161,13 @@ private fun MeridiemPicker(
             .height(itemSize * visibleItemsCount),
         userScrollEnabled = false
     ) {
-        itemsIndexed(pickerItems) { index, it ->
+        itemsIndexed(pickerItems) { index, item ->
             Box(
                 modifier = Modifier.size(itemSize),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = it,
+                    text = item,
                     color = if (driveFirstVisibleItemIndex == index) Black_Pearl else Silver_Sand,
                     fontSize = 16.dp.toSp(),
                     fontWeight = FontWeight.Bold,
