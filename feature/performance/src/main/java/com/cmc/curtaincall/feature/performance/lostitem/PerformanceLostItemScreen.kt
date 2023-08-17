@@ -148,6 +148,16 @@ private fun PerformanceLostItemContent(
                 }
             }
         )
+//        Box(
+//            modifier = Modifier
+//                .padding(top = 88.dp)
+//                .fillMaxSize(),
+//            contentAlignment = Alignment.Center
+//        ) {
+//            EmptyItem(
+//                alert = stringResource(R.string.performance_lostitem_empty)
+//            )
+//        }
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             modifier = Modifier.padding(top = 108.dp),
