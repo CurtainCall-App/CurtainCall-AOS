@@ -1,5 +1,6 @@
 package com.cmc.curtaincall.common.design.component.items
 
+import android.view.MotionEvent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,10 +23,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -89,6 +91,7 @@ fun ReviewItem(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ReviewDetailItem(
     modifier: Modifier = Modifier,
@@ -105,6 +108,8 @@ fun ReviewDetailItem(
 ) {
     var isCheckLike by remember { mutableStateOf(false) }
     var isClickMoreVert by remember { mutableStateOf(false) }
+    var isTouchChangeButton by remember { mutableStateOf(false) }
+    var isTouchRemoveButton by remember { mutableStateOf(false) }
     Box(modifier) {
         Row(
             modifier = if (isMyWriting) Modifier.padding(end = 24.dp) else Modifier,
@@ -179,8 +184,26 @@ fun ReviewDetailItem(
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
-                            .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
-                            .clickable { onChangeWriting() },
+                            .background(
+                                color = if (isTouchChangeButton) Me_Pink.copy(0.1f) else White,
+                                RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp)
+                            )
+                            .clickable { onChangeWriting() }
+                            .pointerInteropFilter {
+                                when (it.action) {
+                                    MotionEvent.ACTION_DOWN -> {
+                                        isTouchChangeButton = true
+                                    }
+
+                                    MotionEvent.ACTION_MOVE,
+                                    MotionEvent.ACTION_UP -> {
+                                        isTouchChangeButton = false
+                                    }
+
+                                    else -> return@pointerInteropFilter false
+                                }
+                                true
+                            },
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
@@ -195,8 +218,26 @@ fun ReviewDetailItem(
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
-                            .clip(RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
-                            .clickable { onRemoveWriting() },
+                            .background(
+                                color = if (isTouchRemoveButton) Me_Pink.copy(0.1f) else White,
+                                RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp)
+                            )
+                            .clickable { onRemoveWriting() }
+                            .pointerInteropFilter {
+                                when (it.action) {
+                                    MotionEvent.ACTION_DOWN -> {
+                                        isTouchRemoveButton = true
+                                    }
+
+                                    MotionEvent.ACTION_MOVE,
+                                    MotionEvent.ACTION_UP -> {
+                                        isTouchRemoveButton = false
+                                    }
+
+                                    else -> return@pointerInteropFilter false
+                                }
+                                true
+                            },
                         contentAlignment = Alignment.Center
                     ) {
                         Text(
