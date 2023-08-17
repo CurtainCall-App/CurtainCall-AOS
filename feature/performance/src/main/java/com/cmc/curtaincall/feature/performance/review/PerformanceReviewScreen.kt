@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
+import com.cmc.curtaincall.common.design.component.dialog.CurtainCallBasicDialog
 import com.cmc.curtaincall.common.design.component.items.ReviewDetailItem
 import com.cmc.curtaincall.common.design.theme.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -67,6 +68,18 @@ internal fun PerformanceReviewScreen(
 private fun PerformanceReviewContent(
     modifier: Modifier = Modifier
 ) {
+    var isShowRemoveDialog by remember { mutableStateOf(false) }
+
+    if (isShowRemoveDialog) {
+        CurtainCallBasicDialog(
+            title = stringResource(R.string.dialog_performance_review_remove_title),
+            description = stringResource(R.string.dialog_performance_review_remove_description),
+            dismissText = stringResource(R.string.dialog_performance_review_remove_dismiss),
+            positiveText = stringResource(R.string.dialog_performance_review_remove_positive),
+            onDismiss = { isShowRemoveDialog = false }
+        )
+    }
+
     LazyColumn(
         modifier = modifier
             .padding(top = 13.dp)
@@ -83,7 +96,8 @@ private fun PerformanceReviewContent(
                 date = "2023.6.24",
                 comment = "고전연극은 처음인데 엄청 재미있게 봤어요!",
                 numberOfLike = 37,
-                isMyWriting = true
+                isMyWriting = true,
+                onRemoveWriting = { isShowRemoveDialog = true }
             )
             if (index < 9) {
                 Spacer(

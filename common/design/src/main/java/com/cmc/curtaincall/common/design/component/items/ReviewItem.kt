@@ -65,7 +65,7 @@ fun ReviewItem(
     ) {
         RatingBar(
             modifier = Modifier.size(14.dp),
-            rating = 4
+            rating = rating
         )
         Text(
             text = String.format("%s | %s", name, date),
@@ -188,7 +188,6 @@ fun ReviewDetailItem(
                                 color = if (isTouchChangeButton) Me_Pink.copy(0.1f) else White,
                                 RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp)
                             )
-                            .clickable { onChangeWriting() }
                             .pointerInteropFilter {
                                 when (it.action) {
                                     MotionEvent.ACTION_DOWN -> {
@@ -198,6 +197,8 @@ fun ReviewDetailItem(
                                     MotionEvent.ACTION_MOVE,
                                     MotionEvent.ACTION_UP -> {
                                         isTouchChangeButton = false
+                                        isClickMoreVert = false
+                                        onChangeWriting()
                                     }
 
                                     else -> return@pointerInteropFilter false
@@ -222,7 +223,6 @@ fun ReviewDetailItem(
                                 color = if (isTouchRemoveButton) Me_Pink.copy(0.1f) else White,
                                 RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp)
                             )
-                            .clickable { onRemoveWriting() }
                             .pointerInteropFilter {
                                 when (it.action) {
                                     MotionEvent.ACTION_DOWN -> {
@@ -232,6 +232,8 @@ fun ReviewDetailItem(
                                     MotionEvent.ACTION_MOVE,
                                     MotionEvent.ACTION_UP -> {
                                         isTouchRemoveButton = false
+                                        isClickMoreVert = false
+                                        onRemoveWriting()
                                     }
 
                                     else -> return@pointerInteropFilter false
