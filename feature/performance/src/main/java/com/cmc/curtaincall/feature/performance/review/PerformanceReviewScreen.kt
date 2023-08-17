@@ -5,20 +5,17 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.common.design.component.custom.RatingBar
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
-import com.cmc.curtaincall.common.design.extensions.toSp
+import com.cmc.curtaincall.common.design.component.dialog.CurtainCallBasicDialog
+import com.cmc.curtaincall.common.design.component.items.ReviewDetailItem
 import com.cmc.curtaincall.common.design.theme.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -29,14 +26,12 @@ internal fun PerformanceReviewScreen(
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(Whisper)
+    systemUiController.setStatusBarColor(White)
+
     Scaffold(
         topBar = {
             TopAppBarWithBack(
                 title = stringResource(R.string.performance_review),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp),
                 containerColor = White,
                 contentColor = Nero,
                 onClick = onBack
@@ -64,120 +59,64 @@ internal fun PerformanceReviewScreen(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
-                .background(White)
+                .background(White),
+            onNavigateReviewCreate = onNavigateReviewCreate
         )
     }
 }
 
 @Composable
 private fun PerformanceReviewContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateReviewCreate: () -> Unit
 ) {
+    var isShowRemoveDialog by remember { mutableStateOf(false) }
+
+    if (isShowRemoveDialog) {
+        CurtainCallBasicDialog(
+            title = stringResource(R.string.dialog_performance_review_remove_title),
+            description = stringResource(R.string.dialog_performance_review_remove_description),
+            dismissText = stringResource(R.string.dialog_performance_review_remove_dismiss),
+            positiveText = stringResource(R.string.dialog_performance_review_remove_positive),
+            onDismiss = { isShowRemoveDialog = false }
+        )
+    }
+//    Box(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .background(White),
+//        contentAlignment = Alignment.Center
+//    ) {
+//        EmptyItem(
+//            alert = stringResource(R.string.performance_review_detail_empty)
+//        )
+//    }
     LazyColumn(
         modifier = modifier
-            .padding(top = 33.dp)
+            .padding(top = 13.dp)
             .padding(horizontal = 20.dp)
     ) {
         itemsIndexed(List(10) {}) { index, item ->
-            PerformanceReviewItem()
+            ReviewDetailItem(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 20.dp),
+                painter = painterResource(R.drawable.img_profile),
+                rating = 4,
+                name = "이디야커피맛없서",
+                date = "2023.6.24",
+                comment = "고전연극은 처음인데 엄청 재미있게 봤어요!",
+                numberOfLike = 37,
+                isMyWriting = true,
+                onChangeWriting = { onNavigateReviewCreate() },
+                onRemoveWriting = { isShowRemoveDialog = true }
+            )
             if (index < 9) {
                 Spacer(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 20.dp)
                         .height(1.dp)
                         .background(Bright_Gray)
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun PerformanceReviewItem(
-    modifier: Modifier = Modifier
-) {
-    var isClickThumbsUp by remember { mutableStateOf(false) }
-    Column(modifier) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Image(
-                painter = painterResource(R.drawable.img_profile),
-                contentDescription = null,
-                modifier = Modifier.size(42.dp)
-            )
-            Row(
-                Modifier.padding(10.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column {
-                    RatingBar(
-                        modifier = Modifier.size(14.dp),
-                        rating = 4
-                    )
-                    Text(
-                        text = "이디야커피맛없서 | 2023.6.24",
-                        modifier = Modifier.padding(top = 4.dp),
-                        color = Nero,
-                        fontSize = 13.dp.toSp(),
-                        fontWeight = FontWeight.Medium,
-                        fontFamily = spoqahansanseeo
-                    )
-                }
-                Spacer(Modifier.weight(1f))
-                Box(
-                    modifier = Modifier
-                        .size(40.dp, 24.dp)
-                        .border(BorderStroke(1.dp, Silver_Sand), RoundedCornerShape(20.dp)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = stringResource(R.string.performance_review_repot),
-                        color = Silver_Sand,
-                        fontSize = 13.dp.toSp(),
-                        fontWeight = FontWeight.Medium,
-                        fontFamily = spoqahansanseeo
-                    )
-                }
-            }
-        }
-
-        Text(
-            text = "고전연극은 처음인데 엄청 재미있게 봤어요!",
-            modifier = Modifier.padding(top = 20.dp),
-            color = Nero,
-            fontSize = 16.dp.toSp(),
-            fontWeight = FontWeight.Medium,
-            fontFamily = spoqahansanseeo,
-            lineHeight = 22.dp.toSp()
-        )
-
-        Box(
-            modifier = Modifier
-                .padding(top = 14.dp)
-                .background(
-                    if (isClickThumbsUp) Me_Pink else Ghost_White,
-                    RoundedCornerShape(6.dp)
-                )
-                .clickable { isClickThumbsUp = isClickThumbsUp.not() }
-                .padding(vertical = 4.dp, horizontal = 6.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Row {
-                Icon(
-                    painter = painterResource(
-                        if (isClickThumbsUp) R.drawable.ic_thumb_up_sel else R.drawable.ic_thumb_up
-                    ),
-                    contentDescription = null,
-                    modifier = Modifier.size(14.dp),
-                    tint = Color.Unspecified
-                )
-                Text(
-                    text = "153",
-                    modifier = Modifier.padding(start = 4.dp),
-                    color = if (isClickThumbsUp) White else Cadet_Grey,
-                    fontSize = 11.dp.toSp(),
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo
                 )
             }
         }

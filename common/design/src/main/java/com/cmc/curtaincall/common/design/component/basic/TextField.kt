@@ -26,6 +26,52 @@ import com.cmc.curtaincall.common.design.theme.Roman_Silver
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 
 @Composable
+fun CurtainCallMultiLineTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    fontSize: TextUnit,
+    shape: Shape,
+    containerColor: Color,
+    contentColor: Color,
+    contentModifier: Modifier = Modifier,
+    placeholder: String = "",
+    placeholderColor: Color = contentColor,
+) {
+    BasicTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier
+            .background(containerColor, shape)
+            .padding(horizontal = 18.dp, vertical = 12.dp),
+        textStyle = TextStyle(
+            color = contentColor,
+            fontSize = fontSize,
+            fontWeight = FontWeight.Medium,
+            fontFamily = spoqahansanseeo,
+            lineHeight = 16.dp.toSp()
+        ),
+        decorationBox = { innerTextField ->
+            Box(
+                modifier = contentModifier,
+                contentAlignment = Alignment.TopStart
+            ) {
+                innerTextField()
+                if (value.isEmpty()) {
+                    Text(
+                        text = placeholder,
+                        color = placeholderColor,
+                        fontSize = fontSize,
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = spoqahansanseeo
+                    )
+                }
+            }
+        }
+    )
+}
+
+@Composable
 fun CurtainCallSingleLineTextField(
     value: String,
     onValueChange: (String) -> Unit,

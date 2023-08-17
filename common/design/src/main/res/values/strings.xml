@@ -113,6 +113,7 @@
     <string name="performance_detail_show_all_review">모두 보기</string>
     <string name="performance_detail_more_view">더보기</string>
     <string name="performance_review_empty">아직 한 줄 리뷰가 없어요!</string>
+    <string name="performance_review_detail_empty">아직 한 줄 리뷰가 없어요!\n간단한 리뷰 작성으로 감상 후기를\n공유해보세요:)</string>
     <string name="performance_review">한 줄 리뷰</string>
     <string name="performance_review_repot">신고</string>
     <string name="performance_review_create_satisfaction_question">공연은 만족스러우셨나요?</string>
@@ -212,4 +213,10 @@
     <string name="mypage_setting_privacy_information_policy">개인정보 처리방침</string>
     <string name="mypage_setting_service_use_terms">서비스 이용약관</string>
     <string name="mypage_livetalk_entrance">TALK 입장</string>
+
+    <!-- dialog -->
+    <string name="dialog_performance_review_remove_title">해당 글을 삭제할까요?</string>
+    <string name="dialog_performance_review_remove_description">삭제하기를 하면 되돌릴 수 없습니다.</string>
+    <string name="dialog_performance_review_remove_dismiss">아니요</string>
+    <string name="dialog_performance_review_remove_positive">네, 삭제할래요</string>
 </resources>

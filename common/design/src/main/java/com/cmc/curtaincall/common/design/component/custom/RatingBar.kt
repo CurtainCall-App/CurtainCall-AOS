@@ -13,6 +13,7 @@ import com.cmc.curtaincall.common.design.R
 fun RatingBar(
     modifier: Modifier = Modifier,
     rating: Int = 0,
+    tint: Color = Color.Unspecified,
     canChange: Boolean = false,
     onChangeRate: (Int) -> Unit = {}
 ) {
@@ -27,7 +28,7 @@ fun RatingBar(
                     onChangeRate(1)
                 }
             },
-            tint = Color.Unspecified
+            tint = tint
         )
         Icon(
             painter = painterResource(
@@ -39,7 +40,7 @@ fun RatingBar(
                     onChangeRate(2)
                 }
             },
-            tint = Color.Unspecified
+            tint = tint
         )
         Icon(
             painter = painterResource(
@@ -51,7 +52,7 @@ fun RatingBar(
                     onChangeRate(3)
                 }
             },
-            tint = Color.Unspecified
+            tint = tint
         )
         Icon(
             painter = painterResource(
@@ -63,7 +64,7 @@ fun RatingBar(
                     onChangeRate(4)
                 }
             },
-            tint = Color.Unspecified
+            tint = tint
         )
         Icon(
             painter = painterResource(
@@ -75,7 +76,7 @@ fun RatingBar(
                     onChangeRate(5)
                 }
             },
-            tint = Color.Unspecified
+            tint = tint
         )
     }
 }
