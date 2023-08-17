@@ -1,5 +1,14 @@
 package com.cmc.curtaincall.feature.performance.lostitem
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.launch
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -18,6 +27,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -25,6 +35,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallDropDownButton
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallMultiLineTextField
@@ -98,15 +109,17 @@ private fun PerformanceLostItemCreateContent(
     var dateAcquisition by remember { mutableStateOf("") } // 필수
     var timeAcquisition by remember { mutableStateOf("") }
     var significant by remember { mutableStateOf("") }
-    var attachmentFile by remember { mutableStateOf("") }
 
+    var isSelectAttachment by remember { mutableStateOf(false) }
     var isClickLostItemType by remember { mutableStateOf(false) }
     var isClickDateAcquisition by remember { mutableStateOf(false) }
     var isClickTimeAcquisition by remember { mutableStateOf(false) }
     var isClickAttachmentFile by remember { mutableStateOf(false) }
 
-    LaunchedEffect(lostItemName, lostItemType, dateAcquisition) {
-        onCompleteChange(listOf(lostItemName, lostItemType, dateAcquisition).all { it.isNotEmpty() })
+    LaunchedEffect(lostItemName, lostItemType, dateAcquisition, isSelectAttachment) {
+        onCompleteChange(
+            listOf(lostItemName, lostItemType, dateAcquisition).all { it.isNotEmpty() } && isSelectAttachment
+        )
     }
 
     val scrollState = rememberScrollState()
@@ -299,8 +312,8 @@ private fun PerformanceLostItemCreateContent(
                     isClickTimeAcquisition = false
                 }
             },
-            value = attachmentFile,
-            onValueChange = { attachmentFile = it }
+            isSelectAttachment = isSelectAttachment,
+            onSelectChange = { isSelectAttachment = it }
         )
     }
 }
@@ -310,9 +323,22 @@ private fun LostItemAttachmentDropDown(
     modifier: Modifier = Modifier,
     isClicked: Boolean = false,
     onClickChange: (Boolean) -> Unit,
-    value: String,
-    onValueChange: (String) -> Unit
+    isSelectAttachment: Boolean,
+    onSelectChange: (Boolean) -> Unit
 ) {
+    val context = LocalContext.current
+    var attachmentFile by remember { mutableStateOf<Bitmap?>(null) }
+    val takePhotoFromAlbum = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let { uri ->
+            attachmentFile = uri.parseBitmap(context)
+            onSelectChange(true)
+        }
+    }
+    val takePhotoFromCameraLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+        attachmentFile = bitmap
+        onSelectChange(true)
+    }
+
     Row(modifier.zIndex(if (isClicked) 1f else 0f)) {
         Row(
             modifier = Modifier
@@ -335,97 +361,119 @@ private fun LostItemAttachmentDropDown(
         }
         Column(Modifier.fillMaxWidth()) {
             Box {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(42.dp)
-                        .background(Cultured, RoundedCornerShape(8.dp))
-                        .border(BorderStroke(1.dp, if (isClicked) Roman_Silver else Color.Transparent), RoundedCornerShape(8.dp))
-                        .padding(horizontal = 14.dp)
-                        .clickable { onClickChange(isClicked.not()) },
-                    contentAlignment = Alignment.CenterStart
-                ) {
+                if (isSelectAttachment) {
+                    Box(Modifier.size(83.dp)) {
+                        AsyncImage(
+                            model = attachmentFile,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(80.dp)
+                                .clip(RoundedCornerShape(8.dp)),
+                            contentScale = ContentScale.FillBounds
+                        )
+                        Icon(
+                            painter = painterResource(R.drawable.ic_close),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .size(22.dp)
+                                .clickable { onSelectChange(false) },
+                            tint = Color.Unspecified
+                        )
+                    }
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(42.dp)
+                            .background(Cultured, RoundedCornerShape(8.dp))
+                            .border(BorderStroke(1.dp, if (isClicked) Roman_Silver else Color.Transparent), RoundedCornerShape(8.dp))
+                            .padding(horizontal = 14.dp)
+                            .clickable { onClickChange(isClicked.not()) },
+                        contentAlignment = Alignment.CenterStart
+                    ) {
+                        Text(
+                            text = stringResource(R.string.performance_find_lost_item_create_attachment_placeholder),
+                            color = Silver_Sand,
+                            fontSize = 14.dp.toSp(),
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = spoqahansanseeo
+                        )
+                    }
                     Text(
-                        text = stringResource(R.string.performance_find_lost_item_create_attachment_placeholder),
-                        color = Silver_Sand,
-                        fontSize = 14.dp.toSp(),
+                        text = stringResource(R.string.performance_find_lost_item_create_attachment_limit),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 52.dp),
+                        color = Roman_Silver,
+                        fontSize = 12.dp.toSp(),
                         fontWeight = FontWeight.Medium,
                         fontFamily = spoqahansanseeo
                     )
-                }
-                Text(
-                    text = stringResource(R.string.performance_find_lost_item_create_attachment_limit),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 52.dp),
-                    color = Roman_Silver,
-                    fontSize = 12.dp.toSp(),
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo
-                )
-                if (isClicked) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 52.dp)
-                    ) {
-                        Card(
-                            modifier = Modifier.height(112.dp),
-                            shape = RoundedCornerShape(10.dp),
-                            colors = CardDefaults.cardColors(containerColor = White),
-                            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                    if (isClicked) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 52.dp)
                         ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(vertical = 20.dp),
-                                horizontalArrangement = Arrangement.SpaceEvenly
+                            Card(
+                                modifier = Modifier.height(112.dp),
+                                shape = RoundedCornerShape(10.dp),
+                                colors = CardDefaults.cardColors(containerColor = White),
+                                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                             ) {
-                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                    IconButton(
-                                        onClick = { /*TODO*/ },
-                                        modifier = Modifier
-                                            .size(48.dp)
-                                            .clip(CircleShape),
-                                        colors = IconButtonDefaults.iconButtonColors(containerColor = Cultured)
-                                    ) {
-                                        Icon(
-                                            painter = painterResource(R.drawable.ic_select_image),
-                                            contentDescription = null,
-                                            tint = Color.Unspecified
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(vertical = 20.dp),
+                                    horizontalArrangement = Arrangement.SpaceEvenly
+                                ) {
+                                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                        IconButton(
+                                            onClick = { takePhotoFromAlbum.launch("image/*") },
+                                            modifier = Modifier
+                                                .size(48.dp)
+                                                .clip(CircleShape),
+                                            colors = IconButtonDefaults.iconButtonColors(containerColor = Cultured)
+                                        ) {
+                                            Icon(
+                                                painter = painterResource(R.drawable.ic_select_image),
+                                                contentDescription = null,
+                                                tint = Color.Unspecified
+                                            )
+                                        }
+                                        Text(
+                                            text = stringResource(R.string.performance_find_lost_item_create_select_image),
+                                            modifier = Modifier.padding(top = 8.dp),
+                                            color = Black_Pearl,
+                                            fontSize = 13.dp.toSp(),
+                                            fontWeight = FontWeight.Medium,
+                                            fontFamily = spoqahansanseeo
                                         )
                                     }
-                                    Text(
-                                        text = stringResource(R.string.performance_find_lost_item_create_select_image),
-                                        modifier = Modifier.padding(top = 8.dp),
-                                        color = Black_Pearl,
-                                        fontSize = 13.dp.toSp(),
-                                        fontWeight = FontWeight.Medium,
-                                        fontFamily = spoqahansanseeo
-                                    )
-                                }
-                                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                    IconButton(
-                                        onClick = { /*TODO*/ },
-                                        modifier = Modifier
-                                            .size(48.dp)
-                                            .clip(CircleShape),
-                                        colors = IconButtonDefaults.iconButtonColors(containerColor = Cultured)
-                                    ) {
-                                        Icon(
-                                            painter = painterResource(R.drawable.ic_capture),
-                                            contentDescription = null,
-                                            tint = Color.Unspecified
+                                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                        IconButton(
+                                            onClick = { takePhotoFromCameraLauncher.launch() },
+                                            modifier = Modifier
+                                                .size(48.dp)
+                                                .clip(CircleShape),
+                                            colors = IconButtonDefaults.iconButtonColors(containerColor = Cultured)
+                                        ) {
+                                            Icon(
+                                                painter = painterResource(R.drawable.ic_capture),
+                                                contentDescription = null,
+                                                tint = Color.Unspecified
+                                            )
+                                        }
+                                        Text(
+                                            text = stringResource(R.string.performance_find_lost_item_create_capture),
+                                            modifier = Modifier.padding(top = 8.dp),
+                                            color = Black_Pearl,
+                                            fontSize = 13.dp.toSp(),
+                                            fontWeight = FontWeight.Medium,
+                                            fontFamily = spoqahansanseeo
                                         )
                                     }
-                                    Text(
-                                        text = stringResource(R.string.performance_find_lost_item_create_capture),
-                                        modifier = Modifier.padding(top = 8.dp),
-                                        color = Black_Pearl,
-                                        fontSize = 13.dp.toSp(),
-                                        fontWeight = FontWeight.Medium,
-                                        fontFamily = spoqahansanseeo
-                                    )
                                 }
                             }
                         }
@@ -572,6 +620,20 @@ private fun LostItemInfoTextField(
                 placeholder = placeholder,
                 placeholderColor = Silver_Sand
             )
+        }
+    }
+}
+
+@Suppress("DEPRECATION", "NewApi")
+private fun Uri.parseBitmap(context: Context): Bitmap {
+    return when (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { // 28
+        true -> {
+            val source = ImageDecoder.createSource(context.contentResolver, this)
+            ImageDecoder.decodeBitmap(source)
+        }
+
+        else -> {
+            MediaStore.Images.Media.getBitmap(context.contentResolver, this)
         }
     }
 }
