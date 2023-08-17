@@ -145,6 +145,9 @@ private fun MeridiemPicker(
     val listState = rememberLazyListState(initialFirstVisibleItemIndex = currentIndex)
     val flingBehavior = rememberSnapFlingBehavior(lazyListState = listState)
 
+    val driveFirstVisibleItemIndex by remember {
+        derivedStateOf { listState.firstVisibleItemIndex + 2 }
+    }
     LaunchedEffect(currentIndex) {
         listState.scrollToItem(currentIndex)
     }
@@ -158,14 +161,14 @@ private fun MeridiemPicker(
             .height(itemSize * visibleItemsCount),
         userScrollEnabled = false
     ) {
-        items(pickerItems) {
+        itemsIndexed(pickerItems) { index, it ->
             Box(
                 modifier = Modifier.size(itemSize),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = it,
-                    color = Black_Pearl,
+                    color = if (driveFirstVisibleItemIndex == index) Black_Pearl else Silver_Sand,
                     fontSize = 16.dp.toSp(),
                     fontWeight = FontWeight.Bold,
                     fontFamily = spoqahansanseeo
@@ -188,7 +191,9 @@ private fun Picker(
     val pickerItems = List(visibleItemsMiddle) { "" } + items.map { it.toString() } + List(visibleItemsMiddle) { "" }
     val listState = rememberLazyListState(initialFirstVisibleItemIndex = startIndex)
     val flingBehavior = rememberSnapFlingBehavior(lazyListState = listState)
-
+    val driveFirstVisibleItemIndex by remember {
+        derivedStateOf { listState.firstVisibleItemIndex + 2 }
+    }
     LaunchedEffect(listState) {
         snapshotFlow { listState.firstVisibleItemIndex }
             .distinctUntilChanged()
@@ -210,7 +215,7 @@ private fun Picker(
             ) {
                 Text(
                     text = if (item.isNotEmpty()) String.format("%02d", item.toInt()) else item,
-                    color = Black_Pearl,
+                    color = if (driveFirstVisibleItemIndex == index) Black_Pearl else Silver_Sand,
                     fontSize = 16.dp.toSp(),
                     fontWeight = FontWeight.Bold,
                     fontFamily = spoqahansanseeo

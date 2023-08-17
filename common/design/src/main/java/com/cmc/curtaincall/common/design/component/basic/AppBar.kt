@@ -375,3 +375,40 @@ fun TopAppBarWithReportAction(
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = containerColor)
     )
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopAppBarWithClose(
+    title: String,
+    containerColor: Color,
+    contentColor: Color,
+    onClose: () -> Unit
+) {
+    CenterAlignedTopAppBar(
+        title = {
+            Text(
+                text = title,
+                color = contentColor,
+                fontSize = 17.dp.toSp(),
+                fontWeight = FontWeight.Bold,
+                fontFamily = spoqahansanseeo
+            )
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(54.dp)
+            .background(containerColor)
+            .padding(top = 20.dp, bottom = 10.dp),
+        navigationIcon = {
+            IconButton(onClick = onClose) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_appbar_close),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                    tint = contentColor
+                )
+            }
+        },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = containerColor)
+    )
+}

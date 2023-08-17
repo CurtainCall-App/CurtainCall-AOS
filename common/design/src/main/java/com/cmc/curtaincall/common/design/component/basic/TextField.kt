@@ -41,9 +41,7 @@ fun CurtainCallMultiLineTextField(
     BasicTextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = modifier
-            .background(containerColor, shape)
-            .padding(horizontal = 18.dp, vertical = 12.dp),
+        modifier = modifier.background(containerColor, shape),
         textStyle = TextStyle(
             color = contentColor,
             fontSize = fontSize,
