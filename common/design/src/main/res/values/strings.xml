@@ -18,6 +18,7 @@
 
     <!-- search -->
     <string name="search_performance_title">작품명 입력</string>
+    <string name="search_lostitem_title">분실물 입력</string>
 
     <!-- signup -->
     <string name="signup_terms">약관 동의</string>
@@ -128,8 +129,10 @@
     <string name="performance_find_lost_item_repot">신고</string>
     <string name="performance_find_lost_item_detail_classification">분류</string>
     <string name="performance_find_lost_item_detail_place_of_acquisition">습득장소</string>
+    <string name="performance_find_lost_item_detail_place_of_acquisition_format">습득장소 | %s</string>
     <string name="performance_find_lost_item_detail_place">세부장소</string>
     <string name="performance_find_lost_item_detail_acquistion_date">습득일자</string>
+    <string name="performance_find_lost_item_detail_acquistion_date_format">습득일자 | %s</string>
     <string name="performance_find_lost_item_detail_significant">특이사항</string>
     <string name="performance_find_lost_item_detail_management_number">관리번호</string>
     <string name="performance_find_lost_item_detail_storage">보관장소</string>
