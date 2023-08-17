@@ -52,7 +52,7 @@ fun TopAppBarOnlyAction(
                 )
             }
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = containerColor)
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = containerColor)
     )
 }
 
@@ -90,7 +90,7 @@ fun TopAppBarWithBack(
                 )
             }
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = containerColor)
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = containerColor)
     )
 }
 
@@ -171,7 +171,7 @@ fun SearchAppBar(
             .height(54.dp)
             .background(containerColor)
             .padding(top = 13.dp, bottom = 5.dp),
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = containerColor)
+        colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = containerColor)
     )
 }
 
@@ -199,7 +199,56 @@ fun TopAppBarOnlySearch(
                 )
             }
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = containerColor)
+        colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = containerColor)
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SearchTopAppBarWithBack(
+    title: String,
+    containerColor: Color,
+    contentColor: Color,
+    tint: Color,
+    onBack: () -> Unit = {},
+    onClick: () -> Unit = {}
+) {
+    CenterAlignedTopAppBar(
+        title = {
+            Text(
+                text = title,
+                color = contentColor,
+                fontSize = 17.dp.toSp(),
+                fontWeight = FontWeight.Bold,
+                fontFamily = spoqahansanseeo
+            )
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(54.dp)
+            .background(containerColor)
+            .padding(top = 20.dp, bottom = 10.dp),
+        navigationIcon = {
+            IconButton(onClick = onBack) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_arrow_back),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                    tint = contentColor
+                )
+            }
+        },
+        actions = {
+            IconButton(onClick = onClick) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_search),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                    tint = tint
+                )
+            }
+        },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = containerColor)
     )
 }
 
@@ -236,7 +285,7 @@ fun TopAppBarWithSearch(
                 )
             }
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = containerColor)
+        colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = containerColor)
     )
 }
 
@@ -279,7 +328,7 @@ fun TopAppBarWithAction(
         actions = {
             actionContent()
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = containerColor)
+        colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = containerColor)
     )
 }
 
@@ -348,6 +397,6 @@ fun TopAppBarWithReportAction(
                 }
             }
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = containerColor)
+        colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = containerColor)
     )
 }
