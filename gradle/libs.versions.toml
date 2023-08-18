@@ -29,6 +29,8 @@ logging-interceptor = "4.11.0"
 
 ## hilt
 hilt = "2.45"
+hilt-navigation-compose = "1.0.0"
+java-inject = "1"
 
 ## coroutine
 corotine-core = "1.6.4"
@@ -95,7 +97,8 @@ logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-intercep
 # hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-android-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
-
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
+java-inject = { group = "javax.inject", name = "javax.inject", version.ref = "java-inject" }
 # coroutine
 coroutine-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "corotine-core" }
 
