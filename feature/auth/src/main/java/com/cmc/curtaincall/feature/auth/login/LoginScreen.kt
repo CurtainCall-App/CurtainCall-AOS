@@ -70,6 +70,21 @@ fun LoginScreen(
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(Cetacean_Blue)
 
+    LaunchedEffect(loginViewModel) {
+        loginViewModel.isValidationToken() //
+        loginViewModel.effects.collectLatest { sideEffect ->
+            when (sideEffect) {
+                LoginSideEffect.SuccessLogin -> {
+                    onNavigateSignUpTerms()
+                }
+
+                LoginSideEffect.AutoLogin -> {
+                    onNavigateHome()
+                }
+            }
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -133,17 +148,6 @@ private fun LoginKaKao(
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
-
-    LaunchedEffect(loginViewModel) {
-        loginViewModel.effects.collectLatest { sideEffect ->
-            when (sideEffect) {
-                LoginSideEffect.SuccessLogin -> {
-                    onNavigateSignUpTerms()
-                }
-            }
-        }
-    }
-
     Image(
         painter = painterResource(R.drawable.ic_kakao_login),
         contentDescription = null,
