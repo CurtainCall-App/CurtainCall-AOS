@@ -14,6 +14,7 @@ androidx-activity-compose = "1.5.1"
 androidx-compose-bom = "2022.10.00"
 androidx-navigation-compose = "2.5.3"
 androidx-splashscreen = "1.0.0"
+androidx-lifecycle-compose = "2.6.0"
 
 # accompanist
 accompanist-compose = "0.31.5-beta"
@@ -76,6 +77,7 @@ androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graph
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidx-splashscreen" }
+androidx-lifecycle-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle-compose" }
 
 # accompanist
 accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanist-compose" }
