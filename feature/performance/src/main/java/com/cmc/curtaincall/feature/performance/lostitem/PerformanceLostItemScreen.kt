@@ -11,18 +11,18 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.component.basic.CurtainCallDropDownButton
+import com.cmc.curtaincall.common.design.component.basic.SearchAppBar
+import com.cmc.curtaincall.common.design.component.basic.SearchTopAppBarWithBack
 import com.cmc.curtaincall.common.design.component.custom.SelectedDateCalender
-import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
+import com.cmc.curtaincall.common.design.component.items.GridLostItem
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -36,17 +36,30 @@ internal fun PerformanceLostItemScreen(
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(White)
+
+    var isActiveSearchState by remember { mutableStateOf(false) }
+    var queryState by remember { mutableStateOf("") }
     Scaffold(
         topBar = {
-            TopAppBarWithBack(
-                title = stringResource(R.string.performance_find_lost_item),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp),
-                containerColor = White,
-                contentColor = Nero,
-                onClick = onBack
-            )
+            if (isActiveSearchState) {
+                SearchAppBar(
+                    value = queryState,
+                    onValueChange = { queryState = it },
+                    containerColor = White,
+                    contentColor = Nero,
+                    placeholder = stringResource(R.string.search_lostitem_title),
+                    onClick = { isActiveSearchState = false }
+                )
+            } else {
+                SearchTopAppBarWithBack(
+                    title = stringResource(R.string.performance_find_lost_item),
+                    containerColor = White,
+                    contentColor = Nero,
+                    tint = Roman_Silver,
+                    onBack = onBack,
+                    onClick = { isActiveSearchState = true }
+                )
+            }
         },
         floatingActionButton = {
             FloatingActionButton(
@@ -66,15 +79,17 @@ internal fun PerformanceLostItemScreen(
             }
         }
     ) { paddingValues ->
-        PerformanceLostItemContent(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
-                .background(White)
-                .padding(top = 23.dp)
-                .padding(horizontal = 20.dp),
-            onNavigateLostItemDetail = onNavigateLostItemDetail
-        )
+        if (isActiveSearchState) {
+            // TODO
+        } else {
+            PerformanceLostItemContent(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
+                    .background(White),
+                onNavigateLostItemDetail = onNavigateLostItemDetail
+            )
+        }
     }
 }
 
@@ -85,11 +100,20 @@ private fun PerformanceLostItemContent(
 ) {
     var isClickedDate by remember { mutableStateOf(false) }
     var isClickedType by remember { mutableStateOf(false) }
-    Box(modifier) {
-        DropDownLostItem(
+    var lostDateState by remember { mutableStateOf("") }
+    var lostTypeState by remember { mutableStateOf("") }
+    Box(
+        modifier = modifier
+            .padding(top = 23.dp)
+            .padding(horizontal = 20.dp)
+    ) {
+        PerformanceLostItemHeader(
             modifier = Modifier
                 .zIndex(if (isClickedDate or isClickedType) 1f else 0f)
                 .fillMaxWidth(),
+            location = "LG아트센터 서울",
+            lostDate = lostDateState,
+            lostType = lostTypeState,
             isClickedDate = isClickedDate,
             isClickedType = isClickedType,
             onClickDate = { isClickedDate = it },
@@ -97,7 +121,16 @@ private fun PerformanceLostItemContent(
             content = {
                 if (isClickedDate) {
                     SelectedDateCalender(
-                        modifier = Modifier.padding(top = 10.dp)
+                        modifier = Modifier.padding(top = 10.dp),
+                        onDateClick = {
+                            lostDateState = String.format(
+                                "%d.%d.%d",
+                                it.date.year,
+                                it.date.month.value,
+                                it.date.dayOfMonth
+                            )
+                            isClickedDate = false
+                        }
                     )
                 }
                 if (isClickedType) {
@@ -106,22 +139,42 @@ private fun PerformanceLostItemContent(
                             .padding(vertical = 24.dp, horizontal = 30.dp)
                             .fillMaxWidth()
                             .height(336.dp),
-                        itemModifier = Modifier.size(60.dp, 90.dp)
+                        itemModifier = Modifier.size(60.dp, 90.dp),
+                        onTypeChange = {
+                            lostTypeState = it.label
+                            isClickedType = false
+                        }
                     )
                 }
             }
         )
+//        Box(
+//            modifier = Modifier
+//                .padding(top = 88.dp)
+//                .fillMaxSize(),
+//            contentAlignment = Alignment.Center
+//        ) {
+//            EmptyItem(
+//                alert = stringResource(R.string.performance_lostitem_empty)
+//            )
+//        }
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
-            modifier = Modifier.padding(top = 58.dp)
+            modifier = Modifier.padding(top = 108.dp),
+            verticalArrangement = Arrangement.spacedBy(18.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             itemsIndexed(List(9) { it }) { index, item ->
-                LostItemContent(
+                GridLostItem(
                     modifier = Modifier
                         .clickable { onNavigateLostItemDetail() }
-                        .padding(start = if (index % 2 == 1) 6.dp else 0.dp)
-                        .padding(end = if (index % 2 == 0) 6.dp else 0.dp)
-                        .padding(bottom = 18.dp)
+                        .background(Cultured, RoundedCornerShape(10.dp))
+                        .padding(horizontal = 8.dp)
+                        .padding(top = 8.dp, bottom = 15.dp),
+                    painter = painterResource(R.drawable.img_poster),
+                    title = "아이폰 핑크",
+                    location = "LG 아트센터 서울",
+                    date = "2023.7.15"
                 )
             }
         }
@@ -129,57 +182,11 @@ private fun PerformanceLostItemContent(
 }
 
 @Composable
-private fun LostItemContent(
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-            .background(Cultured, RoundedCornerShape(10.dp))
-            .padding(horizontal = 8.dp)
-            .padding(top = 8.dp, bottom = 15.dp)
-    ) {
-        Image(
-            painter = painterResource(R.drawable.img_poster),
-            contentDescription = null,
-            modifier = Modifier
-                .aspectRatio(1f)
-                .clip(RoundedCornerShape(10.dp)),
-            contentScale = ContentScale.FillWidth
-        )
-        Text(
-            text = "아이폰 핑크",
-            modifier = Modifier.padding(top = 16.dp),
-            color = Chinese_Black,
-            fontSize = 16.dp.toSp(),
-            fontWeight = FontWeight.Bold,
-            fontFamily = spoqahansanseeo
-        )
-        Text(
-            text = "습득 장소 | LG 아트센터 서울",
-            modifier = Modifier.padding(top = 12.dp),
-            color = Nero,
-            fontSize = 12.dp.toSp(),
-            fontWeight = FontWeight.Medium,
-            fontFamily = spoqahansanseeo,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 1
-        )
-        Text(
-            text = "습득 일자 | 2023.7.15",
-            modifier = Modifier.padding(top = 4.dp),
-            color = Nero,
-            fontSize = 12.dp.toSp(),
-            fontWeight = FontWeight.Medium,
-            fontFamily = spoqahansanseeo,
-            overflow = TextOverflow.Ellipsis,
-            maxLines = 1
-        )
-    }
-}
-
-@Composable
-private fun DropDownLostItem(
+private fun PerformanceLostItemHeader(
     modifier: Modifier = Modifier,
+    location: String,
+    lostDate: String,
+    lostType: String,
     isClickedDate: Boolean = false,
     isClickedType: Boolean = false,
     onClickDate: (Boolean) -> Unit = {},
@@ -187,64 +194,66 @@ private fun DropDownLostItem(
     content: @Composable () -> Unit = {}
 ) {
     Column(modifier) {
-        Row(Modifier.fillMaxWidth()) {
-            Row(
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Me_Pink.copy(0.2f), RoundedCornerShape(6.dp))
+                .padding(vertical = 9.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = location,
+                color = Me_Pink,
+                fontSize = 16.dp.toSp(),
+                fontWeight = FontWeight.Bold,
+                fontFamily = spoqahansanseeo
+            )
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp)
+        ) {
+            CurtainCallDropDownButton(
                 modifier = Modifier
+                    .padding(end = 6.dp)
                     .weight(1f)
+                    .height(38.dp)
                     .clickable {
                         onClickDate(isClickedDate.not())
                         if (isClickedDate.not()) onClickType(false)
-                    }
-                    .background(Cultured, RoundedCornerShape(6.dp))
-                    .border(BorderStroke(1.dp, if (isClickedDate) Roman_Silver else Color.Transparent), RoundedCornerShape(6.dp))
+                    },
+                isClicked = isClickedDate,
+                title = lostDate.ifEmpty { stringResource(R.string.performance_find_lost_item_date) },
+                fontSize = 14.dp.toSp(),
+                containerColor = Cultured,
+                contentColor = if (lostDate.isEmpty()) Silver_Sand else Nero,
+                borderColor = Roman_Silver,
+                radiusSize = 6.dp,
+                contentModifier = Modifier
                     .padding(vertical = 9.dp)
-                    .padding(start = 12.dp, end = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = stringResource(R.string.performance_find_lost_item_date),
-                    color = Silver_Sand,
-                    fontSize = 14.dp.toSp(),
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo
-                )
-                Spacer(Modifier.weight(1f))
-                Icon(
-                    painter = painterResource(R.drawable.ic_dropdown),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp),
-                    tint = Color.Unspecified
-                )
-            }
-            Row(
+                    .padding(start = 12.dp, end = 8.dp)
+            )
+            CurtainCallDropDownButton(
                 modifier = Modifier
-                    .padding(start = 12.dp)
+                    .padding(start = 6.dp)
                     .weight(1f)
+                    .height(38.dp)
                     .clickable {
                         onClickType(isClickedType.not())
                         if (isClickedType.not()) onClickDate(false)
-                    }
-                    .background(Cultured, RoundedCornerShape(6.dp))
-                    .border(BorderStroke(1.dp, if (isClickedType) Roman_Silver else Color.Transparent), RoundedCornerShape(6.dp))
+                    },
+                isClicked = isClickedType,
+                title = lostType.ifEmpty { stringResource(R.string.performance_find_lost_item_type) },
+                fontSize = 14.dp.toSp(),
+                containerColor = Cultured,
+                contentColor = if (lostType.isEmpty()) Silver_Sand else Nero,
+                borderColor = Roman_Silver,
+                radiusSize = 6.dp,
+                contentModifier = Modifier
                     .padding(vertical = 9.dp)
-                    .padding(start = 12.dp, end = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = stringResource(R.string.performance_find_lost_item_type),
-                    color = Silver_Sand,
-                    fontSize = 14.dp.toSp(),
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo
-                )
-                Spacer(Modifier.weight(1f))
-                Icon(
-                    painter = painterResource(R.drawable.ic_dropdown),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp),
-                    tint = Color.Unspecified
-                )
-            }
+                    .padding(start = 12.dp, end = 8.dp)
+            )
         }
         if (isClickedDate or isClickedType) {
             content()

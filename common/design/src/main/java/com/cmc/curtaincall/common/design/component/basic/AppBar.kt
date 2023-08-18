@@ -1,9 +1,6 @@
 package com.cmc.curtaincall.common.design.component.basic
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -20,7 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -52,7 +48,7 @@ fun TopAppBarOnlyAction(
                 )
             }
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = containerColor)
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = containerColor)
     )
 }
 
@@ -90,7 +86,7 @@ fun TopAppBarWithBack(
                 )
             }
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = containerColor)
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = containerColor)
     )
 }
 
@@ -171,7 +167,7 @@ fun SearchAppBar(
             .height(54.dp)
             .background(containerColor)
             .padding(top = 13.dp, bottom = 5.dp),
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = containerColor)
+        colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = containerColor)
     )
 }
 
@@ -199,7 +195,56 @@ fun TopAppBarOnlySearch(
                 )
             }
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = containerColor)
+        colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = containerColor)
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SearchTopAppBarWithBack(
+    title: String,
+    containerColor: Color,
+    contentColor: Color,
+    tint: Color,
+    onBack: () -> Unit = {},
+    onClick: () -> Unit = {}
+) {
+    CenterAlignedTopAppBar(
+        title = {
+            Text(
+                text = title,
+                color = contentColor,
+                fontSize = 17.dp.toSp(),
+                fontWeight = FontWeight.Bold,
+                fontFamily = spoqahansanseeo
+            )
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(54.dp)
+            .background(containerColor)
+            .padding(top = 20.dp, bottom = 10.dp),
+        navigationIcon = {
+            IconButton(onClick = onBack) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_arrow_back),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                    tint = contentColor
+                )
+            }
+        },
+        actions = {
+            IconButton(onClick = onClick) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_search),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                    tint = tint
+                )
+            }
+        },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = containerColor)
     )
 }
 
@@ -236,7 +281,7 @@ fun TopAppBarWithSearch(
                 )
             }
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = containerColor)
+        colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = containerColor)
     )
 }
 
@@ -279,7 +324,7 @@ fun TopAppBarWithAction(
         actions = {
             actionContent()
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = containerColor)
+        colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = containerColor)
     )
 }
 
@@ -287,67 +332,83 @@ fun TopAppBarWithAction(
 @Composable
 fun TopAppBarWithReportAction(
     title: String,
-    modifier: Modifier = Modifier,
     containerColor: Color,
+    contentColor: Color,
     onBack: () -> Unit = {},
     onAction: () -> Unit = {}
 ) {
     CenterAlignedTopAppBar(
         title = {
-            Box(
-                modifier = Modifier.fillMaxHeight(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = title,
-                    color = Nero,
-                    fontSize = 17.dp.toSp(),
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = spoqahansanseeo
-                )
-            }
+            Text(
+                text = title,
+                color = contentColor,
+                fontSize = 17.dp.toSp(),
+                fontWeight = FontWeight.Bold,
+                fontFamily = spoqahansanseeo
+            )
         },
-        modifier = modifier,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(54.dp)
+            .background(containerColor)
+            .padding(top = 20.dp, bottom = 10.dp),
         navigationIcon = {
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(start = 20.dp)
-                    .clickable { onBack() },
-                contentAlignment = Alignment.Center
-            ) {
+            IconButton(onClick = onBack) {
                 Icon(
                     painter = painterResource(R.drawable.ic_arrow_back),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
-                    tint = Eerie_Black
+                    tint = contentColor
                 )
             }
         },
         actions = {
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(end = 10.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(40.dp, 24.dp)
-                        .border(BorderStroke(1.dp, Silver_Sand), RoundedCornerShape(20.dp))
-                        .clickable { onAction() },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = stringResource(R.string.performance_find_lost_item_repot),
-                        color = Silver_Sand,
-                        fontSize = 13.dp.toSp(),
-                        fontWeight = FontWeight.Medium,
-                        fontFamily = spoqahansanseeo
-                    )
-                }
+            IconButton(onClick = onAction) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_report),
+                    contentDescription = null,
+                    modifier = Modifier.size(40.dp, 24.dp),
+                    tint = Silver_Sand
+                )
             }
         },
-        colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = containerColor)
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = containerColor)
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopAppBarWithClose(
+    title: String,
+    containerColor: Color,
+    contentColor: Color,
+    onClose: () -> Unit
+) {
+    CenterAlignedTopAppBar(
+        title = {
+            Text(
+                text = title,
+                color = contentColor,
+                fontSize = 17.dp.toSp(),
+                fontWeight = FontWeight.Bold,
+                fontFamily = spoqahansanseeo
+            )
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(54.dp)
+            .background(containerColor)
+            .padding(top = 20.dp, bottom = 10.dp),
+        navigationIcon = {
+            IconButton(onClick = onClose) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_appbar_close),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                    tint = contentColor
+                )
+            }
+        },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = containerColor)
     )
 }

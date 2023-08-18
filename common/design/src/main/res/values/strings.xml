@@ -18,6 +18,7 @@
 
     <!-- search -->
     <string name="search_performance_title">작품명 입력</string>
+    <string name="search_lostitem_title">분실물 입력</string>
 
     <!-- signup -->
     <string name="signup_terms">약관 동의</string>
@@ -128,8 +129,10 @@
     <string name="performance_find_lost_item_repot">신고</string>
     <string name="performance_find_lost_item_detail_classification">분류</string>
     <string name="performance_find_lost_item_detail_place_of_acquisition">습득장소</string>
+    <string name="performance_find_lost_item_detail_place_of_acquisition_format">습득장소 | %s</string>
     <string name="performance_find_lost_item_detail_place">세부장소</string>
     <string name="performance_find_lost_item_detail_acquistion_date">습득일자</string>
+    <string name="performance_find_lost_item_detail_acquistion_date_format">습득일자 | %s</string>
     <string name="performance_find_lost_item_detail_significant">특이사항</string>
     <string name="performance_find_lost_item_detail_management_number">관리번호</string>
     <string name="performance_find_lost_item_detail_storage">보관장소</string>
@@ -137,6 +140,7 @@
     <string name="performance_find_lost_item_create">분실물 게시물 작성</string>
     <string name="performance_find_lost_item_create_title">제목</string>
     <string name="performance_find_lost_item_create_title_placeholder">제목을 입력해주세요.</string>
+    <string name="performance_find_lost_item_create_location">공연장소</string>
     <string name="performance_find_lost_item_create_classification">분류</string>
     <string name="performance_find_lost_item_create_classification_placeholder">물건 종류 선택</string>
     <string name="performance_find_lost_item_create_place_of_acquisition">습득장소</string>
@@ -151,11 +155,12 @@
     <string name="performance_find_lost_item_create_significant_placeholder">내용을 적어주세요.</string>
     <string name="performance_find_lost_item_create_attachment">첨부파일</string>
     <string name="performance_find_lost_item_create_attachment_placeholder">파일을 선택해주세요.</string>
+    <string name="performance_find_lost_item_create_attachment_limit">5MB 이하의 이미지 파일(jpg, png)을 첨부하실 수 있습니다.</string>
     <string name="performance_find_lost_item_create_calendar_confirm">확인</string>
     <string name="performance_find_lost_item_create_select_image">이미지 선택</string>
     <string name="performance_find_lost_item_create_capture">사진 촬영</string>
     <string name="performance_find_lost_item_create_write_complete">작성 완료</string>
-    <string name="performance_find_lost_item_create_time_format">%d : %d %s</string>
+    <string name="performance_find_lost_item_create_time_format">%d:%d</string>
     <string name="performance_lost_item_upload_complete">분실물 작성이 모두 끝났습니다.</string>
     <string name="performance_lost_item_upload_complete_description">해당 게시물은 작품 상세페이지 및\n마이페이지에서 확인할 수 있습니다.</string>
 

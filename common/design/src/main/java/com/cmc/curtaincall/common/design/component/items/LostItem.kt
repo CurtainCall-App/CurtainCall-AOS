@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,15 +17,72 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.Black_Coral
 import com.cmc.curtaincall.common.design.theme.Bright_Gray
 import com.cmc.curtaincall.common.design.theme.Chinese_Black
+import com.cmc.curtaincall.common.design.theme.Nero
 import com.cmc.curtaincall.common.design.theme.Roman_Silver
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
+
+@Composable
+fun GridLostItem(
+    modifier: Modifier = Modifier,
+    painter: Painter,
+    title: String,
+    location: String,
+    date: String
+) {
+    Column(modifier) {
+        Image(
+            painter = painter,
+            contentDescription = null,
+            modifier = Modifier
+                .aspectRatio(1f)
+                .clip(RoundedCornerShape(10.dp)),
+            contentScale = ContentScale.FillBounds
+        )
+        Text(
+            text = title,
+            modifier = Modifier.padding(top = 16.dp),
+            color = Chinese_Black,
+            fontSize = 16.dp.toSp(),
+            fontWeight = FontWeight.Bold,
+            fontFamily = spoqahansanseeo
+        )
+        Text(
+            text = String.format(
+                stringResource(R.string.performance_find_lost_item_detail_place_of_acquisition_format),
+                location
+            ),
+            modifier = Modifier.padding(top = 12.dp),
+            color = Nero,
+            fontSize = 12.dp.toSp(),
+            fontWeight = FontWeight.Medium,
+            fontFamily = spoqahansanseeo,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1
+        )
+        Text(
+            text = String.format(
+                stringResource(R.string.performance_find_lost_item_detail_acquistion_date_format),
+                date
+            ),
+            modifier = Modifier.padding(top = 4.dp),
+            color = Nero,
+            fontSize = 12.dp.toSp(),
+            fontWeight = FontWeight.Medium,
+            fontFamily = spoqahansanseeo,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1
+        )
+    }
+}
 
 @Composable
 fun LostItem(

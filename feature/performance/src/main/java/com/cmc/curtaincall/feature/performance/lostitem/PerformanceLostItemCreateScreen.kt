@@ -1,13 +1,23 @@
 package com.cmc.curtaincall.feature.performance.lostitem
 
+import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.launch
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,15 +27,21 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.component.basic.CurtainCallDropDownButton
+import com.cmc.curtaincall.common.design.component.basic.CurtainCallMultiLineTextField
+import com.cmc.curtaincall.common.design.component.basic.CurtainCallRoundedTextButton
+import com.cmc.curtaincall.common.design.component.basic.CurtainCallSingleLineTextField
+import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithClose
 import com.cmc.curtaincall.common.design.component.custom.CurtainCallTimePicker
 import com.cmc.curtaincall.common.design.component.custom.SelectedDateCalender
 import com.cmc.curtaincall.common.design.extensions.toSp
@@ -38,25 +54,42 @@ internal fun PerformanceLostItemCreateScreen(
     onNavigateUpload: () -> Unit,
     onBack: () -> Unit
 ) {
+    var completeState by remember { mutableStateOf(false) }
     Scaffold(
         topBar = {
             TopAppBarWithClose(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp),
                 title = if (fromMyPage) {
                     stringResource(R.string.mypage_writing_find_lost_item_edit)
                 } else {
                     stringResource(R.string.performance_find_lost_item_create)
                 },
+                containerColor = White,
+                contentColor = Nero,
                 onClose = onBack
             )
-        }
+        },
+        floatingActionButton = {
+            CurtainCallRoundedTextButton(
+                onClick = { onNavigateUpload() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+                    .height(52.dp),
+                title = stringResource(R.string.performance_find_lost_item_create_write_complete),
+                fontSize = 16.dp.toSp(),
+                enabled = completeState,
+                containerColor = if (completeState) Me_Pink else Bright_Gray,
+                contentColor = if (completeState) White else Silver_Sand
+            )
+        },
+        floatingActionButtonPosition = FabPosition.Center
     ) { paddingValues ->
         PerformanceLostItemCreateContent(
             modifier = Modifier
                 .padding(paddingValues)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .background(White),
+            onCompleteChange = { completeState = it },
             onNavigateUpload = onNavigateUpload
         )
     }
@@ -65,30 +98,70 @@ internal fun PerformanceLostItemCreateScreen(
 @Composable
 private fun PerformanceLostItemCreateContent(
     modifier: Modifier = Modifier,
+    onCompleteChange: (Boolean) -> Unit,
     onNavigateUpload: () -> Unit
 ) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
-    var lostItemName by remember { mutableStateOf("") }
-    var lostItemType by remember { mutableStateOf("") }
-    var isClickLostItemType by remember { mutableStateOf(false) }
-    var placeAcquisition by remember { mutableStateOf("") }
+    var lostItemName by remember { mutableStateOf("") } // 필수
+    var lostItemType by remember { mutableStateOf("") } // 필수
     var detailPlaceAcquisition by remember { mutableStateOf("") }
-    var dateAcquisition by remember { mutableStateOf("") }
-    var isClickDateAcquisition by remember { mutableStateOf(false) }
+    var dateAcquisition by remember { mutableStateOf("") } // 필수
     var timeAcquisition by remember { mutableStateOf("") }
-    var isClickTimeAcquisition by remember { mutableStateOf(false) }
     var significant by remember { mutableStateOf("") }
-    var attachmentFile by remember { mutableStateOf("") }
-    var isClickAttachmentFile by remember { mutableStateOf(false) }
-    val isValidation = lostItemName.isNotEmpty() && lostItemType.isNotEmpty() && placeAcquisition.isNotEmpty() && dateAcquisition.isNotEmpty()
 
-    Box(modifier) {
+    var isSelectAttachment by remember { mutableStateOf(false) }
+    var isClickLostItemType by remember { mutableStateOf(false) }
+    var isClickDateAcquisition by remember { mutableStateOf(false) }
+    var isClickTimeAcquisition by remember { mutableStateOf(false) }
+    var isClickAttachmentFile by remember { mutableStateOf(false) }
+
+    LaunchedEffect(lostItemName, lostItemType, dateAcquisition, isSelectAttachment) {
+        onCompleteChange(
+            listOf(lostItemName, lostItemType, dateAcquisition).all { it.isNotEmpty() } && isSelectAttachment
+        )
+    }
+
+    val scrollState = rememberScrollState()
+    Box(
+        modifier = modifier
+            .padding(horizontal = 20.dp)
+            .verticalScroll(scrollState)
+    ) {
+        Row(
+            modifier = Modifier.padding(top = 36.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Row(Modifier.width(84.dp)) {
+                Text(
+                    text = stringResource(R.string.performance_find_lost_item_create_location),
+                    color = Nero,
+                    fontSize = 16.dp.toSp(),
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = spoqahansanseeo
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(42.dp)
+                    .background(Me_Pink.copy(0.1f), RoundedCornerShape(8.dp))
+                    .padding(horizontal = 14.dp),
+                contentAlignment = Alignment.CenterStart
+            ) {
+                Text(
+                    text = "LG아트센터 서울",
+                    color = Me_Pink,
+                    fontSize = 16.dp.toSp(),
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = spoqahansanseeo
+                )
+            }
+        }
         LostItemInfoTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 36.dp)
-                .padding(horizontal = 20.dp),
+                .padding(top = 90.dp),
             title = stringResource(R.string.performance_find_lost_item_create_title),
             placeholder = stringResource(R.string.performance_find_lost_item_create_title_placeholder),
             isEssential = true,
@@ -104,8 +177,7 @@ private fun PerformanceLostItemCreateContent(
         LostItemTypeDropDown(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 90.dp)
-                .padding(horizontal = 20.dp),
+                .padding(top = 144.dp),
             isClicked = isClickLostItemType,
             onClickChange = { isClick ->
                 isClickLostItemType = isClick
@@ -136,25 +208,7 @@ private fun PerformanceLostItemCreateContent(
         LostItemInfoTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 144.dp)
-                .padding(horizontal = 20.dp),
-            title = stringResource(R.string.performance_find_lost_item_create_place_of_acquisition),
-            placeholder = stringResource(R.string.performance_find_lost_item_create_place_of_acquisition_placeholder),
-            isEssential = true,
-            value = placeAcquisition,
-            onValueChange = { placeAcquisition = it },
-            onFocused = {
-                isClickLostItemType = false
-                isClickDateAcquisition = false
-                isClickTimeAcquisition = false
-                isClickAttachmentFile = false
-            }
-        )
-        LostItemInfoTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 198.dp)
-                .padding(horizontal = 20.dp),
+                .padding(top = 198.dp),
             title = stringResource(R.string.performance_find_lost_item_create_place),
             placeholder = stringResource(R.string.performance_find_lost_item_create_place_placeholder),
             value = detailPlaceAcquisition,
@@ -169,8 +223,7 @@ private fun PerformanceLostItemCreateContent(
         LostItemTypeDropDown(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 252.dp)
-                .padding(horizontal = 20.dp),
+                .padding(top = 252.dp),
             isClicked = isClickDateAcquisition,
             onClickChange = { isClick ->
                 isClickDateAcquisition = isClick
@@ -190,7 +243,7 @@ private fun PerformanceLostItemCreateContent(
                 modifier = Modifier.padding(top = 10.dp),
                 onDateClick = {
                     dateAcquisition = String.format(
-                        context.getString(R.string.partymember_create_calendar_date_format),
+                        "%d.%d.%d",
                         it.date.year,
                         it.date.month.value,
                         it.date.dayOfMonth
@@ -202,8 +255,7 @@ private fun PerformanceLostItemCreateContent(
         LostItemTypeDropDown(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 306.dp)
-                .padding(horizontal = 20.dp),
+                .padding(top = 306.dp),
             isClicked = isClickTimeAcquisition,
             onClickChange = { isClick ->
                 isClickTimeAcquisition = isClick
@@ -224,8 +276,7 @@ private fun PerformanceLostItemCreateContent(
                     timeAcquisition = String.format(
                         context.getString(R.string.performance_find_lost_item_create_time_format),
                         it.hour,
-                        it.minute,
-                        it.meridiem
+                        it.minute
                     )
                     isClickTimeAcquisition = false
                 }
@@ -234,8 +285,7 @@ private fun PerformanceLostItemCreateContent(
         LostItemInfoTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 360.dp)
-                .padding(horizontal = 20.dp),
+                .padding(top = 360.dp),
             title = stringResource(R.string.performance_find_lost_item_create_significant),
             placeholder = stringResource(R.string.performance_find_lost_item_create_significant_placeholder),
             value = significant,
@@ -245,13 +295,13 @@ private fun PerformanceLostItemCreateContent(
                 isClickDateAcquisition = false
                 isClickTimeAcquisition = false
                 isClickAttachmentFile = false
-            }
+            },
+            isSingleLine = false
         )
         LostItemAttachmentDropDown(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 414.dp)
-                .padding(horizontal = 20.dp),
+                .padding(top = 546.dp),
             isClicked = isClickAttachmentFile,
             onClickChange = { isClick ->
                 isClickAttachmentFile = isClick
@@ -262,37 +312,9 @@ private fun PerformanceLostItemCreateContent(
                     isClickTimeAcquisition = false
                 }
             },
-            value = attachmentFile,
-            onValueChange = { attachmentFile = it }
+            isSelectAttachment = isSelectAttachment,
+            onSelectChange = { isSelectAttachment = it }
         )
-        Button(
-            onClick = { onNavigateUpload() },
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-                .padding(bottom = 19.dp)
-                .height(52.dp),
-            enabled = lostItemName.isNotEmpty() && lostItemType.isNotEmpty() &&
-                placeAcquisition.isNotEmpty() && dateAcquisition.isNotEmpty(),
-            shape = RoundedCornerShape(12.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = if (isValidation) Me_Pink else Philippine_Gray
-            )
-        ) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(R.string.performance_find_lost_item_create_write_complete),
-                    color = if (isValidation) White else Silver_Sand,
-                    fontSize = 16.dp.toSp(),
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo
-                )
-            }
-        }
     }
 }
 
@@ -301,116 +323,159 @@ private fun LostItemAttachmentDropDown(
     modifier: Modifier = Modifier,
     isClicked: Boolean = false,
     onClickChange: (Boolean) -> Unit,
-    value: String,
-    onValueChange: (String) -> Unit
+    isSelectAttachment: Boolean,
+    onSelectChange: (Boolean) -> Unit
 ) {
-    Column(modifier.zIndex(if (isClicked) 1f else 0f)) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Row(Modifier.width(84.dp)) {
-                Text(
-                    text = stringResource(R.string.performance_find_lost_item_create_attachment),
-                    color = Nero,
-                    fontSize = 16.dp.toSp(),
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo
-                )
-                Spacer(
-                    modifier = Modifier
-                        .padding(start = 2.dp)
-                        .size(4.dp)
-                        .background(Me_Pink, CircleShape)
-                )
-            }
-            Box(
+    val context = LocalContext.current
+    var attachmentFile by remember { mutableStateOf<Bitmap?>(null) }
+    val takePhotoFromAlbum = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        uri?.let { uri ->
+            attachmentFile = uri.parseBitmap(context)
+            onSelectChange(true)
+        }
+    }
+    val takePhotoFromCameraLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
+        attachmentFile = bitmap
+        onSelectChange(true)
+    }
+
+    Row(modifier.zIndex(if (isClicked) 1f else 0f)) {
+        Row(
+            modifier = Modifier
+                .padding(top = 10.dp)
+                .width(84.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.performance_find_lost_item_create_attachment),
+                color = Nero,
+                fontSize = 16.dp.toSp(),
+                fontWeight = FontWeight.Medium,
+                fontFamily = spoqahansanseeo
+            )
+            Spacer(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(42.dp)
-                    .clickable { onClickChange(isClicked.not()) }
-                    .border(BorderStroke(1.dp, if (isClicked) Roman_Silver else Color.Transparent), RoundedCornerShape(8.dp))
-                    .background(Cultured, RoundedCornerShape(8.dp))
-                    .padding(start = 14.dp, end = 9.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
+                    .padding(start = 2.dp)
+                    .size(4.dp)
+                    .background(Me_Pink, CircleShape)
+            )
+        }
+        Column(Modifier.fillMaxWidth()) {
+            Box {
+                if (isSelectAttachment) {
+                    Box(Modifier.size(83.dp)) {
+                        AsyncImage(
+                            model = attachmentFile,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(80.dp)
+                                .clip(RoundedCornerShape(8.dp)),
+                            contentScale = ContentScale.FillBounds
+                        )
+                        Icon(
+                            painter = painterResource(R.drawable.ic_close),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .size(22.dp)
+                                .clickable { onSelectChange(false) },
+                            tint = Color.Unspecified
+                        )
+                    }
+                } else {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(42.dp)
+                            .background(Cultured, RoundedCornerShape(8.dp))
+                            .border(BorderStroke(1.dp, if (isClicked) Roman_Silver else Color.Transparent), RoundedCornerShape(8.dp))
+                            .padding(horizontal = 14.dp)
+                            .clickable { onClickChange(isClicked.not()) },
+                        contentAlignment = Alignment.CenterStart
+                    ) {
+                        Text(
+                            text = stringResource(R.string.performance_find_lost_item_create_attachment_placeholder),
+                            color = Silver_Sand,
+                            fontSize = 14.dp.toSp(),
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = spoqahansanseeo
+                        )
+                    }
                     Text(
-                        text = value.ifEmpty { stringResource(R.string.performance_find_lost_item_create_attachment_placeholder) },
-                        modifier = Modifier.weight(1f),
-                        color = if (value.isNotEmpty()) Nero else Silver_Sand,
-                        fontSize = 14.dp.toSp(),
+                        text = stringResource(R.string.performance_find_lost_item_create_attachment_limit),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 52.dp),
+                        color = Roman_Silver,
+                        fontSize = 12.dp.toSp(),
                         fontWeight = FontWeight.Medium,
                         fontFamily = spoqahansanseeo
                     )
-                    Icon(
-                        painter = painterResource(R.drawable.ic_dropdown),
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp),
-                        tint = Color.Unspecified
-                    )
-                }
-            }
-        }
-        if (isClicked) {
-            Row {
-                Spacer(Modifier.width(84.dp))
-                Card(
-                    modifier = Modifier
-                        .padding(top = 10.dp, bottom = 10.dp)
-                        .height(112.dp),
-                    shape = RoundedCornerShape(10.dp),
-                    colors = CardDefaults.cardColors(containerColor = White),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(vertical = 20.dp),
-                        horizontalArrangement = Arrangement.SpaceEvenly
-                    ) {
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            IconButton(
-                                onClick = { /*TODO*/ },
-                                modifier = Modifier
-                                    .size(48.dp)
-                                    .clip(CircleShape),
-                                colors = IconButtonDefaults.iconButtonColors(containerColor = Cultured)
+                    if (isClicked) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 52.dp)
+                        ) {
+                            Card(
+                                modifier = Modifier.height(112.dp),
+                                shape = RoundedCornerShape(10.dp),
+                                colors = CardDefaults.cardColors(containerColor = White),
+                                elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                             ) {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_select_image),
-                                    contentDescription = null,
-                                    tint = Color.Unspecified
-                                )
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(vertical = 20.dp),
+                                    horizontalArrangement = Arrangement.SpaceEvenly
+                                ) {
+                                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                        IconButton(
+                                            onClick = { takePhotoFromAlbum.launch("image/*") },
+                                            modifier = Modifier
+                                                .size(48.dp)
+                                                .clip(CircleShape),
+                                            colors = IconButtonDefaults.iconButtonColors(containerColor = Cultured)
+                                        ) {
+                                            Icon(
+                                                painter = painterResource(R.drawable.ic_select_image),
+                                                contentDescription = null,
+                                                tint = Color.Unspecified
+                                            )
+                                        }
+                                        Text(
+                                            text = stringResource(R.string.performance_find_lost_item_create_select_image),
+                                            modifier = Modifier.padding(top = 8.dp),
+                                            color = Black_Pearl,
+                                            fontSize = 13.dp.toSp(),
+                                            fontWeight = FontWeight.Medium,
+                                            fontFamily = spoqahansanseeo
+                                        )
+                                    }
+                                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                                        IconButton(
+                                            onClick = { takePhotoFromCameraLauncher.launch() },
+                                            modifier = Modifier
+                                                .size(48.dp)
+                                                .clip(CircleShape),
+                                            colors = IconButtonDefaults.iconButtonColors(containerColor = Cultured)
+                                        ) {
+                                            Icon(
+                                                painter = painterResource(R.drawable.ic_capture),
+                                                contentDescription = null,
+                                                tint = Color.Unspecified
+                                            )
+                                        }
+                                        Text(
+                                            text = stringResource(R.string.performance_find_lost_item_create_capture),
+                                            modifier = Modifier.padding(top = 8.dp),
+                                            color = Black_Pearl,
+                                            fontSize = 13.dp.toSp(),
+                                            fontWeight = FontWeight.Medium,
+                                            fontFamily = spoqahansanseeo
+                                        )
+                                    }
+                                }
                             }
-                            Text(
-                                text = stringResource(R.string.performance_find_lost_item_create_select_image),
-                                modifier = Modifier.padding(top = 8.dp),
-                                color = Black_Pearl,
-                                fontSize = 13.dp.toSp(),
-                                fontWeight = FontWeight.Medium,
-                                fontFamily = spoqahansanseeo
-                            )
-                        }
-                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                            IconButton(
-                                onClick = { /*TODO*/ },
-                                modifier = Modifier
-                                    .size(48.dp)
-                                    .clip(CircleShape),
-                                colors = IconButtonDefaults.iconButtonColors(containerColor = Cultured)
-                            ) {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_capture),
-                                    contentDescription = null,
-                                    tint = Color.Unspecified
-                                )
-                            }
-                            Text(
-                                text = stringResource(R.string.performance_find_lost_item_create_capture),
-                                modifier = Modifier.padding(top = 8.dp),
-                                color = Black_Pearl,
-                                fontSize = 13.dp.toSp(),
-                                fontWeight = FontWeight.Medium,
-                                fontFamily = spoqahansanseeo
-                            )
                         }
                     }
                 }
@@ -449,33 +514,22 @@ private fun LostItemTypeDropDown(
                     )
                 }
             }
-            Box(
+            CurtainCallDropDownButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(42.dp)
-                    .clickable { onClickChange(isClicked.not()) }
-                    .border(BorderStroke(1.dp, if (isClicked) Roman_Silver else Color.Transparent), RoundedCornerShape(8.dp))
-                    .background(Cultured, RoundedCornerShape(8.dp))
-                    .padding(start = 14.dp, end = 9.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = value.ifEmpty { placeholder },
-                        modifier = Modifier.weight(1f),
-                        color = if (value.isNotEmpty()) Nero else Silver_Sand,
-                        fontSize = 14.dp.toSp(),
-                        fontWeight = FontWeight.Medium,
-                        fontFamily = spoqahansanseeo
-                    )
-                    Icon(
-                        painter = painterResource(R.drawable.ic_dropdown),
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp),
-                        tint = Color.Unspecified
-                    )
-                }
-            }
+                    .clickable { onClickChange(isClicked.not()) },
+                isClicked = isClicked,
+                title = value.ifEmpty { placeholder },
+                fontSize = 14.dp.toSp(),
+                containerColor = Cultured,
+                contentColor = if (value.isEmpty()) Silver_Sand else Nero,
+                borderColor = Roman_Silver,
+                radiusSize = 8.dp,
+                contentModifier = Modifier
+                    .padding(start = 14.dp, end = 9.dp)
+                    .padding(vertical = 9.dp)
+            )
         }
         if (isClicked) {
             Row {
@@ -495,14 +549,19 @@ private fun LostItemInfoTextField(
     value: String,
     onValueChange: (String) -> Unit,
     onFocused: () -> Unit,
+    isSingleLine: Boolean = true
 ) {
     val focusRequester = FocusRequester()
     var isFocused by remember { mutableStateOf(false) }
     Row(
         modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = if (isSingleLine) Alignment.CenterVertically else Alignment.Top
     ) {
-        Row(Modifier.width(84.dp)) {
+        Row(
+            modifier = Modifier
+                .padding(top = if (isSingleLine) 0.dp else 12.dp)
+                .width(84.dp)
+        ) {
             Text(
                 text = title,
                 color = Nero,
@@ -519,84 +578,62 @@ private fun LostItemInfoTextField(
                 )
             }
         }
-        BasicTextField(
-            value = value,
-            onValueChange = onValueChange,
-            modifier = Modifier
-                .focusRequester(focusRequester)
-                .onFocusChanged {
-                    isFocused = it.isFocused
-                    if (it.isFocused) onFocused()
-                }
-                .fillMaxWidth()
-                .height(42.dp)
-                .border(BorderStroke(1.dp, if (isFocused) Roman_Silver else Color.Transparent), RoundedCornerShape(8.dp))
-                .background(Cultured, RoundedCornerShape(8.dp))
-                .padding(horizontal = 14.dp),
-            textStyle = TextStyle(
-                color = Nero,
-                fontSize = 14.dp.toSp(),
-                fontWeight = FontWeight.Medium,
-                fontFamily = spoqahansanseeo
-            ),
-            singleLine = true,
-            maxLines = 1,
-            decorationBox = { innerTextField ->
-                Box(contentAlignment = Alignment.CenterStart) {
-                    innerTextField()
-                    if (value.isEmpty()) {
-                        Text(
-                            text = placeholder,
-                            color = Silver_Sand,
-                            fontSize = 14.dp.toSp(),
-                            fontWeight = FontWeight.Medium,
-                            fontFamily = spoqahansanseeo
-                        )
+        if (isSingleLine) {
+            CurtainCallSingleLineTextField(
+                value = value,
+                onValueChange = onValueChange,
+                modifier = Modifier
+                    .focusRequester(focusRequester)
+                    .onFocusChanged {
+                        isFocused = it.isFocused
+                        if (it.isFocused) onFocused()
                     }
-                }
-            }
-        )
+                    .fillMaxWidth()
+                    .height(42.dp)
+                    .border(BorderStroke(1.dp, if (isFocused) Roman_Silver else Color.Transparent), RoundedCornerShape(8.dp)),
+                fontSize = 14.dp.toSp(),
+                shape = RoundedCornerShape(8.dp),
+                containerColor = Cultured,
+                contentColor = Nero,
+                contentModifier = Modifier.padding(horizontal = 14.dp),
+                placeholder = placeholder,
+                placeholderColor = Silver_Sand
+            )
+        } else {
+            CurtainCallMultiLineTextField(
+                value = value,
+                onValueChange = onValueChange,
+                modifier = Modifier
+                    .focusRequester(focusRequester)
+                    .onFocusChanged {
+                        isFocused = it.isFocused
+                        if (it.isFocused) onFocused()
+                    }
+                    .fillMaxWidth()
+                    .height(174.dp)
+                    .border(BorderStroke(1.dp, if (isFocused) Roman_Silver else Color.Transparent), RoundedCornerShape(8.dp)),
+                fontSize = 14.dp.toSp(),
+                shape = RoundedCornerShape(8.dp),
+                containerColor = Cultured,
+                contentColor = Nero,
+                contentModifier = Modifier.padding(horizontal = 14.dp, vertical = 10.dp),
+                placeholder = placeholder,
+                placeholderColor = Silver_Sand
+            )
+        }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun TopAppBarWithClose(
-    modifier: Modifier = Modifier,
-    title: String,
-    onClose: () -> Unit
-) {
-    CenterAlignedTopAppBar(
-        title = {
-            Box(
-                modifier = Modifier.fillMaxHeight(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = title,
-                    color = Nero,
-                    fontSize = 17.dp.toSp(),
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = spoqahansanseeo
-                )
-            }
-        },
-        modifier = modifier,
-        navigationIcon = {
-            Box(
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .padding(start = 20.dp)
-                    .clickable { onClose() },
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_appbar_close),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp),
-                    tint = Color.Unspecified
-                )
-            }
+@Suppress("DEPRECATION", "NewApi")
+private fun Uri.parseBitmap(context: Context): Bitmap {
+    return when (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) { // 28
+        true -> {
+            val source = ImageDecoder.createSource(context.contentResolver, this)
+            ImageDecoder.decodeBitmap(source)
         }
-    )
+
+        else -> {
+            MediaStore.Images.Media.getBitmap(context.contentResolver, this)
+        }
+    }
 }

@@ -199,7 +199,9 @@ private fun ReviewCreateBody(
             containerColor = Cultured,
             shape = RoundedCornerShape(10.dp),
             contentColor = Nero,
-            contentModifier = Modifier.fillMaxWidth(),
+            contentModifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 18.dp, vertical = 12.dp),
             placeholder = stringResource(R.string.performance_review_create_request_placeholder),
             placeholderColor = Silver_Sand
         )
