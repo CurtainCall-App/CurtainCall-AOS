@@ -19,6 +19,7 @@ android {
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":core:local"))
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
