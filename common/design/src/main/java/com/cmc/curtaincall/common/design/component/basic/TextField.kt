@@ -1,6 +1,7 @@
 package com.cmc.curtaincall.common.design.component.basic
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -77,6 +78,7 @@ fun CurtainCallSingleLineTextField(
     fontSize: TextUnit,
     shape: Shape,
     containerColor: Color,
+    borderColor: Color = Color.Transparent,
     contentColor: Color,
     contentModifier: Modifier = Modifier,
     placeholder: String = "",
@@ -85,7 +87,9 @@ fun CurtainCallSingleLineTextField(
     BasicTextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = modifier.background(containerColor, shape),
+        modifier = modifier
+            .background(containerColor, shape)
+            .border(1.dp, borderColor, shape),
         textStyle = TextStyle(
             color = contentColor,
             fontSize = fontSize,

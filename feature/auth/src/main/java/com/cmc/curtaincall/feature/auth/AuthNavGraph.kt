@@ -6,8 +6,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.feature.auth.login.LoginScreen
-import com.cmc.curtaincall.feature.auth.signup.SignUpInputScreen
-import com.cmc.curtaincall.feature.auth.signup.SignUpTermsScreen
+import com.cmc.curtaincall.feature.auth.signup.screen.SignUpInputScreen
+import com.cmc.curtaincall.feature.auth.signup.screen.SignUpTermsScreen
 import com.cmc.curtaincall.feature.auth.welcome.WelComeScreen
 import com.cmc.curtaincall.feature.home.HomeDestination
 
