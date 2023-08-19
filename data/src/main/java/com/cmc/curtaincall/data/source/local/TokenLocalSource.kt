@@ -7,13 +7,14 @@ import com.cmc.curtaincall.core.local.PreferenceKeys.ACCESS_TOKEN
 import com.cmc.curtaincall.core.local.PreferenceKeys.ACCESS_TOKEN_EXPIRESAT
 import com.cmc.curtaincall.core.local.PreferenceKeys.REFRESH_TOKEN
 import com.cmc.curtaincall.core.local.PreferenceKeys.REFRESH_TOKEN_EXPIRESAT
+import com.cmc.curtaincall.core.local.qualifiers.TokenDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import timber.log.Timber
 import javax.inject.Inject
 
 class TokenLocalSource @Inject constructor(
-    private val dataStore: DataStore<Preferences>
+    @TokenDataStore private val dataStore: DataStore<Preferences>
 ) {
     fun getAccessToken(): Flow<String> =
         dataStore.data.map { preferences ->

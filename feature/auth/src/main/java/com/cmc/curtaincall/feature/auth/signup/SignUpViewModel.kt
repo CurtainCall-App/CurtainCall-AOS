@@ -39,7 +39,11 @@ class SignUpViewModel @Inject constructor(
 
     fun createMember(nickname: String) {
         memberRepository.createMember(nickname)
-            .onEach { sendSideEffect(SignUpSideEffect.CreateMember(it)) }
+            .onEach {
+                memberRepository.saveMemberId(it)
+                memberRepository.saveMemberNickname(nickname)
+                sendSideEffect(SignUpSideEffect.CreateMember(it))
+            }
             .launchIn(viewModelScope)
     }
 }
