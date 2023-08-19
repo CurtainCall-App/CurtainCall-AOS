@@ -34,6 +34,8 @@
     <string name="signup_input_sub_description">닉네임은 공백없이 최소 6자에서 최대 15자 이하로\n한글, 영문, 숫자를 자유롭게 조합해주세요.</string>
     <string name="signup_input_nickname">닉네임을 입력해주세요.</string>
     <string name="signup_input_double_check">중복 확인</string>
+    <string name="signup_nickname_validate">사용 가능한 닉네임입니다.</string>
+    <string name="signup_nickname_duplicate">이미 동일한 닉네임이 있습니다.\n다른 닉네임을 입력해주세요.</string>
     <string name="signup_nickname_setting_complete">닉네임 설정 완료</string>
     <string name="signup_welcome_description">이제 커튼콜 이용을\n시작해볼까요?</string>기
     <string name="signup_welcome_start">시작하기</string>

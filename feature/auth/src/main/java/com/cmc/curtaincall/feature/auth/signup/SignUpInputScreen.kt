@@ -9,11 +9,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallRoundedTextButton
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallSingleLineTextField
@@ -27,6 +29,7 @@ private const val INPUT_CHECK_REGEX = "^[ㄱ-ㅎ가-힣a-zA-Z0-9]{6,15}$"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SignUpInputScreen(
+    signUpViewModel: SignUpViewModel = hiltViewModel(),
     onNavigateWelcome: () -> Unit,
     onBack: () -> Unit
 ) {
@@ -45,6 +48,7 @@ internal fun SignUpInputScreen(
                 .padding(paddingValues)
                 .fillMaxSize()
                 .background(White),
+            signUpViewModel = signUpViewModel,
             onNavigateWelcome = onNavigateWelcome
         )
     }
@@ -53,12 +57,12 @@ internal fun SignUpInputScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SignUpInputContent(
+    signUpViewModel: SignUpViewModel,
     modifier: Modifier = Modifier,
     onNavigateWelcome: () -> Unit
 ) {
     var nicknameState by remember { mutableStateOf("") }
-    var nicknameCheckState by remember { mutableStateOf(false) }
-
+    val signUpState by signUpViewModel.uiState.collectAsStateWithLifecycle()
     Column(modifier.padding(horizontal = 20.dp)) {
         Text(
             text = stringResource(R.string.signup_input_description),
@@ -82,6 +86,7 @@ private fun SignUpInputContent(
             value = nicknameState,
             onValueChange = {
                 if (Regex(INPUT_REGEX).matches(it)) {
+                    signUpViewModel.changeCheckState(CheckState.None)
                     nicknameState = it
                 }
             },
@@ -93,25 +98,44 @@ private fun SignUpInputContent(
             shape = RoundedCornerShape(10.dp),
             containerColor = Cultured,
             contentColor = Roman_Silver,
+            borderColor = if (signUpState.checkState == CheckState.Duplicate) Cheery_Paddle_Pop else Color.Transparent,
             contentModifier = Modifier.padding(horizontal = 20.dp),
             placeholder = stringResource(R.string.signup_input_nickname)
         )
-        CurtainCallRoundedTextButton(
-            onClick = {
-                nicknameCheckState = true
-            },
+        Row(
             modifier = Modifier
-                .align(Alignment.End)
-                .padding(top = 16.dp)
-                .wrapContentWidth()
-                .height(32.dp),
-            title = stringResource(R.string.signup_input_double_check),
-            fontSize = 13.dp.toSp(),
-            enabled = Regex(INPUT_CHECK_REGEX).matches(nicknameState),
-            containerColor = if (Regex(INPUT_CHECK_REGEX).matches(nicknameState)) Me_Pink else Bright_Gray,
-            contentColor = if (Regex(INPUT_CHECK_REGEX).matches(nicknameState)) White else Silver_Sand,
-            radiusSize = 8.dp
-        )
+                .fillMaxWidth()
+                .padding(top = 12.dp)
+        ) {
+            if (signUpState.checkState != CheckState.None) {
+                Text(
+                    text = stringResource(
+                        if (signUpState.checkState == CheckState.Validate) {
+                            R.string.signup_nickname_validate
+                        } else {
+                            R.string.signup_nickname_duplicate
+                        }
+                    ),
+                    color = if (signUpState.checkState == CheckState.Validate) Green else Cheery_Paddle_Pop,
+                    fontSize = 13.dp.toSp(),
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = spoqahansanseeo
+                )
+            }
+            Spacer(Modifier.weight(1f))
+            CurtainCallRoundedTextButton(
+                onClick = { signUpViewModel.checkDuplicateNickname(nicknameState) },
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .height(32.dp),
+                title = stringResource(R.string.signup_input_double_check),
+                fontSize = 13.dp.toSp(),
+                enabled = Regex(INPUT_CHECK_REGEX).matches(nicknameState) && (signUpState.checkState == CheckState.None),
+                containerColor = if (Regex(INPUT_CHECK_REGEX).matches(nicknameState) && (signUpState.checkState == CheckState.None)) Me_Pink else Bright_Gray,
+                contentColor = if (Regex(INPUT_CHECK_REGEX).matches(nicknameState) && (signUpState.checkState == CheckState.None)) White else Silver_Sand,
+                radiusSize = 8.dp
+            )
+        }
         Spacer(Modifier.weight(1f))
         CurtainCallRoundedTextButton(
             onClick = onNavigateWelcome,
@@ -121,9 +145,9 @@ private fun SignUpInputContent(
                 .height(52.dp),
             title = stringResource(R.string.signup_nickname_setting_complete),
             fontSize = 16.dp.toSp(),
-            enabled = nicknameCheckState,
-            containerColor = if (nicknameCheckState) Me_Pink else Bright_Gray,
-            contentColor = if (nicknameCheckState) White else Silver_Sand
+            enabled = signUpState.checkState == CheckState.Validate,
+            containerColor = if (signUpState.checkState == CheckState.Validate) Me_Pink else Bright_Gray,
+            contentColor = if (signUpState.checkState == CheckState.Validate) White else Silver_Sand
         )
     }
 }

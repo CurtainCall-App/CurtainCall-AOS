@@ -1,6 +1,7 @@
 package com.cmc.curtaincall.core.network.di
 
 import com.cmc.curtaincall.core.network.service.auth.AuthService
+import com.cmc.curtaincall.core.network.service.member.MemberService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,4 +19,10 @@ object ServiceModule {
     fun provideAuthService(
         retrofit: Retrofit
     ): AuthService = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun provideMemberService(
+        retrofit: Retrofit
+    ): MemberService = retrofit.create()
 }
