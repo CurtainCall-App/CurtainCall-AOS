@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -30,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
@@ -48,6 +51,7 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.coroutines.CancellableContinuation
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
@@ -59,11 +63,27 @@ private sealed interface AuthResult {
 
 @Composable
 fun LoginScreen(
+    loginViewModel: LoginViewModel = hiltViewModel(),
     onNavigateSignUpTerms: () -> Unit,
     onNavigateHome: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(Cetacean_Blue)
+
+    LaunchedEffect(loginViewModel) {
+        loginViewModel.isValidationToken() //
+        loginViewModel.effects.collectLatest { sideEffect ->
+            when (sideEffect) {
+                LoginSideEffect.SuccessLogin -> {
+                    onNavigateSignUpTerms()
+                }
+
+                LoginSideEffect.AutoLogin -> {
+                    onNavigateHome()
+                }
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -82,7 +102,8 @@ fun LoginScreen(
         Image(
             painter = painterResource(R.drawable.ic_social_login),
             contentDescription = null,
-            modifier = Modifier.size(180.dp, 47.dp)
+            modifier = Modifier
+                .size(180.dp, 47.dp)
                 .clickable {
                     // 추후 제거
                     onNavigateHome()
@@ -90,11 +111,17 @@ fun LoginScreen(
             contentScale = ContentScale.FillBounds
         )
         Row(
-            modifier = Modifier.fillMaxWidth().padding(top = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 16.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            LoginKaKao(onNavigateSignUpTerms, onNavigateHome)
+            LoginKaKao(
+                loginViewModel = loginViewModel,
+                onNavigateSignUpTerms = onNavigateSignUpTerms,
+                onNavigateHome = onNavigateHome
+            )
             Spacer(Modifier.width(16.dp))
             LoginGoogle(onNavigateSignUpTerms, onNavigateHome)
             Spacer(Modifier.width(16.dp))
@@ -115,6 +142,7 @@ fun LoginScreen(
 
 @Composable
 private fun LoginKaKao(
+    loginViewModel: LoginViewModel,
     onNavigateSignUpTerms: () -> Unit,
     onNavigateHome: () -> Unit
 ) {
@@ -131,7 +159,8 @@ private fun LoginKaKao(
                     when (result) {
                         is AuthResult.Success -> {
                             // TODO 카카오 AccessToken 서버 전달
-                            onNavigateSignUpTerms()
+                            loginViewModel.fetchLogin("kakao", result.idToken)
+                            // onNavigateSignUpTerms()
                         }
 
                         is AuthResult.Failure -> {

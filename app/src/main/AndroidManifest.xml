@@ -12,6 +12,7 @@
         android:icon="@drawable/ic_app"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
+        android:usesCleartextTraffic="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.CurtainCall"
         tools:targetApi="31">

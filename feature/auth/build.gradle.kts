@@ -4,6 +4,8 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -33,6 +35,7 @@ dependencies {
     implementation(project(":common:design"))
     implementation(project(":core:base"))
     implementation(project(":common:utility"))
+    implementation(project(":domain"))
     implementation(project(":feature:home"))
 
     // androidx
@@ -43,6 +46,7 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.androidx.compose)
     implementation(libs.bundles.accompanist.compose)
+    implementation(libs.androidx.lifecycle.compose)
 
     // firebase
     implementation(platform(libs.firebase.bom))
@@ -55,6 +59,11 @@ dependencies {
     // auth
     implementation(libs.kakao.user)
     implementation(libs.facebook.login)
+
+    // hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    implementation(libs.hilt.navigation.compose)
 
     implementation(libs.androidx.core.ktx)
     testImplementation(libs.junit)

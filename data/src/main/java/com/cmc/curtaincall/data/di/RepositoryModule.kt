@@ -1,7 +1,9 @@
 package com.cmc.curtaincall.data.di
 
 import com.cmc.curtaincall.data.repository.AuthRepositoryImpl
+import com.cmc.curtaincall.data.repository.TokenRepositoryImpl
 import com.cmc.curtaincall.domain.repository.AuthRepository
+import com.cmc.curtaincall.domain.repository.TokenRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -16,4 +18,10 @@ interface RepositoryModule {
     fun bindAuthRepository(
         authRepositoryImpl: AuthRepositoryImpl
     ): AuthRepository
+
+    @Binds
+    @Singleton
+    fun bindTokenRepository(
+        tokenRepositoryImpl: TokenRepositoryImpl
+    ): TokenRepository
 }
