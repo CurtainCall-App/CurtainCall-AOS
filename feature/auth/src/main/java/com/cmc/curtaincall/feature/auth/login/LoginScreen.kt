@@ -70,7 +70,7 @@ fun LoginScreen(
     systemUiController.setStatusBarColor(Cetacean_Blue)
 
     LaunchedEffect(loginViewModel) {
-        loginViewModel.isValidationToken()
+        // loginViewModel.isValidationToken()
         loginViewModel.effects.collectLatest { sideEffect ->
             when (sideEffect) {
                 LoginSideEffect.SuccessLogin -> {

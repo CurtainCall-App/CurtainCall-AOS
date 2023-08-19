@@ -36,4 +36,10 @@ class SignUpViewModel @Inject constructor(
             .onEach { sendAction(SignUpEvent.CheckDuplicateNickname(it)) }
             .launchIn(viewModelScope)
     }
+
+    fun createMember(nickname: String) {
+        memberRepository.createMember(nickname)
+            .onEach { sendSideEffect(SignUpSideEffect.CreateMember(it)) }
+            .launchIn(viewModelScope)
+    }
 }

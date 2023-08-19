@@ -1,10 +1,11 @@
-package com.cmc.curtaincall.feature.auth.signup
+package com.cmc.curtaincall.feature.auth.signup.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,6 +23,10 @@ import com.cmc.curtaincall.common.design.component.basic.CurtainCallSingleLineTe
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.feature.auth.signup.CheckState
+import com.cmc.curtaincall.feature.auth.signup.SignUpSideEffect
+import com.cmc.curtaincall.feature.auth.signup.SignUpViewModel
+import kotlinx.coroutines.flow.collectLatest
 
 private const val INPUT_REGEX = "^[ㄱ-ㅎ가-힣a-zA-Z0-9]{0,15}$"
 private const val INPUT_CHECK_REGEX = "^[ㄱ-ㅎ가-힣a-zA-Z0-9]{6,15}$"
@@ -63,6 +68,17 @@ private fun SignUpInputContent(
 ) {
     var nicknameState by remember { mutableStateOf("") }
     val signUpState by signUpViewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(signUpViewModel) {
+        signUpViewModel.effects.collectLatest { sideEffect ->
+            when (sideEffect) {
+                is SignUpSideEffect.CreateMember -> {
+                    onNavigateWelcome()
+                }
+            }
+        }
+    }
+
     Column(modifier.padding(horizontal = 20.dp)) {
         Text(
             text = stringResource(R.string.signup_input_description),
@@ -119,7 +135,8 @@ private fun SignUpInputContent(
                     color = if (signUpState.checkState == CheckState.Validate) Green else Cheery_Paddle_Pop,
                     fontSize = 13.dp.toSp(),
                     fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo
+                    fontFamily = spoqahansanseeo,
+                    lineHeight = 16.dp.toSp()
                 )
             }
             Spacer(Modifier.weight(1f))
@@ -138,7 +155,7 @@ private fun SignUpInputContent(
         }
         Spacer(Modifier.weight(1f))
         CurtainCallRoundedTextButton(
-            onClick = onNavigateWelcome,
+            onClick = { signUpViewModel.createMember(nicknameState) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 19.dp)
