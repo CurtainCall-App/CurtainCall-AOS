@@ -21,62 +21,120 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.component.basic.CurtainCallBorderText
+import com.cmc.curtaincall.common.design.component.basic.CurtainCallSelectTypeButton
+import com.cmc.curtaincall.common.design.component.content.card.PerformanceSimpleCard
+import com.cmc.curtaincall.common.design.component.content.row.SortTypeRow
+import com.cmc.curtaincall.common.design.component.custom.SelectSortTypeBottomSheet
 import com.cmc.curtaincall.common.design.component.custom.SelectedDateCalender
+import com.cmc.curtaincall.common.design.component.custom.SortType
+import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
-import com.cmc.curtaincall.feature.partymember.PartyPerformanceType
-
-enum class SortType {
-    Reservation, Korean
-}
 
 fun LazyGridScope.showPerformanceFirstStep(
-    modifier: Modifier = Modifier,
     selectedIndex: Int,
     onChangeSelect: (Int) -> Unit
 ) {
-    val dummyDatas = listOf(
-        "BIRTH" to R.drawable.img_default_performance,
-        "BIRTH" to R.drawable.img_default_performance,
-        "BIRTH" to R.drawable.img_default_performance,
-        "BIRTH" to R.drawable.img_default_performance,
-        "BIRTH" to R.drawable.img_default_performance,
-        "BIRTH" to R.drawable.img_default_performance,
-        "BIRTH" to R.drawable.img_default_performance,
-        "BIRTH" to R.drawable.img_default_performance,
-        "BIRTH" to R.drawable.img_default_performance,
-        "BIRTH" to R.drawable.img_default_performance,
-        "BIRTH" to R.drawable.img_default_performance,
-        "BIRTH" to R.drawable.img_default_performance,
-        "BIRTH" to R.drawable.img_default_performance,
-        "BIRTH" to R.drawable.img_default_performance
-    )
-
     item(span = { GridItemSpan(3) }) {
+        var isCheckFirstType by remember { mutableStateOf(true) }
+        var sortType by remember { mutableStateOf(SortType.STAR) }
+        var showDialog by remember { mutableStateOf(false) }
+
+        if (showDialog) {
+            SelectSortTypeBottomSheet(
+                sortType = sortType,
+                onSelectSortType = {
+                    sortType = it
+                    showDialog = false
+                }
+            )
+        }
+
         Column {
-            PerformanceClassifyButton(
-                modifier = modifier
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(top = 15.dp)
-                    .padding(horizontal = 6.dp)
-            )
-
-            PerformanceGridHeader(
-                modifier = modifier
-                    .padding(top = 36.dp)
-                    .padding(horizontal = 6.dp)
-            )
-
-            Spacer(modifier = Modifier.size(24.dp))
+            ) {
+                Text(
+                    text = stringResource(R.string.partymember_create_classification),
+                    color = Black_Pearl,
+                    fontSize = 18.dp.toSp(),
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = spoqahansanseeo
+                )
+                CurtainCallSelectTypeButton(
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .fillMaxWidth()
+                        .height(45.dp),
+                    firstType = stringResource(R.string.partymember_create_classification_theater),
+                    lastType = stringResource(R.string.partymember_create_classification_musical),
+                    isCheckFirstType = isCheckFirstType,
+                    onTypeChange = { isCheckFirstType = it }
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 32.dp)
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = stringResource(R.string.partymember_create_select_performance),
+                        modifier = Modifier.weight(1f),
+                        color = Black_Pearl,
+                        fontSize = 18.dp.toSp(),
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = spoqahansanseeo
+                    )
+                    CurtainCallBorderText(
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp)
+                            .padding(vertical = 4.dp),
+                        text = stringResource(R.string.partymember_create_essential),
+                        borderColor = Me_Pink,
+                        contentColor = Me_Pink,
+                        fontSize = 13.dp.toSp(),
+                        radiusSize = 20.dp
+                    )
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp, bottom = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    SortTypeRow(
+                        modifier = Modifier.weight(1f),
+                        sortType = sortType,
+                        onClick = { showDialog = true }
+                    )
+                    Text(
+                        text = "8:00 업데이트",
+                        color = Silver_Sand,
+                        fontSize = 10.dp.toSp(),
+                        fontWeight = FontWeight.Normal,
+                        fontFamily = spoqahansanseeo
+                    )
+                }
+            }
         }
     }
 
-    itemsIndexed(dummyDatas) { index, item ->
-        PerformanceCard(
-            imageRes = item.second,
-            title = item.first,
+    itemsIndexed(List(3) {}) { index, item ->
+        PerformanceSimpleCard(
+            modifier = Modifier
+                .width(100.dp)
+                .padding(bottom = 16.dp),
+            title = "별이 빛나는 밤에",
             currentIndex = index,
             selectedIndex = selectedIndex,
             onChangeSelect = onChangeSelect
         )
+    }
+    item(span = { GridItemSpan(3) }) {
+        Spacer(Modifier.size(70.dp))
     }
 }
 
@@ -300,176 +358,6 @@ private fun SelectDateWithButton(
                     )
                     onDateClick(false)
                 }
-            )
-        }
-    }
-}
-
-@Composable
-private fun PerformanceClassifyButton(
-    modifier: Modifier = Modifier
-) {
-    var performanceType by remember { mutableStateOf(PartyPerformanceType.THEATER) }
-    Column(modifier) {
-        Text(
-            text = stringResource(R.string.partymember_create_classification),
-            color = Eerie_Black,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Bold,
-            fontFamily = spoqahansanseeo
-        )
-
-        Row {
-            Button(
-                onClick = { performanceType = PartyPerformanceType.THEATER },
-                modifier = Modifier.weight(1f),
-                shape = RoundedCornerShape(topStart = 10.dp, bottomStart = 10.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (performanceType == PartyPerformanceType.THEATER) Me_Pink else White
-                ),
-                border = BorderStroke(1.dp, if (performanceType == PartyPerformanceType.THEATER) French_Pink else Silver_Sand)
-            ) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = stringResource(R.string.partymember_create_classification_theater),
-                        color = if (performanceType == PartyPerformanceType.THEATER) White else Silver_Sand,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = spoqahansanseeo
-                    )
-                }
-            }
-
-            Button(
-                onClick = { performanceType = PartyPerformanceType.MUSICAL },
-                modifier = Modifier.weight(1f),
-                shape = RoundedCornerShape(topEnd = 10.dp, bottomEnd = 10.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = if (performanceType == PartyPerformanceType.MUSICAL) Me_Pink else White
-                ),
-                border = BorderStroke(1.dp, if (performanceType == PartyPerformanceType.MUSICAL) French_Pink else Silver_Sand)
-            ) {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = stringResource(R.string.partymember_create_classification_musical),
-                        color = if (performanceType == PartyPerformanceType.MUSICAL) White else Silver_Sand,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = spoqahansanseeo
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun PerformanceGridHeader(
-    modifier: Modifier = Modifier,
-    onChangeSort: (SortType) -> Unit = {}
-) {
-    var sortTypeState by remember { mutableStateOf(SortType.Reservation) }
-    Row(modifier) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = stringResource(R.string.partymember_create_select_performance),
-                color = Eerie_Black,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                fontFamily = spoqahansanseeo
-            )
-
-            Row(
-                modifier = Modifier.padding(top = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Spacer(
-                    modifier = Modifier
-                        .size(4.dp)
-                        .background(
-                            color = if (sortTypeState == SortType.Reservation) {
-                                Fiery_Rose
-                            } else {
-                                Color.Transparent
-                            }
-                        )
-                        .align(Alignment.CenterVertically)
-                        .clickable { sortTypeState = SortType.Reservation }
-                )
-
-                Text(
-                    text = stringResource(R.string.partymember_create_reservation_sort),
-                    modifier = Modifier.padding(start = 4.dp),
-                    color = if (sortTypeState == SortType.Reservation) {
-                        Eerie_Black
-                    } else {
-                        Silver_Sand
-                    },
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo
-                )
-
-                Spacer(
-                    modifier = Modifier
-                        .padding(start = 10.dp)
-                        .size(4.dp)
-                        .background(
-                            color = if (sortTypeState == SortType.Korean) {
-                                Fiery_Rose
-                            } else {
-                                Color.Transparent
-                            }
-                        )
-                        .align(Alignment.CenterVertically)
-                        .clickable { sortTypeState = SortType.Korean }
-                )
-
-                Text(
-                    text = stringResource(R.string.partymember_create_korean_sort),
-                    modifier = Modifier.padding(start = 4.dp),
-                    color = if (sortTypeState == SortType.Korean) {
-                        Eerie_Black
-                    } else {
-                        Silver_Sand
-                    },
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo
-                )
-            }
-        }
-
-        Column(horizontalAlignment = Alignment.End) {
-            Surface(
-                modifier = Modifier.size(38.dp, 20.dp),
-                shape = RoundedCornerShape(20.dp),
-                color = White,
-                border = BorderStroke(1.dp, Me_Pink)
-            ) {
-                Text(
-                    text = stringResource(R.string.partymember_create_essential),
-                    modifier = Modifier.padding(vertical = 2.dp, horizontal = 8.dp),
-                    color = Me_Pink,
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo
-                )
-            }
-
-            Text(
-                text = stringResource(R.string.partymember_create_update_time_format),
-                modifier = Modifier.padding(top = 9.dp),
-                color = Silver_Sand,
-                fontSize = 10.sp,
-                fontWeight = FontWeight.Medium,
-                fontFamily = spoqahansanseeo
             )
         }
     }

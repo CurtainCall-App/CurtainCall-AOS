@@ -14,8 +14,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.component.basic.CurtainCallRoundedText
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.component.content.card.PartyType
+import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -36,21 +38,18 @@ internal fun PartyMemberCreateScreen(
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(White)
 
-    var step by remember { mutableStateOf(if (partyType == PartyType.ETC) STEP.PHASE1_1 else STEP.PHASE1) }
+    var currentStep by remember { mutableStateOf(if (partyType == PartyType.ETC) STEP.PHASE1_1 else STEP.PHASE1) }
     Scaffold(
         topBar = {
             TopAppBarWithBack(
                 title = stringResource(R.string.partymember_create_appbar),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(38.dp),
                 containerColor = White,
                 contentColor = Eerie_Black,
                 onClick = {
-                    if ((step == STEP.PHASE1) or (step == STEP.PHASE1_1)) {
+                    if ((currentStep == STEP.PHASE1) or (currentStep == STEP.PHASE1_1)) {
                         onBack()
                     } else {
-                        step = step.prevStep
+                        currentStep = currentStep.prevStep
                     }
                 }
             )
@@ -62,8 +61,8 @@ internal fun PartyMemberCreateScreen(
                 .padding(paddingValues)
                 .background(White),
             partyType = partyType,
-            currentStep = step,
-            onChangeStep = { step = it },
+            currentStep = currentStep,
+            onChangeStep = { currentStep = it },
             onNavigateUpload = onNavigateUpload
         )
     }
@@ -77,41 +76,40 @@ private fun PartyMemberCreateContent(
     onChangeStep: (STEP) -> Unit,
     onNavigateUpload: (PartyType) -> Unit
 ) {
-    var selectedPerformanceIndex by remember { mutableStateOf(UNSELECTED_INDEX) }
+    var selectedPerformanceIndex by remember { mutableIntStateOf(UNSELECTED_INDEX) }
     var selectedDateState by remember { mutableStateOf("") }
     var selectedTimeState by remember { mutableStateOf("") }
     var titleTextState by remember { mutableStateOf("") }
     var contentTextState by remember { mutableStateOf("") }
     var clickedUndeterminDateState by remember { mutableStateOf(false) }
-    var personnelCountState by remember { mutableStateOf(DEFAULT_PERSONNEL_COUNT) }
+    var personnelCountState by remember { mutableIntStateOf(DEFAULT_PERSONNEL_COUNT) }
 
     Box(modifier) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
-            modifier = Modifier.padding(15.dp)
+            modifier = Modifier.padding(horizontal = 20.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             createStep(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 28.dp)
-                    .padding(horizontal = 4.dp),
+                    .padding(top = 26.dp),
                 currentStep = currentStep
             )
 
             createClip(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 22.dp)
-                    .padding(start = 5.dp),
+                    .padding(top = 24.dp),
                 partyType = partyType
             )
 
             when (currentStep) {
                 STEP.PHASE1 -> showPerformanceFirstStep(
-                    modifier = Modifier.fillMaxWidth(),
                     selectedIndex = selectedPerformanceIndex,
                     onChangeSelect = { selectedPerformanceIndex = it }
                 )
+
                 STEP.PHASE2 -> showPerformanceSecondStep(
                     modifier = Modifier.fillMaxWidth(),
                     selectedDate = selectedDateState,
@@ -119,6 +117,7 @@ private fun PartyMemberCreateContent(
                     onSelectDate = { selectedDateState = it },
                     onSelectTime = { selectedTimeState = it }
                 )
+
                 STEP.PHASE3, STEP.PHASE1_2 -> showLastStep(
                     modifier = Modifier.fillMaxWidth(),
                     title = titleTextState,
@@ -126,6 +125,7 @@ private fun PartyMemberCreateContent(
                     onChangeTitle = { titleTextState = it },
                     onChangeContent = { contentTextState = it }
                 )
+
                 STEP.PHASE1_1 -> showEtcFirstStep(
                     modifier = Modifier.fillMaxWidth(),
                     selectedDate = selectedDateState,
@@ -164,6 +164,7 @@ private fun PartyMemberCreateContent(
                     )
                 }
             }
+
             STEP.PHASE2 -> {
                 Button(
                     onClick = { onChangeStep(STEP.PHASE3) },
@@ -189,6 +190,7 @@ private fun PartyMemberCreateContent(
                     )
                 }
             }
+
             STEP.PHASE3, STEP.PHASE1_2 -> {
                 Button(
                     onClick = { onNavigateUpload(partyType) },
@@ -214,6 +216,7 @@ private fun PartyMemberCreateContent(
                     )
                 }
             }
+
             STEP.PHASE1_1 -> {
                 var validation = (selectedDateState.isNotEmpty() or clickedUndeterminDateState) and (personnelCountState > DEFAULT_PERSONNEL_COUNT)
                 Button(
@@ -250,27 +253,20 @@ private fun LazyGridScope.createClip(
 ) {
     item(span = { GridItemSpan(3) }) {
         Row(modifier) {
-            Box(
-                modifier = Modifier
-                    .background(Cetacean_Blue, RoundedCornerShape(12.dp))
-                    .padding(vertical = 4.dp, horizontal = 12.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(
-                        when (partyType) {
-                            PartyType.PERFORMANCE -> R.string.partymember_performance_title
-                            PartyType.MEAL -> R.string.partymember_restaurant_title
-                            PartyType.ETC -> R.string.partymember_etc_title
-                        }
-                    ),
-                    modifier = Modifier.wrapContentWidth(),
-                    color = White,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo
-                )
-            }
+            CurtainCallRoundedText(
+                modifier = Modifier.padding(vertical = 4.dp, horizontal = 12.dp),
+                text = stringResource(
+                    when (partyType) {
+                        PartyType.PERFORMANCE -> R.string.partymember_performance_title
+                        PartyType.MEAL -> R.string.partymember_restaurant_title
+                        PartyType.ETC -> R.string.partymember_etc_title
+                    }
+                ),
+                containerColor = Cetacean_Blue,
+                contentColor = White,
+                fontSize = 12.dp.toSp(),
+                radiusSize = 12.dp
+            )
         }
     }
 }
@@ -286,29 +282,27 @@ private fun LazyGridScope.createStep(
                     Text(
                         text = stringResource(R.string.partymember_create_first_step),
                         color = Cetacean_Blue,
-                        fontSize = 12.sp,
+                        fontSize = 12.dp.toSp(),
                         fontWeight = FontWeight.Bold,
                         fontFamily = spoqahansanseeo
                     )
-
                     Spacer(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 3.dp)
+                            .padding(top = 4.dp)
                             .height(8.dp)
                             .background(Cetacean_Blue, RoundedCornerShape(topStart = 30.dp, bottomStart = 30.dp))
                     )
                 }
-
                 Column(
                     modifier = Modifier
-                        .padding(start = 2.dp)
+                        .padding(start = 3.dp)
                         .weight(1f)
                 ) {
                     Text(
                         text = stringResource(R.string.partymember_create_second_step),
                         color = if (currentStep !in listOf(STEP.PHASE1, STEP.PHASE1_1)) Cetacean_Blue else Bright_Gray,
-                        fontSize = 12.sp,
+                        fontSize = 12.dp.toSp(),
                         fontWeight = FontWeight.Bold,
                         fontFamily = spoqahansanseeo
                     )
@@ -316,7 +310,7 @@ private fun LazyGridScope.createStep(
                     Spacer(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 3.dp)
+                            .padding(top = 4.dp)
                             .height(8.dp)
                             .background(
                                 if (currentStep !in listOf(STEP.PHASE1, STEP.PHASE1_1)) Cetacean_Blue else Bright_Gray,
@@ -331,25 +325,23 @@ private fun LazyGridScope.createStep(
                             )
                     )
                 }
-
                 if (currentStep !in listOf(STEP.PHASE1_1, STEP.PHASE1_2)) {
                     Column(
                         modifier = Modifier
-                            .padding(start = 2.dp)
+                            .padding(start = 3.dp)
                             .weight(1f)
                     ) {
                         Text(
                             text = stringResource(R.string.partymember_create_third_step),
                             color = if (currentStep == STEP.PHASE3) Cetacean_Blue else Bright_Gray,
-                            fontSize = 12.sp,
+                            fontSize = 12.dp.toSp(),
                             fontWeight = FontWeight.Bold,
                             fontFamily = spoqahansanseeo
                         )
-
                         Spacer(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = 3.dp)
+                                .padding(top = 4.dp)
                                 .height(8.dp)
                                 .background(
                                     if (currentStep == STEP.PHASE3) Cetacean_Blue else Bright_Gray,
