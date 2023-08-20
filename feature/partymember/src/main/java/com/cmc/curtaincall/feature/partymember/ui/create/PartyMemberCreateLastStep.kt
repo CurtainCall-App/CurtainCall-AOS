@@ -122,7 +122,9 @@ fun LazyGridScope.showLastStep(
                 }
                 CurtainCallMultiLineTextField(
                     value = content,
-                    onValueChange = onChangeContent,
+                    onValueChange = {
+                        if (it.length <= 500) onChangeContent(it)
+                    },
                     modifier = Modifier
                         .padding(top = 10.dp)
                         .fillMaxWidth()

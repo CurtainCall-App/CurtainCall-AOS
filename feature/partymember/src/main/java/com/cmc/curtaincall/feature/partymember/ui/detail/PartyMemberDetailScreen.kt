@@ -36,6 +36,7 @@ fun PartyMemberDetailScreen(
     fromRecruitment: Boolean = false,
     fromParticipation: Boolean = false,
     partyType: PartyType,
+    onNavigateEdit: (PartyType) -> Unit,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -76,6 +77,7 @@ fun PartyMemberDetailScreen(
     if (isShowBottomSheeet) {
         EditBottomSheet(
             onEdit = {
+                onNavigateEdit(partyType)
                 isShowBottomSheeet = false
             },
             onDelete = {
@@ -193,7 +195,7 @@ private fun PartyMemberDetailContent(
 }
 
 @Composable
-private fun PartyMemberDetailHeader(
+fun PartyMemberDetailHeader(
     modifier: Modifier = Modifier,
     profileUrl: String? = null,
     nickname: String,
@@ -261,7 +263,7 @@ private fun PartyMemberDetailHeader(
 }
 
 @Composable
-private fun PartyMemberDetailBody(
+fun PartyMemberDetailBody(
     partyType: PartyType,
     modifier: Modifier = Modifier
 ) {
