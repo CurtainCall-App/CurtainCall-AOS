@@ -72,7 +72,6 @@ fun LazyGridScope.showPerformanceSecondStep(
     onChangePersonnelCount: (Int) -> Unit
 ) {
     item(span = { GridItemSpan(3) }) {
-        val context = LocalContext.current
         Box(modifier = modifier.padding(top = 15.dp)) {
             var isClickedDate by remember { mutableStateOf(false) }
             var isClickedTime by remember { mutableStateOf(false) }

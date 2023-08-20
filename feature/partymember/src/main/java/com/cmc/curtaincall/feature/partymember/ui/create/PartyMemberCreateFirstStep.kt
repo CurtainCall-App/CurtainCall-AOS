@@ -294,7 +294,6 @@ private fun SelectDateWithButton(
     onButtonClick: (Boolean) -> Unit,
     onCalenderClick: (String) -> Unit,
 ) {
-    val context = LocalContext.current
     Column(modifier.zIndex(if (isClickedDate) 1f else 0f)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(

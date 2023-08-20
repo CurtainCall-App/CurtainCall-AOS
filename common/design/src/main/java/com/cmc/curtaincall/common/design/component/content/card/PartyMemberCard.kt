@@ -120,7 +120,7 @@ fun PartyMemberContentCard(
             Column(
                 modifier = Modifier
                     .padding(horizontal = 18.dp)
-                    .padding(top = if (partyType == PartyType.ETC) 20.dp else 30.dp, bottom = 20.dp),
+                    .padding(top = if (partyType == PartyType.ETC) 20.dp else 30.dp, bottom = 20.dp)
             ) {
                 PartyMemberContentCardHeader(
                     modifier = Modifier.fillMaxWidth(),
@@ -128,7 +128,7 @@ fun PartyMemberContentCard(
                     createAtDate = createAtDate,
                     createAtTime = createAtTime,
                     numberOfMember = numberOfMember,
-                    numberOfTotal = numberOfTotal,
+                    numberOfTotal = numberOfTotal
                 )
                 Text(
                     text = description,

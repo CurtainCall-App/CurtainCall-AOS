@@ -93,7 +93,7 @@ private fun LiveTalkContent(
                 color = White,
                 fontSize = 24.dp.toSp(),
                 fontWeight = FontWeight.Bold,
-                fontFamily = spoqahansanseeo,
+                fontFamily = spoqahansanseeo
             )
             Row(Modifier.padding(top = 12.dp)) {
                 CurtainCallRoundedText(

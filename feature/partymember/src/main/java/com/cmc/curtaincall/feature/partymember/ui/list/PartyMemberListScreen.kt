@@ -75,6 +75,7 @@ internal fun PartyMemberListScreen(
         }
     ) { paddingValues ->
         if (isActiveSearchState) {
+            // TODO
         } else {
             PartyMemberListContent(
                 partyType = partyType,
