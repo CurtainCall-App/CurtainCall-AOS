@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.feature.partymember.ui.PartyMemberScreen
@@ -24,10 +25,6 @@ private const val PARTYMEMBER_LIST = "partymember_list"
 private const val PARTYMEMBER_DETAIL = "partymember_detail"
 private const val PARTYMEMBER_CREATE = "partymember_create"
 private const val PARTYMEMBER_UPLOAD = "partymember_upload"
-
-enum class PartyType(val value: String) {
-    PERFORMANCE("공연 관람"), MEAL("식사/카페"), ETC("기타")
-}
 
 enum class PartyPerformanceType {
     THEATER, MUSICAL

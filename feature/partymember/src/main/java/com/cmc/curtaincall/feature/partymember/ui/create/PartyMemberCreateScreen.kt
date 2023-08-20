@@ -15,8 +15,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
+import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.cmc.curtaincall.common.design.theme.*
-import com.cmc.curtaincall.feature.partymember.PartyType
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private const val UNSELECTED_INDEX = -1

@@ -22,7 +22,7 @@ import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.Black
 import com.cmc.curtaincall.common.design.theme.Cultured
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
-import com.cmc.curtaincall.feature.partymember.PartyType
+import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable

@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.sp
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.DottedLine
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithAction
+import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.cmc.curtaincall.common.design.theme.*
-import com.cmc.curtaincall.feature.partymember.PartyType
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalMaterial3Api::class)
