@@ -1,7 +1,6 @@
 package com.cmc.curtaincall.feature.partymember.ui.detail
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -11,8 +10,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -21,6 +18,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.component.basic.DottedLine
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithAction
 import com.cmc.curtaincall.common.design.theme.*
 import com.cmc.curtaincall.feature.partymember.PartyType
@@ -378,22 +376,6 @@ private fun PartyMemberDetailInfo(
             fontFamily = spoqahansanseeo,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
-        )
-    }
-}
-
-@Composable
-private fun DottedLine(
-    modifier: Modifier = Modifier
-) {
-    val pathEffect = PathEffect.dashPathEffect(floatArrayOf(5f, 10f), 15f)
-    Canvas(modifier) {
-        drawLine(
-            color = Bright_Gray,
-            start = Offset(0f, 0f),
-            end = Offset(size.width, 0f),
-            pathEffect = pathEffect,
-            strokeWidth = 2.dp.value
         )
     }
 }

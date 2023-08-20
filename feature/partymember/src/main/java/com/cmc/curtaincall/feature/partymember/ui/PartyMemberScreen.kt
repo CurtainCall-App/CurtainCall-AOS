@@ -1,23 +1,27 @@
 package com.cmc.curtaincall.feature.partymember.ui
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.common.design.component.basic.DottedLine
+import com.cmc.curtaincall.common.design.component.content.card.PartyMemberCard
+import com.cmc.curtaincall.common.design.extensions.toSp
+import com.cmc.curtaincall.common.design.theme.Black
+import com.cmc.curtaincall.common.design.theme.Cultured
+import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 import com.cmc.curtaincall.feature.partymember.PartyType
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -30,104 +34,86 @@ fun PartyMemberScreen(onNavigateList: (PartyType) -> Unit) {
         modifier = Modifier
             .fillMaxSize()
             .background(Cultured)
-            .padding(bottom = 30.dp)
+            .padding(horizontal = 20.dp)
     ) {
         Text(
             text = stringResource(R.string.partymember_recruitment),
-            modifier = Modifier.padding(top = 44.dp, start = 22.dp),
-            color = Gunmetal,
-            fontSize = 26.sp,
+            modifier = Modifier.padding(top = 60.dp),
+            color = Black,
+            fontSize = 24.dp.toSp(),
             fontWeight = FontWeight.Bold,
             fontFamily = spoqahansanseeo
         )
-
-        PartyMemberRecruitmentCard(
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-                .padding(horizontal = 22.dp, vertical = 10.dp),
-            title = stringResource(R.string.partymember_performance_title),
-            description = stringResource(R.string.partymember_performance_description),
-            fontColor = White,
-            backgroundColor = Me_Pink,
-            onClick = {
-                onNavigateList(PartyType.PERFORMANCE)
+                .fillMaxSize()
+                .padding(top = 18.dp)
+        ) {
+            PartyMemberCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                title = stringResource(R.string.partymember_performance_title),
+                description = stringResource(R.string.partymember_performance_description),
+                onClick = { onNavigateList(PartyType.PERFORMANCE) }
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_partymember_performance),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(end = 11.dp, bottom = 21.dp)
+                        .size(100.dp)
+                )
             }
-        )
-
-        PartyMemberRecruitmentCard(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-                .padding(horizontal = 22.dp, vertical = 10.dp),
-            title = stringResource(R.string.partymember_restaurant_title),
-            description = stringResource(R.string.partymember_restaurant_description),
-            fontColor = Cetacean_Blue,
-            backgroundColor = Corn,
-            onClick = {
-                onNavigateList(PartyType.MEAL)
+            DottedLine(
+                modifier = Modifier.fillMaxWidth(),
+                strokeWidth = 10.dp.value,
+                strokeColor = Cultured,
+                intervals = floatArrayOf(10.dp.value, 15.dp.value),
+                phase = 15.dp.value
+            )
+            PartyMemberCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                title = stringResource(R.string.partymember_restaurant_title),
+                description = stringResource(R.string.partymember_restaurant_description),
+                onClick = { onNavigateList(PartyType.MEAL) }
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_partymember_food),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(end = 13.dp, bottom = 23.dp)
+                        .size(100.dp)
+                )
             }
-        )
-
-        PartyMemberRecruitmentCard(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-                .padding(horizontal = 22.dp, vertical = 10.dp),
-            title = stringResource(R.string.partymember_etc_title),
-            description = stringResource(R.string.partymember_etc_description),
-            fontColor = White,
-            backgroundColor = Cetacean_Blue,
-            onClick = {
-                onNavigateList(PartyType.ETC)
+            DottedLine(
+                modifier = Modifier.fillMaxWidth(),
+                strokeWidth = 10.dp.value,
+                strokeColor = Cultured,
+                intervals = floatArrayOf(10.dp.value, 15.dp.value),
+                phase = 15.dp.value
+            )
+            PartyMemberCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                title = stringResource(R.string.partymember_etc_title),
+                description = stringResource(R.string.partymember_etc_description),
+                onClick = { onNavigateList(PartyType.ETC) }
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_partymember_etc),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .align(Alignment.BottomEnd)
+                        .padding(end = 18.dp, bottom = 30.dp)
+                        .size(100.dp)
+                )
             }
-        )
-    }
-}
-
-@Composable
-private fun ColumnScope.PartyMemberRecruitmentCard(
-    modifier: Modifier = Modifier,
-    title: String,
-    description: String,
-    fontColor: Color,
-    backgroundColor: Color,
-    @DrawableRes backgroundRes: Int? = null,
-    onClick: () -> Unit
-) {
-    Box(
-        modifier = modifier
-            .background(backgroundColor, RoundedCornerShape(10.dp))
-            .clickable { onClick() }
-    ) {
-        Column {
-            Text(
-                text = title,
-                modifier = Modifier.padding(start = 22.dp, top = 25.dp),
-                color = fontColor,
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-                fontFamily = spoqahansanseeo
-            )
-
-            Text(
-                text = description,
-                modifier = Modifier.padding(start = 22.dp, top = 8.dp),
-                color = fontColor,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Medium,
-                fontFamily = spoqahansanseeo,
-                lineHeight = 18.sp
-            )
-        }
-
-        if (backgroundRes != null) {
-            // TODO
-            Image(
-                painter = painterResource(backgroundRes),
-                contentDescription = null,
-                modifier = Modifier.align(Alignment.BottomEnd)
-            )
         }
     }
 }
