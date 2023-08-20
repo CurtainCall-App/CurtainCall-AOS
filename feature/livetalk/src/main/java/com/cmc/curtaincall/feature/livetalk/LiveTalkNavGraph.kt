@@ -30,9 +30,7 @@ sealed interface LiveTalkDestination : CurtainCallDestination {
 fun NavGraphBuilder.livetalkNavGraph(navHostController: NavHostController) {
     navigation(startDestination = LiveTalkDestination.LiveTalk.route, route = LIVETALK_GRAPH) {
         composable(route = LiveTalkDestination.LiveTalk.route) {
-            LiveTalkScreen {
-                navHostController.navigate(LiveTalkDestination.Detail.route)
-            }
+            LiveTalkScreen()
         }
 
         composable(route = LiveTalkDestination.Detail.route) {
