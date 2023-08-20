@@ -114,8 +114,10 @@ private fun PartyMemberCreateContent(
                     modifier = Modifier.fillMaxWidth(),
                     selectedDate = selectedDateState,
                     selectedTime = selectedTimeState,
+                    personnelCount = personnelCountState,
                     onSelectDate = { selectedDateState = it },
-                    onSelectTime = { selectedTimeState = it }
+                    onSelectTime = { selectedTimeState = it },
+                    onChangePersonnelCount = { personnelCountState = it }
                 )
 
                 STEP.PHASE3, STEP.PHASE1_2 -> showLastStep(
@@ -174,10 +176,14 @@ private fun PartyMemberCreateContent(
                         .padding(horizontal = 20.dp)
                         .padding(bottom = 19.dp)
                         .height(52.dp),
-                    enabled = selectedDateState.isNotEmpty() and selectedTimeState.isNotEmpty(),
+                    enabled = selectedDateState.isNotEmpty() and selectedTimeState.isNotEmpty() and (personnelCountState > 0),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if (selectedDateState.isNotEmpty() and selectedTimeState.isNotEmpty()) Me_Pink else Bright_Gray,
+                        containerColor = if (selectedDateState.isNotEmpty() and selectedTimeState.isNotEmpty() and (personnelCountState > 0)) {
+                            Me_Pink
+                        } else {
+                            Bright_Gray
+                        },
                         disabledContainerColor = Bright_Gray
                     )
                 ) {

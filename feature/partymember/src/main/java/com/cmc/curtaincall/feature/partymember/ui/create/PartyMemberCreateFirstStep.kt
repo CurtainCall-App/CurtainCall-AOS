@@ -189,6 +189,7 @@ fun LazyGridScope.showEtcFirstStep(
             SelectPersonnelButton(
                 modifier = Modifier.padding(top = 130.dp),
                 personnelCount = personnelCount,
+                maxCount = 100,
                 onClick = onClickPersonnel
             )
         }
@@ -199,6 +200,7 @@ fun LazyGridScope.showEtcFirstStep(
 fun SelectPersonnelButton(
     modifier: Modifier = Modifier,
     personnelCount: Int,
+    maxCount: Int = Int.MAX_VALUE,
     onClick: (Int) -> Unit
 ) {
     Column(modifier) {
@@ -265,7 +267,7 @@ fun SelectPersonnelButton(
                     .height(42.dp)
                     .background(Cultured, RoundedCornerShape(topEnd = 10.dp, bottomEnd = 10.dp))
                     .clickable {
-                        if (personnelCount < 10) {
+                        if (personnelCount < maxCount) {
                             onClick(personnelCount + 1)
                         }
                     },
@@ -275,7 +277,7 @@ fun SelectPersonnelButton(
                     painter = painterResource(R.drawable.ic_plus),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
-                    tint = if (personnelCount < 10) Arsenic else Silver_Sand
+                    tint = if (personnelCount < maxCount) Arsenic else Silver_Sand
                 )
             }
         }

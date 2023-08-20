@@ -84,7 +84,7 @@
     <string name="partymember_create_write_title_placeholder">예시)OOO 함께 볼 사람 구해요!</string>
     <string name="partymember_create_write_content">내용을 적어주세요.</string>
     <string name="partymember_create_write_content_placeholder">예시)\n이번주 공연 같이 볼 4명 구합니다.\n구체적인 내용은 톡방 생성되면 얘기할 예정입니다.</string>
-    <string name="partymember_create_write_number_of_text">글자수 제한 (%d/400)</string>
+    <string name="partymember_create_write_number_of_text">글자수 제한 (%d/%d)</string>
     <string name="partymember_create_write_complete">작성 완료</string>
     <string name="partymember_create_undetermined_date">날짜 미정</string>
     <string name="partymember_upload_complete">파티원 모집글이 게시되었습니다.</string>
