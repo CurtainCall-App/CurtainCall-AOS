@@ -1,27 +1,39 @@
 package com.cmc.curtaincall.feature.partymember.ui.create
 
-import androidx.annotation.DrawableRes
-import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallBorderText
+import com.cmc.curtaincall.common.design.component.basic.CurtainCallRoundedText
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallSelectTypeButton
 import com.cmc.curtaincall.common.design.component.content.card.PerformanceSimpleCard
 import com.cmc.curtaincall.common.design.component.content.row.SortTypeRow
@@ -29,7 +41,16 @@ import com.cmc.curtaincall.common.design.component.custom.SelectSortTypeBottomSh
 import com.cmc.curtaincall.common.design.component.custom.SelectedDateCalender
 import com.cmc.curtaincall.common.design.component.custom.SortType
 import com.cmc.curtaincall.common.design.extensions.toSp
-import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.common.design.theme.Arsenic
+import com.cmc.curtaincall.common.design.theme.Black_Pearl
+import com.cmc.curtaincall.common.design.theme.Chinese_Black
+import com.cmc.curtaincall.common.design.theme.Cultured
+import com.cmc.curtaincall.common.design.theme.Me_Pink
+import com.cmc.curtaincall.common.design.theme.Nero
+import com.cmc.curtaincall.common.design.theme.Roman_Silver
+import com.cmc.curtaincall.common.design.theme.Silver_Sand
+import com.cmc.curtaincall.common.design.theme.White
+import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 
 fun LazyGridScope.showPerformanceFirstStep(
     selectedIndex: Int,
@@ -149,9 +170,8 @@ fun LazyGridScope.showEtcFirstStep(
 ) {
     item(span = { GridItemSpan(3) }) {
         var isClickedDate by remember { mutableStateOf(false) }
-        Box(modifier.padding(horizontal = 5.dp)) {
+        Box(Modifier.padding(top = 15.dp)) {
             SelectDateWithButton(
-                modifier = Modifier.padding(top = 15.dp),
                 date = selectedDate,
                 isClickedDate = isClickedDate,
                 isClickedButton = clickedUndeterminedDate,
@@ -185,46 +205,43 @@ fun SelectPersonnelButton(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = stringResource(R.string.partymember_create_select_personnel),
+                modifier = Modifier.weight(1f),
                 color = Black_Pearl,
-                fontSize = 18.sp,
+                fontSize = 18.dp.toSp(),
                 fontWeight = FontWeight.Bold,
                 fontFamily = spoqahansanseeo
             )
-            Spacer(modifier = Modifier.weight(1f))
-            Box(
-                modifier = Modifier.border(BorderStroke(1.dp, Me_Pink), RoundedCornerShape(20.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(R.string.partymember_create_essential),
-                    modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
-                    color = Me_Pink,
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo
-                )
-            }
+            CurtainCallBorderText(
+                modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
+                text = stringResource(R.string.partymember_create_essential),
+                borderColor = Me_Pink,
+                contentColor = Me_Pink,
+                fontSize = 13.dp.toSp(),
+                radiusSize = 20.dp
+            )
         }
 
         Row(
             modifier = Modifier.padding(top = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(
-                onClick = {
-                    if (personnelCount > DEFAULT_PERSONNEL_COUNT) onClick(personnelCount - 1)
-                },
+            Box(
                 modifier = Modifier
                     .weight(1f)
                     .height(42.dp)
-                    .clip(RoundedCornerShape(topStart = 10.dp, bottomStart = 10.dp)),
-                colors = IconButtonDefaults.iconButtonColors(containerColor = Cultured)
+                    .background(Cultured, RoundedCornerShape(topStart = 10.dp, bottomStart = 10.dp))
+                    .clickable {
+                        if (personnelCount > DEFAULT_PERSONNEL_COUNT) {
+                            onClick(personnelCount - 1)
+                        }
+                    },
+                contentAlignment = Alignment.Center
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_minus),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
-                    tint = Color.Unspecified
+                    tint = if (personnelCount > DEFAULT_PERSONNEL_COUNT) Arsenic else Silver_Sand
                 )
             }
             Box(
@@ -236,27 +253,29 @@ fun SelectPersonnelButton(
             ) {
                 Text(
                     text = personnelCount.toString(),
-                    color = Chinese_Black,
-                    fontSize = 20.sp,
+                    color = if (personnelCount > DEFAULT_PERSONNEL_COUNT) Chinese_Black else Silver_Sand,
+                    fontSize = 20.dp.toSp(),
                     fontWeight = FontWeight.Bold,
                     fontFamily = spoqahansanseeo
                 )
             }
-            IconButton(
-                onClick = {
-                    if (personnelCount < Int.MAX_VALUE) onClick(personnelCount + 1)
-                },
+            Box(
                 modifier = Modifier
                     .weight(1f)
                     .height(42.dp)
-                    .clip(RoundedCornerShape(topEnd = 10.dp, bottomEnd = 10.dp)),
-                colors = IconButtonDefaults.iconButtonColors(containerColor = Cultured)
+                    .background(Cultured, RoundedCornerShape(topEnd = 10.dp, bottomEnd = 10.dp))
+                    .clickable {
+                        if (personnelCount < 10) {
+                            onClick(personnelCount + 1)
+                        }
+                    },
+                contentAlignment = Alignment.Center
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_plus),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
-                    tint = Color.Unspecified
+                    tint = if (personnelCount < 10) Arsenic else Silver_Sand
                 )
             }
         }
@@ -278,68 +297,69 @@ private fun SelectDateWithButton(
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = stringResource(R.string.partymember_create_select_date),
+                modifier = Modifier.weight(1f),
                 color = Black_Pearl,
-                fontSize = 18.sp,
+                fontSize = 18.dp.toSp(),
                 fontWeight = FontWeight.Bold,
                 fontFamily = spoqahansanseeo
             )
-            Spacer(modifier = Modifier.weight(1f))
-            Box(
-                modifier = Modifier.border(BorderStroke(1.dp, Me_Pink), RoundedCornerShape(20.dp)),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(R.string.partymember_create_essential),
-                    modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
-                    color = Me_Pink,
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo
-                )
-            }
+            CurtainCallBorderText(
+                modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
+                text = stringResource(R.string.partymember_create_essential),
+                borderColor = Me_Pink,
+                contentColor = Me_Pink,
+                fontSize = 13.dp.toSp(),
+                radiusSize = 20.dp
+            )
         }
-
         Row(
-            modifier = Modifier.padding(top = 10.dp),
+            modifier = Modifier.padding(top = 6.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Surface(
                 modifier = Modifier
-                    .size(200.dp, 42.dp)
-                    .clickable { onDateClick(isClickedDate.not()) },
+                    .weight(1f)
+                    .height(42.dp)
+                    .padding(end = 10.dp)
+                    .clickable {
+                        onDateClick(isClickedDate.not())
+                    },
                 shape = RoundedCornerShape(10.dp),
                 color = Cultured
             ) {
                 Text(
                     text = date.ifEmpty { stringResource(R.string.partymember_create_select_date) },
                     modifier = Modifier
-                        .padding(start = 16.dp)
-                        .padding(vertical = 11.dp),
-                    color = if (date.isEmpty()) Roman_Silver else Eerie_Black,
-                    fontSize = 15.sp,
+                        .padding(horizontal = 18.dp)
+                        .padding(vertical = 10.dp),
+                    color = if (date.isEmpty()) Silver_Sand else Nero,
+                    fontSize = 15.dp.toSp(),
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo
                 )
             }
-            Spacer(modifier = Modifier.weight(1f))
-            Box(
-                modifier = Modifier
-                    .size(110.dp, 42.dp)
-                    .background(
-                        if (isClickedButton) Me_Pink else Cultured,
-                        RoundedCornerShape(10.dp)
-                    )
-                    .clickable {
-                        onButtonClick(isClickedButton.not())
-                    },
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
+            if (isClickedButton) {
+                CurtainCallRoundedText(
+                    modifier = Modifier.padding(horizontal = 25.dp, vertical = 11.dp),
                     text = stringResource(R.string.partymember_create_undetermined_date),
-                    color = if (isClickedButton) White else Roman_Silver,
-                    fontSize = 15.sp,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo
+                    containerColor = Me_Pink,
+                    contentColor = White,
+                    fontSize = 15.dp.toSp(),
+                    radiusSize = 10.dp
+                )
+            } else {
+                CurtainCallBorderText(
+                    modifier = Modifier
+                        .padding(horizontal = 25.dp, vertical = 11.dp)
+                        .clickable {
+                            onButtonClick(true)
+                            onDateClick(false)
+                        },
+                    text = stringResource(R.string.partymember_create_undetermined_date),
+                    borderColor = Silver_Sand,
+                    contentColor = Roman_Silver,
+                    fontSize = 15.dp.toSp(),
+                    radiusSize = 10.dp
                 )
             }
         }
@@ -350,7 +370,7 @@ private fun SelectDateWithButton(
                 onDateClick = {
                     onCalenderClick(
                         String.format(
-                            context.getString(R.string.partymember_create_calendar_date_format),
+                            "%d. %02d. %02d",
                             it.date.year,
                             it.date.month.value,
                             it.date.dayOfMonth
@@ -360,46 +380,5 @@ private fun SelectDateWithButton(
                 }
             )
         }
-    }
-}
-
-@Composable
-private fun PerformanceCard(
-    @DrawableRes imageRes: Int,
-    title: String,
-    currentIndex: Int,
-    selectedIndex: Int,
-    onChangeSelect: (Int) -> Unit
-) {
-    Column(
-        modifier = Modifier
-            .padding(horizontal = 7.dp)
-            .padding(bottom = 22.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Surface(
-            modifier = Modifier.clickable {
-                onChangeSelect(if (currentIndex == selectedIndex) -1 else currentIndex)
-            },
-            shape = RoundedCornerShape(10.dp),
-            border = BorderStroke(
-                width = 4.dp,
-                color = if (selectedIndex == currentIndex) Me_Pink else Color.Transparent
-            )
-        ) {
-            Image(
-                painter = painterResource(imageRes),
-                contentDescription = null
-            )
-        }
-
-        Text(
-            text = title,
-            modifier = Modifier.padding(top = 8.dp),
-            color = Eerie_Black,
-            fontSize = 15.sp,
-            fontWeight = FontWeight.Medium,
-            fontFamily = spoqahansanseeo
-        )
     }
 }

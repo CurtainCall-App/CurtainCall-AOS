@@ -86,8 +86,8 @@ fun PartyMemberScreen(onNavigateList: (PartyType) -> Unit) {
                     contentDescription = null,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
-                        .padding(end = 13.dp, bottom = 23.dp)
-                        .size(100.dp)
+                        .padding(end = 33.dp, bottom = 23.dp)
+                        .size(55.dp, 98.dp)
                 )
             }
             DottedLine(
@@ -110,8 +110,8 @@ fun PartyMemberScreen(onNavigateList: (PartyType) -> Unit) {
                     contentDescription = null,
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
-                        .padding(end = 18.dp, bottom = 30.dp)
-                        .size(100.dp)
+                        .padding(end = 28.dp, bottom = (29.13).dp)
+                        .size(65.dp, (88.87).dp)
                 )
             }
         }

@@ -18,6 +18,7 @@ import com.cmc.curtaincall.common.design.component.basic.SearchTopAppBarWithBack
 import com.cmc.curtaincall.common.design.component.content.card.PartyMemberContentCard
 import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.cmc.curtaincall.common.design.theme.*
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,6 +28,9 @@ internal fun PartyMemberListScreen(
     onNavigateCreate: (PartyType) -> Unit,
     onBack: () -> Unit
 ) {
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setStatusBarColor(Cultured)
+
     var isActiveSearchState by remember { mutableStateOf(false) }
     var queryState by remember { mutableStateOf("") }
     Scaffold(
