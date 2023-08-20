@@ -112,7 +112,14 @@ fun NavGraphBuilder.partymemberNavGraph(
             if (partyType != null) {
                 PartyMemberListScreen(
                     partyType = partyType,
-                    onNavigateDetail = { navHostController.navigate("${PartyMemberDestination.Detail.route}/$it") },
+                    onNavigateDetail = {
+                        navHostController.navigate(
+                            PartyMemberDestination.Detail.route + "?" +
+                                "${PartyMemberDestination.Detail.typeArg}=$it" + "&" +
+                                "${PartyMemberDestination.Detail.fromRecruitmentArg}=false" + "&" +
+                                "${PartyMemberDestination.Detail.fromParticipationArg}=false"
+                        )
+                    },
                     onNavigateCreate = { navHostController.navigate("${PartyMemberDestination.Create.route}/$it") },
                     onBack = { navHostController.popBackStack() }
                 )
@@ -137,7 +144,7 @@ fun NavGraphBuilder.partymemberNavGraph(
                 PartyMemberDetailScreen(
                     fromRecruitment = fromRecruitment,
                     fromParticipation = fromParticipation,
-                    partyType = partyType ?: PartyType.PERFORMANCE,
+                    partyType = PartyType.PERFORMANCE,
                     onBack = { navHostController.popBackStack() }
                 )
             }

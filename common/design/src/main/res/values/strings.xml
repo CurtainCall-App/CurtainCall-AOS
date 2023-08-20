@@ -227,4 +227,8 @@
     <string name="dialog_performance_review_remove_description">삭제하기를 하면 되돌릴 수 없습니다.</string>
     <string name="dialog_performance_review_remove_dismiss">아니요</string>
     <string name="dialog_performance_review_remove_positive">네, 삭제할래요</string>
+    <string name="dialog_partymember_participate_title">참여할까요?</string>
+    <string name="dialog_partymember_participate_description">참여하기를 클릭하면 참여 취소가\n불가능해요. 계속할까요?</string>
+    <string name="dialog_partymember_participate_dismiss">아니요</string>
+    <string name="dialog_partymember_participate_positive">네, 참여할래요</string>
 </resources>

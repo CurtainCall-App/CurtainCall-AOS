@@ -1,26 +1,32 @@
 package com.cmc.curtaincall.feature.partymember.ui.detail
 
-import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.component.basic.CurtainCallRoundedTextButton
 import com.cmc.curtaincall.common.design.component.basic.DottedLine
-import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithAction
+import com.cmc.curtaincall.common.design.component.basic.MoreTopAppBarWithBack
 import com.cmc.curtaincall.common.design.component.content.card.PartyType
+import com.cmc.curtaincall.common.design.component.custom.EditBottomSheet
+import com.cmc.curtaincall.common.design.component.dialog.CurtainCallBasicDialog
+import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -35,9 +41,53 @@ fun PartyMemberDetailScreen(
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(White)
 
+    var isShowDialog by remember { mutableStateOf(false) }
+    var isShowRemoveDialog by remember { mutableStateOf(false) }
+    var isShowBottomSheeet by remember { mutableStateOf(false) }
+    var joinState by remember { mutableStateOf(false) }
+
+    if (isShowDialog) {
+        CurtainCallBasicDialog(
+            title = stringResource(R.string.dialog_partymember_participate_title),
+            description = stringResource(R.string.dialog_partymember_participate_description),
+            dismissText = stringResource(R.string.dialog_partymember_participate_dismiss),
+            positiveText = stringResource(R.string.dialog_partymember_participate_positive),
+            onDismiss = {
+                joinState = false
+                isShowDialog = false
+            },
+            onPositive = {
+                joinState = true
+                isShowDialog = false
+            }
+        )
+    }
+
+    if (isShowRemoveDialog) {
+        CurtainCallBasicDialog(
+            title = stringResource(R.string.dialog_performance_review_remove_title),
+            dismissText = stringResource(R.string.dialog_performance_review_remove_dismiss),
+            positiveText = stringResource(R.string.dialog_performance_review_remove_positive),
+            onDismiss = { isShowRemoveDialog = false },
+            onPositive = { isShowRemoveDialog = false }
+        )
+    }
+
+    if (isShowBottomSheeet) {
+        EditBottomSheet(
+            onEdit = {
+                isShowBottomSheeet = false
+            },
+            onDelete = {
+                isShowRemoveDialog = true
+                isShowBottomSheeet = false
+            }
+        )
+    }
+
     Scaffold(
         topBar = {
-            TopAppBarWithAction(
+            MoreTopAppBarWithBack(
                 title = stringResource(
                     if (fromRecruitment) {
                         R.string.mypage_my_gathering_tab
@@ -51,47 +101,59 @@ fun PartyMemberDetailScreen(
                         }
                     }
                 ),
+                containerColor = White,
+                contentColor = Nero,
+                tint = Silver_Sand,
+                onBack = onBack,
+                onClick = { isShowBottomSheeet = true }
+            )
+//            TopAppBarWithReportAction(
+//                title = stringResource(
+//                    if (fromRecruitment) {
+//                        R.string.mypage_my_gathering_tab
+//                    } else if (fromParticipation) {
+//                        R.string.mypage_my_participation_tab
+//                    } else {
+//                        when (partyType) {
+//                            PartyType.PERFORMANCE -> R.string.partymember_performance_title
+//                            PartyType.MEAL -> R.string.partymember_restaurant_title
+//                            PartyType.ETC -> R.string.partymember_etc_title
+//                        }
+//                    }
+//                ),
+//                containerColor = White,
+//                contentColor = Nero,
+//                onBack = onBack
+//            )
+        },
+        floatingActionButton = {
+            CurtainCallRoundedTextButton(
+                onClick = { isShowDialog = true },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(54.dp),
-                containerColor = White,
-                contentColor = Eerie_Black,
-                onBack = onBack,
-                actionContent = {
-                    if (fromRecruitment) {
-                        IconButton(onClick = {}) {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_more_vert),
-                                contentDescription = null,
-                                modifier = Modifier.size(37.dp, 22.dp),
-                                tint = Roman_Silver
-                            )
-                        }
+                    .padding(horizontal = 20.dp)
+                    .height(52.dp),
+                title = stringResource(
+                    if (joinState) {
+                        R.string.partymember_detail_joined
                     } else {
-                        IconButton(onClick = {}) {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_report),
-                                contentDescription = null,
-                                modifier = Modifier.size(37.dp, 22.dp),
-                                tint = Roman_Silver
-                            )
-                        }
+                        R.string.partymember_detail_join
                     }
-                }
+                ),
+                fontSize = 16.dp.toSp(),
+                enabled = joinState.not(),
+                containerColor = if (joinState) Bright_Gray else Me_Pink,
+                contentColor = if (joinState) Silver_Sand else White
             )
-        }
+        },
+        floatingActionButtonPosition = FabPosition.Center
     ) { paddingValues ->
         PartyMemberDetailContent(
             partyType = partyType,
             modifier = Modifier
+                .padding(paddingValues)
                 .fillMaxSize()
                 .background(White)
-                .padding(paddingValues),
-            profile = "",
-            name = "고라파덕",
-            createdAt = "2023.6.7. 12:37",
-            title = "리어왕 lg센터 끝나고 밥 드실 분",
-            description = "등촌칼국수 드실 분 있나여?! 다들 참여 기기"
         )
     }
 }
@@ -99,50 +161,44 @@ fun PartyMemberDetailScreen(
 @Composable
 private fun PartyMemberDetailContent(
     partyType: PartyType,
-    modifier: Modifier = Modifier,
-    profile: String,
-    name: String,
-    createdAt: String,
-    title: String,
-    description: String
+    modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier) {
-        PartyMemberDetailUser(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 29.dp)
-                .padding(horizontal = 22.dp),
-            profile = "",
-            name = name,
-            createdAt = createdAt,
-            title = title,
-            description = description
-        )
-
-        Spacer(
+    val scrollState = rememberScrollState()
+    Column(modifier.verticalScroll(scrollState)) {
+        PartyMemberDetailHeader(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 30.dp)
-                .height(12.dp)
-                .background(Black.copy(alpha = 0.36f))
+                .padding(horizontal = 20.dp),
+            nickname = "고라파덕",
+            createAtDate = "2023.06.07",
+            createAtTime = "12:37",
+            title = "리어왕 lg센터 끝나고 밥 드실 분",
+            description = "등촌칼국수 드실 분 있나여?! 다들 참여 기기 등촌칼국수 드실 분 있나여?! 다들 참여 기기"
         )
-
-        PartyMemberDetailPerformance(
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(12.dp)
+                .background(Cultured)
+        )
+        PartyMemberDetailBody(
             partyType = partyType,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 32.dp)
-                .padding(horizontal = 22.dp)
+                .padding(top = 24.dp)
+                .padding(horizontal = 20.dp)
         )
     }
 }
 
 @Composable
-private fun PartyMemberDetailUser(
+private fun PartyMemberDetailHeader(
     modifier: Modifier = Modifier,
-    profile: String,
-    name: String,
-    createdAt: String,
+    profileUrl: String? = null,
+    nickname: String,
+    createAtDate: String,
+    createAtTime: String,
     title: String,
     description: String
 ) {
@@ -151,180 +207,135 @@ private fun PartyMemberDetailUser(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(R.drawable.img_profile),
+            AsyncImage(
+                model = profileUrl,
                 contentDescription = null,
-                modifier = Modifier.size(48.dp)
+                error = painterResource(R.drawable.ic_default_profile),
+                modifier = Modifier
+                    .size(52.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
             )
-
             Column(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(start = 15.dp),
+                    .padding(start = 14.dp),
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = name,
-                    color = Eerie_Black,
-                    fontSize = 16.sp,
+                    text = nickname,
+                    color = Chinese_Black,
+                    fontSize = 16.dp.toSp(),
                     fontWeight = FontWeight.Bold,
-                    fontFamily = spoqahansanseeo
+                    fontFamily = spoqahansanseeo,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
-
                 Text(
-                    text = createdAt,
-                    modifier = Modifier.padding(top = 1.dp),
+                    text = String.format("%s %s", createAtTime, createAtDate),
                     color = Silver_Sand,
-                    fontSize = 12.sp,
+                    fontSize = 12.dp.toSp(),
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo
                 )
             }
         }
-
         Text(
             text = title,
-            modifier = Modifier.padding(top = 28.dp),
-            color = Eerie_Black,
-            fontSize = 16.sp,
+            modifier = Modifier.padding(top = 26.dp),
+            color = Nero,
+            fontSize = 15.dp.toSp(),
             fontWeight = FontWeight.Bold,
             fontFamily = spoqahansanseeo
         )
-
         Text(
             text = description,
-            modifier = Modifier.padding(top = 15.dp),
+            modifier = Modifier.padding(top = 18.dp, bottom = 44.dp),
             color = Black_Coral,
-            fontSize = 16.sp,
+            fontSize = 15.dp.toSp(),
             fontWeight = FontWeight.Medium,
-            fontFamily = spoqahansanseeo
+            fontFamily = spoqahansanseeo,
+            lineHeight = 23.dp.toSp()
         )
     }
 }
 
 @Composable
-private fun PartyMemberDetailPerformance(
+private fun PartyMemberDetailBody(
     partyType: PartyType,
     modifier: Modifier = Modifier
 ) {
-    var joinState by remember { mutableStateOf(false) }
-
     Column(modifier) {
         Text(
             text = stringResource(R.string.partymember_detail),
             color = Gunmetal,
-            fontSize = 16.sp,
+            fontSize = 16.dp.toSp(),
             fontWeight = FontWeight.Bold,
             fontFamily = spoqahansanseeo
         )
-
         if (partyType == PartyType.ETC) {
             PartyMemberDetailInfo(
-                modifier = Modifier.padding(top = 22.dp),
-                iconRes = R.drawable.ic_calendar,
+                modifier = Modifier.padding(top = 20.dp),
+                icon = painterResource(R.drawable.ic_calendar),
                 category = stringResource(R.string.partymember_detail_date),
-                info = "2023.6.24"
+                description = "2023.06.24"
             )
-
             DottedLine(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 11.dp)
+                    .padding(vertical = 12.dp)
             )
-
             PartyMemberDetailInfo(
-                modifier = Modifier.padding(top = 11.dp),
-                iconRes = R.drawable.ic_party_state,
+                icon = painterResource(R.drawable.ic_party_state),
                 category = stringResource(R.string.partymember_detail_join_state),
-                info = "2/5"
+                description = "2/5"
             )
         } else {
             PartyMemberDetailInfo(
-                modifier = Modifier.padding(top = 22.dp),
-                iconRes = R.drawable.ic_dns,
+                modifier = Modifier.padding(top = 20.dp),
+                icon = painterResource(R.drawable.ic_dns),
                 category = stringResource(R.string.partymember_detail_performance_title),
-                info = "리어왕"
+                description = "리어왕"
             )
-
             DottedLine(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 11.dp)
+                    .padding(vertical = 12.dp)
             )
-
             PartyMemberDetailInfo(
-                modifier = Modifier.padding(top = 11.dp),
-                iconRes = R.drawable.ic_party_state,
+                icon = painterResource(R.drawable.ic_party_state),
                 category = stringResource(R.string.partymember_detail_join_state),
-                info = "2/5"
+                description = "2/5"
             )
-
             DottedLine(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 11.dp)
+                    .padding(vertical = 12.dp)
             )
-
             PartyMemberDetailInfo(
-                modifier = Modifier.padding(top = 11.dp),
-                iconRes = R.drawable.ic_calendar,
+                icon = painterResource(R.drawable.ic_calendar),
                 category = stringResource(R.string.partymember_detail_performance_date),
-                info = "2023.6.24"
+                description = "2023.06.24"
             )
-
             DottedLine(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 11.dp)
+                    .padding(vertical = 12.dp)
             )
-
             PartyMemberDetailInfo(
-                modifier = Modifier.padding(top = 11.dp),
-                iconRes = R.drawable.ic_clock,
+                icon = painterResource(R.drawable.ic_clock),
                 category = stringResource(R.string.partymember_detail_performance_time),
-                info = "19:3019:3019:3019:3019:3019:3019:3019:3019:3019:3019:30"
+                description = "19:3019:3019:3019:3019:3019:3019:3019:3019:3019:3019:30"
             )
             DottedLine(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 11.dp)
+                    .padding(vertical = 12.dp)
             )
-
             PartyMemberDetailInfo(
-                modifier = Modifier.padding(top = 11.dp),
-                iconRes = R.drawable.ic_location,
+                icon = painterResource(R.drawable.ic_location),
                 category = stringResource(R.string.partymember_detail_performance_location),
-                info = "LG아트센터 서울"
-            )
-        }
-
-        Spacer(Modifier.weight(1f))
-        Button(
-            onClick = { joinState = joinState.not() },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 15.dp)
-                .height(52.dp),
-            enabled = joinState.not(),
-            shape = RoundedCornerShape(12.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = if (joinState) Bright_Gray else Me_Pink,
-                disabledContainerColor = Bright_Gray
-            )
-        ) {
-            Text(
-                text = stringResource(
-                    if (joinState) {
-                        R.string.partymember_detail_joined
-                    } else {
-                        R.string.partymember_detail_join
-                    }
-                ),
-                color = if (joinState) Silver_Sand else White,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Medium,
-                fontFamily = spoqahansanseeo,
-                textAlign = TextAlign.Center
+                description = "LG아트센터 서울"
             )
         }
     }
@@ -333,9 +344,9 @@ private fun PartyMemberDetailPerformance(
 @Composable
 private fun PartyMemberDetailInfo(
     modifier: Modifier = Modifier,
-    @DrawableRes iconRes: Int,
+    icon: Painter,
     category: String,
-    info: String
+    description: String
 ) {
     Row(
         modifier = modifier,
@@ -343,35 +354,32 @@ private fun PartyMemberDetailInfo(
     ) {
         Box(
             modifier = Modifier
-                .size(22.dp)
-                .background(Bright_Gray, CircleShape),
+                .size(24.dp)
+                .background(Cultured, CircleShape),
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                painter = painterResource(iconRes),
+                painter = icon,
                 contentDescription = null,
-                modifier = Modifier.size(16.dp)
+                modifier = Modifier.size(16.dp),
+                tint = Color.Unspecified
             )
         }
-
         Text(
             text = category,
             modifier = Modifier
-                .padding(start = 9.dp)
-                .weight(1f),
+                .padding(start = 8.dp)
+                .width(70.dp),
             color = Black_Coral,
-            fontSize = 15.sp,
+            fontSize = 14.dp.toSp(),
             fontWeight = FontWeight.Medium,
-            fontFamily = spoqahansanseeo,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
+            fontFamily = spoqahansanseeo
         )
-
         Text(
-            text = info,
-            modifier = Modifier.weight(3f),
-            color = Eerie_Black,
-            fontSize = 15.sp,
+            text = description,
+            modifier = Modifier.weight(1f),
+            color = Nero,
+            fontSize = 14.dp.toSp(),
             fontWeight = FontWeight.Medium,
             fontFamily = spoqahansanseeo,
             maxLines = 1,

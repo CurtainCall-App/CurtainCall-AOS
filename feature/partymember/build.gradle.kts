@@ -36,6 +36,7 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.androidx.compose)
     implementation(libs.accompanist.systemuicontroller)
+    implementation(libs.coil.compose)
 
     // 3rd party
     implementation(libs.calendar.compose)

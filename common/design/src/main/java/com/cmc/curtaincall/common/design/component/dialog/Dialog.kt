@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallRoundedTextButton
@@ -28,7 +29,7 @@ import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 @Composable
 fun CurtainCallBasicDialog(
     title: String,
-    description: String,
+    description: String = "",
     dismissText: String,
     positiveText: String,
     onDismiss: () -> Unit = {},
@@ -50,14 +51,18 @@ fun CurtainCallBasicDialog(
                 fontWeight = FontWeight.Bold,
                 fontFamily = spoqahansanseeo
             )
-            Text(
-                text = description,
-                modifier = Modifier.padding(top = 10.dp),
-                color = Roman_Silver,
-                fontSize = 15.dp.toSp(),
-                fontWeight = FontWeight.Medium,
-                fontFamily = spoqahansanseeo
-            )
+            if (description.isNotEmpty()) {
+                Text(
+                    text = description,
+                    modifier = Modifier.padding(top = 10.dp),
+                    color = Roman_Silver,
+                    fontSize = 14.dp.toSp(),
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = spoqahansanseeo,
+                    lineHeight = 22.dp.toSp(),
+                    textAlign = TextAlign.Center
+                )
+            }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
