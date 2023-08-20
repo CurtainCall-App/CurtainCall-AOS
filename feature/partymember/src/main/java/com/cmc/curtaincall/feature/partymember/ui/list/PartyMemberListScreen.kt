@@ -91,6 +91,12 @@ private fun PartyMemberListContent(
     onNavigateDetail: (PartyType) -> Unit
 ) {
     Column(modifier = modifier.background(Cultured)) {
+//        EmptyItem(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(top = 252.dp),
+//            alert = stringResource(R.string.partymember_empty_text)
+//        )
         LazyColumn(
             modifier = Modifier
                 .padding(top = 30.dp)

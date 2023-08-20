@@ -41,6 +41,7 @@
     <string name="signup_welcome_start">시작하기</string>
 
     <!-- partymember -->
+    <string name="partymember_empty_text">모집 중인 파티원이 없어요!</string>
     <string name="partymember_recruitment">파티원 모집</string>
     <string name="partymember_performance_title">공연 관람</string>
     <string name="partymember_performance_description">여럿이 함께 관람할 때\n더 즐거운 공연 관람!</string>
