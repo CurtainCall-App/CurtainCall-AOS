@@ -62,7 +62,8 @@ fun CurtainCallMultiLineTextField(
                         color = placeholderColor,
                         fontSize = fontSize,
                         fontWeight = FontWeight.Medium,
-                        fontFamily = spoqahansanseeo
+                        fontFamily = spoqahansanseeo,
+                        lineHeight = 23.dp.toSp()
                     )
                 }
             }

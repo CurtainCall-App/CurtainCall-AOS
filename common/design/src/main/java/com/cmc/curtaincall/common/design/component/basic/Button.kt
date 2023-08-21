@@ -68,6 +68,7 @@ fun CurtainCallBorderTextButton(
 fun CurtainCallRoundedTextButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    contentModifier: Modifier = Modifier,
     title: String,
     fontSize: TextUnit,
     enabled: Boolean = true,
@@ -77,7 +78,7 @@ fun CurtainCallRoundedTextButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier,
+        modifier = modifier.then(contentModifier),
         enabled = enabled,
         shape = RoundedCornerShape(radiusSize),
         colors = ButtonDefaults.buttonColors(containerColor = containerColor)

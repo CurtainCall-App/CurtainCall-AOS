@@ -9,11 +9,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.feature.partymember.ui.PartyMemberScreen
 import com.cmc.curtaincall.feature.partymember.ui.create.PartyMemberCreateScreen
 import com.cmc.curtaincall.feature.partymember.ui.detail.PartyMemberDetailScreen
+import com.cmc.curtaincall.feature.partymember.ui.edit.PartyMemberEditScreen
 import com.cmc.curtaincall.feature.partymember.ui.list.PartyMemberListScreen
 import com.cmc.curtaincall.feature.partymember.ui.upload.PartyMemberUploadScreen
 
@@ -24,14 +26,7 @@ private const val PARTYMEMBER_LIST = "partymember_list"
 private const val PARTYMEMBER_DETAIL = "partymember_detail"
 private const val PARTYMEMBER_CREATE = "partymember_create"
 private const val PARTYMEMBER_UPLOAD = "partymember_upload"
-
-enum class PartyType(val value: String) {
-    PERFORMANCE("공연 관람"), MEAL("식사/카페"), ETC("기타")
-}
-
-enum class PartyPerformanceType {
-    THEATER, MUSICAL
-}
+private const val PARTYMEMBER_EDIT = "partymember_edit"
 
 sealed interface PartyMemberDestination : CurtainCallDestination {
     object PartyMember : PartyMemberDestination, BottomDestination {
@@ -96,6 +91,29 @@ sealed interface PartyMemberDestination : CurtainCallDestination {
             }
         )
     }
+
+    object Edit : PartyMemberDestination {
+        override val route = PARTYMEMBER_EDIT
+        const val typeArg = "type"
+        const val fromRecruitmentArg = "fromRecruitment"
+        const val fromParticipationArg = "fromParticipation"
+        val routeWithArgs = "$route?$typeArg={$typeArg}&$fromRecruitmentArg={$fromRecruitmentArg}&$fromParticipationArg={$fromParticipationArg}"
+
+        val arguments = listOf(
+            navArgument(typeArg) {
+                type = NavType.EnumType(PartyType::class.java)
+                defaultValue = PartyType.PERFORMANCE
+            },
+            navArgument(fromRecruitmentArg) {
+                type = NavType.BoolType
+                defaultValue = false
+            },
+            navArgument(fromParticipationArg) {
+                type = NavType.BoolType
+                defaultValue = false
+            }
+        )
+    }
 }
 
 fun NavGraphBuilder.partymemberNavGraph(
@@ -115,7 +133,14 @@ fun NavGraphBuilder.partymemberNavGraph(
             if (partyType != null) {
                 PartyMemberListScreen(
                     partyType = partyType,
-                    onNavigateDetail = { navHostController.navigate("${PartyMemberDestination.Detail.route}/$it") },
+                    onNavigateDetail = {
+                        navHostController.navigate(
+                            PartyMemberDestination.Detail.route + "?" +
+                                "${PartyMemberDestination.Detail.typeArg}=$it" + "&" +
+                                "${PartyMemberDestination.Detail.fromRecruitmentArg}=false" + "&" +
+                                "${PartyMemberDestination.Detail.fromParticipationArg}=false"
+                        )
+                    },
                     onNavigateCreate = { navHostController.navigate("${PartyMemberDestination.Create.route}/$it") },
                     onBack = { navHostController.popBackStack() }
                 )
@@ -134,13 +159,29 @@ fun NavGraphBuilder.partymemberNavGraph(
                     fromRecruitment = fromRecruitment,
                     fromParticipation = fromParticipation,
                     partyType = partyType,
+                    onNavigateEdit = {
+                        navHostController.navigate(
+                            PartyMemberDestination.Edit.route + "?" +
+                                "${PartyMemberDestination.Edit.typeArg}=$it" + "&" +
+                                "${PartyMemberDestination.Edit.fromRecruitmentArg}=$fromRecruitment" + "&" +
+                                "${PartyMemberDestination.Edit.fromParticipationArg}=$fromParticipation"
+                        )
+                    },
                     onBack = { navHostController.popBackStack() }
                 )
             } else {
                 PartyMemberDetailScreen(
                     fromRecruitment = fromRecruitment,
                     fromParticipation = fromParticipation,
-                    partyType = partyType ?: PartyType.PERFORMANCE,
+                    partyType = PartyType.PERFORMANCE,
+                    onNavigateEdit = {
+                        navHostController.navigate(
+                            PartyMemberDestination.Edit.route + "?" +
+                                "${PartyMemberDestination.Edit.typeArg}=$it" + "&" +
+                                "${PartyMemberDestination.Edit.fromRecruitmentArg}=$fromRecruitment" + "&" +
+                                "${PartyMemberDestination.Edit.fromParticipationArg}=$fromParticipation"
+                        )
+                    },
                     onBack = { navHostController.popBackStack() }
                 )
             }
@@ -177,6 +218,23 @@ fun NavGraphBuilder.partymemberNavGraph(
                         }
                     },
                     onNavigateHome = onNavigateHome
+                )
+            }
+        }
+
+        composable(
+            route = PartyMemberDestination.Edit.routeWithArgs,
+            arguments = PartyMemberDestination.Edit.arguments
+        ) { entry ->
+            val partyType: PartyType? = getPartyType(entry.arguments)
+            val fromRecruitment = entry.arguments?.getBoolean(PartyMemberDestination.Edit.fromRecruitmentArg) ?: false
+            val fromParticipation = entry.arguments?.getBoolean(PartyMemberDestination.Edit.fromParticipationArg) ?: false
+            if (partyType != null) {
+                PartyMemberEditScreen(
+                    fromRecruitment = fromRecruitment,
+                    fromParticipation = fromParticipation,
+                    partyType = partyType,
+                    onBack = { navHostController.popBackStack() }
                 )
             }
         }

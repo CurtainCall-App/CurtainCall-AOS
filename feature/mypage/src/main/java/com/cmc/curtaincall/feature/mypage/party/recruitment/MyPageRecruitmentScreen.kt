@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -15,15 +16,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
+import com.cmc.curtaincall.common.design.component.content.card.PartyMemberContentCard
+import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.cmc.curtaincall.common.design.theme.Bright_Gray
 import com.cmc.curtaincall.common.design.theme.Nero
 import com.cmc.curtaincall.feature.mypage.party.MyPagePartyMenuTab
-import com.cmc.curtaincall.feature.partymember.PartyType
-import com.cmc.curtaincall.feature.partymember.ui.list.PartyMemberItemCard
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -78,57 +80,25 @@ private fun MyPageRecruitmentContent(
                 .padding(top = 11.dp)
                 .fillMaxSize()
         ) {
-            item {
-                PartyMemberItemCard(
+            item(10) {
+                PartyMemberContentCard(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight()
+                        .padding(bottom = 20.dp),
                     partyType = partyTypeState,
-                    cardName = "비스티",
-                    profile = "",
-                    name = "고라파덕",
-                    createdAt = "2023.6.7. 11:51",
+                    title = "비스티",
+                    nickname = "고라파덕",
+                    createAtDate = "2023.06.07",
+                    createAtTime = "11:51",
                     numberOfMember = 1,
-                    maxOfMember = 5,
-                    description = "비스티 이번주 토욜 저녁 공연 같이 봐요~~~~~~~~~~",
-                    poster = "",
+                    numberOfTotal = 5,
+                    description = "비스티 이번주 토욜 저녁 공연 같이 봐요~",
+                    poster = painterResource(R.drawable.img_poster),
                     date = "2023.6.24(토)",
                     time = "19:30",
                     location = "링크아트센터",
-                    fromMyPage = true,
-                    onNavigateDetail = { onNavigatRecruitmentDetail(partyTypeState) }
-                )
-            }
-            item {
-                PartyMemberItemCard(
-                    partyType = partyTypeState,
-                    cardName = "비스티",
-                    profile = "",
-                    name = "고라파덕",
-                    createdAt = "2023.6.7. 11:51",
-                    numberOfMember = 1,
-                    maxOfMember = 5,
-                    description = "비스티 이번주 토욜 저녁 공연 같이 봐요~~~~~~~~~~",
-                    poster = "",
-                    date = "2023.6.24(토)",
-                    time = "19:30",
-                    location = "링크아트센터",
-                    fromMyPage = true,
-                    onNavigateDetail = { onNavigatRecruitmentDetail(partyTypeState) }
-                )
-            }
-            item {
-                PartyMemberItemCard(
-                    partyType = partyTypeState,
-                    cardName = "비스티",
-                    profile = "",
-                    name = "고라파덕",
-                    createdAt = "2023.6.7. 11:51",
-                    numberOfMember = 1,
-                    maxOfMember = 5,
-                    description = "비스티 이번주 토욜 저녁 공연 같이 봐요~~~~~~~~~~",
-                    poster = "",
-                    date = "2023.6.24(토)",
-                    time = "19:30",
-                    location = "링크아트센터",
-                    fromMyPage = true,
+                    hasLiveTalk = true,
                     onNavigateDetail = { onNavigatRecruitmentDetail(partyTypeState) }
                 )
             }

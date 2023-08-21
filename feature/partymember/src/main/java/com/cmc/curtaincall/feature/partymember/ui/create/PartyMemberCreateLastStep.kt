@@ -3,7 +3,17 @@ package com.cmc.curtaincall.feature.partymember.ui.create
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,7 +29,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.common.design.component.basic.CurtainCallBorderText
+import com.cmc.curtaincall.common.design.component.basic.CurtainCallMultiLineTextField
+import com.cmc.curtaincall.common.design.component.basic.CurtainCallSingleLineTextField
+import com.cmc.curtaincall.common.design.extensions.toSp
+import com.cmc.curtaincall.common.design.theme.Black_Pearl
+import com.cmc.curtaincall.common.design.theme.Cultured
+import com.cmc.curtaincall.common.design.theme.Me_Pink
+import com.cmc.curtaincall.common.design.theme.Nero
+import com.cmc.curtaincall.common.design.theme.Roman_Silver
+import com.cmc.curtaincall.common.design.theme.Silver_Sand
+import com.cmc.curtaincall.common.design.theme.White
+import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 
 fun LazyGridScope.showLastStep(
     modifier: Modifier = Modifier,
@@ -29,24 +50,108 @@ fun LazyGridScope.showLastStep(
     onChangeContent: (String) -> Unit
 ) {
     item(span = { GridItemSpan(3) }) {
-        Column(modifier = modifier) {
-            TitleTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 5.dp)
-                    .padding(top = 15.dp),
-                text = title,
-                onChangeText = onChangeTitle
-            )
+        Column(modifier) {
+            Column(Modifier.padding(top = 15.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = stringResource(R.string.partymember_create_write_title),
+                        modifier = Modifier.weight(1f),
+                        color = Black_Pearl,
+                        fontSize = 18.dp.toSp(),
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = spoqahansanseeo
+                    )
+                    CurtainCallBorderText(
+                        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
+                        text = stringResource(R.string.partymember_create_essential),
+                        borderColor = Me_Pink,
+                        contentColor = Me_Pink,
+                        fontSize = 13.dp.toSp(),
+                        radiusSize = 20.dp
+                    )
+                }
+                CurtainCallSingleLineTextField(
+                    value = title,
+                    onValueChange = { if (it.length <= 20) onChangeTitle(it) },
+                    modifier = Modifier
+                        .padding(top = 10.dp)
+                        .fillMaxWidth()
+                        .height(42.dp),
+                    fontSize = 15.dp.toSp(),
+                    shape = RoundedCornerShape(10.dp),
+                    containerColor = Cultured,
+                    contentColor = Nero,
+                    contentModifier = Modifier.padding(horizontal = 18.dp, vertical = 9.dp),
+                    placeholder = stringResource(R.string.partymember_create_write_title_placeholder),
+                    placeholderColor = Silver_Sand
+                )
+                Text(
+                    text = String.format(
+                        stringResource(R.string.partymember_create_write_number_of_text),
+                        title.length,
+                        20
+                    ),
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        .align(Alignment.End),
+                    color = Roman_Silver,
+                    fontSize = 12.dp.toSp(),
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = spoqahansanseeo
+                )
+            }
 
-            ContentTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 5.dp)
-                    .padding(top = 40.dp),
-                text = content,
-                onChangeText = onChangeContent
-            )
+            Column(Modifier.padding(top = 38.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = stringResource(R.string.partymember_create_write_content),
+                        modifier = Modifier.weight(1f),
+                        color = Black_Pearl,
+                        fontSize = 18.dp.toSp(),
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = spoqahansanseeo
+                    )
+                    CurtainCallBorderText(
+                        modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
+                        text = stringResource(R.string.partymember_create_essential),
+                        borderColor = Me_Pink,
+                        contentColor = Me_Pink,
+                        fontSize = 13.dp.toSp(),
+                        radiusSize = 20.dp
+                    )
+                }
+                CurtainCallMultiLineTextField(
+                    value = content,
+                    onValueChange = {
+                        if (it.length <= 500) onChangeContent(it)
+                    },
+                    modifier = Modifier
+                        .padding(top = 10.dp)
+                        .fillMaxWidth()
+                        .heightIn(min = 227.dp),
+                    fontSize = 15.dp.toSp(),
+                    shape = RoundedCornerShape(10.dp),
+                    containerColor = Cultured,
+                    contentColor = Nero,
+                    contentModifier = Modifier.padding(horizontal = 18.dp, vertical = 12.dp),
+                    placeholder = stringResource(R.string.partymember_create_write_content_placeholder),
+                    placeholderColor = Silver_Sand
+                )
+                Text(
+                    text = String.format(
+                        stringResource(R.string.partymember_create_write_number_of_text),
+                        content.length,
+                        500
+                    ),
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        .align(Alignment.End),
+                    color = Roman_Silver,
+                    fontSize = 12.dp.toSp(),
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = spoqahansanseeo
+                )
+            }
         }
     }
 }
@@ -125,7 +230,8 @@ private fun ContentTextField(
         Text(
             text = String.format(
                 stringResource(R.string.partymember_create_write_number_of_text),
-                text.length
+                text.length,
+                400
             ),
             modifier = Modifier
                 .fillMaxWidth()
@@ -135,78 +241,6 @@ private fun ContentTextField(
             fontWeight = FontWeight.Medium,
             fontFamily = spoqahansanseeo,
             textAlign = TextAlign.End
-        )
-    }
-}
-
-@Composable
-private fun TitleTextField(
-    modifier: Modifier = Modifier,
-    text: String,
-    onChangeText: (String) -> Unit = {}
-) {
-    Column(modifier) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text = stringResource(R.string.partymember_create_write_title),
-                color = Black_Pearl,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                fontFamily = spoqahansanseeo
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            Box(
-                modifier = Modifier
-                    .size(40.dp, 22.dp)
-                    .border(BorderStroke(1.dp, Me_Pink), RoundedCornerShape(20.dp))
-                    .background(White),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = stringResource(R.string.partymember_create_essential),
-                    color = Me_Pink,
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo
-                )
-            }
-        }
-
-        BasicTextField(
-            value = text,
-            onValueChange = onChangeText,
-            modifier = Modifier
-                .padding(top = 10.dp)
-                .fillMaxWidth()
-                .height(42.dp)
-                .background(Cultured, RoundedCornerShape(10.dp)),
-            textStyle = TextStyle(
-                color = Nero,
-                fontSize = 15.sp,
-                fontWeight = FontWeight.Medium,
-                fontFamily = spoqahansanseeo
-            ),
-            singleLine = true,
-            maxLines = 1,
-            decorationBox = { innerTextField ->
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 18.dp),
-                    contentAlignment = Alignment.CenterStart
-                ) {
-                    if (text.isEmpty()) {
-                        Text(
-                            text = stringResource(R.string.partymember_create_write_title_placeholder),
-                            color = Roman_Silver,
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Medium,
-                            fontFamily = spoqahansanseeo
-                        )
-                    }
-                    innerTextField()
-                }
-            }
         )
     }
 }
