@@ -167,6 +167,10 @@
     <string name="performance_lost_item_upload_complete">분실물 작성이 모두 끝났습니다.</string>
     <string name="performance_lost_item_upload_complete_description">해당 게시물은 작품 상세페이지 및\n마이페이지에서 확인할 수 있습니다.</string>
 
+    <!-- livetalk-->
+    <string name="livetalk_appbar_title">라이브톡</string>
+    <string name="livetalk_empty_contents">해당 기능은\n추후에 제공될 예정입니다.</string>
+
     <!-- home-->
     <string name="home_appbar_title">CURTAIN CALL</string>
     <string name="home_banner_word_dictionary_title">알쏭달쏭 용어 사전</string>

@@ -2,6 +2,7 @@ package com.cmc.curtaincall.common.design.component.basic
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -59,12 +60,14 @@ fun CurtainCallRoundedText(
     containerColor: Color,
     contentColor: Color,
     fontSize: TextUnit,
-    radiusSize: Dp
+    radiusSize: Dp,
+    onClick: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier
             .background(containerColor, RoundedCornerShape(radiusSize))
-            .then(modifier),
+            .then(modifier)
+            .clickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
         Text(

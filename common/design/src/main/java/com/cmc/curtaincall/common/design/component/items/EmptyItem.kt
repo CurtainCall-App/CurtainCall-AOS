@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.Silver_Sand
+import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 
 @Composable
@@ -41,6 +42,34 @@ fun EmptyItem(
             fontWeight = FontWeight.Medium,
             fontFamily = spoqahansanseeo,
             lineHeight = 22.dp.toSp(),
+            textAlign = TextAlign.Center
+        )
+    }
+}
+
+@Composable
+fun EmptyLiveTalk(
+    modifier: Modifier,
+    alert: String
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_fix),
+            contentDescription = null,
+            modifier = Modifier.size(70.dp),
+            tint = Color.Unspecified
+        )
+        Text(
+            text = alert,
+            modifier = Modifier.padding(top = 20.dp),
+            color = White,
+            fontSize = 18.dp.toSp(),
+            fontWeight = FontWeight.Medium,
+            fontFamily = spoqahansanseeo,
+            lineHeight = 26.dp.toSp(),
             textAlign = TextAlign.Center
         )
     }
