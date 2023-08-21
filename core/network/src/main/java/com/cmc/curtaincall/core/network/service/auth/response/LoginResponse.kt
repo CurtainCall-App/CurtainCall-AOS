@@ -1,6 +1,6 @@
 package com.cmc.curtaincall.core.network.service.auth.response
 
-import com.cmc.curtaincall.domain.model.LoginResultModel
+import com.cmc.curtaincall.domain.model.auth.LoginResultModel
 
 data class LoginResponse(
     val memberId: Int?,

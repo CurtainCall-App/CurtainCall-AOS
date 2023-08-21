@@ -1,7 +1,7 @@
 package com.cmc.curtaincall.data.repository
 
 import com.cmc.curtaincall.data.source.local.TokenLocalSource
-import com.cmc.curtaincall.domain.model.LoginResultModel
+import com.cmc.curtaincall.domain.model.auth.LoginResultModel
 import com.cmc.curtaincall.domain.repository.TokenRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject

@@ -1,7 +1,7 @@
 package com.cmc.curtaincall.data.repository
 
 import com.cmc.curtaincall.data.source.remote.AuthRemoteSource
-import com.cmc.curtaincall.domain.model.LoginResultModel
+import com.cmc.curtaincall.domain.model.auth.LoginResultModel
 import com.cmc.curtaincall.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
