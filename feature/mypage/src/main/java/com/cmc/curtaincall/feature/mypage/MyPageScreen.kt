@@ -32,10 +32,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.cmc.curtaincall.common.design.component.basic.TopAppBarOnlyAction
-import com.cmc.curtaincall.common.design.theme.Nero
-import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.component.basic.TopAppBarOnlySetting
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.Arsenic
 import com.cmc.curtaincall.common.design.theme.Black
@@ -44,8 +42,10 @@ import com.cmc.curtaincall.common.design.theme.Bright_Gray
 import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
 import com.cmc.curtaincall.common.design.theme.Cultured
 import com.cmc.curtaincall.common.design.theme.Me_Pink
+import com.cmc.curtaincall.common.design.theme.Nero
 import com.cmc.curtaincall.common.design.theme.Roman_Silver
 import com.cmc.curtaincall.common.design.theme.Silver_Sand
+import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -65,10 +65,7 @@ fun MyPageScreen(
 
     Scaffold(
         topBar = {
-            TopAppBarOnlyAction(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp),
+            TopAppBarOnlySetting(
                 containerColor = White,
                 contentColor = Roman_Silver,
                 onClick = { onNavigateSetting() }
@@ -114,13 +111,13 @@ private fun MyPageContent(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 20.dp)
+                .padding(top = 26.dp)
                 .padding(horizontal = 20.dp)
         ) {
             MyPageContentItem(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 30.dp),
+                    .padding(vertical = 24.dp),
                 icon = painterResource(R.drawable.ic_edit_square),
                 title = stringResource(R.string.mypage_my_writing),
                 onClick = onNavigateWrite
@@ -134,7 +131,7 @@ private fun MyPageContent(
             MyPageContentItem(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 30.dp),
+                    .padding(vertical = 24.dp),
                 icon = painterResource(R.drawable.ic_border_all),
                 title = stringResource(R.string.mypage_saved_performance_list),
                 onClick = onNavigateSavedPerformance
@@ -142,6 +139,7 @@ private fun MyPageContent(
         }
         Spacer(
             modifier = Modifier
+                .padding(top = 17.dp)
                 .fillMaxWidth()
                 .height(12.dp)
                 .background(Cultured)
@@ -149,25 +147,21 @@ private fun MyPageContent(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 20.dp)
+                .padding(top = 29.dp)
                 .padding(horizontal = 20.dp)
         ) {
             MyPageInfoItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 12.dp),
+                modifier = Modifier.fillMaxWidth(),
                 title = stringResource(R.string.mypage_announcement),
                 onClick = { onNavigateAnnouncement() }
             )
             MyPageInfoItem(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 12.dp),
+                    .padding(top = 22.dp),
                 title = stringResource(R.string.mypage_the_most_frequently_question)
             )
-            Spacer(
-                modifier = Modifier.height(48.dp)
-            )
+            Spacer(Modifier.height(60.dp))
         }
         MyPageFooter(
             modifier = Modifier
@@ -181,9 +175,7 @@ private fun MyPageContent(
 private fun MyPageFooter(
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier.padding(horizontal = 20.dp)
-    ) {
+    Column(modifier.padding(horizontal = 20.dp)) {
         Text(
             text = stringResource(R.string.mypage_curtaincall_customer_center),
             modifier = Modifier.padding(top = 24.dp),
@@ -194,7 +186,7 @@ private fun MyPageFooter(
         )
         Text(
             text = stringResource(R.string.mypage_curtaincall_email),
-            modifier = Modifier.padding(top = 4.dp),
+            modifier = Modifier.padding(top = 2.dp),
             color = Arsenic,
             fontSize = 12.dp.toSp(),
             fontWeight = FontWeight.Medium,
@@ -202,27 +194,27 @@ private fun MyPageFooter(
         )
         Text(
             text = stringResource(R.string.mypage_can_consult_time),
-            modifier = Modifier.padding(top = 14.dp),
+            modifier = Modifier.padding(top = 18.dp),
             color = Black_Coral,
-            fontSize = 10.dp.toSp(),
+            fontSize = 12.dp.toSp(),
             fontWeight = FontWeight.Normal,
             fontFamily = spoqahansanseeo
         )
         Spacer(
             modifier = Modifier
-                .padding(top = 20.dp, bottom = 18.dp)
+                .padding(top = 16.dp, bottom = 18.dp)
                 .fillMaxWidth()
                 .height(1.dp)
                 .background(Bright_Gray)
         )
         Text(
             text = stringResource(R.string.mypage_source_of_performance_information),
-            modifier = Modifier.padding(bottom = 50.dp),
+            modifier = Modifier.padding(bottom = 39.dp),
             color = Roman_Silver,
             fontSize = 10.dp.toSp(),
             fontWeight = FontWeight.Normal,
             fontFamily = spoqahansanseeo,
-            lineHeight = 18.dp.toSp()
+            lineHeight = 15.dp.toSp()
         )
     }
 }
@@ -268,9 +260,7 @@ private fun MyPageContentItem(
         Icon(
             painter = icon,
             contentDescription = null,
-            modifier = Modifier
-                .padding(start = 6.dp)
-                .size(24.dp),
+            modifier = Modifier.size(24.dp),
             tint = Color.Unspecified
         )
         Text(
@@ -313,7 +303,7 @@ private fun MyPageProfile(
                         modifier = Modifier
                             .align(Alignment.TopStart)
                             .size(80.dp)
-                            .clip(RoundedCornerShape(27.dp))
+                            .clip(RoundedCornerShape(26.dp))
                             .clickable { onNavigateProfileEdit() },
                         contentScale = ContentScale.FillBounds
                     )
@@ -350,7 +340,7 @@ private fun MyPageProfile(
         ) {
             Column(
                 modifier = Modifier
-                    .padding(vertical = 18.dp)
+                    .padding(top = 18.dp, bottom = 14.dp)
                     .weight(1f)
                     .clickable { onNavigateRecruitment() },
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -364,9 +354,9 @@ private fun MyPageProfile(
                 )
                 Text(
                     text = "2",
-                    modifier = Modifier.padding(top = 4.dp),
+                    modifier = Modifier.padding(top = 8.dp),
                     color = Me_Pink,
-                    fontSize = 24.dp.toSp(),
+                    fontSize = 22.dp.toSp(),
                     fontWeight = FontWeight.Bold,
                     fontFamily = spoqahansanseeo
                 )
@@ -375,11 +365,10 @@ private fun MyPageProfile(
                 modifier = Modifier
                     .background(Silver_Sand)
                     .size(1.dp, 30.dp)
-
             )
             Column(
                 modifier = Modifier
-                    .padding(vertical = 18.dp)
+                    .padding(top = 18.dp, bottom = 14.dp)
                     .weight(1f)
                     .clickable { onNavigateParticipation() },
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -393,7 +382,7 @@ private fun MyPageProfile(
                 )
                 Text(
                     text = "2",
-                    modifier = Modifier.padding(top = 4.dp),
+                    modifier = Modifier.padding(top = 8.dp),
                     color = Me_Pink,
                     fontSize = 24.dp.toSp(),
                     fontWeight = FontWeight.Bold,
