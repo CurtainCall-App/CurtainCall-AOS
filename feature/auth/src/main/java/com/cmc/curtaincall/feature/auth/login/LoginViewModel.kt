@@ -3,7 +3,7 @@ package com.cmc.curtaincall.feature.auth.login
 import android.annotation.SuppressLint
 import androidx.lifecycle.viewModelScope
 import com.cmc.curtaincall.core.base.BaseViewModel
-import com.cmc.curtaincall.domain.model.LoginResultModel
+import com.cmc.curtaincall.domain.model.auth.LoginResultModel
 import com.cmc.curtaincall.domain.repository.AuthRepository
 import com.cmc.curtaincall.domain.repository.TokenRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.domain.model
+package com.cmc.curtaincall.domain.model.auth
 
 data class LoginResultModel(
     val memberId: Int? = null,

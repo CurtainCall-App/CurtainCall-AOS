@@ -1,6 +1,6 @@
 package com.cmc.curtaincall.domain.repository
 
-import com.cmc.curtaincall.domain.model.LoginResultModel
+import com.cmc.curtaincall.domain.model.auth.LoginResultModel
 import kotlinx.coroutines.flow.Flow
 
 interface TokenRepository {
