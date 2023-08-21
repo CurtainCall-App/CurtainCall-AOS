@@ -7,8 +7,8 @@ import androidx.navigation.navigation
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
-import com.cmc.curtaincall.feature.mypage.announcemnet.MyPageNoticeDetailScreen
-import com.cmc.curtaincall.feature.mypage.announcemnet.MyPageNoticeScreen
+import com.cmc.curtaincall.feature.mypage.notice.MyPageNoticeDetailScreen
+import com.cmc.curtaincall.feature.mypage.notice.MyPageNoticeScreen
 import com.cmc.curtaincall.feature.mypage.editprofile.MyPageProfileEditScreen
 import com.cmc.curtaincall.feature.mypage.party.participation.MyPageParticipationScreen
 import com.cmc.curtaincall.feature.mypage.party.recruitment.MyPageRecruitmentScreen
