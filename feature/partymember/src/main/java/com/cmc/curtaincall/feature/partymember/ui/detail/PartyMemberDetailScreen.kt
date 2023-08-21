@@ -83,6 +83,9 @@ fun PartyMemberDetailScreen(
             onDelete = {
                 isShowRemoveDialog = true
                 isShowBottomSheeet = false
+            },
+            onDismissRequest = {
+                isShowBottomSheeet = false
             }
         )
     }

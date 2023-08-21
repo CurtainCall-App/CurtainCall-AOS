@@ -83,7 +83,8 @@ private fun PerformanceContent(
             onSelectSortType = {
                 sortType = it
                 showDialog = false
-            }
+            },
+            onDismissRequest = { showDialog = false }
         )
     }
     Column(modifier) {

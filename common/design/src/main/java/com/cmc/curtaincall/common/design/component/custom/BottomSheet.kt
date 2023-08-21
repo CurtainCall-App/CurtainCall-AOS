@@ -37,9 +37,10 @@ enum class SortType(val value: String) {
 @Composable
 fun SelectSortTypeBottomSheet(
     sortType: SortType,
-    onSelectSortType: (SortType) -> Unit
+    onSelectSortType: (SortType) -> Unit,
+    onDismissRequest: () -> Unit = {}
 ) {
-    BottomSheetDialog(onDismissRequest = { }) {
+    BottomSheetDialog(onDismissRequest = onDismissRequest) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -123,9 +124,10 @@ fun SelectSortTypeBottomSheet(
 @Composable
 fun EditBottomSheet(
     onEdit: () -> Unit,
-    onDelete: () -> Unit
+    onDelete: () -> Unit,
+    onDismissRequest: () -> Unit = {}
 ) {
-    BottomSheetDialog(onDismissRequest = { }) {
+    BottomSheetDialog(onDismissRequest = onDismissRequest) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()

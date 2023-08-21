@@ -66,7 +66,8 @@ fun LazyGridScope.showPerformanceFirstStep(
                 onSelectSortType = {
                     sortType = it
                     showDialog = false
-                }
+                },
+                onDismissRequest = { showDialog = false }
             )
         }
 

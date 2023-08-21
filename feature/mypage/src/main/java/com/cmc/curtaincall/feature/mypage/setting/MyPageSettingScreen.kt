@@ -15,17 +15,22 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
+import com.cmc.curtaincall.common.design.component.dialog.CurtainCallBasicDialog
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.Arsenic
-import com.cmc.curtaincall.common.design.theme.Bright_Gray
+import com.cmc.curtaincall.common.design.theme.Cultured
 import com.cmc.curtaincall.common.design.theme.Nero
 import com.cmc.curtaincall.common.design.theme.Silver_Sand
 import com.cmc.curtaincall.common.design.theme.White
@@ -39,9 +44,6 @@ internal fun MyPageSettingScreen(
     Scaffold(
         topBar = {
             TopAppBarWithBack(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp),
                 title = stringResource(R.string.mypage_setting),
                 containerColor = White,
                 contentColor = Nero,
@@ -62,59 +64,70 @@ internal fun MyPageSettingScreen(
 private fun MyPageSettingContent(
     modifier: Modifier = Modifier
 ) {
+    var isShowDialog by remember { mutableStateOf(false) }
+    if (isShowDialog) {
+        CurtainCallBasicDialog(
+            title = stringResource(R.string.dialog_logout_title),
+            dismissText = stringResource(R.string.dialog_logout_dismiss),
+            positiveText = stringResource(R.string.dialog_logout_positive),
+            onDismiss = { isShowDialog = false },
+            onPositive = { isShowDialog = false }
+        )
+    }
+
     Column(modifier) {
-        Text(
-            text = stringResource(R.string.mypage_setting_account),
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 20.dp)
-                .padding(top = 30.dp),
-            color = Silver_Sand,
-            fontSize = 13.dp.toSp(),
-            fontWeight = FontWeight.Medium,
-            fontFamily = spoqahansanseeo
-        )
-        SettingItem(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 23.dp)
-                .padding(horizontal = 20.dp),
-            title = stringResource(R.string.mypage_setting_logout),
-            onClick = {}
-        )
-        Spacer(
-            modifier = Modifier
-                .padding(vertical = 25.dp)
-                .fillMaxWidth()
-                .height(1.dp)
-                .background(Bright_Gray)
-        )
-        Text(
-            text = stringResource(R.string.mypage_setting_information),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 20.dp),
-            color = Silver_Sand,
-            fontSize = 13.dp.toSp(),
-            fontWeight = FontWeight.Medium,
-            fontFamily = spoqahansanseeo
-        )
-        SettingItem(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 23.dp)
-                .padding(horizontal = 20.dp),
-            title = stringResource(R.string.mypage_setting_privacy_information_policy),
-            onClick = {}
-        )
-        SettingItem(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 22.dp)
-                .padding(horizontal = 20.dp),
-            title = stringResource(R.string.mypage_setting_service_use_terms),
-            onClick = {}
-        )
+                .padding(horizontal = 20.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.mypage_setting_account),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 30.dp),
+                color = Silver_Sand,
+                fontSize = 13.dp.toSp(),
+                fontWeight = FontWeight.Medium,
+                fontFamily = spoqahansanseeo
+            )
+            SettingItem(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 18.dp),
+                title = stringResource(R.string.mypage_setting_logout),
+                onClick = { isShowDialog = true }
+            )
+            Spacer(
+                modifier = Modifier
+                    .padding(vertical = 24.dp)
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(Cultured)
+            )
+            Text(
+                text = stringResource(R.string.mypage_setting_information),
+                modifier = Modifier.fillMaxWidth(),
+                color = Silver_Sand,
+                fontSize = 13.dp.toSp(),
+                fontWeight = FontWeight.Medium,
+                fontFamily = spoqahansanseeo
+            )
+            SettingItem(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 18.dp),
+                title = stringResource(R.string.mypage_setting_privacy_information_policy),
+                onClick = {}
+            )
+            SettingItem(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 19.dp),
+                title = stringResource(R.string.mypage_setting_service_use_terms),
+                onClick = {}
+            )
+        }
     }
 }
 
