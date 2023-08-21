@@ -3,7 +3,6 @@ package com.cmc.curtaincall.common.design.component.basic
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,20 +24,20 @@ import com.cmc.curtaincall.common.design.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopAppBarOnlyAction(
-    modifier: Modifier = Modifier,
+fun TopAppBarOnlySetting(
     containerColor: Color,
     contentColor: Color,
     onClick: () -> Unit
 ) {
-    CenterAlignedTopAppBar(
-        title = { },
-        modifier = modifier,
+    TopAppBar(
+        title = {},
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(54.dp)
+            .background(containerColor)
+            .padding(top = 20.dp, bottom = 10.dp),
         actions = {
-            IconButton(
-                onClick = onClick,
-                modifier = Modifier.fillMaxHeight()
-            ) {
+            IconButton(onClick = onClick) {
                 Icon(
                     painter = painterResource(R.drawable.ic_settings),
                     contentDescription = null,
@@ -47,7 +46,7 @@ fun TopAppBarOnlyAction(
                 )
             }
         },
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = containerColor)
+        colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = containerColor)
     )
 }
 

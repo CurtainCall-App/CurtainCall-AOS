@@ -226,6 +226,8 @@
     <string name="mypage_setting_privacy_information_policy">개인정보 처리방침</string>
     <string name="mypage_setting_service_use_terms">서비스 이용약관</string>
     <string name="mypage_livetalk_entrance">TALK 입장</string>
+    <string name="mypage_privacy_terms_appbar_title">개인정보 처리방침</string>
+    <string name="mypage_service_terms_appbar_title">서비스 이용약관</string>
 
     <!-- dialog -->
     <string name="dialog_performance_review_remove_title">해당 글을 삭제할까요?</string>
@@ -236,4 +238,7 @@
     <string name="dialog_partymember_participate_description">참여하기를 클릭하면 참여 취소가\n불가능해요. 계속할까요?</string>
     <string name="dialog_partymember_participate_dismiss">아니요</string>
     <string name="dialog_partymember_participate_positive">네, 참여할래요</string>
+    <string name="dialog_logout_title">로그아웃 할까요?</string>
+    <string name="dialog_logout_dismiss">아니요</string>
+    <string name="dialog_logout_positive">로그아웃</string>
 </resources>

@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.mypage.announcemnet
+package com.cmc.curtaincall.feature.mypage.notice
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -15,13 +15,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
+import com.cmc.curtaincall.common.design.component.items.NoticeItem
+import com.cmc.curtaincall.common.design.extensions.toSp
+import com.cmc.curtaincall.common.design.theme.Arsenic
+import com.cmc.curtaincall.common.design.theme.Cultured
 import com.cmc.curtaincall.common.design.theme.Nero
 import com.cmc.curtaincall.common.design.theme.White
-import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.common.design.extensions.toSp
-import com.cmc.curtaincall.common.design.theme.Bright_Gray
-import com.cmc.curtaincall.common.design.theme.Charcoal
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,9 +33,6 @@ internal fun MyPageNoticeDetailScreen(
     Scaffold(
         topBar = {
             TopAppBarWithBack(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp),
                 title = stringResource(R.string.mypage_announcement),
                 containerColor = White,
                 contentColor = Nero,
@@ -59,8 +57,7 @@ private fun MyPageNoticeDetailContent(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 10.dp)
-                .padding(horizontal = 20.dp)
+                .padding(top = 12.dp)
         ) {
             NoticeItem(
                 modifier = Modifier.fillMaxWidth(),
@@ -71,8 +68,9 @@ private fun MyPageNoticeDetailContent(
             Spacer(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
                     .height(1.dp)
-                    .background(Bright_Gray)
+                    .background(Cultured)
             )
             Text(
                 text = "안녕하세요, 고객님\n" +
@@ -83,8 +81,10 @@ private fun MyPageNoticeDetailContent(
                     "추후 이용 중 다른 문의 사항이 발생한다면 고객센터로 말씀 주시기 바랍니다.\n" +
                     "감사합니다.\n" +
                     "커튼콜팀 드림",
-                modifier = Modifier.padding(top = 40.dp),
-                color = Charcoal,
+                modifier = Modifier
+                    .padding(top = 30.dp)
+                    .padding(horizontal = 20.dp),
+                color = Arsenic,
                 fontSize = 14.dp.toSp(),
                 fontWeight = FontWeight.Medium,
                 fontFamily = spoqahansanseeo,
