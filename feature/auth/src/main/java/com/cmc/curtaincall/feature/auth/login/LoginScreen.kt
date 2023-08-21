@@ -53,6 +53,7 @@ import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
+import timber.log.Timber
 import kotlin.coroutines.resume
 
 private sealed interface AuthResult {
@@ -70,18 +71,18 @@ fun LoginScreen(
     systemUiController.setStatusBarColor(Cetacean_Blue)
 
     LaunchedEffect(loginViewModel) {
-        // loginViewModel.isValidationToken()
+        loginViewModel.isValidationToken()
         loginViewModel.effects.collectLatest { sideEffect ->
+            Timber.d("LoginScreen $sideEffect")
             when (sideEffect) {
                 LoginSideEffect.SuccessLogin -> {
                     onNavigateSignUpTerms()
                 }
 
+                LoginSideEffect.ExistMember,
                 LoginSideEffect.AutoLogin -> {
                     onNavigateHome()
                 }
-
-                else -> {}
             }
         }
     }
@@ -244,6 +245,7 @@ private suspend fun loginKaKao(context: Context): AuthResult = suspendCancellabl
     if (UserApiClient.instance.isKakaoTalkLoginAvailable(context)) {
         UserApiClient.instance.loginWithKakaoTalk(context) { token, error ->
             if (error != null) {
+                Timber.e("loginKaKao error ${error.message}")
                 if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
                     return@loginWithKakaoTalk
                 }

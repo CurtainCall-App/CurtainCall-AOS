@@ -1,5 +1,6 @@
 package com.cmc.curtaincall.core.local
 
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 
 object PreferenceKeys {
@@ -7,4 +8,7 @@ object PreferenceKeys {
     val ACCESS_TOKEN_EXPIRESAT = stringPreferencesKey("ACCESS_TOKEN_EXPIRESAT")
     val REFRESH_TOKEN = stringPreferencesKey("REFRESH_TOKEN")
     val REFRESH_TOKEN_EXPIRESAT = stringPreferencesKey("REFRESH_TOKEN_EXPIRESAT")
+
+    val MEMBER_ID = intPreferencesKey("MEMBER_ID")
+    val MEMBER_NICKNAME = stringPreferencesKey("MEMBER_NICKNAME")
 }

@@ -5,4 +5,5 @@ import com.cmc.curtaincall.core.base.BaseSideEffect
 sealed class LoginSideEffect : BaseSideEffect {
     object SuccessLogin : LoginSideEffect()
     object AutoLogin : LoginSideEffect()
+    object ExistMember : LoginSideEffect()
 }

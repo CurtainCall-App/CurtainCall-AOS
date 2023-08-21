@@ -39,6 +39,10 @@ empty-blocks:
 exceptions:
   ThrowingExceptionsWithoutMessageOrCause:
     active: false
+  TooGenericExceptionCaught:
+    active: false
+  SwallowedException:
+    active: false
 
 potential-bugs:
   ImplicitDefaultLocale:

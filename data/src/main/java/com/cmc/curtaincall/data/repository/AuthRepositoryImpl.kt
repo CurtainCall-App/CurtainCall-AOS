@@ -16,9 +16,9 @@ class AuthRepositoryImpl @Inject constructor(
             accessToken = accessToken
         ).map { it.toModel() }
 
-    override fun requestReissue(): Flow<Boolean> =
-        authRemoteSource.requestReissue()
+    override fun requestReissue(refreshToken: String): Flow<LoginResultModel> =
+        authRemoteSource.requestReissue(refreshToken).map { it.toModel() }
 
-    override fun requestLogout(): Flow<Boolean> =
-        authRemoteSource.requestLogout()
+    override fun requestLogout(accessToken: String): Flow<Boolean> =
+        authRemoteSource.requestLogout(accessToken)
 }

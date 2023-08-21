@@ -36,7 +36,10 @@ android {
 dependencies {
     implementation(project(":common:design"))
     implementation(project(":core:base"))
+    implementation(project(":core:network"))
+    implementation(project(":core:local"))
     implementation(project(":data"))
+    implementation(project(":domain"))
     implementation(project(":feature:auth"))
     implementation(project(":feature:home"))
 
