@@ -39,6 +39,8 @@ import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MyPageSettingScreen(
+    onNavigatePrivacyTerms: () -> Unit,
+    onNavigateServiceTerms: () -> Unit,
     onBack: () -> Unit
 ) {
     Scaffold(
@@ -55,14 +57,18 @@ internal fun MyPageSettingScreen(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
-                .background(White)
+                .background(White),
+            onNavigatePrivacyTerms = onNavigatePrivacyTerms,
+            onNavigateServiceTerms = onNavigateServiceTerms
         )
     }
 }
 
 @Composable
 private fun MyPageSettingContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigatePrivacyTerms: () -> Unit,
+    onNavigateServiceTerms: () -> Unit,
 ) {
     var isShowDialog by remember { mutableStateOf(false) }
     if (isShowDialog) {
@@ -118,14 +124,14 @@ private fun MyPageSettingContent(
                     .fillMaxWidth()
                     .padding(top = 18.dp),
                 title = stringResource(R.string.mypage_setting_privacy_information_policy),
-                onClick = {}
+                onClick = { onNavigatePrivacyTerms() }
             )
             SettingItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 19.dp),
                 title = stringResource(R.string.mypage_setting_service_use_terms),
-                onClick = {}
+                onClick = { onNavigateServiceTerms() }
             )
         }
     }
