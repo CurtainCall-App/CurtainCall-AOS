@@ -9,7 +9,7 @@ interface AuthRepository {
         accessToken: String
     ): Flow<LoginResultModel>
 
-    fun requestReissue(): Flow<Boolean>
+    fun requestReissue(refreshToken: String): Flow<LoginResultModel>
 
-    fun requestLogout(): Flow<Boolean>
+    fun requestLogout(accessToken: String): Flow<Boolean>
 }

@@ -3,8 +3,8 @@ package com.cmc.curtaincall.core.network.service.auth
 import com.cmc.curtaincall.core.network.service.auth.request.LoginRequest
 import com.cmc.curtaincall.core.network.service.auth.response.LoginResponse
 import com.cmc.curtaincall.core.network.service.auth.response.LogoutResponse
-import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
 
@@ -16,8 +16,12 @@ interface AuthService {
     ): LoginResponse
 
     @POST("login/reissue")
-    suspend fun requestReissue(): Response<Unit>
+    suspend fun requestReissue(
+        @Header("refreshToken") refreshToken: String
+    ): LoginResponse
 
     @POST("logout")
-    suspend fun requestLogout(): LogoutResponse
+    suspend fun requestLogout(
+        @Header("accessToken") accessToken: String
+    ): LogoutResponse
 }

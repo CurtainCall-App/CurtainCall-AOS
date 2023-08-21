@@ -1,5 +1,7 @@
 package com.cmc.curtaincall.core.network.di
 
+import com.cmc.curtaincall.core.network.qualifiers.LoggingRetrofit
+import com.cmc.curtaincall.core.network.qualifiers.RefreshTokenRetrofit
 import com.cmc.curtaincall.core.network.service.auth.AuthService
 import com.cmc.curtaincall.core.network.service.member.MemberService
 import dagger.Module
@@ -17,12 +19,12 @@ object ServiceModule {
     @Provides
     @Singleton
     fun provideAuthService(
-        retrofit: Retrofit
+        @LoggingRetrofit retrofit: Retrofit
     ): AuthService = retrofit.create()
 
     @Provides
     @Singleton
     fun provideMemberService(
-        retrofit: Retrofit
+        @RefreshTokenRetrofit retrofit: Retrofit
     ): MemberService = retrofit.create()
 }

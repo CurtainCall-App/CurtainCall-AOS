@@ -22,11 +22,13 @@ class AuthRemoteSource @Inject constructor(
         )
     }
 
-    fun requestReissue(): Flow<Boolean> = flow {
-        emit(authService.requestReissue().isSuccessful)
+    fun requestReissue(refreshToken: String): Flow<LoginResponse> = flow {
+        emit(
+            authService.requestReissue("Bearer $refreshToken")
+        )
     }
 
-    fun requestLogout(): Flow<Boolean> = flow {
-        emit(authService.requestLogout().success)
+    fun requestLogout(accessToken: String): Flow<Boolean> = flow {
+        emit(authService.requestLogout("Bearer $accessToken").success)
     }
 }

@@ -16,6 +16,7 @@ android {
 
 dependencies {
     implementation(project(":domain"))
+    implementation(libs.timber)
     implementation(libs.datastore.preferences)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)

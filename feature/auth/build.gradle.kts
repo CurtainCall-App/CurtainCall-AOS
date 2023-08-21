@@ -34,7 +34,6 @@ android {
 dependencies {
     implementation(project(":common:design"))
     implementation(project(":core:base"))
-    implementation(project(":common:utility"))
     implementation(project(":domain"))
     implementation(project(":feature:home"))
 
