@@ -14,12 +14,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.extensions.toSp
+import com.cmc.curtaincall.common.design.theme.Chinese_Black
+import com.cmc.curtaincall.common.design.theme.Cultured
 import com.cmc.curtaincall.common.design.theme.Me_Pink
 import com.cmc.curtaincall.common.design.theme.Nero
 import com.cmc.curtaincall.common.design.theme.White
@@ -111,6 +115,75 @@ fun SelectSortTypeBottomSheet(
                         tint = Me_Pink
                     )
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun EditBottomSheet(
+    onEdit: () -> Unit,
+    onDelete: () -> Unit
+) {
+    BottomSheetDialog(onDismissRequest = { }) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(187.dp)
+                .background(White, RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp))
+                .padding(horizontal = 20.dp)
+                .padding(top = 30.dp, bottom = 35.dp)
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(55.dp)
+                    .background(Cultured, RoundedCornerShape(12.dp))
+                    .clickable { onEdit() },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_correct),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                        .size(24.dp),
+                    tint = Color.Unspecified
+                )
+                Text(
+                    text = stringResource(R.string.mypage_writing_edit),
+                    modifier = Modifier.padding(start = 8.dp),
+                    color = Chinese_Black,
+                    fontSize = 16.dp.toSp(),
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = spoqahansanseeo
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .padding(top = 12.dp)
+                    .fillMaxWidth()
+                    .height(55.dp)
+                    .background(Cultured, RoundedCornerShape(12.dp))
+                    .clickable { onDelete() },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_delete),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                        .size(24.dp),
+                    tint = Color.Unspecified
+                )
+                Text(
+                    text = stringResource(R.string.mypage_writing_remove),
+                    modifier = Modifier.padding(start = 8.dp),
+                    color = Chinese_Black,
+                    fontSize = 16.dp.toSp(),
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = spoqahansanseeo
+                )
             }
         }
     }

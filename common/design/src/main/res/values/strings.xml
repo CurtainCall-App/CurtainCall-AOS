@@ -41,11 +41,12 @@
     <string name="signup_welcome_start">시작하기</string>
 
     <!-- partymember -->
+    <string name="partymember_empty_text">모집 중인 파티원이 없어요!</string>
     <string name="partymember_recruitment">파티원 모집</string>
     <string name="partymember_performance_title">공연 관람</string>
-    <string name="partymember_performance_description">혼자보다는 함께 관람할 때\n더 즐거운 공연!</string>
+    <string name="partymember_performance_description">여럿이 함께 관람할 때\n더 즐거운 공연 관람!</string>
     <string name="partymember_restaurant_title">식사/카페</string>
-    <string name="partymember_restaurant_description">공연장 근처의 맛집이나 카페에서\n맛있는 음식을 즐기며 이야기를\n나눌 수 있어요!</string>
+    <string name="partymember_restaurant_description">공연 전후에 근처 맛집이나\n카페에서 관심있는 공연 혹은 배우에\n관한 이야기를 나눌 수 있어요!</string>
     <string name="partymember_etc_title">기타</string>
     <string name="partymember_etc_description">이벤트, 굿즈 제작 등 자유롭게\n파티원들을 모집할 수 있어요!</string>
     <string name="partymember_list_top_appbar_placeholder">작품명 또는 장소 입력</string>
@@ -83,7 +84,7 @@
     <string name="partymember_create_write_title_placeholder">예시)OOO 함께 볼 사람 구해요!</string>
     <string name="partymember_create_write_content">내용을 적어주세요.</string>
     <string name="partymember_create_write_content_placeholder">예시)\n이번주 공연 같이 볼 4명 구합니다.\n구체적인 내용은 톡방 생성되면 얘기할 예정입니다.</string>
-    <string name="partymember_create_write_number_of_text">글자수 제한 (%d/400)</string>
+    <string name="partymember_create_write_number_of_text">글자수 제한 (%d/%d)</string>
     <string name="partymember_create_write_complete">작성 완료</string>
     <string name="partymember_create_undetermined_date">날짜 미정</string>
     <string name="partymember_upload_complete">파티원 모집글이 게시되었습니다.</string>
@@ -208,6 +209,7 @@
     <string name="mypage_nickname_duplicate_check">중복 확인</string>
     <string name="mypage_nickname_change_complete">변경 완료</string>
     <string name="mypage_writing_edit">수정</string>
+    <string name="mypage_writing_edit_complete">수정 완료</string>
     <string name="mypage_writing_remove">삭제</string>
     <string name="mypage_writing_lost_item_find_location_format">습득 장소 | %s</string>
     <string name="mypage_writing_lost_item_find_date_format">습득 일자 | %s</string>
@@ -226,4 +228,8 @@
     <string name="dialog_performance_review_remove_description">삭제하기를 하면 되돌릴 수 없습니다.</string>
     <string name="dialog_performance_review_remove_dismiss">아니요</string>
     <string name="dialog_performance_review_remove_positive">네, 삭제할래요</string>
+    <string name="dialog_partymember_participate_title">참여할까요?</string>
+    <string name="dialog_partymember_participate_description">참여하기를 클릭하면 참여 취소가\n불가능해요. 계속할까요?</string>
+    <string name="dialog_partymember_participate_dismiss">아니요</string>
+    <string name="dialog_partymember_participate_positive">네, 참여할래요</string>
 </resources>

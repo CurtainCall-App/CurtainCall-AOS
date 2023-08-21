@@ -3,7 +3,6 @@ package com.cmc.curtaincall.common.design.component.basic
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -250,6 +249,55 @@ fun SearchTopAppBarWithBack(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+fun MoreTopAppBarWithBack(
+    title: String,
+    containerColor: Color,
+    contentColor: Color,
+    tint: Color,
+    onBack: () -> Unit = {},
+    onClick: () -> Unit = {}
+) {
+    CenterAlignedTopAppBar(
+        title = {
+            Text(
+                text = title,
+                color = contentColor,
+                fontSize = 17.dp.toSp(),
+                fontWeight = FontWeight.Bold,
+                fontFamily = spoqahansanseeo
+            )
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(54.dp)
+            .background(containerColor)
+            .padding(top = 20.dp, bottom = 10.dp),
+        navigationIcon = {
+            IconButton(onClick = onBack) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_arrow_back),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                    tint = contentColor
+                )
+            }
+        },
+        actions = {
+            IconButton(onClick = onClick) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_more_vert),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                    tint = tint
+                )
+            }
+        },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = containerColor)
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun TopAppBarWithSearch(
     title: String,
     containerColor: Color,
@@ -280,49 +328,6 @@ fun TopAppBarWithSearch(
                     tint = contentColor
                 )
             }
-        },
-        colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = containerColor)
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TopAppBarWithAction(
-    title: String,
-    modifier: Modifier = Modifier,
-    containerColor: Color,
-    contentColor: Color,
-    onBack: () -> Unit,
-    actionContent: @Composable RowScope.() -> Unit
-) {
-    CenterAlignedTopAppBar(
-        title = {
-            Box(
-                modifier = Modifier.fillMaxHeight(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = title,
-                    color = contentColor,
-                    fontSize = 17.dp.toSp(),
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = spoqahansanseeo
-                )
-            }
-        },
-        modifier = modifier,
-        navigationIcon = {
-            IconButton(onClick = onBack) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_arrow_back),
-                    contentDescription = null,
-                    modifier = Modifier.size(22.dp),
-                    tint = contentColor
-                )
-            }
-        },
-        actions = {
-            actionContent()
         },
         colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = containerColor)
     )

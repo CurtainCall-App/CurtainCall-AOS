@@ -1,6 +1,8 @@
 package com.cmc.curtaincall.common.design.component.content.card
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,6 +20,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -45,6 +48,7 @@ import com.cmc.curtaincall.common.design.theme.Bright_Gray
 import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
 import com.cmc.curtaincall.common.design.theme.Chinese_Black
 import com.cmc.curtaincall.common.design.theme.Coal
+import com.cmc.curtaincall.common.design.theme.Me_Pink
 import com.cmc.curtaincall.common.design.theme.Nero
 import com.cmc.curtaincall.common.design.theme.Roman_Silver
 import com.cmc.curtaincall.common.design.theme.White
@@ -315,6 +319,53 @@ fun PerformanceCard(
                 )
             }
         }
+    }
+}
+
+@Composable
+fun PerformanceSimpleCard(
+    modifier: Modifier,
+    imageUrl: String? = null,
+    title: String,
+    currentIndex: Int,
+    selectedIndex: Int,
+    onChangeSelect: (Int) -> Unit
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Surface(
+            modifier = Modifier.clickable {
+                onChangeSelect(if (currentIndex == selectedIndex) -1 else currentIndex)
+            },
+            shape = RoundedCornerShape(10.dp),
+            border = BorderStroke(
+                width = 4.dp,
+                color = if (selectedIndex == currentIndex) Me_Pink else Color.Transparent
+            )
+        ) {
+            AsyncImage(
+                model = null,
+                contentDescription = null,
+                error = painterResource(R.drawable.img_poster),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(100 / 133f)
+            )
+        }
+        Text(
+            text = title,
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .fillMaxWidth(),
+            color = Nero,
+            fontSize = 13.dp.toSp(),
+            fontWeight = FontWeight.Medium,
+            fontFamily = spoqahansanseeo,
+            maxLines = 1,
+            lineHeight = 20.dp.toSp()
+        )
     }
 }
 
