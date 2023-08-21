@@ -1,7 +1,7 @@
 package com.cmc.curtaincall.domain.repository
 
 import com.cmc.curtaincall.domain.model.home.MemberInfoModel
-import com.cmc.curtaincall.domain.model.home.MyParticipationsModel
+import com.cmc.curtaincall.domain.model.home.MyParticipationModel
 import com.cmc.curtaincall.domain.model.home.MyRecruitmentModel
 import kotlinx.coroutines.flow.Flow
 
@@ -13,9 +13,19 @@ interface MemberRepository {
 
     fun requestMemberInfo(memberId: Int): Flow<MemberInfoModel>
 
-    fun requestMyRecruitments(memberId: Int): Flow<MyRecruitmentModel>
+    fun requestMyRecruitments(
+        memberId: Int,
+        page: Int,
+        size: Int,
+        category: String
+    ): Flow<List<MyRecruitmentModel>>
 
-    fun requestMyParticipations(memberId: Int): Flow<MyParticipationsModel>
+    fun requestMyParticipations(
+        memberId: Int,
+        page: Int,
+        size: Int,
+        category: String
+    ): Flow<List<MyParticipationModel>>
 
     suspend fun saveMemberId(id: Int)
 

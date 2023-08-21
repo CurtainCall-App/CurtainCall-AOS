@@ -1,6 +1,6 @@
 package com.cmc.curtaincall.domain.model.home
 
-data class MyParticipationsModel(
+data class MyParticipationModel(
     val id: Int = Int.MIN_VALUE,
     val title: String = "",
     val curMemberNum: Int = 0,
