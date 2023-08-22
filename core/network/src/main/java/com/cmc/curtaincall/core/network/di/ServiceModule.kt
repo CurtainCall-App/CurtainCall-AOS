@@ -3,6 +3,7 @@ package com.cmc.curtaincall.core.network.di
 import com.cmc.curtaincall.core.network.qualifiers.LoggingRetrofit
 import com.cmc.curtaincall.core.network.qualifiers.RefreshTokenRetrofit
 import com.cmc.curtaincall.core.network.service.auth.AuthService
+import com.cmc.curtaincall.core.network.service.favorite.FavoriteService
 import com.cmc.curtaincall.core.network.service.member.MemberService
 import com.cmc.curtaincall.core.network.service.review.ReviewService
 import com.cmc.curtaincall.core.network.service.show.ShowService
@@ -41,4 +42,10 @@ object ServiceModule {
     fun provideReviewService(
         @RefreshTokenRetrofit retrofit: Retrofit
     ): ReviewService = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun provideFavoriteService(
+        @RefreshTokenRetrofit retrofit: Retrofit
+    ): FavoriteService = retrofit.create()
 }
