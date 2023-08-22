@@ -5,7 +5,9 @@ import com.cmc.curtaincall.core.network.qualifiers.RefreshTokenRetrofit
 import com.cmc.curtaincall.core.network.service.auth.AuthService
 import com.cmc.curtaincall.core.network.service.favorite.FavoriteService
 import com.cmc.curtaincall.core.network.service.member.MemberService
+import com.cmc.curtaincall.core.network.service.notice.NoticeService
 import com.cmc.curtaincall.core.network.service.party.PartyService
+import com.cmc.curtaincall.core.network.service.report.ReportService
 import com.cmc.curtaincall.core.network.service.review.ReviewService
 import com.cmc.curtaincall.core.network.service.show.ShowService
 import dagger.Module
@@ -55,4 +57,16 @@ object ServiceModule {
     fun providePartyService(
         @RefreshTokenRetrofit retrofit: Retrofit
     ): PartyService = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun provideNoticeService(
+        @RefreshTokenRetrofit retrofit: Retrofit
+    ): NoticeService = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun provideReportService(
+        @RefreshTokenRetrofit retrofit: Retrofit
+    ): ReportService = retrofit.create()
 }

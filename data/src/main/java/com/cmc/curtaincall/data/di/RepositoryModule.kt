@@ -3,14 +3,18 @@ package com.cmc.curtaincall.data.di
 import com.cmc.curtaincall.data.repository.AuthRepositoryImpl
 import com.cmc.curtaincall.data.repository.FavoriteRepositoryImpl
 import com.cmc.curtaincall.data.repository.MemberRepositoryImpl
+import com.cmc.curtaincall.data.repository.NoticeRepositoryImpl
 import com.cmc.curtaincall.data.repository.PartyRepositoryImpl
+import com.cmc.curtaincall.data.repository.ReportRepositoryImpl
 import com.cmc.curtaincall.data.repository.ReviewRepositoryImpl
 import com.cmc.curtaincall.data.repository.ShowRepositoryImpl
 import com.cmc.curtaincall.data.repository.TokenRepositoryImpl
 import com.cmc.curtaincall.domain.repository.AuthRepository
 import com.cmc.curtaincall.domain.repository.FavoriteRepository
 import com.cmc.curtaincall.domain.repository.MemberRepository
+import com.cmc.curtaincall.domain.repository.NoticeRepository
 import com.cmc.curtaincall.domain.repository.PartyRepository
+import com.cmc.curtaincall.domain.repository.ReportRepository
 import com.cmc.curtaincall.domain.repository.ReviewRepository
 import com.cmc.curtaincall.domain.repository.ShowRepository
 import com.cmc.curtaincall.domain.repository.TokenRepository
@@ -64,4 +68,16 @@ interface RepositoryModule {
     fun bindPartyRepository(
         partyRepositoryImpl: PartyRepositoryImpl
     ): PartyRepository
+
+    @Binds
+    @Singleton
+    fun bindNoticeRepository(
+        noticeRepositoryImpl: NoticeRepositoryImpl
+    ): NoticeRepository
+
+    @Binds
+    @Singleton
+    fun bindReportRepository(
+        reportRepositoryImpl: ReportRepositoryImpl
+    ): ReportRepository
 }

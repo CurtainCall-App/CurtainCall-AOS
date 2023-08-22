@@ -1,5 +1,6 @@
 package com.cmc.curtaincall.domain.repository
 
+import com.cmc.curtaincall.domain.model.show.FacilityDetailModel
 import com.cmc.curtaincall.domain.model.show.ShowDetailModel
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import com.cmc.curtaincall.domain.model.show.ShowRankModel
@@ -33,4 +34,8 @@ interface ShowRepository {
         size: Int,
         startDate: String
     ): Flow<List<ShowRankModel>>
+
+    fun requestFacilityDetail(
+        facilityId: String
+    ): Flow<FacilityDetailModel>
 }

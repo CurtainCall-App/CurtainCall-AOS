@@ -1,6 +1,7 @@
 package com.cmc.curtaincall.data.repository
 
 import com.cmc.curtaincall.data.source.remote.ShowRemoteSource
+import com.cmc.curtaincall.domain.model.show.FacilityDetailModel
 import com.cmc.curtaincall.domain.model.show.ShowDetailModel
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import com.cmc.curtaincall.domain.model.show.ShowRankModel
@@ -34,4 +35,7 @@ class ShowRepositoryImpl @Inject constructor(
         showRemoteSource.requestPopularShowList(type, size, startDate).map { showRankResponse ->
             showRankResponse.map { it.toModel() }
         }
+
+    override fun requestFacilityDetail(facilityId: String): Flow<FacilityDetailModel> =
+        showRemoteSource.requestFacilityDetail(facilityId).map { it.toModel() }
 }
