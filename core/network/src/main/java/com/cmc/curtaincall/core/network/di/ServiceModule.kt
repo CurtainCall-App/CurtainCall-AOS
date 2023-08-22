@@ -4,6 +4,7 @@ import com.cmc.curtaincall.core.network.qualifiers.LoggingRetrofit
 import com.cmc.curtaincall.core.network.qualifiers.RefreshTokenRetrofit
 import com.cmc.curtaincall.core.network.service.auth.AuthService
 import com.cmc.curtaincall.core.network.service.member.MemberService
+import com.cmc.curtaincall.core.network.service.show.ShowService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,4 +28,10 @@ object ServiceModule {
     fun provideMemberService(
         @RefreshTokenRetrofit retrofit: Retrofit
     ): MemberService = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun provideShowService(
+        @RefreshTokenRetrofit retrofit: Retrofit
+    ): ShowService = retrofit.create()
 }
