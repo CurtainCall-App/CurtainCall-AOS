@@ -1,6 +1,7 @@
 package com.cmc.curtaincall.data.source.remote
 
 import com.cmc.curtaincall.core.network.service.review.ReviewService
+import com.cmc.curtaincall.core.network.service.review.request.UpdateShowReviewRequest
 import com.cmc.curtaincall.core.network.service.review.response.CreateReviewResponse
 import com.cmc.curtaincall.core.network.service.review.response.LikeReviewResponse
 import com.cmc.curtaincall.core.network.service.review.response.ShowReviewResponse
@@ -47,8 +48,10 @@ class ReviewRemoteSource @Inject constructor(
         emit(
             reviewService.updateShowReview(
                 reviewId = reviewId,
-                content = content,
-                grade = grade
+                updateShowReviewRequest = UpdateShowReviewRequest(
+                    content = content,
+                    grade = grade
+                )
             ).isSuccessful
         )
     }
