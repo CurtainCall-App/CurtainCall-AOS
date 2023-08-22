@@ -18,11 +18,13 @@ class PartyRemoteSource @Inject constructor(
         size: Int,
         category: String
     ): Flow<List<PartyResponse>> = flow {
-        partyService.requestPartyList(
-            page = page,
-            size = size,
-            category = category
-        ).parties
+        emit(
+            partyService.requestPartyList(
+                page = page,
+                size = size,
+                category = category
+            ).parties
+        )
     }
 
     fun searchPartyList(
@@ -31,19 +33,23 @@ class PartyRemoteSource @Inject constructor(
         category: String,
         keyword: String
     ): Flow<List<PartyResponse>> = flow {
-        partyService.searchPartyList(
-            page = page,
-            size = size,
-            category = category,
-            keyword = keyword
-        ).parties
+        emit(
+            partyService.searchPartyList(
+                page = page,
+                size = size,
+                category = category,
+                keyword = keyword
+            ).parties
+        )
     }
 
     fun requestPartyDetail(
         partyId: String
     ): Flow<PartyDetailResponse> = flow {
-        partyService.requestPartyDetail(
-            partyId = partyId
+        emit(
+            partyService.requestPartyDetail(
+                partyId = partyId
+            )
         )
     }
 
@@ -55,14 +61,16 @@ class PartyRemoteSource @Inject constructor(
         maxMemberNum: Int,
         category: String
     ): Flow<CreatePartyResponse> = flow {
-        partyService.createParty(
-            createPartyRequest = CreatePartyRequest(
-                showId = showId,
-                showAt = showAt,
-                title = title,
-                content = content,
-                maxMemberNum = maxMemberNum,
-                category = category
+        emit(
+            partyService.createParty(
+                createPartyRequest = CreatePartyRequest(
+                    showId = showId,
+                    showAt = showAt,
+                    title = title,
+                    content = content,
+                    maxMemberNum = maxMemberNum,
+                    category = category
+                )
             )
         )
     }
@@ -70,24 +78,30 @@ class PartyRemoteSource @Inject constructor(
     fun deleteParty(
         partyId: String
     ): Flow<Boolean> = flow {
-        partyService.deleteParty(partyId).isSuccessful
+        emit(
+            partyService.deleteParty(partyId).isSuccessful
+        )
     }
 
     fun updateParty(
         title: String,
         content: String
     ): Flow<Boolean> = flow {
-        partyService.updateParty(
-            updatePartyRequest = UpdatePartyRequest(
-                title = title,
-                content = content
-            )
-        ).isSuccessful
+        emit(
+            partyService.updateParty(
+                updatePartyRequest = UpdatePartyRequest(
+                    title = title,
+                    content = content
+                )
+            ).isSuccessful
+        )
     }
 
     fun participateParty(
         partyId: String
     ): Flow<Boolean> = flow {
-        partyService.participateParty(partyId = partyId).isSuccessful
+        emit(
+            partyService.participateParty(partyId = partyId).isSuccessful
+        )
     }
 }

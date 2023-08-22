@@ -1,6 +1,7 @@
 package com.cmc.curtaincall.data.source.remote
 
 import com.cmc.curtaincall.core.network.service.show.ShowService
+import com.cmc.curtaincall.core.network.service.show.response.FacilityDetailResponse
 import com.cmc.curtaincall.core.network.service.show.response.ShowDetailResponse
 import com.cmc.curtaincall.core.network.service.show.response.ShowInfoResponse
 import com.cmc.curtaincall.core.network.service.show.response.ShowRankResponse
@@ -72,6 +73,14 @@ class ShowRemoteSource @Inject constructor(
                 size = size,
                 startDate = startDate
             ).showRanks
+        )
+    }
+
+    fun requestFacilityDetail(
+        facilityId: String
+    ): Flow<FacilityDetailResponse> = flow {
+        emit(
+            showService.requestFacilityDetail(facilityId)
         )
     }
 }

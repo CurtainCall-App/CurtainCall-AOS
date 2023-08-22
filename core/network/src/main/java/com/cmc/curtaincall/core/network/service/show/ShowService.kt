@@ -1,5 +1,6 @@
 package com.cmc.curtaincall.core.network.service.show
 
+import com.cmc.curtaincall.core.network.service.show.response.FacilityDetailResponse
 import com.cmc.curtaincall.core.network.service.show.response.ShowDetailResponse
 import com.cmc.curtaincall.core.network.service.show.response.ShowInfosResponse
 import com.cmc.curtaincall.core.network.service.show.response.ShowRanksResponse
@@ -41,4 +42,9 @@ interface ShowService {
         @Query("size") size: Int,
         @Query("startDate") startDate: String
     ): ShowRanksResponse
+
+    @GET("facilities/{facilityId}")
+    suspend fun requestFacilityDetail(
+        @Path("facilityId") facilityId: String
+    ): FacilityDetailResponse
 }
