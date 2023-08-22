@@ -1,7 +1,6 @@
 package com.cmc.curtaincall.core.network.service.show.response
 
 import com.cmc.curtaincall.domain.model.show.ShowDetailModel
-import com.cmc.curtaincall.domain.model.show.ShowTimeModel
 
 data class ShowDetailResponse(
     val age: String,
