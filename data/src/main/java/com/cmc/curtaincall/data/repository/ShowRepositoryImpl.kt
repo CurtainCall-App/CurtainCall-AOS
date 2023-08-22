@@ -31,8 +31,8 @@ class ShowRepositoryImpl @Inject constructor(
     override fun requestShowDetail(showId: String): Flow<ShowDetailModel> =
         showRemoteSource.requestShowDetail(showId).map { it.toModel() }
 
-    override fun requestPopularShowList(type: String, size: Int, startDate: String): Flow<List<ShowRankModel>> =
-        showRemoteSource.requestPopularShowList(type, size, startDate).map { showRankResponse ->
+    override fun requestPopularShowList(type: String, genre: String, baseDate: String): Flow<List<ShowRankModel>> =
+        showRemoteSource.requestPopularShowList(type, genre, baseDate).map { showRankResponse ->
             showRankResponse.map { it.toModel() }
         }
 

@@ -231,6 +231,7 @@ fun PerformanceCard(
     modifier: Modifier = Modifier,
     title: String,
     painter: Painter,
+    imageUrl: String? = null,
     rate: Float,
     numberOfTotal: Int,
     isShowMetadata: Boolean = false,
@@ -252,10 +253,12 @@ fun PerformanceCard(
                 .clip(RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
         ) {
             AsyncImage(
-                model = null,
+                model = imageUrl,
                 error = painter,
                 contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)),
                 contentScale = ContentScale.FillBounds
             )
             if (isShowMetadata) {
@@ -299,7 +302,7 @@ fun PerformanceCard(
                     painter = painterResource(R.drawable.ic_star),
                     contentDescription = null,
                     modifier = Modifier.size(16.dp),
-                    tint = Color.Unspecified
+                    tint = Me_Pink
                 )
                 Text(
                     text = String.format("%.1f", rate),

@@ -2,6 +2,8 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -26,7 +28,9 @@ android {
 
 dependencies {
     implementation(project(":common:design"))
+    implementation(project(":common:utility"))
     implementation(project(":core:base"))
+    implementation(project(":domain"))
     implementation(project(":feature:performance"))
     implementation(project(":feature:livetalk"))
     implementation(project(":feature:partymember"))
@@ -42,6 +46,14 @@ dependencies {
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pager.indicators)
+    implementation(libs.androidx.lifecycle.compose)
+
+    implementation(libs.timber)
+
+    // hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    implementation(libs.hilt.navigation.compose)
 
     implementation(libs.androidx.core.ktx)
     testImplementation(libs.junit)

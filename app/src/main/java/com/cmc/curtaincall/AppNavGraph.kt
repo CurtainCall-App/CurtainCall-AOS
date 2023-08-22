@@ -10,8 +10,8 @@ import androidx.navigation.compose.rememberNavController
 import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.feature.auth.AuthDestination
 import com.cmc.curtaincall.feature.auth.authNavGraph
-import com.cmc.curtaincall.feature.home.HomeDestination
-import com.cmc.curtaincall.feature.home.HomeNavHost
+import com.cmc.curtaincall.feature.home.navigation.HomeDestination
+import com.cmc.curtaincall.feature.home.navigation.HomeNavHost
 import com.cmc.curtaincall.ui.OnBoardingScreen
 import com.cmc.curtaincall.ui.SplashScreen
 

@@ -37,7 +37,7 @@ interface MemberService {
         @Query("category") category: String
     ): MemberRecruitmentsResponse
 
-    @GET("members/{memberId}/participation")
+    @GET("members/{memberId}/participations")
     suspend fun requestMyParticipations(
         @Path("memberId") memberId: Int,
         @Query("page") page: Int,

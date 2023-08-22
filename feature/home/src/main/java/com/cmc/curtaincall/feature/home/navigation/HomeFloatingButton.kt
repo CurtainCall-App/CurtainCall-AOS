@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.home
+package com.cmc.curtaincall.feature.home.navigation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

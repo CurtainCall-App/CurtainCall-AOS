@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- splash -->
     <string name="splash_logo_image_description">Splash Logo Image</string>
 
@@ -31,7 +31,7 @@
     <string name="signup_next">다음</string>
     <string name="signup_setting_nickname">닉네임 설정</string>
     <string name="signup_input_description">커튼콜에서 사용할\n닉네임을 설정해 주세요.</string>
-    <string name="signup_input_sub_description">닉네임은 공백없이 최소 6자에서 최대 15자 이하로\n한글, 영문, 숫자를 자유롭게 조합해주세요.</string>
+    <string name="signup_input_sub_description">닉네임은 공백없이 최소 6자에서 최대 10자 이하로\n한글, 영문, 숫자를 자유롭게 조합해주세요.</string>
     <string name="signup_input_nickname">닉네임을 입력해주세요.</string>
     <string name="signup_input_double_check">중복 확인</string>
     <string name="signup_nickname_validate">사용 가능한 닉네임입니다.</string>
@@ -226,7 +226,7 @@
     <string name="mypage_setting_privacy_information_policy">개인정보 처리방침</string>
     <string name="mypage_setting_service_use_terms">서비스 이용약관</string>
     <string name="mypage_livetalk_entrance">TALK 입장</string>
-    <string name="mypage_privacy_terms_appbar_title">개인정보 처리방침</string>
+    <string name="mypage_privacy_terms_appbar_title" tools:ignore="ExtraTranslation">개인정보 처리방침</string>
     <string name="mypage_service_terms_appbar_title">서비스 이용약관</string>
 
     <!-- dialog -->

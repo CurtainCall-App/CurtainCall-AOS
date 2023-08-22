@@ -44,11 +44,11 @@ class CurtainCallInterceptor @Inject constructor(
         }
 
         val today = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(Calendar.getInstance().time)
-        if (tokenInfo.accessTokenExpiresAt > today) {
+        if (tokenInfo.accessTokenExpiresAt < today) {
             Timber.d("refreshToken start")
             try {
                 tokenInfo = runBlocking {
-                    val result = authRepository.requestReissue(tokenInfo.accessToken).first()
+                    val result = authRepository.requestReissue(tokenInfo.refreshToken).first()
                     tokenRepository.saveToken(result)
                     TokenInfo(
                         accessToken = result.accessToken,

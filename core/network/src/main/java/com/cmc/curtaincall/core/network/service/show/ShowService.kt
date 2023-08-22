@@ -39,8 +39,8 @@ interface ShowService {
     @GET("box-office")
     suspend fun requestPopularShowList(
         @Query("type") type: String,
-        @Query("size") size: Int,
-        @Query("startDate") startDate: String
+        @Query("genre") genre: String,
+        @Query("baseDate") baseDate: String
     ): ShowRanksResponse
 
     @GET("facilities/{facilityId}")

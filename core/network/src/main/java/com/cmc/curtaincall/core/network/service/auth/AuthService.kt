@@ -17,11 +17,11 @@ interface AuthService {
 
     @POST("login/reissue")
     suspend fun requestReissue(
-        @Header("refreshToken") refreshToken: String
+        @Header("Authorization") refreshToken: String
     ): LoginResponse
 
     @POST("logout")
     suspend fun requestLogout(
-        @Header("accessToken") accessToken: String
+        @Header("Authorization") accessToken: String
     ): LogoutResponse
 }

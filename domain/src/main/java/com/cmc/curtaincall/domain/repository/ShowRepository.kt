@@ -31,8 +31,8 @@ interface ShowRepository {
 
     fun requestPopularShowList(
         type: String,
-        size: Int,
-        startDate: String
+        genre: String,
+        baseDate: String
     ): Flow<List<ShowRankModel>>
 
     fun requestFacilityDetail(

@@ -1,9 +1,10 @@
 package com.cmc.curtaincall.core.network.service.show.response
 
 import com.cmc.curtaincall.domain.model.show.ShowRankModel
+import com.google.gson.annotations.SerializedName
 
 data class ShowRanksResponse(
-    val showRanks: List<ShowRankResponse>
+    @SerializedName("content") val showRanks: List<ShowRankResponse>
 )
 
 data class ShowRankResponse(

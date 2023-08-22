@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.home
+package com.cmc.curtaincall.feature.home.navigation
 
 import android.os.Build
 import android.os.Bundle
@@ -18,6 +18,7 @@ import androidx.navigation.navArgument
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
+import com.cmc.curtaincall.feature.home.HomeScreen
 import com.cmc.curtaincall.feature.home.guide.GuideScreen
 import com.cmc.curtaincall.feature.home.guide.GuideType
 import com.cmc.curtaincall.feature.livetalk.LiveTalkDestination

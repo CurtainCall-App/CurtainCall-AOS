@@ -28,8 +28,8 @@ import com.cmc.curtaincall.feature.auth.signup.SignUpSideEffect
 import com.cmc.curtaincall.feature.auth.signup.SignUpViewModel
 import kotlinx.coroutines.flow.collectLatest
 
-private const val INPUT_REGEX = "^[ㄱ-ㅎ가-힣a-zA-Z0-9]{0,15}$"
-private const val INPUT_CHECK_REGEX = "^[ㄱ-ㅎ가-힣a-zA-Z0-9]{6,15}$"
+private const val INPUT_REGEX = "^[ㄱ-ㅎ가-힣a-zA-Z0-9]{0,10}$"
+private const val INPUT_CHECK_REGEX = "^[ㄱ-ㅎ가-힣a-zA-Z0-9]{6,10}$"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -9,7 +9,7 @@ import com.cmc.curtaincall.feature.auth.login.LoginScreen
 import com.cmc.curtaincall.feature.auth.signup.screen.SignUpInputScreen
 import com.cmc.curtaincall.feature.auth.signup.screen.SignUpTermsScreen
 import com.cmc.curtaincall.feature.auth.welcome.WelComeScreen
-import com.cmc.curtaincall.feature.home.HomeDestination
+import com.cmc.curtaincall.feature.home.navigation.HomeDestination
 
 private const val AUTH_GRAPH = "auth_graph"
 private const val LOGIN = "login"

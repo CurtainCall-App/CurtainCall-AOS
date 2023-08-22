@@ -64,14 +64,14 @@ class ShowRemoteSource @Inject constructor(
 
     fun requestPopularShowList(
         type: String,
-        size: Int,
-        startDate: String
+        genre: String,
+        baseDate: String
     ): Flow<List<ShowRankResponse>> = flow {
         emit(
             showService.requestPopularShowList(
                 type = type,
-                size = size,
-                startDate = startDate
+                genre = genre,
+                baseDate = baseDate
             ).showRanks
         )
     }

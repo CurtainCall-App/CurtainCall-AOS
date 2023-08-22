@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.home
+package com.cmc.curtaincall.feature.home.navigation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.RowScope
@@ -47,7 +47,8 @@ fun HomeBottomBar(navHostController: NavHostController) {
     if (hasBottomNavigation) {
         NavigationBar(
             containerColor = if (currentDestination?.route == LiveTalkDestination.LiveTalk.route) Cetacean_Blue else White,
-            modifier = Modifier.height(80.dp)
+            modifier = Modifier.height(80.dp),
+            tonalElevation = 15.dp
         ) {
             bottomDestinations.forEach { bottomDestination ->
                 if (bottomDestination.route == LiveTalkDestination.LiveTalk.route) {
