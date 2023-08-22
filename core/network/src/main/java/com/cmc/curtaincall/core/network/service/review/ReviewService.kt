@@ -1,11 +1,12 @@
 package com.cmc.curtaincall.core.network.service.review
 
+import com.cmc.curtaincall.core.network.service.review.request.UpdateShowReviewRequest
 import com.cmc.curtaincall.core.network.service.review.response.CreateReviewResponse
 import com.cmc.curtaincall.core.network.service.review.response.LikeReviewsResponse
 import com.cmc.curtaincall.core.network.service.review.response.ShowReviewsResponse
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.DELETE
-import retrofit2.http.Field
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -35,8 +36,7 @@ interface ReviewService {
     @PATCH("reviews/{reviewId}")
     suspend fun updateShowReview(
         @Path("reviewId") reviewId: String,
-        @Field("content") content: String,
-        @Field("grade") grade: Int
+        @Body updateShowReviewRequest: UpdateShowReviewRequest
     ): Response<Unit>
 
     @PUT("reviews/{reviewId}/like")
