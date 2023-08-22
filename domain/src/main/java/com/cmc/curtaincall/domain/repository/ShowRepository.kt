@@ -1,5 +1,6 @@
 package com.cmc.curtaincall.domain.repository
 
+import androidx.paging.PagingData
 import com.cmc.curtaincall.domain.model.show.FacilityDetailModel
 import com.cmc.curtaincall.domain.model.show.ShowDetailModel
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
@@ -7,6 +8,10 @@ import com.cmc.curtaincall.domain.model.show.ShowRankModel
 import kotlinx.coroutines.flow.Flow
 
 interface ShowRepository {
+
+    fun fetchShowList(
+        genre: String
+    ): Flow<PagingData<ShowInfoModel>>
     fun requestShowList(
         page: Int,
         size: Int,

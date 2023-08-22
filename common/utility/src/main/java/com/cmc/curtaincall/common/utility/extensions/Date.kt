@@ -18,3 +18,8 @@ fun String.toDday(): Long {
     val dday = (Calendar.getInstance().time.time - date.time) / (60 * 60 * 24 * 1000)
     return dday
 }
+
+fun String.toChangeDate(): String {
+    val date = SimpleDateFormat("yyyy-MM-dd").parse(this)
+    return SimpleDateFormat("yy.MM.dd").format(date)
+}

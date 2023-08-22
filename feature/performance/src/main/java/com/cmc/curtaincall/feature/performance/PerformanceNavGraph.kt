@@ -2,7 +2,9 @@ package com.cmc.curtaincall.feature.performance
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.core.base.BottomDestination
@@ -36,6 +38,13 @@ sealed interface PerformanceDestination : CurtainCallDestination {
 
     object Detail : PerformanceDestination {
         override val route = PERFORMANCE_DETAIL
+        const val showIdArg = "showId"
+        val routeWithArgs = "$route/{$showIdArg}"
+        val arguments = listOf(
+            navArgument(showIdArg) {
+                type = NavType.StringType
+            }
+        )
     }
 
     object Review : PerformanceDestination {
@@ -70,10 +79,13 @@ fun NavGraphBuilder.performanceNavGraph(
     navigation(startDestination = PerformanceDestination.Performance.route, route = PERFORMANCE_GRAPH) {
         composable(route = PerformanceDestination.Performance.route) {
             PerformanceScreen {
-                navHostController.navigate(PerformanceDestination.Detail.route)
+                navHostController.navigate("${PerformanceDestination.Detail.route}/$it")
             }
         }
-        composable(route = PerformanceDestination.Detail.route) {
+        composable(
+            route = PerformanceDestination.Detail.routeWithArgs,
+            arguments = PerformanceDestination.Detail.arguments
+        ) {
             PerformanceDetailScreen(
                 onNavigateReview = {
                     navHostController.navigate(PerformanceDestination.Review.route)
