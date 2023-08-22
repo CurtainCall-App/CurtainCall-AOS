@@ -56,5 +56,4 @@ interface PartyService {
     suspend fun participateParty(
         @Path("partyId") partyId: String
     ): Response<Unit>
-
 }
