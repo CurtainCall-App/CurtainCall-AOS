@@ -1,5 +1,12 @@
 package com.cmc.curtaincall.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.map
+import com.cmc.curtaincall.core.network.service.party.PartyService
+import com.cmc.curtaincall.data.source.paging.PARTY_PAGE_SIZE
+import com.cmc.curtaincall.data.source.paging.PartyPagingSource
 import com.cmc.curtaincall.data.source.remote.PartyRemoteSource
 import com.cmc.curtaincall.domain.model.party.CreatePartyModel
 import com.cmc.curtaincall.domain.model.party.PartyDetailModel
@@ -10,8 +17,22 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class PartyRepositoryImpl @Inject constructor(
-    private val partyRemoteSource: PartyRemoteSource
+    private val partyRemoteSource: PartyRemoteSource,
+    private val partyService: PartyService
 ) : PartyRepository {
+
+    override fun fetchPartyList(category: String): Flow<PagingData<PartyModel>> {
+        return Pager(
+            config = PagingConfig(pageSize = PARTY_PAGE_SIZE),
+            pagingSourceFactory = { PartyPagingSource(partyService, category) }
+        ).flow
+            .map { pagingData ->
+                pagingData.map { response ->
+                    response.toModel()
+                }
+            }
+    }
+
     override fun requestPartyList(page: Int, size: Int, category: String): Flow<List<PartyModel>> =
         partyRemoteSource.requestPartyList(page, size, category).map { parties ->
             parties.map { it.toModel() }

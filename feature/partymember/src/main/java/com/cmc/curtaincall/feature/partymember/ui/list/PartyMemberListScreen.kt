@@ -12,17 +12,26 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.SearchAppBar
 import com.cmc.curtaincall.common.design.component.basic.SearchTopAppBarWithBack
 import com.cmc.curtaincall.common.design.component.content.card.PartyMemberContentCard
 import com.cmc.curtaincall.common.design.component.content.card.PartyType
+import com.cmc.curtaincall.common.design.component.items.EmptyItem
 import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
+import com.cmc.curtaincall.common.utility.extensions.toDateWithDay
+import com.cmc.curtaincall.common.utility.extensions.toTime
+import com.cmc.curtaincall.feature.partymember.ui.PartyMemberViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PartyMemberListScreen(
+    partyMemberViewModel: PartyMemberViewModel = hiltViewModel(),
     partyType: PartyType,
     onNavigateDetail: (PartyType) -> Unit,
     onNavigateCreate: (PartyType) -> Unit,
@@ -78,6 +87,7 @@ internal fun PartyMemberListScreen(
             // TODO
         } else {
             PartyMemberListContent(
+                partyMemberViewModel = partyMemberViewModel,
                 partyType = partyType,
                 modifier = Modifier
                     .padding(paddingValues)
@@ -91,53 +101,72 @@ internal fun PartyMemberListScreen(
 
 @Composable
 private fun PartyMemberListContent(
+    partyMemberViewModel: PartyMemberViewModel,
     partyType: PartyType,
     modifier: Modifier = Modifier,
     onNavigateDetail: (PartyType) -> Unit
 ) {
-    Column(modifier = modifier.background(Cultured)) {
-//        EmptyItem(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(top = 252.dp),
-//            alert = stringResource(R.string.partymember_empty_text)
-//        )
-        LazyColumn(
-            modifier = Modifier
-                .padding(top = 30.dp)
-                .padding(horizontal = 20.dp)
-        ) {
-            item {
-                Text(
-                    text = stringResource(R.string.partymember_list_description),
-                    modifier = Modifier.padding(bottom = 12.dp),
-                    color = Black_Coral,
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo
-                )
-            }
+    val pagingItems = when (partyType) {
+        PartyType.PERFORMANCE -> {
+            partyMemberViewModel.watchingItems.collectAsLazyPagingItems()
+        }
 
-            items(10) {
-                PartyMemberContentCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .padding(bottom = 20.dp),
-                    partyType = partyType,
-                    title = "비스티",
-                    nickname = "고라파덕",
-                    createAtDate = "2023.06.07",
-                    createAtTime = "11:51",
-                    numberOfMember = 1,
-                    numberOfTotal = 5,
-                    description = "비스티 이번주 토욜 저녁 공연 같이 봐요~",
-                    poster = painterResource(R.drawable.img_poster),
-                    date = "2023.6.24(토)",
-                    time = "19:30",
-                    location = "링크아트센터",
-                    onNavigateDetail = onNavigateDetail
-                )
+        PartyType.MEAL -> {
+            partyMemberViewModel.foodCafeItems.collectAsLazyPagingItems()
+        }
+
+        PartyType.ETC -> {
+            partyMemberViewModel.etcItems.collectAsLazyPagingItems()
+        }
+    }
+
+    Column(modifier = modifier.background(Cultured)) {
+        if (pagingItems.itemCount == 0) {
+            EmptyItem(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 252.dp),
+                alert = stringResource(R.string.partymember_empty_text)
+            )
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(top = 30.dp)
+                    .padding(horizontal = 20.dp)
+            ) {
+                item {
+                    Text(
+                        text = stringResource(R.string.partymember_list_description),
+                        modifier = Modifier.padding(bottom = 12.dp),
+                        color = Black_Coral,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = spoqahansanseeo
+                    )
+                }
+                items(pagingItems) { partyModel ->
+                    partyModel?.let { partyModel ->
+                        PartyMemberContentCard(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight()
+                                .padding(bottom = 20.dp),
+                            partyType = partyType,
+                            title = partyModel.showName,
+                            nickname = partyModel.creatorNickname,
+                            createAtDate = partyModel.createdAt.toChangeFullDate(),
+                            createAtTime = partyModel.createdAt.toTime(),
+                            numberOfMember = partyModel.curMemberNum,
+                            numberOfTotal = partyModel.maxMemberNum,
+                            description = partyModel.title,
+                            posterUrl = partyModel.showPoster,
+                            date = partyModel.showAt.toDateWithDay(),
+                            time = partyModel.showAt.toTime(),
+                            location = partyModel.facilityName,
+                            onNavigateDetail = onNavigateDetail
+                        )
+                    }
+                }
             }
         }
     }

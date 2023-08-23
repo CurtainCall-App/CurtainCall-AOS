@@ -1,11 +1,17 @@
 package com.cmc.curtaincall.domain.repository
 
+import androidx.paging.PagingData
 import com.cmc.curtaincall.domain.model.party.CreatePartyModel
 import com.cmc.curtaincall.domain.model.party.PartyDetailModel
 import com.cmc.curtaincall.domain.model.party.PartyModel
 import kotlinx.coroutines.flow.Flow
 
 interface PartyRepository {
+
+    fun fetchPartyList(
+        category: String
+    ): Flow<PagingData<PartyModel>>
+
     fun requestPartyList(
         page: Int,
         size: Int,
