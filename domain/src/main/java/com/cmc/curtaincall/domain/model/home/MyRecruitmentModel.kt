@@ -10,7 +10,7 @@ data class MyRecruitmentModel(
     val category: String = "",
     val creatorId: Int = 0,
     val creatorNickname: String = "",
-    val creatorImageUrl: String = "",
+    val creatorImageUrl: String? = null,
     val showId: String = "",
     val showName: String = "",
     val showPoster: String = "",

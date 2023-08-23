@@ -11,6 +11,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import com.cmc.curtaincall.common.design.R
@@ -79,10 +80,10 @@ private fun PerformanceContent(
     modifier: Modifier = Modifier,
     onNavigateDetail: (String) -> Unit
 ) {
-    var isCheckFirstType by remember { mutableStateOf(true) }
     var sortType by remember { mutableStateOf(SortType.STAR) }
     var showDialog by remember { mutableStateOf(false) }
 
+    val isCheckFirstType = performanceViewModel.isFirstType.collectAsStateWithLifecycle()
     val playItems = performanceViewModel.playItems.collectAsLazyPagingItems()
     val musicalItems = performanceViewModel.musicalItems.collectAsLazyPagingItems()
 
@@ -119,8 +120,8 @@ private fun PerformanceContent(
                             .height(45.dp),
                         firstType = stringResource(R.string.partymember_create_classification_theater),
                         lastType = stringResource(R.string.partymember_create_classification_musical),
-                        isCheckFirstType = isCheckFirstType,
-                        onTypeChange = { isCheckFirstType = it }
+                        isCheckFirstType = isCheckFirstType.value,
+                        onTypeChange = { performanceViewModel.changeSortType(it) }
                     )
                     SortTypeRow(
                         modifier = Modifier.padding(top = 28.dp),
@@ -130,7 +131,7 @@ private fun PerformanceContent(
                 }
             }
 
-            if (isCheckFirstType) {
+            if (isCheckFirstType.value) {
                 itemsIndexed(playItems) { index, showInfoModel ->
                     showInfoModel?.let { showInfoModel ->
                         PerformanceDetailCard(

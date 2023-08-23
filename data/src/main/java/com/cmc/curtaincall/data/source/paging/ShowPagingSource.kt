@@ -7,7 +7,7 @@ import com.cmc.curtaincall.core.network.service.show.response.ShowInfoResponse
 import javax.inject.Inject
 
 private const val SHOW_STARTING_KEY = 0
-const val PAGE_SIZE = 20
+const val SHOW_PAGE_SIZE = 20
 
 class ShowPagingSource @Inject constructor(
     private val showService: ShowService,
@@ -25,7 +25,7 @@ class ShowPagingSource @Inject constructor(
             val pageKey = params.key ?: SHOW_STARTING_KEY
             val response = showService.requestShowList(
                 page = pageKey,
-                size = PAGE_SIZE,
+                size = SHOW_PAGE_SIZE,
                 genre = genre
             )
             return LoadResult.Page(

@@ -2,7 +2,6 @@ package com.cmc.curtaincall.common.design.component.items
 
 import android.view.MotionEvent
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -35,6 +34,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.custom.RatingBar
 import com.cmc.curtaincall.common.design.extensions.toSp
@@ -95,6 +95,7 @@ fun ReviewItem(
 @Composable
 fun ReviewDetailItem(
     modifier: Modifier = Modifier,
+    profileUrl: String? = null,
     painter: Painter,
     rating: Int,
     name: String,
@@ -115,9 +116,10 @@ fun ReviewDetailItem(
             modifier = if (isMyWriting) Modifier.padding(end = 24.dp) else Modifier,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painter,
+            AsyncImage(
+                model = profileUrl,
                 contentDescription = null,
+                error = painter,
                 modifier = Modifier.size(42.dp),
                 contentScale = ContentScale.FillBounds
             )

@@ -1,5 +1,7 @@
 package com.cmc.curtaincall.feature.performance
 
+import androidx.compose.runtime.remember
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -49,6 +51,13 @@ sealed interface PerformanceDestination : CurtainCallDestination {
 
     object Review : PerformanceDestination {
         override val route = PERFORMANCE_REVIEW
+        const val showIdArg = "showId"
+        val routeWithArgs = "$route/{$showIdArg}"
+        val arguments = listOf(
+            navArgument(showIdArg) {
+                type = NavType.StringType
+            }
+        )
     }
 
     object ReviewCreate : PerformanceDestination {
@@ -90,7 +99,7 @@ fun NavGraphBuilder.performanceNavGraph(
             PerformanceDetailScreen(
                 showId = showIdType,
                 onNavigateReview = {
-                    navHostController.navigate(PerformanceDestination.Review.route)
+                    navHostController.navigate("${PerformanceDestination.Review.route}/$it")
                 },
                 onNavigateLostItem = {
                     navHostController.navigate(PerformanceDestination.LostItem.route)
@@ -100,8 +109,17 @@ fun NavGraphBuilder.performanceNavGraph(
                 }
             )
         }
-        composable(route = PerformanceDestination.Review.route) {
+        composable(
+            route = PerformanceDestination.Review.routeWithArgs,
+            arguments = PerformanceDestination.Review.arguments
+        ) { entry ->
+            val parentEntry = remember(entry) {
+                navHostController.getBackStackEntry(PerformanceDestination.Detail.routeWithArgs)
+            }
+            val showIdType = entry.arguments?.getString(PerformanceDestination.Review.showIdArg) ?: ""
             PerformanceReviewScreen(
+                performanceDetailViewModel = hiltViewModel(parentEntry),
+                showId = showIdType,
                 onNavigateReviewCreate = {
                     navHostController.navigate(PerformanceDestination.ReviewCreate.route)
                 },

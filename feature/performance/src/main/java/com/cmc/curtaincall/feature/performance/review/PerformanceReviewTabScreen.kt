@@ -19,20 +19,26 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.items.EmptyItem
+import com.cmc.curtaincall.common.design.component.items.ReviewItem
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.Chinese_Black
 import com.cmc.curtaincall.common.design.theme.Me_Pink
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
+import com.cmc.curtaincall.common.utility.extensions.toChangeDate
+import com.cmc.curtaincall.domain.model.review.ShowReviewModel
 
 @Composable
 internal fun PerformanceReviewTabScreen(
     modifier: Modifier = Modifier,
-    onNavigateReview: () -> Unit
+    showId: String,
+    reviewCount: Int = 0,
+    showReviews: List<ShowReviewModel> = listOf(),
+    onNavigateReview: (String) -> Unit
 ) {
     Column(modifier.padding(horizontal = 20.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = "총 324개의 한 줄 리뷰",
+                text = "총 ${reviewCount}개의 한 줄 리뷰",
                 modifier = Modifier.weight(1f),
                 color = Chinese_Black,
                 fontSize = 17.dp.toSp(),
@@ -43,7 +49,7 @@ internal fun PerformanceReviewTabScreen(
                 modifier = Modifier
                     .border(BorderStroke(1.dp, Me_Pink), RoundedCornerShape(14.dp))
                     .padding(vertical = 6.dp, horizontal = 10.dp)
-                    .clickable { onNavigateReview() },
+                    .clickable { onNavigateReview(showId) },
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -60,39 +66,26 @@ internal fun PerformanceReviewTabScreen(
                 .padding(top = 14.dp)
                 .heightIn(min = 317.dp)
         ) {
-            EmptyItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 70.dp),
-                alert = stringResource(R.string.performance_review_empty)
-            )
-//            ReviewItem(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(bottom = 12.dp),
-//                rating = 4,
-//                name = "zkvpzkvpzk",
-//                date = "2023.6.28",
-//                comment = "최고령 리어왕'으로 기네스북에 오를 예정이라시는~!"
-//            )
-//            ReviewItem(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(bottom = 12.dp),
-//                rating = 4,
-//                name = "zkvpzkvpzk",
-//                date = "2023.6.28",
-//                comment = "최고령 리어왕'으로 기네스북에 오를 예정이라시는~!"
-//            )
-//            ReviewItem(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(bottom = 12.dp),
-//                rating = 4,
-//                name = "zkvpzkvpzk",
-//                date = "2023.6.28",
-//                comment = "최고령 리어왕'으로 기네스북에 오를 예정이라시는~!"
-//            )
+            if (showReviews.isEmpty()) {
+                EmptyItem(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 70.dp),
+                    alert = stringResource(R.string.performance_review_empty)
+                )
+            } else {
+                showReviews.forEach { showReview ->
+                    ReviewItem(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 12.dp),
+                        rating = showReview.grade,
+                        name = showReview.creatorNickname,
+                        date = showReview.createdAt.toChangeDate(),
+                        comment = showReview.content
+                    )
+                }
+            }
         }
     }
 }

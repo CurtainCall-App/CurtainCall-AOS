@@ -1,5 +1,6 @@
 package com.cmc.curtaincall.domain.repository
 
+import androidx.paging.PagingData
 import com.cmc.curtaincall.domain.model.review.CreateReviewModel
 import com.cmc.curtaincall.domain.model.review.LikeReviewModel
 import com.cmc.curtaincall.domain.model.review.ShowReviewModel
@@ -10,6 +11,10 @@ interface ReviewRepository {
     fun createShowReview(
         showId: String
     ): Flow<CreateReviewModel>
+
+    fun fetchShowReviewList(
+        showId: String
+    ): Flow<PagingData<ShowReviewModel>>
 
     fun requestShowReviewList(
         showId: String,

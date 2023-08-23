@@ -1,5 +1,12 @@
 package com.cmc.curtaincall.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.map
+import com.cmc.curtaincall.core.network.service.review.ReviewService
+import com.cmc.curtaincall.data.source.paging.REVIEW_PAGE_SIZE
+import com.cmc.curtaincall.data.source.paging.ReviewPagingSource
 import com.cmc.curtaincall.data.source.remote.ReviewRemoteSource
 import com.cmc.curtaincall.domain.model.review.CreateReviewModel
 import com.cmc.curtaincall.domain.model.review.LikeReviewModel
@@ -10,10 +17,23 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class ReviewRepositoryImpl @Inject constructor(
-    private val reviewRemoteSource: ReviewRemoteSource
+    private val reviewRemoteSource: ReviewRemoteSource,
+    private val reviewService: ReviewService
 ) : ReviewRepository {
     override fun createShowReview(showId: String): Flow<CreateReviewModel> =
         reviewRemoteSource.createShowReview(showId).map { it.toModel() }
+
+    override fun fetchShowReviewList(showId: String): Flow<PagingData<ShowReviewModel>> {
+        return Pager(
+            config = PagingConfig(pageSize = REVIEW_PAGE_SIZE),
+            pagingSourceFactory = { ReviewPagingSource(reviewService, showId) }
+        ).flow
+            .map { pagingData ->
+                pagingData.map { response ->
+                    response.toModel()
+                }
+            }
+    }
 
     override fun requestShowReviewList(showId: String, page: Int, size: Int): Flow<List<ShowReviewModel>> =
         reviewRemoteSource.requestShowReviewList(showId, page, size).map { showReviews ->

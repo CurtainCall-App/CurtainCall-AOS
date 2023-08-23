@@ -9,9 +9,9 @@ data class ShowReviewsResponse(
 
 data class ShowReviewResponse(
     val content: String,
-    val createdAt: Any,
+    val createdAt: String,
     val creatorId: Int,
-    val creatorImageUrl: String,
+    val creatorImageUrl: String?,
     val creatorNickname: String,
     val grade: Int,
     val id: Int,

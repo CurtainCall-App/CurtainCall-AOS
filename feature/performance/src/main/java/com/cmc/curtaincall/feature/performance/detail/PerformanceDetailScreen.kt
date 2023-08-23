@@ -65,7 +65,7 @@ enum class TabType(val label: String) {
 internal fun PerformanceDetailScreen(
     performanceDetailViewModel: PerformanceDetailViewModel = hiltViewModel(),
     showId: String,
-    onNavigateReview: () -> Unit,
+    onNavigateReview: (String) -> Unit,
     onNavigateLostItem: () -> Unit,
     onBack: () -> Unit
 ) {
@@ -74,6 +74,7 @@ internal fun PerformanceDetailScreen(
 
     LaunchedEffect(Unit) {
         performanceDetailViewModel.requestShowDetail(showId)
+        performanceDetailViewModel.requestShowReviewList(showId)
     }
 
     val scrollState = rememberScrollState()
@@ -112,6 +113,7 @@ internal fun PerformanceDetailScreen(
             PerformanceDetailTab(
                 performanceDetailViewModel = performanceDetailViewModel,
                 Modifier.padding(top = 26.dp),
+                showId = showId,
                 onNavigateReview = onNavigateReview,
                 onNavigateLostItem = onNavigateLostItem
             )
@@ -123,7 +125,8 @@ internal fun PerformanceDetailScreen(
 private fun PerformanceDetailTab(
     performanceDetailViewModel: PerformanceDetailViewModel,
     modifier: Modifier = Modifier,
-    onNavigateReview: () -> Unit,
+    showId: String,
+    onNavigateReview: (String) -> Unit,
     onNavigateLostItem: () -> Unit
 ) {
     val performanceDetailUiState by performanceDetailViewModel.uiState.collectAsStateWithLifecycle()
@@ -236,6 +239,9 @@ private fun PerformanceDetailTab(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 50.dp),
+                    showId = showId,
+                    reviewCount = performanceDetailUiState.showDetailModel.reviewCount,
+                    showReviews = performanceDetailUiState.showReviews,
                     onNavigateReview = onNavigateReview
                 )
             }

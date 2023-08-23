@@ -22,7 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.common.design.component.items.LostItem
+import com.cmc.curtaincall.common.design.component.items.EmptyItem
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.Black_Coral
 import com.cmc.curtaincall.common.design.theme.Bright_Gray
@@ -67,42 +67,42 @@ internal fun PerformanceLostItemTabScreen(
                 .padding(top = 14.dp)
                 .heightIn(min = 317.dp)
         ) {
-//            EmptyItem(
+            EmptyItem(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 70.dp),
+                alert = stringResource(R.string.performance_lostitem_empty)
+            )
+//            LostItem(
 //                modifier = Modifier
 //                    .fillMaxWidth()
-//                    .padding(top = 70.dp),
-//                alert = stringResource(R.string.performance_lostitem_empty)
+//                    .padding(bottom = 12.dp),
+//                painter = painterResource(R.drawable.img_default_performance),
+//                title = "닥스지갑",
+//                date = "2023.6.15",
+//                getLocation = "LG아트센터 서울",
+//                storeLocation = "LG아트센터 서울"
 //            )
-            LostItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 12.dp),
-                painter = painterResource(R.drawable.img_default_performance),
-                title = "닥스지갑",
-                date = "2023.6.15",
-                getLocation = "LG아트센터 서울",
-                storeLocation = "LG아트센터 서울"
-            )
-            LostItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 12.dp),
-                painter = painterResource(R.drawable.img_default_performance),
-                title = "닥스지갑",
-                date = "2023.6.15",
-                getLocation = "LG아트센터 서울",
-                storeLocation = "LG아트센터 서울"
-            )
-            LostItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 12.dp),
-                painter = painterResource(R.drawable.img_default_performance),
-                title = "닥스지갑",
-                date = "2023.6.15",
-                getLocation = "LG아트센터 서울",
-                storeLocation = "LG아트센터 서울"
-            )
+//            LostItem(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(bottom = 12.dp),
+//                painter = painterResource(R.drawable.img_default_performance),
+//                title = "닥스지갑",
+//                date = "2023.6.15",
+//                getLocation = "LG아트센터 서울",
+//                storeLocation = "LG아트센터 서울"
+//            )
+//            LostItem(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(bottom = 12.dp),
+//                painter = painterResource(R.drawable.img_default_performance),
+//                title = "닥스지갑",
+//                date = "2023.6.15",
+//                getLocation = "LG아트센터 서울",
+//                storeLocation = "LG아트센터 서울"
+//            )
         }
     }
 }
