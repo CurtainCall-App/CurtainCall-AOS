@@ -7,6 +7,10 @@ import com.cmc.curtaincall.domain.model.show.ShowDetailModel
 
 sealed class PerformanceDetailEvent : BaseEvent {
 
+    data class GetMemberId(
+        val memberId: Int
+    ) : PerformanceDetailEvent()
+
     data class ShowDetail(
         val showDetailModel: ShowDetailModel
     ) : PerformanceDetailEvent()

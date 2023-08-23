@@ -5,6 +5,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.cmc.curtaincall.core.base.BaseViewModel
 import com.cmc.curtaincall.domain.model.review.ShowReviewModel
+import com.cmc.curtaincall.domain.repository.MemberRepository
 import com.cmc.curtaincall.domain.repository.ReviewRepository
 import com.cmc.curtaincall.domain.repository.ShowRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,11 +17,15 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PerformanceDetailViewModel @Inject constructor(
+    private val memberRepository: MemberRepository,
     private val showRepository: ShowRepository,
     private val reviewRepository: ReviewRepository
 ) : BaseViewModel<PerformanceDetailState, PerformanceDetailEvent, Nothing>(
     initialState = PerformanceDetailState()
 ) {
+    init {
+        getMemberId()
+    }
 
     var reviewItems: Flow<PagingData<ShowReviewModel>> = reviewRepository
         .fetchShowReviewList("")
@@ -28,6 +33,10 @@ class PerformanceDetailViewModel @Inject constructor(
 
     override fun reduceState(currentState: PerformanceDetailState, event: PerformanceDetailEvent): PerformanceDetailState =
         when (event) {
+            is PerformanceDetailEvent.GetMemberId -> {
+                currentState.copy(memberId = event.memberId)
+            }
+
             is PerformanceDetailEvent.ShowDetail -> {
                 currentState.copy(showDetailModel = event.showDetailModel)
             }
@@ -55,5 +64,11 @@ class PerformanceDetailViewModel @Inject constructor(
         reviewItems = reviewRepository
             .fetchShowReviewList(showId)
             .cachedIn(viewModelScope)
+    }
+
+    private fun getMemberId() {
+        memberRepository.getMemberId()
+            .onEach { sendAction(PerformanceDetailEvent.GetMemberId(it)) }
+            .launchIn(viewModelScope)
     }
 }

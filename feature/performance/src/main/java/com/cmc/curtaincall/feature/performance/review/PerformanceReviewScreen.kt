@@ -21,7 +21,7 @@ import com.cmc.curtaincall.common.design.component.dialog.CurtainCallBasicDialog
 import com.cmc.curtaincall.common.design.component.items.EmptyItem
 import com.cmc.curtaincall.common.design.component.items.ReviewDetailItem
 import com.cmc.curtaincall.common.design.theme.*
-import com.cmc.curtaincall.common.utility.extensions.toChangeDate
+import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
 import com.cmc.curtaincall.feature.performance.detail.PerformanceDetailViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -116,14 +116,14 @@ private fun PerformanceReviewContent(
                         painter = painterResource(R.drawable.ic_default_profile),
                         rating = reviewItem.grade,
                         name = reviewItem.creatorNickname,
-                        date = reviewItem.createdAt.toChangeDate(),
+                        date = reviewItem.createdAt.toChangeFullDate(),
                         comment = reviewItem.content,
                         numberOfLike = 37,
-                        isMyWriting = true,
+                        isMyWriting = performanceDetailViewModel.uiState.value.memberId == reviewItem.creatorId,
                         onChangeWriting = { onNavigateReviewCreate() },
                         onRemoveWriting = { isShowRemoveDialog = true }
                     )
-                    if (index < reviewItems.itemCount) {
+                    if (index < reviewItems.itemCount - 1) {
                         Spacer(
                             modifier = Modifier
                                 .fillMaxWidth()

@@ -130,7 +130,8 @@ fun ReviewDetailItem(
                 Column(Modifier.weight(1f)) {
                     RatingBar(
                         modifier = Modifier.size(14.dp),
-                        rating = rating
+                        rating = rating,
+                        tint = Me_Pink
                     )
                     Text(
                         text = String.format("%s | %s", name, date),
@@ -159,98 +160,100 @@ fun ReviewDetailItem(
                 }
             }
         }
-        Column(
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .zIndex(if (isClickMoreVert) 1f else 0f),
-            horizontalAlignment = Alignment.End
-        ) {
-            Icon(
-                painter = painterResource(R.drawable.ic_more_vert),
-                contentDescription = null,
+        if (isMyWriting) {
+            Column(
                 modifier = Modifier
-                    .size(24.dp)
-                    .clickable { isClickMoreVert = isClickMoreVert.not() },
-                tint = Eerie_Black
-            )
-            if (isClickMoreVert) {
-                Card(
+                    .align(Alignment.TopEnd)
+                    .zIndex(if (isClickMoreVert) 1f else 0f),
+                horizontalAlignment = Alignment.End
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_more_vert),
+                    contentDescription = null,
                     modifier = Modifier
-                        .padding(top = 9.dp)
-                        .size(73.dp, 86.dp),
-                    shape = RoundedCornerShape(8.dp),
-                    colors = CardDefaults.cardColors(containerColor = White),
-                    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-                ) {
-                    Box(
+                        .size(24.dp)
+                        .clickable { isClickMoreVert = isClickMoreVert.not() },
+                    tint = Eerie_Black
+                )
+                if (isClickMoreVert) {
+                    Card(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                            .background(
-                                color = if (isTouchChangeButton) Me_Pink.copy(0.1f) else White,
-                                RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp)
-                            )
-                            .pointerInteropFilter {
-                                when (it.action) {
-                                    MotionEvent.ACTION_DOWN -> {
-                                        isTouchChangeButton = true
-                                    }
-
-                                    MotionEvent.ACTION_MOVE,
-                                    MotionEvent.ACTION_UP -> {
-                                        isTouchChangeButton = false
-                                        isClickMoreVert = false
-                                        onChangeWriting()
-                                    }
-
-                                    else -> return@pointerInteropFilter false
-                                }
-                                true
-                            },
-                        contentAlignment = Alignment.Center
+                            .padding(top = 9.dp)
+                            .size(73.dp, 86.dp),
+                        shape = RoundedCornerShape(8.dp),
+                        colors = CardDefaults.cardColors(containerColor = White),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                     ) {
-                        Text(
-                            text = stringResource(R.string.mypage_writing_edit),
-                            color = Black_Pearl,
-                            fontSize = 14.dp.toSp(),
-                            fontWeight = FontWeight.Medium,
-                            fontFamily = spoqahansanseeo
-                        )
-                    }
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)
-                            .background(
-                                color = if (isTouchRemoveButton) Me_Pink.copy(0.1f) else White,
-                                RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp)
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                                .background(
+                                    color = if (isTouchChangeButton) Me_Pink.copy(0.1f) else White,
+                                    RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp)
+                                )
+                                .pointerInteropFilter {
+                                    when (it.action) {
+                                        MotionEvent.ACTION_DOWN -> {
+                                            isTouchChangeButton = true
+                                        }
+
+                                        MotionEvent.ACTION_MOVE,
+                                        MotionEvent.ACTION_UP -> {
+                                            isTouchChangeButton = false
+                                            isClickMoreVert = false
+                                            onChangeWriting()
+                                        }
+
+                                        else -> return@pointerInteropFilter false
+                                    }
+                                    true
+                                },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = stringResource(R.string.mypage_writing_edit),
+                                color = Black_Pearl,
+                                fontSize = 14.dp.toSp(),
+                                fontWeight = FontWeight.Medium,
+                                fontFamily = spoqahansanseeo
                             )
-                            .pointerInteropFilter {
-                                when (it.action) {
-                                    MotionEvent.ACTION_DOWN -> {
-                                        isTouchRemoveButton = true
-                                    }
+                        }
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                                .background(
+                                    color = if (isTouchRemoveButton) Me_Pink.copy(0.1f) else White,
+                                    RoundedCornerShape(bottomStart = 8.dp, bottomEnd = 8.dp)
+                                )
+                                .pointerInteropFilter {
+                                    when (it.action) {
+                                        MotionEvent.ACTION_DOWN -> {
+                                            isTouchRemoveButton = true
+                                        }
 
-                                    MotionEvent.ACTION_MOVE,
-                                    MotionEvent.ACTION_UP -> {
-                                        isTouchRemoveButton = false
-                                        isClickMoreVert = false
-                                        onRemoveWriting()
-                                    }
+                                        MotionEvent.ACTION_MOVE,
+                                        MotionEvent.ACTION_UP -> {
+                                            isTouchRemoveButton = false
+                                            isClickMoreVert = false
+                                            onRemoveWriting()
+                                        }
 
-                                    else -> return@pointerInteropFilter false
-                                }
-                                true
-                            },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = stringResource(R.string.mypage_writing_remove),
-                            color = Black_Pearl,
-                            fontSize = 14.dp.toSp(),
-                            fontWeight = FontWeight.Medium,
-                            fontFamily = spoqahansanseeo
-                        )
+                                        else -> return@pointerInteropFilter false
+                                    }
+                                    true
+                                },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = stringResource(R.string.mypage_writing_remove),
+                                color = Black_Pearl,
+                                fontSize = 14.dp.toSp(),
+                                fontWeight = FontWeight.Medium,
+                                fontFamily = spoqahansanseeo
+                            )
+                        }
                     }
                 }
             }
