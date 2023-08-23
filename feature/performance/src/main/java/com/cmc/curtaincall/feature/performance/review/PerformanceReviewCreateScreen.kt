@@ -38,6 +38,7 @@ internal fun PerformanceReviewCreateScreen(
     posterUrl: String? = null,
     genre: String = "",
     title: String = "",
+    reviewId: Int,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -59,6 +60,8 @@ internal fun PerformanceReviewCreateScreen(
             performanceReviewViewModel = performanceReviewViewModel,
             modifier = Modifier.fillMaxSize(),
             showId = showId,
+            fromMypage = fromMypage,
+            reviewId = reviewId,
             onBack = onBack
         )
     }
@@ -146,12 +149,22 @@ private fun PerformanceReviewCreateBody(
     performanceReviewViewModel: PerformanceReviewViewModel,
     modifier: Modifier = Modifier,
     showId: String,
+    fromMypage: Boolean,
+    reviewId: Int,
     onBack: () -> Unit,
 ) {
     LaunchedEffect(performanceReviewViewModel) {
         performanceReviewViewModel.effect.collectLatest {
             when (it) {
                 PerformanceReviewSideEffect.CreateSuccess -> {
+                    onBack()
+                }
+
+                PerformanceReviewSideEffect.UpdateSuccess -> {
+                    onBack()
+                }
+
+                PerformanceReviewSideEffect.DeleteSuccess -> {
                     onBack()
                 }
             }
@@ -172,7 +185,13 @@ private fun PerformanceReviewCreateBody(
             onReviewChange = { review = it }
         )
         CurtainCallRoundedTextButton(
-            onClick = { performanceReviewViewModel.createShowReview(showId, rating, review) },
+            onClick = {
+                if (fromMypage) {
+                    performanceReviewViewModel.updateShowReview(reviewId, review, rating)
+                } else {
+                    performanceReviewViewModel.createShowReview(showId, rating, review)
+                }
+            },
             modifier = Modifier
                 .padding(bottom = 19.dp)
                 .fillMaxWidth()
@@ -231,11 +250,7 @@ private fun ReviewCreateBody(
         )
         CurtainCallMultiLineTextField(
             value = review,
-            onValueChange = {
-                if (it.length < 20) {
-                    onReviewChange(it)
-                }
-            },
+            onValueChange = { if (it.length < 20) onReviewChange(it) },
             modifier = Modifier
                 .padding(top = 12.dp)
                 .fillMaxWidth()
