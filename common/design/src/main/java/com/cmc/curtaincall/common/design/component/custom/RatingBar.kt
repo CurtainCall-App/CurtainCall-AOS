@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.theme.Bright_Gray
 
 @Composable
 fun RatingBar(
@@ -19,64 +20,54 @@ fun RatingBar(
 ) {
     Row {
         Icon(
-            painter = painterResource(
-                if (rating >= 1) R.drawable.ic_star else R.drawable.ic_unfilled_star
-            ),
+            painter = painterResource(R.drawable.ic_star),
             contentDescription = null,
             modifier = modifier.clickable {
                 if (canChange) {
                     onChangeRate(1)
                 }
             },
-            tint = tint
+            tint = if (rating >= 1) tint else Bright_Gray
         )
         Icon(
-            painter = painterResource(
-                if (rating >= 2) R.drawable.ic_star else R.drawable.ic_unfilled_star
-            ),
+            painter = painterResource(R.drawable.ic_star),
             contentDescription = null,
             modifier = modifier.clickable {
                 if (canChange) {
                     onChangeRate(2)
                 }
             },
-            tint = tint
+            tint = if (rating >= 2) tint else Bright_Gray
         )
         Icon(
-            painter = painterResource(
-                if (rating >= 3) R.drawable.ic_star else R.drawable.ic_unfilled_star
-            ),
+            painter = painterResource(R.drawable.ic_star),
             contentDescription = null,
             modifier = modifier.clickable {
                 if (canChange) {
                     onChangeRate(3)
                 }
             },
-            tint = tint
+            tint = if (rating >= 3) tint else Bright_Gray
         )
         Icon(
-            painter = painterResource(
-                if (rating >= 4) R.drawable.ic_star else R.drawable.ic_unfilled_star
-            ),
+            painter = painterResource(R.drawable.ic_star),
             contentDescription = null,
             modifier = modifier.clickable {
                 if (canChange) {
                     onChangeRate(4)
                 }
             },
-            tint = tint
+            tint = if (rating >= 4) tint else Bright_Gray
         )
         Icon(
-            painter = painterResource(
-                if (rating == 5) R.drawable.ic_star else R.drawable.ic_unfilled_star
-            ),
+            painter = painterResource(R.drawable.ic_star),
             contentDescription = null,
             modifier = modifier.clickable {
                 if (canChange) {
                     onChangeRate(5)
                 }
             },
-            tint = tint
+            tint = if (rating >= 5) tint else Bright_Gray
         )
     }
 }

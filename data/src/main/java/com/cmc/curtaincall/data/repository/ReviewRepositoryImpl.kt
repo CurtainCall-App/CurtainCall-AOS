@@ -20,8 +20,12 @@ class ReviewRepositoryImpl @Inject constructor(
     private val reviewRemoteSource: ReviewRemoteSource,
     private val reviewService: ReviewService
 ) : ReviewRepository {
-    override fun createShowReview(showId: String): Flow<CreateReviewModel> =
-        reviewRemoteSource.createShowReview(showId).map { it.toModel() }
+    override fun createShowReview(
+        showId: String,
+        grade: Int,
+        content: String
+    ): Flow<CreateReviewModel> =
+        reviewRemoteSource.createShowReview(showId, grade, content).map { it.toModel() }
 
     override fun fetchShowReviewList(showId: String): Flow<PagingData<ShowReviewModel>> {
         return Pager(

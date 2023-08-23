@@ -30,7 +30,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 internal fun PerformanceReviewScreen(
     performanceDetailViewModel: PerformanceDetailViewModel = hiltViewModel(),
     showId: String,
-    onNavigateReviewCreate: () -> Unit,
+    onNavigateReviewCreate: (String?, String, String) -> Unit,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -46,7 +46,13 @@ internal fun PerformanceReviewScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { onNavigateReviewCreate() },
+                onClick = {
+                    onNavigateReviewCreate(
+                        performanceDetailViewModel.uiState.value.showDetailModel.poster,
+                        performanceDetailViewModel.uiState.value.showDetailModel.genre,
+                        performanceDetailViewModel.uiState.value.showDetailModel.name
+                    )
+                },
                 modifier = Modifier
                     .padding(bottom = 40.dp)
                     .size(58.dp),
@@ -68,6 +74,7 @@ internal fun PerformanceReviewScreen(
                 .padding(paddingValues)
                 .fillMaxSize()
                 .background(White),
+            showId = showId,
             onNavigateReviewCreate = onNavigateReviewCreate
         )
     }
@@ -77,7 +84,8 @@ internal fun PerformanceReviewScreen(
 private fun PerformanceReviewContent(
     performanceDetailViewModel: PerformanceDetailViewModel,
     modifier: Modifier = Modifier,
-    onNavigateReviewCreate: () -> Unit
+    showId: String,
+    onNavigateReviewCreate: (String?, String, String) -> Unit
 ) {
     val reviewItems = performanceDetailViewModel.reviewItems.collectAsLazyPagingItems()
     var isShowRemoveDialog by remember { mutableStateOf(false) }
@@ -120,7 +128,13 @@ private fun PerformanceReviewContent(
                         comment = reviewItem.content,
                         numberOfLike = 37,
                         isMyWriting = performanceDetailViewModel.uiState.value.memberId == reviewItem.creatorId,
-                        onChangeWriting = { onNavigateReviewCreate() },
+                        onChangeWriting = {
+                            onNavigateReviewCreate(
+                                performanceDetailViewModel.uiState.value.showDetailModel.poster,
+                                performanceDetailViewModel.uiState.value.showDetailModel.genre,
+                                performanceDetailViewModel.uiState.value.showDetailModel.name
+                            )
+                        },
                         onRemoveWriting = { isShowRemoveDialog = true }
                     )
                     if (index < reviewItems.itemCount - 1) {

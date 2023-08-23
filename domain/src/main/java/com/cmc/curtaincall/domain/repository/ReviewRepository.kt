@@ -9,7 +9,9 @@ import kotlinx.coroutines.flow.Flow
 interface ReviewRepository {
 
     fun createShowReview(
-        showId: String
+        showId: String,
+        grade: Int,
+        content: String
     ): Flow<CreateReviewModel>
 
     fun fetchShowReviewList(

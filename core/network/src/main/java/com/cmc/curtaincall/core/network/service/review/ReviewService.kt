@@ -1,5 +1,6 @@
 package com.cmc.curtaincall.core.network.service.review
 
+import com.cmc.curtaincall.core.network.service.review.request.CreateShowReviewRequest
 import com.cmc.curtaincall.core.network.service.review.request.UpdateShowReviewRequest
 import com.cmc.curtaincall.core.network.service.review.response.CreateReviewResponse
 import com.cmc.curtaincall.core.network.service.review.response.LikeReviewsResponse
@@ -18,7 +19,8 @@ interface ReviewService {
 
     @POST("shows/{showId}/reviews")
     suspend fun createShowReview(
-        @Path("showId") showId: String
+        @Path("showId") showId: String,
+        @Body createShowReviewRequest: CreateShowReviewRequest
     ): CreateReviewResponse
 
     @GET("shows/{showId}/reviews?")

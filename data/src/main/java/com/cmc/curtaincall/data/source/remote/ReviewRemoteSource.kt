@@ -1,6 +1,7 @@
 package com.cmc.curtaincall.data.source.remote
 
 import com.cmc.curtaincall.core.network.service.review.ReviewService
+import com.cmc.curtaincall.core.network.service.review.request.CreateShowReviewRequest
 import com.cmc.curtaincall.core.network.service.review.request.UpdateShowReviewRequest
 import com.cmc.curtaincall.core.network.service.review.response.CreateReviewResponse
 import com.cmc.curtaincall.core.network.service.review.response.LikeReviewResponse
@@ -13,9 +14,19 @@ class ReviewRemoteSource @Inject constructor(
     private val reviewService: ReviewService
 ) {
     fun createShowReview(
-        showId: String
+        showId: String,
+        grade: Int,
+        content: String
     ): Flow<CreateReviewResponse> = flow {
-        emit(reviewService.createShowReview(showId))
+        emit(
+            reviewService.createShowReview(
+                showId = showId,
+                createShowReviewRequest = CreateShowReviewRequest(
+                    grade = grade,
+                    content = content
+                )
+            )
+        )
     }
 
     fun requestShowReviewList(

@@ -123,7 +123,7 @@
     <string name="performance_review_create_satisfaction_question">공연은 만족스러우셨나요?</string>
     <string name="performance_review_create_request">한 줄 리뷰를 남겨주세요!</string>
     <string name="performance_review_create_request_placeholder">공연 후기를 남겨주세요.</string>
-    <string name="performance_review_create_write_number_of_text">글자수 제한 (%d/30)</string>
+    <string name="performance_review_create_write_number_of_text">글자수 제한 (%d/20)</string>
     <string name="performance_review_create_write_complete">작성 완료</string>
     <string name="performance_lostitem_empty">아직 분실물이 없어요!</string>
     <string name="performance_find_lost_item">분실물 찾기</string>
