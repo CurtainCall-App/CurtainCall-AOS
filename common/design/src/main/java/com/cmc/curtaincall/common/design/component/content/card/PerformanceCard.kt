@@ -57,26 +57,28 @@ import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 @Composable
 fun PerformanceDetailCard(
     modifier: Modifier = Modifier,
+    imageUrl: String? = null,
     painter: Painter,
     title: String,
     rate: Float,
     numberOfTotal: Int,
     period: String,
     runningTime: String,
-    dates: List<String>,
+    date: String,
     location: String,
     onClick: () -> Unit = {},
     onSave: (Boolean) -> Unit = {}
 ) {
     var savePerformance by remember { mutableStateOf(false) }
-    Row(modifier) {
+    Row(modifier.clickable { onClick() }) {
         AsyncImage(
-            model = null,
+            model = imageUrl,
             error = painter,
             contentDescription = null,
             modifier = Modifier
                 .weight(114f)
-                .aspectRatio(114 / 153f),
+                .aspectRatio(114 / 153f)
+                .clip(RoundedCornerShape(12.dp)),
             contentScale = ContentScale.FillBounds
         )
         Column(
@@ -91,7 +93,9 @@ fun PerformanceDetailCard(
                         color = Chinese_Black,
                         fontSize = 16.dp.toSp(),
                         fontWeight = FontWeight.Bold,
-                        fontFamily = spoqahansanseeo
+                        fontFamily = spoqahansanseeo,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                     Row(
                         modifier = Modifier.padding(top = 3.dp),
@@ -101,7 +105,7 @@ fun PerformanceDetailCard(
                             painter = painterResource(R.drawable.ic_star),
                             contentDescription = null,
                             modifier = Modifier.size(16.dp),
-                            tint = Color.Unspecified
+                            tint = Me_Pink
                         )
                         Text(
                             text = String.format("%.1f", rate),
@@ -127,6 +131,7 @@ fun PerformanceDetailCard(
                         onSave(savePerformance)
                     },
                     modifier = Modifier
+                        .padding(start = 3.dp)
                         .clip(CircleShape)
                         .size(26.dp),
                     colors = IconButtonDefaults.iconButtonColors(
@@ -193,7 +198,7 @@ fun PerformanceDetailCard(
                 )
                 Column(Modifier.padding(start = 13.dp)) {
                     Text(
-                        text = dates.joinToString("\n"),
+                        text = date,
                         color = Nero,
                         fontSize = 14.dp.toSp(),
                         fontWeight = FontWeight.Medium,
@@ -231,6 +236,7 @@ fun PerformanceCard(
     modifier: Modifier = Modifier,
     title: String,
     painter: Painter,
+    imageUrl: String? = null,
     rate: Float,
     numberOfTotal: Int,
     isShowMetadata: Boolean = false,
@@ -252,10 +258,12 @@ fun PerformanceCard(
                 .clip(RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp))
         ) {
             AsyncImage(
-                model = null,
+                model = imageUrl,
                 error = painter,
                 contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(topStart = 10.dp, topEnd = 10.dp)),
                 contentScale = ContentScale.FillBounds
             )
             if (isShowMetadata) {
@@ -299,7 +307,7 @@ fun PerformanceCard(
                     painter = painterResource(R.drawable.ic_star),
                     contentDescription = null,
                     modifier = Modifier.size(16.dp),
-                    tint = Color.Unspecified
+                    tint = Me_Pink
                 )
                 Text(
                     text = String.format("%.1f", rate),
@@ -382,7 +390,7 @@ private fun PerformanceDetailCardPreview() {
         numberOfTotal = 324,
         period = "2023.6.1 - 2023.6.18",
         runningTime = "200분",
-        dates = listOf("화-금 19:00", "토,일 14:00, 19:00"),
+        date = "",
         location = "LG아트센터 서울"
     )
 }

@@ -1,5 +1,12 @@
 package com.cmc.curtaincall.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.map
+import com.cmc.curtaincall.core.network.service.show.ShowService
+import com.cmc.curtaincall.data.source.paging.SHOW_PAGE_SIZE
+import com.cmc.curtaincall.data.source.paging.ShowPagingSource
 import com.cmc.curtaincall.data.source.remote.ShowRemoteSource
 import com.cmc.curtaincall.domain.model.show.FacilityDetailModel
 import com.cmc.curtaincall.domain.model.show.ShowDetailModel
@@ -11,8 +18,22 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class ShowRepositoryImpl @Inject constructor(
-    private val showRemoteSource: ShowRemoteSource
+    private val showRemoteSource: ShowRemoteSource,
+    private val showService: ShowService
 ) : ShowRepository {
+
+    override fun fetchShowList(genre: String): Flow<PagingData<ShowInfoModel>> {
+        return Pager(
+            config = PagingConfig(pageSize = SHOW_PAGE_SIZE),
+            pagingSourceFactory = { ShowPagingSource(showService, genre) }
+        ).flow
+            .map { pagingData ->
+                pagingData.map { response ->
+                    response.toModel()
+                }
+            }
+    }
+
     override fun requestShowList(page: Int, size: Int, genre: String): Flow<List<ShowInfoModel>> =
         showRemoteSource.requestShowList(page, size, genre).map { showInfoResponses ->
             showInfoResponses.map { it.toModel() }
@@ -31,8 +52,8 @@ class ShowRepositoryImpl @Inject constructor(
     override fun requestShowDetail(showId: String): Flow<ShowDetailModel> =
         showRemoteSource.requestShowDetail(showId).map { it.toModel() }
 
-    override fun requestPopularShowList(type: String, size: Int, startDate: String): Flow<List<ShowRankModel>> =
-        showRemoteSource.requestPopularShowList(type, size, startDate).map { showRankResponse ->
+    override fun requestPopularShowList(type: String, genre: String, baseDate: String): Flow<List<ShowRankModel>> =
+        showRemoteSource.requestPopularShowList(type, genre, baseDate).map { showRankResponse ->
             showRankResponse.map { it.toModel() }
         }
 

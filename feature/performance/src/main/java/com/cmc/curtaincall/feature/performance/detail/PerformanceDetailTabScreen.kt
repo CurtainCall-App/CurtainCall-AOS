@@ -12,13 +12,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.design.R
@@ -26,21 +26,26 @@ import com.cmc.curtaincall.common.design.component.basic.CurtainCallBorderTextBu
 import com.cmc.curtaincall.common.design.component.content.card.PerformanceCard
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.domain.model.show.FacilityDetailModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.compose.*
 
 @Composable
 internal fun PerformanceDetailTabScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    introductionImage: String? = null,
+    facilityDetailModel: FacilityDetailModel
 ) {
     Column(modifier) {
-        // TODO PerformanceNotice
-        PerformanceNotice(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 40.dp)
-        )
+        if (introductionImage != null) {
+            PerformanceNotice(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 40.dp),
+                introductionImage = introductionImage
+            )
+        }
         PerformanceTimeRow(
             modifier = Modifier
                 .fillMaxWidth()
@@ -57,20 +62,21 @@ internal fun PerformanceDetailTabScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
-                .padding(vertical = 30.dp)
+                .padding(vertical = 30.dp),
+            facilityDetailModel = facilityDetailModel
         )
-        Spacer(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-                .background(Bright_Gray)
-                .height(1.dp)
-        )
-        PerformanceSimilarContent(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 30.dp, bottom = 103.dp)
-        )
+//        Spacer(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(horizontal = 20.dp)
+//                .background(Bright_Gray)
+//                .height(1.dp)
+//        )
+//        PerformanceSimilarContent(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(top = 30.dp, bottom = 103.dp)
+//        )
     }
 }
 
@@ -111,12 +117,13 @@ private fun PerformanceSimilarContent(
 
 @Composable
 private fun PerformanceNotice(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    introductionImage: String
 ) {
     var isClickMore by remember { mutableStateOf(false) }
     Column(modifier) {
         AsyncImage(
-            model = null,
+            model = introductionImage,
             contentDescription = null,
             modifier = Modifier
                 .fillMaxWidth()
@@ -127,7 +134,6 @@ private fun PerformanceNotice(
                         Modifier
                     }
                 ),
-            error = painterResource(R.drawable.dummy_performance_poster),
             contentScale = ContentScale.FillWidth
         )
         CurtainCallBorderTextButton(
@@ -149,7 +155,8 @@ private fun PerformanceNotice(
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
 private fun PerformancePlace(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    facilityDetailModel: FacilityDetailModel
 ) {
     Column(modifier) {
         Text(
@@ -169,11 +176,13 @@ private fun PerformancePlace(
                 fontFamily = spoqahansanseeo
             )
             Text(
-                text = "LG아트센터 서울",
+                text = facilityDetailModel.name,
                 color = Nero,
                 fontSize = 14.dp.toSp(),
                 fontWeight = FontWeight.Normal,
-                fontFamily = spoqahansanseeo
+                fontFamily = spoqahansanseeo,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
         Row(Modifier.padding(top = 6.dp)) {
@@ -186,7 +195,7 @@ private fun PerformancePlace(
                 fontFamily = spoqahansanseeo
             )
             Text(
-                text = "서울 강서구 마곡중앙로 136",
+                text = facilityDetailModel.address,
                 color = Nero,
                 fontSize = 14.dp.toSp(),
                 fontWeight = FontWeight.Normal,
@@ -203,7 +212,7 @@ private fun PerformancePlace(
                 fontFamily = spoqahansanseeo
             )
             Text(
-                text = "1661-0017",
+                text = facilityDetailModel.phone,
                 color = Nero,
                 fontSize = 14.dp.toSp(),
                 fontWeight = FontWeight.Normal,
@@ -220,7 +229,7 @@ private fun PerformancePlace(
                 fontFamily = spoqahansanseeo
             )
             Text(
-                text = "https://www.lgart.com/",
+                text = facilityDetailModel.homepage,
                 color = Nero,
                 fontSize = 14.dp.toSp(),
                 fontWeight = FontWeight.Normal,
@@ -234,7 +243,7 @@ private fun PerformancePlace(
                 .height(142.dp)
                 .clip(RoundedCornerShape(10.dp)),
             cameraPositionState = CameraPositionState(
-                CameraPosition(LatLng(37.56480446250912, 126.82722338487427), 12.0)
+                CameraPosition(LatLng(facilityDetailModel.latitude, facilityDetailModel.longitude), 12.0)
             ),
             uiSettings = MapUiSettings(
                 isScrollGesturesEnabled = false,
@@ -263,24 +272,6 @@ private fun PerformanceTimeRow(
             fontWeight = FontWeight.Bold,
             fontFamily = spoqahansanseeo
         )
-        Row(
-            Modifier.padding(top = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Spacer(
-                modifier = Modifier
-                    .size(6.dp)
-                    .background(Nero, CircleShape)
-            )
-            Text(
-                text = "예매 가능 시간 : 관람 2시간 전까지",
-                modifier = Modifier.padding(start = 10.dp),
-                color = Nero,
-                fontSize = 14.dp.toSp(),
-                fontWeight = FontWeight.Medium,
-                fontFamily = spoqahansanseeo
-            )
-        }
         Row(Modifier.padding(top = 4.dp)) {
             Spacer(
                 modifier = Modifier

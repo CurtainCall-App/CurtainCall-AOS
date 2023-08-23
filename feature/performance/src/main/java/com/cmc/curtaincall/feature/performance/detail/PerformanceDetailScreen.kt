@@ -1,6 +1,5 @@
 package com.cmc.curtaincall.feature.performance.detail
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -21,6 +21,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,6 +38,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
@@ -45,8 +48,11 @@ import com.cmc.curtaincall.common.design.theme.Black
 import com.cmc.curtaincall.common.design.theme.Bright_Gray
 import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
 import com.cmc.curtaincall.common.design.theme.Chinese_Black
+import com.cmc.curtaincall.common.design.theme.Me_Pink
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
+import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
+import com.cmc.curtaincall.common.utility.extensions.toRunningTime
 import com.cmc.curtaincall.feature.performance.lostitem.PerformanceLostItemTabScreen
 import com.cmc.curtaincall.feature.performance.review.PerformanceReviewTabScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -57,14 +63,23 @@ enum class TabType(val label: String) {
 
 @Composable
 internal fun PerformanceDetailScreen(
-    onNavigateReview: () -> Unit,
-    onNavigateLostItem: () -> Unit,
+    performanceDetailViewModel: PerformanceDetailViewModel = hiltViewModel(),
+    showId: String,
+    onNavigateReview: (String) -> Unit,
+    onNavigateLostItem: (String) -> Unit,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(Black)
 
+    LaunchedEffect(Unit) {
+        performanceDetailViewModel.requestShowDetail(showId)
+        performanceDetailViewModel.requestShowReviewList(showId)
+    }
+
     val scrollState = rememberScrollState()
+    val performanceDetailUiState by performanceDetailViewModel.uiState.collectAsStateWithLifecycle()
+    val ticketPrices = performanceDetailUiState.showDetailModel.ticketPrice.split(", ")
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -74,18 +89,31 @@ internal fun PerformanceDetailScreen(
         PerformanceDetailContent(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(668.dp)
+                .height(666.dp)
                 .background(Cetacean_Blue.copy(0.8f)),
+            posterUrl = performanceDetailUiState.showDetailModel.poster,
+            title = performanceDetailUiState.showDetailModel.name,
+            genre = performanceDetailUiState.showDetailModel.genre,
+            reviewCount = performanceDetailUiState.showDetailModel.reviewCount,
+            reviewGradeSum = performanceDetailUiState.showDetailModel.reviewGradeSum,
+            date = "${performanceDetailUiState.showDetailModel.startDate.toChangeFullDate()} - ${performanceDetailUiState.showDetailModel.endDate.toChangeFullDate()}",
+            runningTime = if (performanceDetailUiState.showDetailModel.runtime.isEmpty()) "해당 정보 없음" else "${performanceDetailUiState.showDetailModel.runtime.toRunningTime()}분",
+            age = performanceDetailUiState.showDetailModel.age,
+            ticketPrice = if (performanceDetailUiState.showDetailModel.ticketPrice.isEmpty()) "해당 정보 없음" else ticketPrices.joinToString("\n"),
+            facilityName = performanceDetailUiState.showDetailModel.facilityName,
             onBack = onBack
         )
         Column(
             modifier = Modifier
+                .offset(y = (-1 * (2 - ticketPrices.size) * 22).dp)
                 .padding(top = 644.dp)
                 .fillMaxSize()
                 .background(White, RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
         ) {
             PerformanceDetailTab(
-                Modifier.padding(top = 26.dp),
+                performanceDetailViewModel = performanceDetailViewModel,
+                modifier = Modifier.padding(top = 26.dp),
+                showId = showId,
                 onNavigateReview = onNavigateReview,
                 onNavigateLostItem = onNavigateLostItem
             )
@@ -95,10 +123,13 @@ internal fun PerformanceDetailScreen(
 
 @Composable
 private fun PerformanceDetailTab(
+    performanceDetailViewModel: PerformanceDetailViewModel,
     modifier: Modifier = Modifier,
-    onNavigateReview: () -> Unit,
-    onNavigateLostItem: () -> Unit
+    showId: String,
+    onNavigateReview: (String) -> Unit,
+    onNavigateLostItem: (String) -> Unit
 ) {
+    val performanceDetailUiState by performanceDetailViewModel.uiState.collectAsStateWithLifecycle()
     var tabType by remember { mutableStateOf(TabType.DETAIL) }
     Column(modifier) {
         Row(
@@ -117,7 +148,11 @@ private fun PerformanceDetailTab(
                 ) {
                     Icon(
                         painter = painterResource(
-                            if (tabType == TabType.DETAIL) R.drawable.ic_detail_home_sel else R.drawable.ic_detail_home
+                            if (tabType == TabType.DETAIL) {
+                                R.drawable.ic_detail_home_sel
+                            } else {
+                                R.drawable.ic_detail_home
+                            }
                         ),
                         contentDescription = null,
                         tint = Color.Unspecified
@@ -126,7 +161,7 @@ private fun PerformanceDetailTab(
                 Text(
                     text = TabType.DETAIL.label,
                     modifier = Modifier.padding(top = 10.dp),
-                    color = Chinese_Black,
+                    color = if (tabType == TabType.DETAIL) Cetacean_Blue else Bright_Gray,
                     fontSize = 15.dp.toSp(),
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo
@@ -153,7 +188,7 @@ private fun PerformanceDetailTab(
                 Text(
                     text = TabType.REVIEW.label,
                     modifier = Modifier.padding(top = 10.dp),
-                    color = Chinese_Black,
+                    color = if (tabType == TabType.REVIEW) Cetacean_Blue else Bright_Gray,
                     fontSize = 15.dp.toSp(),
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo
@@ -180,7 +215,7 @@ private fun PerformanceDetailTab(
                 Text(
                     text = TabType.LOST_ITEM.label,
                     modifier = Modifier.padding(top = 10.dp),
-                    color = Chinese_Black,
+                    color = if (tabType == TabType.LOST_ITEM) Cetacean_Blue else Bright_Gray,
                     fontSize = 15.dp.toSp(),
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo
@@ -193,7 +228,9 @@ private fun PerformanceDetailTab(
                 PerformanceDetailTabScreen(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 50.dp)
+                        .padding(top = 50.dp),
+                    introductionImage = performanceDetailUiState.showDetailModel.introductionImages.firstOrNull(),
+                    facilityDetailModel = performanceDetailUiState.facilityDetailModel
                 )
             }
 
@@ -202,6 +239,9 @@ private fun PerformanceDetailTab(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 50.dp),
+                    showId = showId,
+                    reviewCount = performanceDetailUiState.showDetailModel.reviewCount,
+                    showReviews = performanceDetailUiState.showReviews,
                     onNavigateReview = onNavigateReview
                 )
             }
@@ -211,6 +251,7 @@ private fun PerformanceDetailTab(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 50.dp),
+                    facilityName = performanceDetailUiState.showDetailModel.facilityName,
                     onNavigateLostItem = onNavigateLostItem
                 )
             }
@@ -221,11 +262,21 @@ private fun PerformanceDetailTab(
 @Composable
 private fun PerformanceDetailContent(
     modifier: Modifier = Modifier,
+    posterUrl: String? = null,
+    genre: String,
+    title: String,
+    reviewCount: Int,
+    reviewGradeSum: Int,
+    date: String,
+    runningTime: String,
+    age: String,
+    ticketPrice: String,
+    facilityName: String,
     onBack: () -> Unit
 ) {
     Box(modifier) {
-        Image(
-            painter = painterResource(R.drawable.img_poster),
+        AsyncImage(
+            model = posterUrl,
             contentDescription = null,
             modifier = Modifier
                 .fillMaxSize()
@@ -234,30 +285,50 @@ private fun PerformanceDetailContent(
             contentScale = ContentScale.FillBounds
         )
         TopAppBarWithBack(
-            title = "비스티",
+            title = title,
             containerColor = Color.Transparent,
             contentColor = White,
+            textModifier = Modifier.width(160.dp),
             onClick = onBack
         )
         PerformanceDetailInfoContent(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 54.dp)
+                .padding(top = 54.dp),
+            posterUrl = posterUrl,
+            genre = genre,
+            title = title,
+            reviewCount = reviewCount,
+            reviewGradeSum = reviewGradeSum,
+            date = date,
+            runningTime = runningTime,
+            age = age,
+            ticketPrice = ticketPrice,
+            facilityName = facilityName
         )
     }
 }
 
 @Composable
 private fun PerformanceDetailInfoContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    posterUrl: String? = null,
+    genre: String,
+    title: String,
+    reviewCount: Int,
+    reviewGradeSum: Int,
+    date: String,
+    runningTime: String,
+    age: String,
+    ticketPrice: String,
+    facilityName: String
 ) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         AsyncImage(
-            model = null,
-            error = painterResource(R.drawable.img_poster),
+            model = posterUrl,
             contentDescription = null,
             modifier = Modifier
                 .padding(top = 43.dp)
@@ -272,12 +343,21 @@ private fun PerformanceDetailInfoContent(
                 .padding(top = 30.dp)
         ) {
             PerformanceDetailHeader(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                genre = genre,
+                title = title,
+                reviewCount = reviewCount,
+                reviewGradeSum = reviewGradeSum
             )
             PerformanceDetailBody(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 30.dp)
+                    .padding(top = 30.dp),
+                date = date,
+                runningTime = runningTime,
+                age = age,
+                ticketPrice = ticketPrice,
+                facilityName = facilityName
             )
         }
     }
@@ -285,7 +365,12 @@ private fun PerformanceDetailInfoContent(
 
 @Composable
 private fun PerformanceDetailBody(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    date: String,
+    runningTime: String,
+    age: String,
+    ticketPrice: String,
+    facilityName: String
 ) {
     Column(modifier) {
         Row {
@@ -298,7 +383,7 @@ private fun PerformanceDetailBody(
                 fontFamily = spoqahansanseeo
             )
             Text(
-                text = "2023.6.1 - 2023.6.18",
+                text = date,
                 color = White,
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.dp.toSp(),
@@ -315,7 +400,7 @@ private fun PerformanceDetailBody(
                 fontFamily = spoqahansanseeo
             )
             Text(
-                text = "200분",
+                text = runningTime,
                 color = White,
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.dp.toSp(),
@@ -332,7 +417,7 @@ private fun PerformanceDetailBody(
                 fontFamily = spoqahansanseeo
             )
             Text(
-                text = "14세 이상 관람가",
+                text = age,
                 color = White,
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.dp.toSp(),
@@ -349,7 +434,7 @@ private fun PerformanceDetailBody(
                 fontFamily = spoqahansanseeo
             )
             Text(
-                text = "R석 99,000원 | S석 77,000원 |\nA석 44,000원",
+                text = ticketPrice,
                 color = White,
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.dp.toSp(),
@@ -367,7 +452,7 @@ private fun PerformanceDetailBody(
                 fontFamily = spoqahansanseeo
             )
             Text(
-                text = "LG아트센터 서울 LG SISNATURE 홀",
+                text = facilityName,
                 color = White,
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.dp.toSp(),
@@ -379,7 +464,11 @@ private fun PerformanceDetailBody(
 
 @Composable
 private fun PerformanceDetailHeader(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    genre: String,
+    title: String,
+    reviewCount: Int,
+    reviewGradeSum: Int
 ) {
     var isSelectBookmark by remember { mutableStateOf(false) }
     Column(modifier) {
@@ -390,7 +479,7 @@ private fun PerformanceDetailHeader(
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = "뮤지컬",
+                text = if (genre == "PLAY") "연극" else "뮤지컬",
                 color = Chinese_Black,
                 fontSize = 13.dp.toSp(),
                 fontWeight = FontWeight.Medium,
@@ -400,7 +489,7 @@ private fun PerformanceDetailHeader(
         Row(Modifier.padding(top = 10.dp)) {
             Column(Modifier.weight(1f)) {
                 Text(
-                    text = "비스티",
+                    text = title,
                     color = White,
                     fontSize = 22.dp.toSp(),
                     fontWeight = FontWeight.Bold,
@@ -412,22 +501,22 @@ private fun PerformanceDetailHeader(
                     modifier = Modifier.padding(top = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = "예매율 29.0% |",
-                        modifier = Modifier.padding(end = 8.dp),
-                        color = White,
-                        fontSize = 13.dp.toSp(),
-                        fontWeight = FontWeight.Medium,
-                        fontFamily = spoqahansanseeo
-                    )
                     Icon(
                         painter = painterResource(R.drawable.ic_star),
                         contentDescription = null,
                         modifier = Modifier.size(14.dp),
-                        tint = Color.Unspecified
+                        tint = Me_Pink
                     )
                     Text(
-                        text = "4.8 (324)",
+                        text = if (reviewCount == 0) {
+                            "0.0 (0)"
+                        } else {
+                            String.format(
+                                "%.1f (%d)",
+                                reviewGradeSum / reviewCount.toFloat(),
+                                reviewCount
+                            )
+                        },
                         modifier = Modifier.padding(start = 2.dp),
                         color = White,
                         fontSize = 13.dp.toSp(),
@@ -440,6 +529,7 @@ private fun PerformanceDetailHeader(
                 onClick = { isSelectBookmark = isSelectBookmark.not() },
                 modifier = Modifier
                     .clip(CircleShape)
+                    .padding(start = 6.dp)
                     .size(30.dp),
                 colors = IconButtonDefaults.iconButtonColors(
                     containerColor = if (isSelectBookmark) Cetacean_Blue else Bright_Gray

@@ -16,9 +16,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -39,8 +40,8 @@ fun MyContentCard(
     modifier: Modifier = Modifier,
     containColor: Color,
     shape: Shape,
-    painter: Painter,
-    title: String,
+    imageUrl: String? = null,
+    showName: String,
     description: String,
     numberOfPartyMember: Int,
     numberOfTotalMember: Int,
@@ -54,17 +55,18 @@ fun MyContentCard(
             .padding(9.dp)
     ) {
         AsyncImage(
-            model = null,
-            error = painter,
+            model = imageUrl,
             contentDescription = null,
             modifier = Modifier
                 .fillMaxHeight()
                 .aspectRatio(58 / 77f)
+                .clip(RoundedCornerShape(4.dp)),
+            contentScale = ContentScale.FillBounds
         )
         Column(Modifier.padding(start = 10.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = String.format("[%s]", title),
+                    text = String.format("%s", showName),
                     modifier = Modifier
                         .weight(1f)
                         .padding(end = 16.dp),
@@ -154,8 +156,7 @@ private fun MyContentCardPreview() {
             .padding(top = 12.dp),
         containColor = Cultured,
         shape = RoundedCornerShape(10.dp),
-        painter = painterResource(R.drawable.img_poster),
-        title = "시카고",
+        showName = "시카고",
         description = "공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹",
         numberOfPartyMember = 2,
         numberOfTotalMember = 4,

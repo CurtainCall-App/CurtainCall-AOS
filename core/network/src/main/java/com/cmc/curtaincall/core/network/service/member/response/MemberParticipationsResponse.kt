@@ -11,7 +11,7 @@ data class MemberParticipationResponse(
     val category: String,
     val createdAt: String,
     val creatorId: Int,
-    val creatorImageUrl: String,
+    val creatorImageUrl: String?,
     val creatorNickname: String,
     val curMemberNum: Int,
     val facilityId: String,

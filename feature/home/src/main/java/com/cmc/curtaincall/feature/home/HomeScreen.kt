@@ -21,6 +21,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.SearchAppBar
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithSearch
@@ -30,6 +32,9 @@ import com.cmc.curtaincall.common.design.component.content.card.PerformanceCard
 import com.cmc.curtaincall.common.design.component.content.row.ContentTitleRow
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.common.utility.extensions.toDateWithDay
+import com.cmc.curtaincall.common.utility.extensions.toDday
+import com.cmc.curtaincall.common.utility.extensions.toTime
 import com.cmc.curtaincall.feature.home.guide.GuideType
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -37,6 +42,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
+    homeViewModel: HomeViewModel = hiltViewModel(),
     onNavigateGuide: (GuideType) -> Unit,
     onNavigatePerformance: () -> Unit,
     onNavigateLiveTalk: () -> Unit,
@@ -48,35 +54,22 @@ fun HomeScreen(
     systemUiController.setStatusBarColor(if (isActiveSearchState) White else Cetacean_Blue)
 
     var queryState by remember { mutableStateOf("") }
-    Scaffold(
-        topBar = {
-            if (isActiveSearchState) {
-                SearchAppBar(
-                    value = queryState,
-                    onValueChange = { queryState = it },
-                    containerColor = White,
-                    contentColor = Nero,
-                    placeholder = stringResource(R.string.search_performance_title),
-                    onClick = { isActiveSearchState = false }
-                )
-            } else {
-                TopAppBarWithSearch(
-                    title = stringResource(R.string.home_appbar_title),
-                    containerColor = Cetacean_Blue,
-                    contentColor = White,
-                    onClick = { isActiveSearchState = true }
-                )
-            }
+    Scaffold(topBar = {
+        if (isActiveSearchState) {
+            SearchAppBar(value = queryState, onValueChange = { queryState = it }, containerColor = White, contentColor = Nero, placeholder = stringResource(R.string.search_performance_title), onClick = { isActiveSearchState = false })
+        } else {
+            TopAppBarWithSearch(title = stringResource(R.string.home_appbar_title), containerColor = Cetacean_Blue, contentColor = White, onClick = { isActiveSearchState = true })
         }
-    ) { paddingValues ->
+    }) { paddingValues ->
         if (isActiveSearchState) {
             // TODO
         } else {
             HomeContent(
+                homeViewModel = homeViewModel,
                 modifier = Modifier
                     .padding(paddingValues)
                     .fillMaxSize()
-                    .background(Cetacean_Blue),
+                    .background(White),
                 onNavigateGuide = onNavigateGuide
             )
         }
@@ -85,13 +78,18 @@ fun HomeScreen(
 
 @Composable
 private fun HomeContent(
+    homeViewModel: HomeViewModel,
     modifier: Modifier = Modifier,
     onNavigateGuide: (GuideType) -> Unit
 ) {
     val scrollState = rememberScrollState()
+    val homeUiState by homeViewModel.uiState.collectAsStateWithLifecycle()
     Column(modifier.verticalScroll(scrollState)) {
         HomeBanner(
-            modifier = Modifier.height(275.dp),
+            modifier = Modifier
+                .height(275.dp)
+                .background(Cetacean_Blue),
+            nickname = homeUiState.nickname,
             onNavigateGuide = onNavigateGuide
         )
         Column(
@@ -99,181 +97,184 @@ private fun HomeContent(
                 .fillMaxSize()
                 .background(White)
         ) {
-            HomeContentRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .padding(top = 40.dp),
-                painter = painterResource(R.drawable.ic_gather),
-                title = stringResource(R.string.home_my_gathering_tab)
-            ) {
-                MyContentCard(
+            if (homeUiState.myRecruitments.isNotEmpty()) {
+                HomeContentRow(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 12.dp),
-                    containColor = Cultured,
-                    shape = RoundedCornerShape(10.dp),
-                    painter = painterResource(R.drawable.img_poster),
-                    title = "시카고",
-                    description = "공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹",
-                    numberOfPartyMember = 2,
-                    numberOfTotalMember = 4,
-                    date = "2023.7.16(토)",
-                    time = "19:30"
-                )
-            }
-            HomeContentRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .padding(top = 40.dp),
-                painter = painterResource(R.drawable.ic_my_participation),
-                title = stringResource(R.string.home_my_participation_tab)
-            ) {
-                MyContentCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 12.dp)
-                        .height(97.dp),
-                    containColor = Cultured,
-                    shape = RoundedCornerShape(10.dp),
-                    painter = painterResource(R.drawable.img_poster),
-                    title = "시카고",
-                    description = "공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹",
-                    numberOfPartyMember = 2,
-                    numberOfTotalMember = 4,
-                    date = "2023.7.16(토)",
-                    time = "19:30"
-                )
-                MyContentCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 12.dp)
-                        .height(97.dp),
-                    containColor = Cultured,
-                    shape = RoundedCornerShape(10.dp),
-                    painter = painterResource(R.drawable.img_poster),
-                    title = "시카고",
-                    description = "공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹",
-                    numberOfPartyMember = 2,
-                    numberOfTotalMember = 4,
-                    date = "2023.7.16(토)",
-                    time = "19:30"
-                )
-            }
-            HomeContentRow(
-                modifier = Modifier
-                    .padding(top = 40.dp)
-                    .fillMaxWidth()
-                    .background(Cultured)
-                    .padding(vertical = 20.dp),
-                titleModifier = Modifier.padding(start = 20.dp),
-                painter = painterResource(R.drawable.ic_chatting),
-                title = stringResource(R.string.home_coming_livetalk)
-            ) {
-                LazyRow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 12.dp)
+                        .padding(horizontal = 20.dp)
+                        .padding(top = 40.dp),
+                    painter = painterResource(R.drawable.ic_gather),
+                    title = stringResource(R.string.home_my_gathering_tab)
                 ) {
-                    itemsIndexed(List(10) {}) { index, item ->
-                        if (index == 0) Spacer(Modifier.size(20.dp))
-                        Row {
-                            LiveTalkContentCard(
-                                modifier = Modifier.width(72.dp),
-                                title = "비스타",
-                                painter = painterResource(R.drawable.img_poster),
-                                time = "19:30"
-                            )
-                            Spacer(Modifier.size(9.dp))
+                    homeUiState.myRecruitments.forEach { myRecruitment ->
+                        MyContentCard(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 12.dp),
+                            containColor = Cultured,
+                            shape = RoundedCornerShape(10.dp),
+                            imageUrl = myRecruitment.showPoster,
+                            showName = myRecruitment.showName,
+                            description = myRecruitment.title,
+                            numberOfPartyMember = myRecruitment.curMemberNum,
+                            numberOfTotalMember = myRecruitment.maxMemberNum,
+                            date = myRecruitment.showAt.toDateWithDay(),
+                            time = myRecruitment.showAt.toTime()
+                        )
+                    }
+                }
+            }
+            if (homeUiState.myParticipations.isNotEmpty()) {
+                HomeContentRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .padding(top = 40.dp),
+                    painter = painterResource(R.drawable.ic_my_participation),
+                    title = stringResource(R.string.home_my_participation_tab)
+                ) {
+                    homeUiState.myParticipations.forEach { myParticipation ->
+                        MyContentCard(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 12.dp)
+                                .height(97.dp),
+                            containColor = Cultured,
+                            shape = RoundedCornerShape(10.dp),
+                            imageUrl = myParticipation.showPoster,
+                            showName = myParticipation.showName,
+                            description = myParticipation.title,
+                            numberOfPartyMember = myParticipation.curMemberNum,
+                            numberOfTotalMember = myParticipation.maxMemberNum,
+                            date = myParticipation.showAt.toDateWithDay(),
+                            time = myParticipation.showAt.toTime()
+                        )
+                    }
+                }
+            }
+            if (homeUiState.liveTalks.isNotEmpty()) {
+                HomeContentRow(
+                    modifier = Modifier
+                        .padding(top = 40.dp)
+                        .fillMaxWidth()
+                        .background(Cultured)
+                        .padding(vertical = 20.dp),
+                    titleModifier = Modifier.padding(start = 20.dp),
+                    painter = painterResource(R.drawable.ic_chatting),
+                    title = stringResource(R.string.home_coming_livetalk)
+                ) {
+                    LazyRow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 12.dp)
+                    ) {
+                        itemsIndexed(List(10) {}) { index, item ->
+                            if (index == 0) Spacer(Modifier.size(20.dp))
+                            Row {
+                                LiveTalkContentCard(
+                                    modifier = Modifier.width(72.dp),
+                                    title = "비스타",
+                                    painter = painterResource(R.drawable.img_poster),
+                                    time = "19:30"
+                                )
+                                Spacer(Modifier.size(9.dp))
+                            }
                         }
                     }
                 }
             }
-            HomeContentRow(
-                modifier = Modifier
-                    .padding(top = 40.dp)
-                    .fillMaxWidth(),
-                titleModifier = Modifier.padding(start = 20.dp),
-                painter = painterResource(R.drawable.ic_fire),
-                title = stringResource(R.string.home_top10_popular_performance)
-            ) {
-                LazyRow(
+            if (homeUiState.showRanks.isNotEmpty()) {
+                HomeContentRow(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 12.dp)
+                        .padding(top = 40.dp)
+                        .fillMaxWidth(),
+                    titleModifier = Modifier.padding(start = 20.dp),
+                    painter = painterResource(R.drawable.ic_fire),
+                    title = stringResource(R.string.home_top10_popular_performance)
                 ) {
-                    itemsIndexed(List(10) {}) { index, item ->
-                        if (index == 0) Spacer(Modifier.size(20.dp))
-                        Row {
-                            PerformanceCard(
-                                modifier = Modifier.width(120.dp),
-                                title = "데스노트",
-                                painter = painterResource(R.drawable.dummy_poster),
-                                rate = 4.89f,
-                                numberOfTotal = 1012,
-                                isShowMetadata = true,
-                                meta = (index + 1).toString()
-                            )
-                            Spacer(Modifier.size(12.dp))
+                    LazyRow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 12.dp)
+                    ) {
+                        itemsIndexed(homeUiState.showRanks) { index, showRank ->
+                            if (index == 0) Spacer(Modifier.size(20.dp))
+                            Row {
+                                PerformanceCard(
+                                    modifier = Modifier.width(120.dp),
+                                    title = showRank.name,
+                                    painter = painterResource(R.drawable.dummy_poster),
+                                    imageUrl = showRank.poster,
+                                    rate = if (showRank.reviewCount == 0) 0.0f else showRank.reviewGradeSum / showRank.reviewCount.toFloat(),
+                                    numberOfTotal = showRank.reviewCount,
+                                    isShowMetadata = true,
+                                    meta = showRank.rank.toString()
+                                )
+                                Spacer(Modifier.size(12.dp))
+                            }
                         }
                     }
                 }
             }
-            HomeContentRow(
-                modifier = Modifier
-                    .padding(top = 40.dp)
-                    .fillMaxWidth(),
-                titleModifier = Modifier.padding(start = 20.dp),
-                painter = painterResource(R.drawable.ic_open_clock),
-                title = stringResource(R.string.home_scheduled_open_performance)
-            ) {
-                LazyRow(
+            if (homeUiState.openShowInfos.isNotEmpty()) {
+                HomeContentRow(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 12.dp)
+                        .padding(top = 40.dp)
+                        .fillMaxWidth(),
+                    titleModifier = Modifier.padding(start = 20.dp),
+                    painter = painterResource(R.drawable.ic_open_clock),
+                    title = stringResource(R.string.home_scheduled_open_performance)
                 ) {
-                    itemsIndexed(List(10) {}) { index, item ->
-                        if (index == 0) Spacer(Modifier.size(20.dp))
-                        Row {
-                            PerformanceCard(
-                                modifier = Modifier.width(120.dp),
-                                title = "데스노트",
-                                painter = painterResource(R.drawable.dummy_poster),
-                                rate = 4.89f,
-                                numberOfTotal = 1012,
-                                isShowMetadata = true,
-                                meta = "D-2"
-                            )
-                            Spacer(Modifier.size(12.dp))
+                    LazyRow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 12.dp)
+                    ) {
+                        itemsIndexed(homeUiState.openShowInfos) { index, openShowInfo ->
+                            if (index == 0) Spacer(Modifier.size(20.dp))
+                            Row {
+                                PerformanceCard(
+                                    modifier = Modifier.width(120.dp),
+                                    title = openShowInfo.name,
+                                    imageUrl = openShowInfo.poster,
+                                    painter = painterResource(R.drawable.dummy_poster),
+                                    rate = if (openShowInfo.reviewCount == 0) 0.0f else openShowInfo.reviewGradeSum / openShowInfo.reviewCount.toFloat(),
+                                    numberOfTotal = openShowInfo.reviewCount,
+                                    isShowMetadata = true,
+                                    meta = if (openShowInfo.startDate.toDday() == 0L) "D-DAY" else "D${openShowInfo.startDate.toDday()}"
+                                )
+                                Spacer(Modifier.size(12.dp))
+                            }
                         }
                     }
                 }
             }
-            HomeContentRow(
-                modifier = Modifier
-                    .padding(top = 40.dp)
-                    .fillMaxWidth(),
-                titleModifier = Modifier.padding(start = 20.dp),
-                painter = painterResource(R.drawable.ic_value_of_money),
-                title = stringResource(R.string.home_value_for_money_performance)
-            ) {
-                LazyRow(
+            if (homeUiState.cheapShowInfos.isNotEmpty()) {
+                HomeContentRow(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 12.dp)
+                        .padding(top = 40.dp)
+                        .fillMaxWidth(),
+                    titleModifier = Modifier.padding(start = 20.dp),
+                    painter = painterResource(R.drawable.ic_value_of_money),
+                    title = stringResource(R.string.home_value_for_money_performance)
                 ) {
-                    itemsIndexed(List(10) {}) { index, item ->
-                        if (index == 0) Spacer(Modifier.size(20.dp))
-                        Row {
-                            PerformanceCard(
-                                modifier = Modifier.width(120.dp),
-                                title = "데스노트",
-                                painter = painterResource(R.drawable.dummy_poster),
-                                rate = 4.89f,
-                                numberOfTotal = 1012
-                            )
-                            Spacer(Modifier.size(12.dp))
+                    LazyRow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 12.dp)
+                    ) {
+                        itemsIndexed(List(10) {}) { index, item ->
+                            if (index == 0) Spacer(Modifier.size(20.dp))
+                            Row {
+                                PerformanceCard(
+                                    modifier = Modifier.width(120.dp),
+                                    title = "데스노트",
+                                    painter = painterResource(R.drawable.dummy_poster),
+                                    rate = 4.89f,
+                                    numberOfTotal = 1012
+                                )
+                                Spacer(Modifier.size(12.dp))
+                            }
                         }
                     }
                 }
@@ -313,61 +314,47 @@ private data class BannerItem(
 @Composable
 internal fun HomeBanner(
     modifier: Modifier = Modifier,
+    nickname: String,
     onNavigateGuide: (GuideType) -> Unit
 ) {
     val bannerItems = listOf(
-        BannerItem(
-            title = stringResource(R.string.home_banner_word_dictionary_title),
-            description = stringResource(R.string.home_banner_word_dictionary_description),
-            color = Navajo_White,
-            content = {
-                Image(
-                    painter = painterResource(R.drawable.ic_dictionary),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(end = 17.dp, bottom = (15.27).dp)
-                )
-            },
-            onClick = { onNavigateGuide(GuideType.DICTIONARY) }
-        ),
-        BannerItem(
-            title = stringResource(R.string.home_banner_ticketing_guide_title),
-            description = stringResource(R.string.home_banner_ticketing_guide_description),
-            color = Pale_Lavendar,
-            content = {
-                Image(
-                    painter = painterResource(R.drawable.ic_ticket),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(end = 20.dp, bottom = (18.37).dp)
-                )
-            },
-            onClick = { onNavigateGuide(GuideType.TICKETING) }
-        ),
-        BannerItem(
-            title = stringResource(R.string.home_banner_gift_title),
-            description = stringResource(R.string.home_banner_gift_description),
-            color = Water,
-            content = {
-                Image(
-                    painter = painterResource(R.drawable.ic_gift),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .align(Alignment.BottomEnd)
-                        .padding(end = (13.5).dp, bottom = (9.79).dp)
-                )
-            },
-            onClick = { onNavigateGuide(GuideType.DISCOUNT) }
-        )
+        BannerItem(title = stringResource(R.string.home_banner_word_dictionary_title), description = stringResource(R.string.home_banner_word_dictionary_description), color = Navajo_White, content = {
+            Image(
+                painter = painterResource(R.drawable.ic_dictionary),
+                contentDescription = null,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 17.dp, bottom = (15.27).dp)
+            )
+        }, onClick = { onNavigateGuide(GuideType.DICTIONARY) }),
+        BannerItem(title = stringResource(R.string.home_banner_ticketing_guide_title), description = stringResource(R.string.home_banner_ticketing_guide_description), color = Pale_Lavendar, content = {
+            Image(
+                painter = painterResource(R.drawable.ic_ticket),
+                contentDescription = null,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 20.dp, bottom = (18.37).dp)
+            )
+        }, onClick = { onNavigateGuide(GuideType.TICKETING) }),
+        BannerItem(title = stringResource(R.string.home_banner_gift_title), description = stringResource(R.string.home_banner_gift_description), color = Water, content = {
+            Image(
+                painter = painterResource(R.drawable.ic_gift),
+                contentDescription = null,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = (13.5).dp, bottom = (9.79).dp)
+            )
+        }, onClick = { onNavigateGuide(GuideType.DISCOUNT) })
     )
 
     val pagerState = rememberPagerState { bannerItems.size }
     Column(modifier) {
         Text(
-            text = "안녕하세요. 고라파덕님:)",
-            modifier = Modifier.padding(top = 22.dp, start = 20.dp),
+            text = "안녕하세요 ${nickname}님",
+            modifier = Modifier.padding(
+                top = 22.dp,
+                start = 20.dp
+            ),
             color = White,
             fontSize = 18.dp.toSp(),
             fontWeight = FontWeight.Bold,

@@ -17,6 +17,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.extensions.toSp
@@ -57,16 +59,21 @@ fun TopAppBarWithBack(
     modifier: Modifier = Modifier,
     containerColor: Color,
     contentColor: Color,
+    textModifier: Modifier = Modifier,
     onClick: () -> Unit,
 ) {
     CenterAlignedTopAppBar(
         title = {
             Text(
                 text = title,
+                modifier = textModifier,
                 color = contentColor,
                 fontSize = 17.dp.toSp(),
                 fontWeight = FontWeight.Bold,
-                fontFamily = spoqahansanseeo
+                fontFamily = spoqahansanseeo,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Center
             )
         },
         modifier = Modifier

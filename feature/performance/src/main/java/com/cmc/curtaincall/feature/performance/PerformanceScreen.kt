@@ -1,10 +1,8 @@
 package com.cmc.curtaincall.feature.performance
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -12,6 +10,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemsIndexed
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallSelectTypeButton
 import com.cmc.curtaincall.common.design.component.basic.SearchAppBar
@@ -22,12 +24,15 @@ import com.cmc.curtaincall.common.design.component.custom.SelectSortTypeBottomSh
 import com.cmc.curtaincall.common.design.component.custom.SortType
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.common.utility.extensions.toChangeDate
+import com.cmc.curtaincall.common.utility.extensions.toRunningTime
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PerformanceScreen(
-    onNavigateDetail: () -> Unit
+    performanceViewModel: PerformanceViewModel = hiltViewModel(),
+    onNavigateDetail: (String) -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(White)
@@ -58,6 +63,7 @@ fun PerformanceScreen(
             // TODO
         } else {
             PerformanceContent(
+                performanceViewModel = performanceViewModel,
                 modifier = Modifier
                     .padding(paddingValues)
                     .fillMaxSize()
@@ -70,12 +76,16 @@ fun PerformanceScreen(
 
 @Composable
 private fun PerformanceContent(
+    performanceViewModel: PerformanceViewModel,
     modifier: Modifier = Modifier,
-    onNavigateDetail: () -> Unit
+    onNavigateDetail: (String) -> Unit
 ) {
-    var isCheckFirstType by remember { mutableStateOf(true) }
     var sortType by remember { mutableStateOf(SortType.STAR) }
     var showDialog by remember { mutableStateOf(false) }
+
+    val isCheckFirstType = performanceViewModel.isFirstType.collectAsStateWithLifecycle()
+    val playItems = performanceViewModel.playItems.collectAsLazyPagingItems()
+    val musicalItems = performanceViewModel.musicalItems.collectAsLazyPagingItems()
 
     if (showDialog) {
         SelectSortTypeBottomSheet(
@@ -110,8 +120,8 @@ private fun PerformanceContent(
                             .height(45.dp),
                         firstType = stringResource(R.string.partymember_create_classification_theater),
                         lastType = stringResource(R.string.partymember_create_classification_musical),
-                        isCheckFirstType = isCheckFirstType,
-                        onTypeChange = { isCheckFirstType = it }
+                        isCheckFirstType = isCheckFirstType.value,
+                        onTypeChange = { performanceViewModel.changeSortType(it) }
                     )
                     SortTypeRow(
                         modifier = Modifier.padding(top = 28.dp),
@@ -121,29 +131,63 @@ private fun PerformanceContent(
                 }
             }
 
-            itemsIndexed(Array(10) {}) { index, item ->
-                PerformanceDetailCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 12.dp)
-                        .clickable { onNavigateDetail() },
-                    painter = painterResource(R.drawable.img_poster),
-                    title = "드림하이",
-                    rate = 4.89f,
-                    numberOfTotal = 324,
-                    period = "2023.6.1 - 2023.6.18",
-                    runningTime = "200분",
-                    dates = listOf("화-금 19:00", "토,일 14:00, 19:00"),
-                    location = "LG아트센터 서울"
-                )
-                if (index != 9) {
-                    Spacer(
-                        modifier = Modifier
-                            .padding(vertical = 16.dp)
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .background(Cultured)
-                    )
+            if (isCheckFirstType.value) {
+                itemsIndexed(playItems) { index, showInfoModel ->
+                    showInfoModel?.let { showInfoModel ->
+                        PerformanceDetailCard(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 12.dp),
+                            imageUrl = showInfoModel.poster,
+                            painter = painterResource(R.drawable.img_poster),
+                            title = showInfoModel.name,
+                            rate = if (showInfoModel.reviewCount == 0) 0.0f else (showInfoModel.reviewGradeSum / showInfoModel.reviewCount.toFloat()),
+                            numberOfTotal = showInfoModel.reviewCount,
+                            period = "${showInfoModel.startDate.toChangeDate()}-${showInfoModel.endDate.toChangeDate()}",
+                            runningTime = if (showInfoModel.runtime.isEmpty()) "해당 정보 없음" else "${showInfoModel.runtime.toRunningTime()}분",
+                            date = "화-금 19:00",
+                            location = showInfoModel.facilityName,
+                            onClick = { onNavigateDetail(showInfoModel.id) }
+                        )
+                        if (index != musicalItems.itemCount) {
+                            Spacer(
+                                modifier = Modifier
+                                    .padding(vertical = 16.dp)
+                                    .fillMaxWidth()
+                                    .height(1.dp)
+                                    .background(Cultured)
+                            )
+                        }
+                    }
+                }
+            } else {
+                itemsIndexed(musicalItems) { index, showInfoModel ->
+                    showInfoModel?.let { showInfoModel ->
+                        PerformanceDetailCard(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 12.dp),
+                            imageUrl = showInfoModel.poster,
+                            painter = painterResource(R.drawable.img_poster),
+                            title = showInfoModel.name,
+                            rate = if (showInfoModel.reviewCount == 0) 0.0f else (showInfoModel.reviewGradeSum / showInfoModel.reviewCount.toFloat()),
+                            numberOfTotal = showInfoModel.reviewCount,
+                            period = "${showInfoModel.startDate.toChangeDate()}-${showInfoModel.endDate.toChangeDate()}",
+                            runningTime = if (showInfoModel.runtime.isEmpty()) "해당 정보 없음" else "${showInfoModel.runtime.toRunningTime()}분",
+                            date = "화-금 19:00",
+                            location = showInfoModel.facilityName,
+                            onClick = { onNavigateDetail(showInfoModel.id) }
+                        )
+                        if (index != musicalItems.itemCount) {
+                            Spacer(
+                                modifier = Modifier
+                                    .padding(vertical = 16.dp)
+                                    .fillMaxWidth()
+                                    .height(1.dp)
+                                    .background(Cultured)
+                            )
+                        }
+                    }
                 }
             }
         }

@@ -2,19 +2,14 @@ package com.cmc.curtaincall.feature.performance.lostitem
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.cmc.curtaincall.common.design.R
@@ -22,7 +17,7 @@ import com.cmc.curtaincall.common.design.component.basic.CurtainCallDropDownButt
 import com.cmc.curtaincall.common.design.component.basic.SearchAppBar
 import com.cmc.curtaincall.common.design.component.basic.SearchTopAppBarWithBack
 import com.cmc.curtaincall.common.design.component.custom.SelectedDateCalender
-import com.cmc.curtaincall.common.design.component.items.GridLostItem
+import com.cmc.curtaincall.common.design.component.items.EmptyItem
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -30,6 +25,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PerformanceLostItemScreen(
+    facilityName: String,
     onNavigateLostItemDetail: () -> Unit,
     onNavigateLostItemCreate: () -> Unit,
     onBack: () -> Unit
@@ -62,21 +58,21 @@ internal fun PerformanceLostItemScreen(
             }
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = { onNavigateLostItemCreate() },
-                modifier = Modifier
-                    .padding(bottom = 40.dp)
-                    .size(58.dp),
-                shape = CircleShape,
-                containerColor = Cetacean_Blue
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_pen),
-                    contentDescription = null,
-                    modifier = Modifier.size(29.dp),
-                    tint = Color.Unspecified
-                )
-            }
+//            FloatingActionButton(
+//                onClick = { onNavigateLostItemCreate() },
+//                modifier = Modifier
+//                    .padding(bottom = 40.dp)
+//                    .size(58.dp),
+//                shape = CircleShape,
+//                containerColor = Cetacean_Blue
+//            ) {
+//                Icon(
+//                    painter = painterResource(R.drawable.ic_pen),
+//                    contentDescription = null,
+//                    modifier = Modifier.size(29.dp),
+//                    tint = Color.Unspecified
+//                )
+//            }
         }
     ) { paddingValues ->
         if (isActiveSearchState) {
@@ -87,6 +83,7 @@ internal fun PerformanceLostItemScreen(
                     .padding(paddingValues)
                     .fillMaxSize()
                     .background(White),
+                facilityName = facilityName,
                 onNavigateLostItemDetail = onNavigateLostItemDetail
             )
         }
@@ -96,6 +93,7 @@ internal fun PerformanceLostItemScreen(
 @Composable
 private fun PerformanceLostItemContent(
     modifier: Modifier = Modifier,
+    facilityName: String,
     onNavigateLostItemDetail: () -> Unit
 ) {
     var isClickedDate by remember { mutableStateOf(false) }
@@ -111,7 +109,7 @@ private fun PerformanceLostItemContent(
             modifier = Modifier
                 .zIndex(if (isClickedDate or isClickedType) 1f else 0f)
                 .fillMaxWidth(),
-            location = "LG아트센터 서울",
+            location = facilityName,
             lostDate = lostDateState,
             lostType = lostTypeState,
             isClickedDate = isClickedDate,
@@ -148,36 +146,36 @@ private fun PerformanceLostItemContent(
                 }
             }
         )
-//        Box(
-//            modifier = Modifier
-//                .padding(top = 88.dp)
-//                .fillMaxSize(),
-//            contentAlignment = Alignment.Center
-//        ) {
-//            EmptyItem(
-//                alert = stringResource(R.string.performance_lostitem_empty)
-//            )
-//        }
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            modifier = Modifier.padding(top = 108.dp),
-            verticalArrangement = Arrangement.spacedBy(18.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        Box(
+            modifier = Modifier
+                .padding(top = 88.dp)
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
         ) {
-            itemsIndexed(List(9) { it }) { index, item ->
-                GridLostItem(
-                    modifier = Modifier
-                        .clickable { onNavigateLostItemDetail() }
-                        .background(Cultured, RoundedCornerShape(10.dp))
-                        .padding(horizontal = 8.dp)
-                        .padding(top = 8.dp, bottom = 15.dp),
-                    painter = painterResource(R.drawable.img_poster),
-                    title = "아이폰 핑크",
-                    location = "LG 아트센터 서울",
-                    date = "2023.7.15"
-                )
-            }
+            EmptyItem(
+                alert = stringResource(R.string.performance_lostitem_empty)
+            )
         }
+//        LazyVerticalGrid(
+//            columns = GridCells.Fixed(2),
+//            modifier = Modifier.padding(top = 108.dp),
+//            verticalArrangement = Arrangement.spacedBy(18.dp),
+//            horizontalArrangement = Arrangement.spacedBy(12.dp)
+//        ) {
+//            itemsIndexed(List(9) { it }) { index, item ->
+//                GridLostItem(
+//                    modifier = Modifier
+//                        .clickable { onNavigateLostItemDetail() }
+//                        .background(Cultured, RoundedCornerShape(10.dp))
+//                        .padding(horizontal = 8.dp)
+//                        .padding(top = 8.dp, bottom = 15.dp),
+//                    painter = painterResource(R.drawable.img_poster),
+//                    title = "아이폰 핑크",
+//                    location = "LG 아트센터 서울",
+//                    date = "2023.7.15"
+//                )
+//            }
+//        }
     }
 }
 
@@ -206,7 +204,9 @@ private fun PerformanceLostItemHeader(
                 color = Me_Pink,
                 fontSize = 16.dp.toSp(),
                 fontWeight = FontWeight.Bold,
-                fontFamily = spoqahansanseeo
+                fontFamily = spoqahansanseeo,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
         Row(

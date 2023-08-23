@@ -1,8 +1,12 @@
 package com.cmc.curtaincall.feature.performance
 
+import androidx.compose.runtime.remember
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.core.base.BottomDestination
@@ -36,18 +40,69 @@ sealed interface PerformanceDestination : CurtainCallDestination {
 
     object Detail : PerformanceDestination {
         override val route = PERFORMANCE_DETAIL
+        const val showIdArg = "showId"
+        val routeWithArgs = "$route/{$showIdArg}"
+        val arguments = listOf(
+            navArgument(showIdArg) {
+                type = NavType.StringType
+            }
+        )
     }
 
     object Review : PerformanceDestination {
         override val route = PERFORMANCE_REVIEW
+        const val showIdArg = "showId"
+        val routeWithArgs = "$route/{$showIdArg}"
+        val arguments = listOf(
+            navArgument(showIdArg) {
+                type = NavType.StringType
+            }
+        )
     }
 
     object ReviewCreate : PerformanceDestination {
         override val route = PERFORMANCE_REVIEW_CREATE
+        const val showIdArgs = "showId"
+        const val fromMypageArg = "fromMypage"
+        const val posterUrlArg = "posterUrl"
+        const val genreArg = "genre"
+        const val titleArg = "title"
+        val routeWithArgs = "$route?" +
+            "$showIdArgs={$showIdArgs}&" +
+            "$fromMypageArg={$fromMypageArg}&" +
+            "$posterUrlArg={$posterUrlArg}&" +
+            "$genreArg={$genreArg}&" +
+            "$titleArg={$titleArg}"
+
+        val arguments = listOf(
+            navArgument(showIdArgs) {
+                type = NavType.StringType
+            },
+            navArgument(fromMypageArg) {
+                type = NavType.BoolType
+            },
+            navArgument(posterUrlArg) {
+                type = NavType.StringType
+            },
+            navArgument(genreArg) {
+                type = NavType.StringType
+            },
+            navArgument(titleArg) {
+                type = NavType.StringType
+            }
+        )
     }
 
     object LostItem : PerformanceDestination {
         override val route = PERFORMANCE_LOST_ITEM
+        const val facilityNameArg = "facilityName"
+        val routeWithArgs = "$route/{$facilityNameArg}"
+
+        val arguments = listOf(
+            navArgument(facilityNameArg) {
+                type = NavType.StringType
+            }
+        )
     }
 
     object LostItemDetail : PerformanceDestination {
@@ -70,40 +125,77 @@ fun NavGraphBuilder.performanceNavGraph(
     navigation(startDestination = PerformanceDestination.Performance.route, route = PERFORMANCE_GRAPH) {
         composable(route = PerformanceDestination.Performance.route) {
             PerformanceScreen {
-                navHostController.navigate(PerformanceDestination.Detail.route)
+                navHostController.navigate("${PerformanceDestination.Detail.route}/$it")
             }
         }
-        composable(route = PerformanceDestination.Detail.route) {
+        composable(
+            route = PerformanceDestination.Detail.routeWithArgs,
+            arguments = PerformanceDestination.Detail.arguments
+        ) { entry ->
+            val showIdType = entry.arguments?.getString(PerformanceDestination.Detail.showIdArg) ?: ""
             PerformanceDetailScreen(
+                showId = showIdType,
                 onNavigateReview = {
-                    navHostController.navigate(PerformanceDestination.Review.route)
+                    navHostController.navigate("${PerformanceDestination.Review.route}/$it")
                 },
                 onNavigateLostItem = {
-                    navHostController.navigate(PerformanceDestination.LostItem.route)
+                    navHostController.navigate("${PerformanceDestination.LostItem.route}/$it")
                 },
                 onBack = {
                     navHostController.popBackStack()
                 }
             )
         }
-        composable(route = PerformanceDestination.Review.route) {
+        composable(
+            route = PerformanceDestination.Review.routeWithArgs,
+            arguments = PerformanceDestination.Review.arguments
+        ) { entry ->
+            val parentEntry = remember(entry) { navHostController.getBackStackEntry(PerformanceDestination.Detail.routeWithArgs) }
+            val showId = entry.arguments?.getString(PerformanceDestination.Review.showIdArg) ?: ""
             PerformanceReviewScreen(
-                onNavigateReviewCreate = {
-                    navHostController.navigate(PerformanceDestination.ReviewCreate.route)
+                performanceDetailViewModel = hiltViewModel(parentEntry),
+                showId = showId,
+                onNavigateReviewCreate = { posterUrl, genre, title ->
+                    navHostController.navigate(
+                        PerformanceDestination.ReviewCreate.route + "?" +
+                            "${PerformanceDestination.ReviewCreate.showIdArgs}=$showId" + "&" +
+                            "${PerformanceDestination.ReviewCreate.fromMypageArg}=false" + "&" +
+                            "${PerformanceDestination.ReviewCreate.posterUrlArg}=$posterUrl" + "&" +
+                            "${PerformanceDestination.ReviewCreate.genreArg}=$genre" + "&" +
+                            "${PerformanceDestination.ReviewCreate.titleArg}=$title"
+                    )
                 },
                 onBack = {
                     navHostController.popBackStack()
                 }
             )
         }
-        composable(route = PerformanceDestination.ReviewCreate.route) {
+        composable(
+            route = PerformanceDestination.ReviewCreate.routeWithArgs,
+            arguments = PerformanceDestination.ReviewCreate.arguments
+        ) { entry ->
+            val showId = entry.arguments?.getString(PerformanceDestination.ReviewCreate.showIdArgs) ?: ""
+            val fromMypage = entry.arguments?.getBoolean(PerformanceDestination.ReviewCreate.fromMypageArg) ?: false
+            val posterUrl = entry.arguments?.getString(PerformanceDestination.ReviewCreate.posterUrlArg)
+            val genre = entry.arguments?.getString(PerformanceDestination.ReviewCreate.genreArg) ?: "PLAY"
+            val title = entry.arguments?.getString(PerformanceDestination.ReviewCreate.titleArg) ?: ""
+
             PerformanceReviewCreateScreen(
-                fromMyPage = navHostController.previousBackStackEntry?.destination?.route != PerformanceDestination.Review.route,
+                showId = showId,
+                fromMypage = fromMypage,
+                posterUrl = posterUrl,
+                genre = genre,
+                title = title,
                 onBack = { navHostController.popBackStack() }
             )
         }
-        composable(route = PerformanceDestination.LostItem.route) {
+        composable(
+            route = PerformanceDestination.LostItem.routeWithArgs,
+            arguments = PerformanceDestination.LostItem.arguments
+        ) { entry ->
+            val facilityName = entry.arguments?.getString(PerformanceDestination.LostItem.facilityNameArg) ?: ""
             PerformanceLostItemScreen(
+                facilityName = facilityName,
                 onNavigateLostItemDetail = {
                     navHostController.navigate(PerformanceDestination.LostItemDetail.route)
                 },
