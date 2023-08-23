@@ -34,7 +34,8 @@ import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 @Composable
 internal fun PerformanceLostItemTabScreen(
     modifier: Modifier = Modifier,
-    onNavigateLostItem: () -> Unit
+    facilityName: String,
+    onNavigateLostItem: (String) -> Unit
 ) {
     Column(modifier.padding(horizontal = 20.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -50,7 +51,7 @@ internal fun PerformanceLostItemTabScreen(
                 modifier = Modifier
                     .border(BorderStroke(1.dp, Me_Pink), RoundedCornerShape(14.dp))
                     .padding(vertical = 6.dp, horizontal = 10.dp)
-                    .clickable { onNavigateLostItem() },
+                    .clickable { onNavigateLostItem(facilityName) },
                 contentAlignment = Alignment.Center
             ) {
                 Text(

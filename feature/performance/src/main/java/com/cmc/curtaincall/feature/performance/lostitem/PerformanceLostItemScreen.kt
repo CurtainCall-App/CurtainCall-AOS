@@ -2,16 +2,14 @@ package com.cmc.curtaincall.feature.performance.lostitem
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import com.cmc.curtaincall.common.design.R
@@ -27,6 +25,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PerformanceLostItemScreen(
+    facilityName: String,
     onNavigateLostItemDetail: () -> Unit,
     onNavigateLostItemCreate: () -> Unit,
     onBack: () -> Unit
@@ -59,21 +58,21 @@ internal fun PerformanceLostItemScreen(
             }
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = { onNavigateLostItemCreate() },
-                modifier = Modifier
-                    .padding(bottom = 40.dp)
-                    .size(58.dp),
-                shape = CircleShape,
-                containerColor = Cetacean_Blue
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_pen),
-                    contentDescription = null,
-                    modifier = Modifier.size(29.dp),
-                    tint = Color.Unspecified
-                )
-            }
+//            FloatingActionButton(
+//                onClick = { onNavigateLostItemCreate() },
+//                modifier = Modifier
+//                    .padding(bottom = 40.dp)
+//                    .size(58.dp),
+//                shape = CircleShape,
+//                containerColor = Cetacean_Blue
+//            ) {
+//                Icon(
+//                    painter = painterResource(R.drawable.ic_pen),
+//                    contentDescription = null,
+//                    modifier = Modifier.size(29.dp),
+//                    tint = Color.Unspecified
+//                )
+//            }
         }
     ) { paddingValues ->
         if (isActiveSearchState) {
@@ -84,6 +83,7 @@ internal fun PerformanceLostItemScreen(
                     .padding(paddingValues)
                     .fillMaxSize()
                     .background(White),
+                facilityName = facilityName,
                 onNavigateLostItemDetail = onNavigateLostItemDetail
             )
         }
@@ -93,6 +93,7 @@ internal fun PerformanceLostItemScreen(
 @Composable
 private fun PerformanceLostItemContent(
     modifier: Modifier = Modifier,
+    facilityName: String,
     onNavigateLostItemDetail: () -> Unit
 ) {
     var isClickedDate by remember { mutableStateOf(false) }
@@ -108,7 +109,7 @@ private fun PerformanceLostItemContent(
             modifier = Modifier
                 .zIndex(if (isClickedDate or isClickedType) 1f else 0f)
                 .fillMaxWidth(),
-            location = "LG아트센터 서울",
+            location = facilityName,
             lostDate = lostDateState,
             lostType = lostTypeState,
             isClickedDate = isClickedDate,
@@ -203,7 +204,9 @@ private fun PerformanceLostItemHeader(
                 color = Me_Pink,
                 fontSize = 16.dp.toSp(),
                 fontWeight = FontWeight.Bold,
-                fontFamily = spoqahansanseeo
+                fontFamily = spoqahansanseeo,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
         Row(

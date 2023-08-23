@@ -66,7 +66,7 @@ internal fun PerformanceDetailScreen(
     performanceDetailViewModel: PerformanceDetailViewModel = hiltViewModel(),
     showId: String,
     onNavigateReview: (String) -> Unit,
-    onNavigateLostItem: () -> Unit,
+    onNavigateLostItem: (String) -> Unit,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -112,7 +112,7 @@ internal fun PerformanceDetailScreen(
         ) {
             PerformanceDetailTab(
                 performanceDetailViewModel = performanceDetailViewModel,
-                Modifier.padding(top = 26.dp),
+                modifier = Modifier.padding(top = 26.dp),
                 showId = showId,
                 onNavigateReview = onNavigateReview,
                 onNavigateLostItem = onNavigateLostItem
@@ -127,7 +127,7 @@ private fun PerformanceDetailTab(
     modifier: Modifier = Modifier,
     showId: String,
     onNavigateReview: (String) -> Unit,
-    onNavigateLostItem: () -> Unit
+    onNavigateLostItem: (String) -> Unit
 ) {
     val performanceDetailUiState by performanceDetailViewModel.uiState.collectAsStateWithLifecycle()
     var tabType by remember { mutableStateOf(TabType.DETAIL) }
@@ -251,6 +251,7 @@ private fun PerformanceDetailTab(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 50.dp),
+                    facilityName = performanceDetailUiState.showDetailModel.facilityName,
                     onNavigateLostItem = onNavigateLostItem
                 )
             }

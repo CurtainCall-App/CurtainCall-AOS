@@ -95,6 +95,14 @@ sealed interface PerformanceDestination : CurtainCallDestination {
 
     object LostItem : PerformanceDestination {
         override val route = PERFORMANCE_LOST_ITEM
+        const val facilityNameArg = "facilityName"
+        val routeWithArgs = "$route/{$facilityNameArg}"
+
+        val arguments = listOf(
+            navArgument(facilityNameArg) {
+                type = NavType.StringType
+            }
+        )
     }
 
     object LostItemDetail : PerformanceDestination {
@@ -131,7 +139,7 @@ fun NavGraphBuilder.performanceNavGraph(
                     navHostController.navigate("${PerformanceDestination.Review.route}/$it")
                 },
                 onNavigateLostItem = {
-                    navHostController.navigate(PerformanceDestination.LostItem.route)
+                    navHostController.navigate("${PerformanceDestination.LostItem.route}/$it")
                 },
                 onBack = {
                     navHostController.popBackStack()
@@ -181,8 +189,13 @@ fun NavGraphBuilder.performanceNavGraph(
                 onBack = { navHostController.popBackStack() }
             )
         }
-        composable(route = PerformanceDestination.LostItem.route) {
+        composable(
+            route = PerformanceDestination.LostItem.routeWithArgs,
+            arguments = PerformanceDestination.LostItem.arguments
+        ) { entry ->
+            val facilityName = entry.arguments?.getString(PerformanceDestination.LostItem.facilityNameArg) ?: ""
             PerformanceLostItemScreen(
+                facilityName = facilityName,
                 onNavigateLostItemDetail = {
                     navHostController.navigate(PerformanceDestination.LostItemDetail.route)
                 },
