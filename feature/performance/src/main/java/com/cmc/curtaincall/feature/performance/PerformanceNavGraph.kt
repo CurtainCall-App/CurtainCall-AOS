@@ -85,8 +85,10 @@ fun NavGraphBuilder.performanceNavGraph(
         composable(
             route = PerformanceDestination.Detail.routeWithArgs,
             arguments = PerformanceDestination.Detail.arguments
-        ) {
+        ) { entry ->
+            val showIdType = entry.arguments?.getString(PerformanceDestination.Detail.showIdArg) ?: ""
             PerformanceDetailScreen(
+                showId = showIdType,
                 onNavigateReview = {
                     navHostController.navigate(PerformanceDestination.Review.route)
                 },

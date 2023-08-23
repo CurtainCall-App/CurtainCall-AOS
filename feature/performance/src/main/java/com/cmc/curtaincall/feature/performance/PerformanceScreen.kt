@@ -143,7 +143,7 @@ private fun PerformanceContent(
                             rate = if (showInfoModel.reviewCount == 0) 0.0f else (showInfoModel.reviewGradeSum / showInfoModel.reviewCount.toFloat()),
                             numberOfTotal = showInfoModel.reviewCount,
                             period = "${showInfoModel.startDate.toChangeDate()}-${showInfoModel.endDate.toChangeDate()}",
-                            runningTime = "${showInfoModel.runtime.toRunningTime()}분",
+                            runningTime = if (showInfoModel.runtime.isEmpty()) "해당 정보 없음" else "${showInfoModel.runtime.toRunningTime()}분",
                             date = "화-금 19:00",
                             location = showInfoModel.facilityName,
                             onClick = { onNavigateDetail(showInfoModel.id) }
@@ -172,7 +172,7 @@ private fun PerformanceContent(
                             rate = if (showInfoModel.reviewCount == 0) 0.0f else (showInfoModel.reviewGradeSum / showInfoModel.reviewCount.toFloat()),
                             numberOfTotal = showInfoModel.reviewCount,
                             period = "${showInfoModel.startDate.toChangeDate()}-${showInfoModel.endDate.toChangeDate()}",
-                            runningTime = "${showInfoModel.runtime.toRunningTime()}분",
+                            runningTime = if (showInfoModel.runtime.isEmpty()) "해당 정보 없음" else "${showInfoModel.runtime.toRunningTime()}분",
                             date = "화-금 19:00",
                             location = showInfoModel.facilityName,
                             onClick = { onNavigateDetail(showInfoModel.id) }
