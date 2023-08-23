@@ -15,10 +15,6 @@ fun List<ShowTimeModel>.toPrint(): String {
         "THURSDAY" to "목",
         "FRIDAY" to "금"
     )
-    val weekendMap = mapOf(
-        "SATURDAY" to "토",
-        "SUNDAY" to "일"
-    )
 
     val result = StringBuilder()
     val days = mutableListOf<String>()

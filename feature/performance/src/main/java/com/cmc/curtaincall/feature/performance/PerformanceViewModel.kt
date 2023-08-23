@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
-import com.cmc.curtaincall.domain.repository.ReviewRepository
 import com.cmc.curtaincall.domain.repository.ShowRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -15,8 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PerformanceViewModel @Inject constructor(
-    private val showRepository: ShowRepository,
-    private val reviewRepository: ReviewRepository
+    private val showRepository: ShowRepository
 ) : ViewModel() {
 
     private var _isFirstType = MutableStateFlow(true)
