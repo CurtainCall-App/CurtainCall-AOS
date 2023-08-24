@@ -21,8 +21,10 @@ import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.feature.partymember.ui.create.PartyMemberCreateSideEffect
 import com.cmc.curtaincall.feature.partymember.ui.create.PartyMemberCreateViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.flow.collectLatest
 
 private const val UNSELECTED_INDEX = -1
 const val DEFAULT_PERSONNEL_COUNT = 0
@@ -85,17 +87,20 @@ private fun PartyMemberCreateContent(
     onChangeStep: (STEP) -> Unit,
     onNavigateUpload: (PartyType) -> Unit
 ) {
-    // first step
+    // 1 step
     var selectedPerformanceIndex by remember { mutableIntStateOf(UNSELECTED_INDEX) }
     var isCheckFirstType by remember { mutableStateOf(true) }
 
-    // second step
+    // 2 step
     var selectedDateState by remember { mutableStateOf("") }
     var selectedTimeState by remember { mutableStateOf("") }
     var personnelCountState by remember { mutableIntStateOf(DEFAULT_PERSONNEL_COUNT) }
 
+    // 3 step
     var titleTextState by remember { mutableStateOf("") }
     var contentTextState by remember { mutableStateOf("") }
+
+    // 1-1 step
     var clickedUndeterminDateState by remember { mutableStateOf(false) }
 
     val playItems = partyMemberCreateViewModel.playItems.collectAsLazyPagingItems()
@@ -106,6 +111,20 @@ private fun PartyMemberCreateContent(
             selectedDateState = ""
             selectedTimeState = ""
             personnelCountState = DEFAULT_PERSONNEL_COUNT
+        } else if (currentStep == STEP.PHASE2) {
+            titleTextState = ""
+            contentTextState = ""
+        } else {
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        partyMemberCreateViewModel.effects.collectLatest { effect ->
+            when (effect) {
+                PartyMemberCreateSideEffect.SuccessUpload -> {
+                    onNavigateUpload(partyType)
+                }
+            }
         }
     }
 
@@ -211,7 +230,10 @@ private fun PartyMemberCreateContent(
 
             STEP.PHASE2 -> {
                 Button(
-                    onClick = { onChangeStep(STEP.PHASE3) },
+                    onClick = {
+                        partyMemberCreateViewModel.setPartyInfo(selectedDateState, selectedTimeState, personnelCountState)
+                        onChangeStep(STEP.PHASE3)
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter)
@@ -241,7 +263,10 @@ private fun PartyMemberCreateContent(
 
             STEP.PHASE3, STEP.PHASE1_2 -> {
                 Button(
-                    onClick = { onNavigateUpload(partyType) },
+                    onClick = {
+                        partyMemberCreateViewModel.setPartyDescription(titleTextState, contentTextState)
+                        partyMemberCreateViewModel.createParty()
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter)

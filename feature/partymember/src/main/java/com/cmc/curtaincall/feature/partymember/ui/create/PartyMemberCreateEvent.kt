@@ -15,4 +15,14 @@ sealed class PartyMemberCreateEvent : BaseEvent {
     data class RequestShowDetail(
         val showDetailModel: ShowDetailModel
     ) : PartyMemberCreateEvent()
+
+    data class SetPartyInfo(
+        val showAt: String,
+        val maxMemberNum: Int
+    ) : PartyMemberCreateEvent()
+
+    data class SetPartyDescription(
+        val title: String,
+        val content: String
+    ) : PartyMemberCreateEvent()
 }
