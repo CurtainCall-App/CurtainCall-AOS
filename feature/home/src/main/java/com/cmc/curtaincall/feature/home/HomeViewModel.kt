@@ -3,6 +3,7 @@ package com.cmc.curtaincall.feature.home
 import androidx.lifecycle.viewModelScope
 import com.cmc.curtaincall.common.utility.extensions.toDday
 import com.cmc.curtaincall.core.base.BaseViewModel
+import com.cmc.curtaincall.domain.model.show.ShowSearchWordModel
 import com.cmc.curtaincall.domain.repository.MemberRepository
 import com.cmc.curtaincall.domain.repository.ShowRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,6 +29,7 @@ class HomeViewModel @Inject constructor(
         requestMyParticipations()
         requestPopularShowList()
         requestOpenShowList()
+        requestShowSearchWords()
     }
 
     override fun reduceState(currentState: HomeState, event: HomeEvent): HomeState =
@@ -50,6 +52,10 @@ class HomeViewModel @Inject constructor(
 
             is HomeEvent.RequestOpenShowList -> {
                 currentState.copy(openShowInfos = event.openShowInfos)
+            }
+
+            is HomeEvent.RequestShowSearchWords -> {
+                currentState.copy(searchWords = event.searchWords)
             }
         }
 
@@ -113,5 +119,23 @@ class HomeViewModel @Inject constructor(
                 sendAction(HomeEvent.RequestOpenShowList(it.sortedByDescending { it.startDate.toDday() }.take(10)))
             }
             .launchIn(viewModelScope)
+    }
+
+    private fun requestShowSearchWords() {
+        showRepository.getShowSearchWordList()
+            .onEach { sendAction(HomeEvent.RequestShowSearchWords(it)) }
+            .launchIn(viewModelScope)
+    }
+
+    fun insertShowSearchWord(word: String) {
+        viewModelScope.launch {
+            showRepository.insertShowSearchWord(
+                ShowSearchWordModel(
+                    System.currentTimeMillis(),
+                    word
+                )
+            )
+            requestShowSearchWords()
+        }
     }
 }

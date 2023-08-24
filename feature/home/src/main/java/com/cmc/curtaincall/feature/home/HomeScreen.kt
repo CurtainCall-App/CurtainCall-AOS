@@ -56,13 +56,27 @@ fun HomeScreen(
     var queryState by remember { mutableStateOf("") }
     Scaffold(topBar = {
         if (isActiveSearchState) {
-            SearchAppBar(value = queryState, onValueChange = { queryState = it }, containerColor = White, contentColor = Nero, placeholder = stringResource(R.string.search_performance_title), onClick = { isActiveSearchState = false })
+            SearchAppBar(
+                value = queryState,
+                onValueChange = { queryState = it },
+                containerColor = White,
+                contentColor = Nero,
+                placeholder = stringResource(R.string.search_performance_title),
+                onClick = { isActiveSearchState = false },
+                onAction = { homeViewModel.insertShowSearchWord(queryState) }
+            )
         } else {
             TopAppBarWithSearch(title = stringResource(R.string.home_appbar_title), containerColor = Cetacean_Blue, contentColor = White, onClick = { isActiveSearchState = true })
         }
     }) { paddingValues ->
         if (isActiveSearchState) {
-            // TODO
+            HomeSearchContent(
+                homeViewModel = homeViewModel,
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
+                    .background(White)
+            )
         } else {
             HomeContent(
                 homeViewModel = homeViewModel,
@@ -72,6 +86,34 @@ fun HomeScreen(
                     .background(White),
                 onNavigateGuide = onNavigateGuide
             )
+        }
+    }
+}
+
+@Composable
+private fun HomeSearchContent(
+    homeViewModel: HomeViewModel,
+    modifier: Modifier = Modifier
+) {
+    val scrollState = rememberScrollState()
+    val searchWords = homeViewModel.uiState.collectAsStateWithLifecycle().value.searchWords
+    Column(modifier.verticalScroll(scrollState)) {
+        searchWords.forEach { searchWord ->
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 6.dp, horizontal = 20.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = searchWord.word,
+                    modifier = Modifier.weight(1f)
+                )
+                Icon(
+                    painter = painterResource(R.drawable.ic_close),
+                    contentDescription = null
+                )
+            }
         }
     }
 }

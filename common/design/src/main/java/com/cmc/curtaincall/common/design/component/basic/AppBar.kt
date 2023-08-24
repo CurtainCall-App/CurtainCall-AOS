@@ -103,7 +103,8 @@ fun SearchAppBar(
     containerColor: Color,
     contentColor: Color,
     placeholder: String = "",
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
+    onAction: () -> Unit = {}
 ) {
     TopAppBar(
         title = {
@@ -154,7 +155,7 @@ fun SearchAppBar(
                                     )
                                 }
                             }
-                            IconButton(onClick = { onValueChange("") }) {
+                            IconButton(onClick = { onAction() }) {
                                 Icon(
                                     painter = painterResource(R.drawable.ic_close),
                                     contentDescription = null,

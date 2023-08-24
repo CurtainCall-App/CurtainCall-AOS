@@ -5,6 +5,7 @@ import com.cmc.curtaincall.domain.model.home.MyParticipationModel
 import com.cmc.curtaincall.domain.model.home.MyRecruitmentModel
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import com.cmc.curtaincall.domain.model.show.ShowRankModel
+import com.cmc.curtaincall.domain.model.show.ShowSearchWordModel
 
 sealed class HomeEvent : BaseEvent {
     data class GetNickname(
@@ -25,5 +26,9 @@ sealed class HomeEvent : BaseEvent {
 
     data class RequestOpenShowList(
         val openShowInfos: List<ShowInfoModel>
+    ) : HomeEvent()
+
+    data class RequestShowSearchWords(
+        val searchWords: List<ShowSearchWordModel>
     ) : HomeEvent()
 }
