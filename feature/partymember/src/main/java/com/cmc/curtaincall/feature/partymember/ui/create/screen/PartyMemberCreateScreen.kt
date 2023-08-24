@@ -293,7 +293,22 @@ private fun PartyMemberCreateContent(
             STEP.PHASE1_1 -> {
                 var validation = (selectedDateState.isNotEmpty() or clickedUndeterminDateState) and (personnelCountState > DEFAULT_PERSONNEL_COUNT)
                 Button(
-                    onClick = { onChangeStep(STEP.PHASE1_2) },
+                    onClick = {
+                        if (clickedUndeterminDateState) {
+                            partyMemberCreateViewModel.setPartyInfo(
+                                date = "0000. 00. 00",
+                                time = "00:00",
+                                maxMemberNum = personnelCountState
+                            )
+                        } else {
+                            partyMemberCreateViewModel.setPartyInfo(
+                                date = selectedDateState,
+                                time = "00:00",
+                                maxMemberNum = personnelCountState
+                            )
+                        }
+                        onChangeStep(STEP.PHASE1_2)
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter)

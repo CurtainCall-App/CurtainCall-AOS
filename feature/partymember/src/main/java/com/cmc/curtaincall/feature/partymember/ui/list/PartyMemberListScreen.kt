@@ -33,7 +33,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 internal fun PartyMemberListScreen(
     partyMemberViewModel: PartyMemberViewModel = hiltViewModel(),
     partyType: PartyType,
-    onNavigateDetail: (PartyType, Boolean) -> Unit,
+    onNavigateDetail: (PartyType, Int, Boolean) -> Unit,
     onNavigateCreate: (PartyType) -> Unit,
     onBack: () -> Unit
 ) {
@@ -104,7 +104,7 @@ private fun PartyMemberListContent(
     partyMemberViewModel: PartyMemberViewModel,
     partyType: PartyType,
     modifier: Modifier = Modifier,
-    onNavigateDetail: (PartyType, Boolean) -> Unit
+    onNavigateDetail: (PartyType, Int, Boolean) -> Unit
 ) {
     val pagingItems = when (partyType) {
         PartyType.PERFORMANCE -> {
@@ -163,7 +163,13 @@ private fun PartyMemberListContent(
                             date = partyModel.showAt.toDateWithDay(),
                             time = partyModel.showAt.toTime(),
                             location = partyModel.facilityName,
-                            onClick = { onNavigateDetail(partyType, partyModel.creatorId == partyMemberViewModel.memberId.value) }
+                            onClick = {
+                                onNavigateDetail(
+                                    partyType,
+                                    partyModel.id,
+                                    partyModel.creatorId == partyMemberViewModel.memberId.value
+                                )
+                            }
                         )
                     }
                 }

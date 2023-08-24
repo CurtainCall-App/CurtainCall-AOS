@@ -50,16 +50,21 @@ sealed interface PartyMemberDestination : CurtainCallDestination {
     object Detail : PartyMemberDestination {
         override val route = PARTYMEMBER_DETAIL
         const val typeArg = "type"
+        const val partyIdArg = "partyId"
         const val myWritingArg = "myWriting"
         const val fromRecruitmentArg = "fromRecruitment"
         const val fromParticipationArg = "fromParticipation"
         val routeWithArgs = "$route?" +
+            "$partyIdArg={$partyIdArg}&" +
             "$myWritingArg={$myWritingArg}&" +
             "$typeArg={$typeArg}&" +
             "$fromRecruitmentArg={$fromRecruitmentArg}&" +
             "$fromParticipationArg={$fromParticipationArg}"
 
         val arguments = listOf(
+            navArgument(partyIdArg) {
+                type = NavType.IntType
+            },
             navArgument(myWritingArg) {
                 type = NavType.BoolType
             },
@@ -144,9 +149,10 @@ fun NavGraphBuilder.partymemberNavGraph(
             if (partyType != null) {
                 PartyMemberListScreen(
                     partyType = partyType,
-                    onNavigateDetail = { partyType, myWriting ->
+                    onNavigateDetail = { partyType, partyId, myWriting ->
                         navHostController.navigate(
                             PartyMemberDestination.Detail.route + "?" +
+                                "${PartyMemberDestination.Detail.partyIdArg}=$partyId" + "&" +
                                 "${PartyMemberDestination.Detail.typeArg}=$partyType" + "&" +
                                 "${PartyMemberDestination.Detail.myWritingArg}=$myWriting" + "&" +
                                 "${PartyMemberDestination.Detail.fromRecruitmentArg}=false" + "&" +
@@ -164,11 +170,13 @@ fun NavGraphBuilder.partymemberNavGraph(
             arguments = PartyMemberDestination.Detail.arguments
         ) { entry ->
             val partyType: PartyType? = getPartyType(entry.arguments)
+            val partyId = entry.arguments?.getInt(PartyMemberDestination.Detail.partyIdArg) ?: Int.MIN_VALUE
             val myWriting = entry.arguments?.getBoolean(PartyMemberDestination.Detail.myWritingArg) ?: false
             val fromRecruitment = entry.arguments?.getBoolean(PartyMemberDestination.Detail.fromRecruitmentArg) ?: false
             val fromParticipation = entry.arguments?.getBoolean(PartyMemberDestination.Detail.fromParticipationArg) ?: false
             if (partyType != null) {
                 PartyMemberDetailScreen(
+                    partyId = partyId,
                     myWriting = myWriting,
                     fromRecruitment = fromRecruitment,
                     fromParticipation = fromParticipation,
@@ -185,6 +193,8 @@ fun NavGraphBuilder.partymemberNavGraph(
                 )
             } else {
                 PartyMemberDetailScreen(
+                    partyId = partyId,
+                    myWriting = myWriting,
                     fromRecruitment = fromRecruitment,
                     fromParticipation = fromParticipation,
                     partyType = PartyType.PERFORMANCE,

@@ -43,7 +43,7 @@ class PartyRepositoryImpl @Inject constructor(
             parties.map { it.toModel() }
         }
 
-    override fun requestPartyDetail(partyId: String): Flow<PartyDetailModel> =
+    override fun requestPartyDetail(partyId: Int): Flow<PartyDetailModel> =
         partyRemoteSource.requestPartyDetail(partyId).map { it.toModel() }
 
     override fun createParty(showId: String, showAt: String, title: String, content: String, maxMemberNum: Int, category: String): Flow<CreatePartyModel> =
@@ -56,7 +56,7 @@ class PartyRepositoryImpl @Inject constructor(
             category = category
         ).map { it.toModel() }
 
-    override fun deleteParty(partyId: String): Flow<Boolean> =
+    override fun deleteParty(partyId: Int): Flow<Boolean> =
         partyRemoteSource.deleteParty(partyId)
 
     override fun updateParty(title: String, content: String): Flow<Boolean> =

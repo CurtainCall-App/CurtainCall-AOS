@@ -34,7 +34,7 @@ interface PartyService {
 
     @GET("parties/{partyId}")
     suspend fun requestPartyDetail(
-        @Path("partyId") partyId: String
+        @Path("partyId") partyId: Int
     ): PartyDetailResponse
 
     @POST("parties")
@@ -44,7 +44,7 @@ interface PartyService {
 
     @DELETE("parties/{partyId}")
     suspend fun deleteParty(
-        @Path("partyId") partyId: String
+        @Path("partyId") partyId: Int
     ): Response<Unit>
 
     @PATCH("parties/{partyId}")

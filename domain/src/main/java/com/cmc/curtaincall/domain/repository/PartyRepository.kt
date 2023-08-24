@@ -26,7 +26,7 @@ interface PartyRepository {
     ): Flow<List<PartyModel>>
 
     fun requestPartyDetail(
-        partyId: String
+        partyId: Int
     ): Flow<PartyDetailModel>
 
     fun createParty(
@@ -39,7 +39,7 @@ interface PartyRepository {
     ): Flow<CreatePartyModel>
 
     fun deleteParty(
-        partyId: String
+        partyId: Int
     ): Flow<Boolean>
 
     fun updateParty(
