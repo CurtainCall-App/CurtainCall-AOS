@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.partymember.ui.create
+package com.cmc.curtaincall.feature.partymember.ui.create.screen
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -13,12 +13,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallRoundedText
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.feature.partymember.ui.create.PartyMemberCreateViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private const val UNSELECTED_INDEX = -1
@@ -31,13 +34,17 @@ enum class STEP(val prevStep: STEP) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PartyMemberCreateScreen(
+    partyMemberCreateViewModel: PartyMemberCreateViewModel = hiltViewModel(),
     partyType: PartyType,
     onNavigateUpload: (PartyType) -> Unit,
     onBack: () -> Unit
 ) {
+    LaunchedEffect(Unit) {
+        partyMemberCreateViewModel.setPartyCategory(partyType)
+    }
+
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(White)
-
     var currentStep by remember { mutableStateOf(if (partyType == PartyType.ETC) STEP.PHASE1_1 else STEP.PHASE1) }
     Scaffold(
         topBar = {
@@ -56,6 +63,7 @@ internal fun PartyMemberCreateScreen(
         }
     ) { paddingValues ->
         PartyMemberCreateContent(
+            partyMemberCreateViewModel = partyMemberCreateViewModel,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
@@ -70,19 +78,36 @@ internal fun PartyMemberCreateScreen(
 
 @Composable
 private fun PartyMemberCreateContent(
+    partyMemberCreateViewModel: PartyMemberCreateViewModel,
     modifier: Modifier = Modifier,
     partyType: PartyType,
     currentStep: STEP,
     onChangeStep: (STEP) -> Unit,
     onNavigateUpload: (PartyType) -> Unit
 ) {
+    // first step
     var selectedPerformanceIndex by remember { mutableIntStateOf(UNSELECTED_INDEX) }
+    var isCheckFirstType by remember { mutableStateOf(true) }
+
+    // second step
     var selectedDateState by remember { mutableStateOf("") }
     var selectedTimeState by remember { mutableStateOf("") }
+    var personnelCountState by remember { mutableIntStateOf(DEFAULT_PERSONNEL_COUNT) }
+
     var titleTextState by remember { mutableStateOf("") }
     var contentTextState by remember { mutableStateOf("") }
     var clickedUndeterminDateState by remember { mutableStateOf(false) }
-    var personnelCountState by remember { mutableIntStateOf(DEFAULT_PERSONNEL_COUNT) }
+
+    val playItems = partyMemberCreateViewModel.playItems.collectAsLazyPagingItems()
+    val musicalItems = partyMemberCreateViewModel.musicalItems.collectAsLazyPagingItems()
+
+    LaunchedEffect(currentStep) {
+        if (currentStep == STEP.PHASE1) {
+            selectedDateState = ""
+            selectedTimeState = ""
+            personnelCountState = DEFAULT_PERSONNEL_COUNT
+        }
+    }
 
     Box(modifier) {
         LazyVerticalGrid(
@@ -106,11 +131,17 @@ private fun PartyMemberCreateContent(
 
             when (currentStep) {
                 STEP.PHASE1 -> showPerformanceFirstStep(
+                    partyMemberCreateViewModel = partyMemberCreateViewModel,
+                    isCheckFirstType = isCheckFirstType,
+                    onTypeChange = { isCheckFirstType = it },
+                    playItems = playItems,
+                    musicalItems = musicalItems,
                     selectedIndex = selectedPerformanceIndex,
                     onChangeSelect = { selectedPerformanceIndex = it }
                 )
 
                 STEP.PHASE2 -> showPerformanceSecondStep(
+                    partyMemberCreateViewModel = partyMemberCreateViewModel,
                     modifier = Modifier.fillMaxWidth(),
                     selectedDate = selectedDateState,
                     selectedTime = selectedTimeState,
@@ -143,7 +174,18 @@ private fun PartyMemberCreateContent(
         when (currentStep) {
             STEP.PHASE1 -> {
                 Button(
-                    onClick = { onChangeStep(STEP.PHASE2) },
+                    onClick = {
+                        if (isCheckFirstType) {
+                            playItems[selectedPerformanceIndex]?.let { playItem ->
+                                partyMemberCreateViewModel.setShowId(playItem.id)
+                            }
+                        } else {
+                            musicalItems[selectedPerformanceIndex]?.let { musicalItem ->
+                                partyMemberCreateViewModel.setShowId(musicalItem.id)
+                            }
+                        }
+                        onChangeStep(STEP.PHASE2)
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter)

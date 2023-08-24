@@ -13,7 +13,7 @@ import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.feature.partymember.ui.PartyMemberScreen
-import com.cmc.curtaincall.feature.partymember.ui.create.PartyMemberCreateScreen
+import com.cmc.curtaincall.feature.partymember.ui.create.screen.PartyMemberCreateScreen
 import com.cmc.curtaincall.feature.partymember.ui.detail.PartyMemberDetailScreen
 import com.cmc.curtaincall.feature.partymember.ui.edit.PartyMemberEditScreen
 import com.cmc.curtaincall.feature.partymember.ui.list.PartyMemberListScreen
