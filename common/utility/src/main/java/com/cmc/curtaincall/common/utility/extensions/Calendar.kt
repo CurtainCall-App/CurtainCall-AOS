@@ -10,7 +10,6 @@ fun getCalendarDays(startDate: String, endDate: String): List<CalendarDay> {
     var start = SimpleDateFormat("yyyy-MM-dd").parse(startDate)
     val end = SimpleDateFormat("yyyy-MM-dd").parse(endDate)
 
-    val startCalendar = Calendar.getInstance().apply { time = start }
     val calendarDays = mutableListOf<CalendarDay>()
     while (start <= end) {
         val calendar = Calendar.getInstance().apply { time = start }
