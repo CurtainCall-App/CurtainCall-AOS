@@ -112,12 +112,12 @@ fun PartyMemberContentCard(
     time: String,
     location: String,
     hasLiveTalk: Boolean = false,
-    onNavigateDetail: (PartyType) -> Unit = {},
-    onNavigateLiveTalk: () -> Unit = {}
+    onClick: () -> Unit = {},
+    onAction: () -> Unit = {}
 ) {
     Box(
         modifier = modifier
-            .clickable { onNavigateDetail(partyType) }
+            .clickable { onClick() }
             .padding(bottom = 10.dp)
     ) {
         Card(
@@ -172,7 +172,7 @@ fun PartyMemberContentCard(
                 )
                 if (hasLiveTalk) {
                     CurtainCallRoundedTextButton(
-                        onClick = onNavigateLiveTalk,
+                        onClick = onAction,
                         modifier = Modifier
                             .padding(top = 22.dp)
                             .fillMaxWidth()

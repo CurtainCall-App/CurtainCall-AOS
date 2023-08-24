@@ -23,6 +23,8 @@ import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallRoundedTextButton
 import com.cmc.curtaincall.common.design.component.basic.DottedLine
 import com.cmc.curtaincall.common.design.component.basic.MoreTopAppBarWithBack
+import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithDelete
+import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithReportAction
 import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.cmc.curtaincall.common.design.component.custom.EditBottomSheet
 import com.cmc.curtaincall.common.design.component.dialog.CurtainCallBasicDialog
@@ -33,6 +35,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PartyMemberDetailScreen(
+    myWriting: Boolean = false,
     fromRecruitment: Boolean = false,
     fromParticipation: Boolean = false,
     partyType: PartyType,
@@ -92,44 +95,46 @@ fun PartyMemberDetailScreen(
 
     Scaffold(
         topBar = {
-            MoreTopAppBarWithBack(
-                title = stringResource(
-                    if (fromRecruitment) {
-                        R.string.mypage_my_gathering_tab
-                    } else if (fromParticipation) {
-                        R.string.mypage_my_participation_tab
-                    } else {
-                        when (partyType) {
-                            PartyType.PERFORMANCE -> R.string.partymember_performance_title
-                            PartyType.MEAL -> R.string.partymember_restaurant_title
-                            PartyType.ETC -> R.string.partymember_etc_title
+            if (myWriting) {
+                TopAppBarWithDelete(
+                    title = stringResource(
+                        if (fromRecruitment) {
+                            R.string.mypage_my_gathering_tab
+                        } else if (fromParticipation) {
+                            R.string.mypage_my_participation_tab
+                        } else {
+                            when (partyType) {
+                                PartyType.PERFORMANCE -> R.string.partymember_performance_title
+                                PartyType.MEAL -> R.string.partymember_restaurant_title
+                                PartyType.ETC -> R.string.partymember_etc_title
+                            }
                         }
-                    }
-                ),
-                containerColor = White,
-                contentColor = Nero,
-                tint = Silver_Sand,
-                onBack = onBack,
-                onClick = { isShowBottomSheeet = true }
-            )
-//            TopAppBarWithReportAction(
-//                title = stringResource(
-//                    if (fromRecruitment) {
-//                        R.string.mypage_my_gathering_tab
-//                    } else if (fromParticipation) {
-//                        R.string.mypage_my_participation_tab
-//                    } else {
-//                        when (partyType) {
-//                            PartyType.PERFORMANCE -> R.string.partymember_performance_title
-//                            PartyType.MEAL -> R.string.partymember_restaurant_title
-//                            PartyType.ETC -> R.string.partymember_etc_title
-//                        }
-//                    }
-//                ),
-//                containerColor = White,
-//                contentColor = Nero,
-//                onBack = onBack
-//            )
+                    ),
+                    containerColor = White,
+                    contentColor = Nero,
+                    deleteColor = Black_Coral,
+                    onBack = onBack
+                )
+            } else {
+                TopAppBarWithReportAction(
+                    title = stringResource(
+                        if (fromRecruitment) {
+                            R.string.mypage_my_gathering_tab
+                        } else if (fromParticipation) {
+                            R.string.mypage_my_participation_tab
+                        } else {
+                            when (partyType) {
+                                PartyType.PERFORMANCE -> R.string.partymember_performance_title
+                                PartyType.MEAL -> R.string.partymember_restaurant_title
+                                PartyType.ETC -> R.string.partymember_etc_title
+                            }
+                        }
+                    ),
+                    containerColor = White,
+                    contentColor = Nero,
+                    onBack = onBack
+                )
+            }
         },
         floatingActionButton = {
             CurtainCallRoundedTextButton(

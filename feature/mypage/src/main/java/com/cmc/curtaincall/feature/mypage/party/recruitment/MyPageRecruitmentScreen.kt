@@ -98,7 +98,7 @@ private fun MyPageRecruitmentContent(
                     time = "19:30",
                     location = "링크아트센터",
                     hasLiveTalk = true,
-                    onNavigateDetail = { onNavigatRecruitmentDetail(partyTypeState) }
+                    onClick = { onNavigatRecruitmentDetail(partyTypeState) }
                 )
             }
         }
