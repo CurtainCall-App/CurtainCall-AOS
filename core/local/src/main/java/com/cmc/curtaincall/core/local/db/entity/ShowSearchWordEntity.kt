@@ -6,8 +6,8 @@ import com.cmc.curtaincall.domain.model.show.ShowSearchWordModel
 
 @Entity
 data class ShowSearchWordEntity(
-    @PrimaryKey val searchAt: Long,
-    val word: String
+    @PrimaryKey val word: String,
+    val searchAt: Long
 ) {
     fun toModel() = ShowSearchWordModel(
         searchAt = searchAt,

@@ -57,6 +57,8 @@ class HomeViewModel @Inject constructor(
             is HomeEvent.RequestShowSearchWords -> {
                 currentState.copy(searchWords = event.searchWords)
             }
+
+            else -> currentState
         }
 
     private fun getMemberNickname() {
@@ -131,8 +133,8 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             showRepository.insertShowSearchWord(
                 ShowSearchWordModel(
-                    System.currentTimeMillis(),
-                    word
+                    word,
+                    System.currentTimeMillis()
                 )
             )
             requestShowSearchWords()

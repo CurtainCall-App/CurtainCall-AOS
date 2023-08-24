@@ -14,16 +14,16 @@ class ShowLocalSource @Inject constructor(
     suspend fun insertShowSearchWord(showSearchWordModel: ShowSearchWordModel) =
         showSearchDao.insertShowSearch(
             showSearchWordEntity = ShowSearchWordEntity(
-                showSearchWordModel.searchAt,
-                showSearchWordModel.word
+                showSearchWordModel.word,
+                showSearchWordModel.searchAt
             )
         )
 
     suspend fun deleteShowSearchWord(showSearchWordModel: ShowSearchWordModel) =
         showSearchDao.deleteShowSearch(
             showSearchWordEntity = ShowSearchWordEntity(
-                showSearchWordModel.searchAt,
-                showSearchWordModel.word
+                showSearchWordModel.word,
+                showSearchWordModel.searchAt
             )
         )
 
