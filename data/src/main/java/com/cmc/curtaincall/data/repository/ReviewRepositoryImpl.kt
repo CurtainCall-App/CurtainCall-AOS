@@ -44,10 +44,10 @@ class ReviewRepositoryImpl @Inject constructor(
             showReviews.map { it.toModel() }
         }
 
-    override fun deleteShowReview(reviewId: String): Flow<Boolean> =
+    override fun deleteShowReview(reviewId: Int): Flow<Boolean> =
         reviewRemoteSource.deleteShowReview(reviewId)
 
-    override fun updateShowReview(reviewId: String, content: String, grade: Int): Flow<Boolean> =
+    override fun updateShowReview(reviewId: Int, content: String, grade: Int): Flow<Boolean> =
         reviewRemoteSource.updateShowReview(reviewId, content, grade)
 
     override fun requestLikeReview(reviewId: String): Flow<Boolean> =

@@ -32,12 +32,12 @@ interface ReviewService {
 
     @DELETE("reviews/{reviewId}")
     suspend fun deleteShowReview(
-        @Path("reviewId") reviewId: String
+        @Path("reviewId") reviewId: Int
     ): Response<Unit>
 
     @PATCH("reviews/{reviewId}")
     suspend fun updateShowReview(
-        @Path("reviewId") reviewId: String,
+        @Path("reviewId") reviewId: Int,
         @Body updateShowReviewRequest: UpdateShowReviewRequest
     ): Response<Unit>
 

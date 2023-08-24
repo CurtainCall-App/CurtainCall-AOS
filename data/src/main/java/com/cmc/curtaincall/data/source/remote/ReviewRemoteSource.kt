@@ -44,7 +44,7 @@ class ReviewRemoteSource @Inject constructor(
     }
 
     fun deleteShowReview(
-        reviewId: String
+        reviewId: Int
     ): Flow<Boolean> = flow {
         emit(
             reviewService.deleteShowReview(reviewId).isSuccessful
@@ -52,7 +52,7 @@ class ReviewRemoteSource @Inject constructor(
     }
 
     fun updateShowReview(
-        reviewId: String,
+        reviewId: Int,
         content: String,
         grade: Int
     ): Flow<Boolean> = flow {

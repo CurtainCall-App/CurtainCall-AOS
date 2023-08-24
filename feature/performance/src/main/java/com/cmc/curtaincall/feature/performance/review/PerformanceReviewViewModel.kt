@@ -27,4 +27,20 @@ class PerformanceReviewViewModel @Inject constructor(
             .onEach { _effect.emit(PerformanceReviewSideEffect.CreateSuccess) }
             .launchIn(viewModelScope)
     }
+
+    fun updateShowReview(
+        reviewId: Int,
+        content: String,
+        grade: Int
+    ) {
+        reviewRepository.updateShowReview(reviewId, content, grade)
+            .onEach { _effect.emit(PerformanceReviewSideEffect.UpdateSuccess) }
+            .launchIn(viewModelScope)
+    }
+
+    fun deleteShowReview(reviewId: Int) {
+        reviewRepository.deleteShowReview(reviewId)
+            .onEach { _effect.emit(PerformanceReviewSideEffect.DeleteSuccess) }
+            .launchIn(viewModelScope)
+    }
 }

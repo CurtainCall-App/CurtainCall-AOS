@@ -67,12 +67,14 @@ sealed interface PerformanceDestination : CurtainCallDestination {
         const val posterUrlArg = "posterUrl"
         const val genreArg = "genre"
         const val titleArg = "title"
+        const val reviewIdArg = "reviewId"
         val routeWithArgs = "$route?" +
             "$showIdArgs={$showIdArgs}&" +
             "$fromMypageArg={$fromMypageArg}&" +
             "$posterUrlArg={$posterUrlArg}&" +
             "$genreArg={$genreArg}&" +
-            "$titleArg={$titleArg}"
+            "$titleArg={$titleArg}&" +
+            "$reviewIdArg={$reviewIdArg}"
 
         val arguments = listOf(
             navArgument(showIdArgs) {
@@ -89,6 +91,9 @@ sealed interface PerformanceDestination : CurtainCallDestination {
             },
             navArgument(titleArg) {
                 type = NavType.StringType
+            },
+            navArgument(reviewIdArg) {
+                type = NavType.IntType
             }
         )
     }
@@ -155,14 +160,15 @@ fun NavGraphBuilder.performanceNavGraph(
             PerformanceReviewScreen(
                 performanceDetailViewModel = hiltViewModel(parentEntry),
                 showId = showId,
-                onNavigateReviewCreate = { posterUrl, genre, title ->
+                onNavigateReviewCreate = { posterUrl, genre, title, fromMypage, reviewId ->
                     navHostController.navigate(
                         PerformanceDestination.ReviewCreate.route + "?" +
                             "${PerformanceDestination.ReviewCreate.showIdArgs}=$showId" + "&" +
-                            "${PerformanceDestination.ReviewCreate.fromMypageArg}=false" + "&" +
+                            "${PerformanceDestination.ReviewCreate.fromMypageArg}=$fromMypage" + "&" +
                             "${PerformanceDestination.ReviewCreate.posterUrlArg}=$posterUrl" + "&" +
                             "${PerformanceDestination.ReviewCreate.genreArg}=$genre" + "&" +
-                            "${PerformanceDestination.ReviewCreate.titleArg}=$title"
+                            "${PerformanceDestination.ReviewCreate.titleArg}=$title" + "&" +
+                            "${PerformanceDestination.ReviewCreate.reviewIdArg}=$reviewId"
                     )
                 },
                 onBack = {
@@ -179,6 +185,7 @@ fun NavGraphBuilder.performanceNavGraph(
             val posterUrl = entry.arguments?.getString(PerformanceDestination.ReviewCreate.posterUrlArg)
             val genre = entry.arguments?.getString(PerformanceDestination.ReviewCreate.genreArg) ?: "PLAY"
             val title = entry.arguments?.getString(PerformanceDestination.ReviewCreate.titleArg) ?: ""
+            val reviewId = entry.arguments?.getInt(PerformanceDestination.ReviewCreate.reviewIdArg) ?: Int.MIN_VALUE
 
             PerformanceReviewCreateScreen(
                 showId = showId,
@@ -186,6 +193,7 @@ fun NavGraphBuilder.performanceNavGraph(
                 posterUrl = posterUrl,
                 genre = genre,
                 title = title,
+                reviewId = reviewId,
                 onBack = { navHostController.popBackStack() }
             )
         }

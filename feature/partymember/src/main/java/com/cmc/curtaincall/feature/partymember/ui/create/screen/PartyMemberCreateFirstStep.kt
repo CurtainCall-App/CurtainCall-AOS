@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.partymember.ui.create
+package com.cmc.curtaincall.feature.partymember.ui.create.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
-import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
@@ -30,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.paging.compose.LazyPagingItems
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallBorderText
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallRoundedText
@@ -50,13 +50,19 @@ import com.cmc.curtaincall.common.design.theme.Roman_Silver
 import com.cmc.curtaincall.common.design.theme.Silver_Sand
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
+import com.cmc.curtaincall.domain.model.show.ShowInfoModel
+import com.cmc.curtaincall.feature.partymember.ui.create.PartyMemberCreateViewModel
 
 fun LazyGridScope.showPerformanceFirstStep(
+    partyMemberCreateViewModel: PartyMemberCreateViewModel,
+    isCheckFirstType: Boolean,
+    onTypeChange: (Boolean) -> Unit,
+    playItems: LazyPagingItems<ShowInfoModel>,
+    musicalItems: LazyPagingItems<ShowInfoModel>,
     selectedIndex: Int,
     onChangeSelect: (Int) -> Unit
 ) {
     item(span = { GridItemSpan(3) }) {
-        var isCheckFirstType by remember { mutableStateOf(true) }
         var sortType by remember { mutableStateOf(SortType.STAR) }
         var showDialog by remember { mutableStateOf(false) }
 
@@ -92,7 +98,7 @@ fun LazyGridScope.showPerformanceFirstStep(
                     firstType = stringResource(R.string.partymember_create_classification_theater),
                     lastType = stringResource(R.string.partymember_create_classification_musical),
                     isCheckFirstType = isCheckFirstType,
-                    onTypeChange = { isCheckFirstType = it }
+                    onTypeChange = onTypeChange
                 )
             }
             Column(
@@ -143,16 +149,36 @@ fun LazyGridScope.showPerformanceFirstStep(
         }
     }
 
-    itemsIndexed(List(3) {}) { index, item ->
-        PerformanceSimpleCard(
-            modifier = Modifier
-                .width(100.dp)
-                .padding(bottom = 16.dp),
-            title = "별이 빛나는 밤에",
-            currentIndex = index,
-            selectedIndex = selectedIndex,
-            onChangeSelect = onChangeSelect
-        )
+    if (isCheckFirstType) {
+        items(playItems.itemCount) { index ->
+            playItems[index]?.let { playItem ->
+                PerformanceSimpleCard(
+                    modifier = Modifier
+                        .width(100.dp)
+                        .padding(bottom = 16.dp),
+                    imageUrl = playItem.poster,
+                    title = playItem.name,
+                    currentIndex = index,
+                    selectedIndex = selectedIndex,
+                    onChangeSelect = onChangeSelect
+                )
+            }
+        }
+    } else {
+        items(musicalItems.itemCount) { index ->
+            musicalItems[index]?.let { musicalItem ->
+                PerformanceSimpleCard(
+                    modifier = Modifier
+                        .width(100.dp)
+                        .padding(bottom = 16.dp),
+                    imageUrl = musicalItem.poster,
+                    title = musicalItem.name,
+                    currentIndex = index,
+                    selectedIndex = selectedIndex,
+                    onChangeSelect = onChangeSelect
+                )
+            }
+        }
     }
     item(span = { GridItemSpan(3) }) {
         Spacer(Modifier.size(70.dp))

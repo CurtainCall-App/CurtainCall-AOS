@@ -49,7 +49,6 @@ import com.cmc.curtaincall.common.design.theme.Roman_Silver
 import com.cmc.curtaincall.common.design.theme.Silver_Sand
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
-import com.cmc.curtaincall.feature.partymember.ui.detail.PartyMemberDetailBody
 
 @Composable
 internal fun PartyMemberEditScreen(
@@ -241,12 +240,13 @@ private fun PartyMemberEditContent(
                 .height(12.dp)
                 .background(Cultured)
         )
-        PartyMemberDetailBody(
-            partyType = partyType,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-        )
+//        PartyMemberDetailBody(
+//            partyType = partyType,
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(horizontal = 20.dp),
+//
+//            )
         Spacer(Modifier.size(100.dp))
     }
 }

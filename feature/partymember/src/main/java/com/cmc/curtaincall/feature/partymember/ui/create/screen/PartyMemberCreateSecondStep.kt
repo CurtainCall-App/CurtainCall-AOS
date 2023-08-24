@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.partymember.ui.create
+package com.cmc.curtaincall.feature.partymember.ui.create.screen
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -41,6 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallBorderText
 import com.cmc.curtaincall.common.design.component.custom.SelectedDateCalender
@@ -57,11 +58,12 @@ import com.cmc.curtaincall.common.design.theme.Roman_Silver
 import com.cmc.curtaincall.common.design.theme.Silver_Sand
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
-import com.kizitonwose.calendar.core.CalendarDay
-import com.kizitonwose.calendar.core.DayPosition
-import java.time.LocalDate
+import com.cmc.curtaincall.common.utility.extensions.getCalendarDays
+import com.cmc.curtaincall.common.utility.extensions.getTimes
+import com.cmc.curtaincall.feature.partymember.ui.create.PartyMemberCreateViewModel
 
 fun LazyGridScope.showPerformanceSecondStep(
+    partyMemberCreateViewModel: PartyMemberCreateViewModel,
     modifier: Modifier = Modifier,
     selectedDate: String,
     selectedTime: String,
@@ -71,6 +73,7 @@ fun LazyGridScope.showPerformanceSecondStep(
     onChangePersonnelCount: (Int) -> Unit
 ) {
     item(span = { GridItemSpan(3) }) {
+        val partyMemberCreateUiState by partyMemberCreateViewModel.uiState.collectAsStateWithLifecycle()
         Box(modifier = modifier.padding(top = 15.dp)) {
             var isClickedDate by remember { mutableStateOf(false) }
             var isClickedTime by remember { mutableStateOf(false) }
@@ -90,14 +93,9 @@ fun LazyGridScope.showPerformanceSecondStep(
             ) {
                 SelectedDateCalender(
                     modifier = Modifier.padding(top = 10.dp),
-                    calendarDays = listOf(
-                        CalendarDay(LocalDate.now(), DayPosition.MonthDate),
-                        CalendarDay(LocalDate.of(2023, 7, 18), DayPosition.MonthDate),
-                        CalendarDay(LocalDate.of(2023, 8, 17), DayPosition.MonthDate),
-                        CalendarDay(LocalDate.of(2023, 6, 16), DayPosition.MonthDate),
-                        CalendarDay(LocalDate.of(2023, 7, 15), DayPosition.MonthDate),
-                        CalendarDay(LocalDate.of(2023, 7, 14), DayPosition.MonthDate),
-                        CalendarDay(LocalDate.of(2023, 7, 13), DayPosition.MonthDate)
+                    calendarDays = getCalendarDays(
+                        partyMemberCreateUiState.showDetailModel.startDate,
+                        partyMemberCreateUiState.showDetailModel.endDate
                     ),
                     onDateClick = {
                         onSelectDate(
@@ -129,7 +127,7 @@ fun LazyGridScope.showPerformanceSecondStep(
             ) {
                 DropDownTime(
                     modifier = Modifier.padding(top = 10.dp),
-                    times = listOf("14:00", "19:00", "14:00", "19:00", "14:00", "19:00"),
+                    times = selectedDate.getTimes(partyMemberCreateUiState.showDetailModel.showTimes),
                     onClick = {
                         onSelectTime(it)
                         isClickedTime = false

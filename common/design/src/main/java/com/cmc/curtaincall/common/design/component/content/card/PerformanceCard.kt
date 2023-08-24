@@ -36,6 +36,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -354,12 +355,12 @@ fun PerformanceSimpleCard(
             )
         ) {
             AsyncImage(
-                model = null,
+                model = imageUrl,
                 contentDescription = null,
-                error = painterResource(R.drawable.img_poster),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(100 / 133f)
+                    .aspectRatio(100 / 133f),
+                contentScale = ContentScale.FillBounds
             )
         }
         Text(
@@ -371,6 +372,8 @@ fun PerformanceSimpleCard(
             fontSize = 13.dp.toSp(),
             fontWeight = FontWeight.Medium,
             fontFamily = spoqahansanseeo,
+            textAlign = TextAlign.Center,
+            overflow = TextOverflow.Ellipsis,
             maxLines = 1,
             lineHeight = 20.dp.toSp()
         )

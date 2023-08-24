@@ -30,7 +30,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 internal fun PerformanceReviewScreen(
     performanceDetailViewModel: PerformanceDetailViewModel = hiltViewModel(),
     showId: String,
-    onNavigateReviewCreate: (String?, String, String) -> Unit,
+    onNavigateReviewCreate: (String?, String, String, Boolean, Int) -> Unit,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -50,7 +50,9 @@ internal fun PerformanceReviewScreen(
                     onNavigateReviewCreate(
                         performanceDetailViewModel.uiState.value.showDetailModel.poster,
                         performanceDetailViewModel.uiState.value.showDetailModel.genre,
-                        performanceDetailViewModel.uiState.value.showDetailModel.name
+                        performanceDetailViewModel.uiState.value.showDetailModel.name,
+                        false,
+                        Int.MIN_VALUE
                     )
                 },
                 modifier = Modifier
@@ -83,19 +85,25 @@ internal fun PerformanceReviewScreen(
 @Composable
 private fun PerformanceReviewContent(
     performanceDetailViewModel: PerformanceDetailViewModel,
+    performanceReviewViewModel: PerformanceReviewViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
     showId: String,
-    onNavigateReviewCreate: (String?, String, String) -> Unit
+    onNavigateReviewCreate: (String?, String, String, Boolean, Int) -> Unit
 ) {
     val reviewItems = performanceDetailViewModel.reviewItems.collectAsLazyPagingItems()
     var isShowRemoveDialog by remember { mutableStateOf(false) }
+    var removeReviewId by remember { mutableIntStateOf(0) }
     if (isShowRemoveDialog) {
         CurtainCallBasicDialog(
             title = stringResource(R.string.dialog_performance_review_remove_title),
             description = stringResource(R.string.dialog_performance_review_remove_description),
             dismissText = stringResource(R.string.dialog_performance_review_remove_dismiss),
             positiveText = stringResource(R.string.dialog_performance_review_remove_positive),
-            onDismiss = { isShowRemoveDialog = false }
+            onDismiss = { isShowRemoveDialog = false },
+            onPositive = {
+                performanceReviewViewModel.deleteShowReview(removeReviewId)
+                isShowRemoveDialog = false
+            }
         )
     }
     if (reviewItems.itemCount == 0) {
@@ -105,9 +113,7 @@ private fun PerformanceReviewContent(
                 .background(White),
             contentAlignment = Alignment.Center
         ) {
-            EmptyItem(
-                alert = stringResource(R.string.performance_review_detail_empty)
-            )
+            EmptyItem(alert = stringResource(R.string.performance_review_detail_empty))
         }
     } else {
         LazyColumn(
@@ -132,10 +138,15 @@ private fun PerformanceReviewContent(
                             onNavigateReviewCreate(
                                 performanceDetailViewModel.uiState.value.showDetailModel.poster,
                                 performanceDetailViewModel.uiState.value.showDetailModel.genre,
-                                performanceDetailViewModel.uiState.value.showDetailModel.name
+                                performanceDetailViewModel.uiState.value.showDetailModel.name,
+                                true,
+                                reviewItem.id
                             )
                         },
-                        onRemoveWriting = { isShowRemoveDialog = true }
+                        onRemoveWriting = {
+                            removeReviewId = reviewItem.id
+                            isShowRemoveDialog = true
+                        }
                     )
                     if (index < reviewItems.itemCount - 1) {
                         Spacer(

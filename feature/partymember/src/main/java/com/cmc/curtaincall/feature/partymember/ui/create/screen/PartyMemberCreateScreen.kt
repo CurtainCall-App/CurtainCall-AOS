@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.partymember.ui.create
+package com.cmc.curtaincall.feature.partymember.ui.create.screen
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -13,13 +13,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallRoundedText
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.feature.partymember.ui.create.PartyMemberCreateSideEffect
+import com.cmc.curtaincall.feature.partymember.ui.create.PartyMemberCreateViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.flow.collectLatest
 
 private const val UNSELECTED_INDEX = -1
 const val DEFAULT_PERSONNEL_COUNT = 0
@@ -31,13 +36,17 @@ enum class STEP(val prevStep: STEP) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PartyMemberCreateScreen(
+    partyMemberCreateViewModel: PartyMemberCreateViewModel = hiltViewModel(),
     partyType: PartyType,
     onNavigateUpload: (PartyType) -> Unit,
     onBack: () -> Unit
 ) {
+    LaunchedEffect(Unit) {
+        partyMemberCreateViewModel.setPartyCategory(partyType)
+    }
+
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(White)
-
     var currentStep by remember { mutableStateOf(if (partyType == PartyType.ETC) STEP.PHASE1_1 else STEP.PHASE1) }
     Scaffold(
         topBar = {
@@ -56,6 +65,7 @@ internal fun PartyMemberCreateScreen(
         }
     ) { paddingValues ->
         PartyMemberCreateContent(
+            partyMemberCreateViewModel = partyMemberCreateViewModel,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
@@ -70,19 +80,54 @@ internal fun PartyMemberCreateScreen(
 
 @Composable
 private fun PartyMemberCreateContent(
+    partyMemberCreateViewModel: PartyMemberCreateViewModel,
     modifier: Modifier = Modifier,
     partyType: PartyType,
     currentStep: STEP,
     onChangeStep: (STEP) -> Unit,
     onNavigateUpload: (PartyType) -> Unit
 ) {
+    // 1 step
     var selectedPerformanceIndex by remember { mutableIntStateOf(UNSELECTED_INDEX) }
+    var isCheckFirstType by remember { mutableStateOf(true) }
+
+    // 2 step
     var selectedDateState by remember { mutableStateOf("") }
     var selectedTimeState by remember { mutableStateOf("") }
+    var personnelCountState by remember { mutableIntStateOf(DEFAULT_PERSONNEL_COUNT) }
+
+    // 3 step
     var titleTextState by remember { mutableStateOf("") }
     var contentTextState by remember { mutableStateOf("") }
+
+    // 1-1 step
     var clickedUndeterminDateState by remember { mutableStateOf(false) }
-    var personnelCountState by remember { mutableIntStateOf(DEFAULT_PERSONNEL_COUNT) }
+
+    val playItems = partyMemberCreateViewModel.playItems.collectAsLazyPagingItems()
+    val musicalItems = partyMemberCreateViewModel.musicalItems.collectAsLazyPagingItems()
+
+    LaunchedEffect(currentStep) {
+        if (currentStep == STEP.PHASE1) {
+            selectedDateState = ""
+            selectedTimeState = ""
+            personnelCountState = DEFAULT_PERSONNEL_COUNT
+        } else if (currentStep == STEP.PHASE2) {
+            titleTextState = ""
+            contentTextState = ""
+        } else {
+            // TODO
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        partyMemberCreateViewModel.effects.collectLatest { effect ->
+            when (effect) {
+                PartyMemberCreateSideEffect.SuccessUpload -> {
+                    onNavigateUpload(partyType)
+                }
+            }
+        }
+    }
 
     Box(modifier) {
         LazyVerticalGrid(
@@ -106,11 +151,17 @@ private fun PartyMemberCreateContent(
 
             when (currentStep) {
                 STEP.PHASE1 -> showPerformanceFirstStep(
+                    partyMemberCreateViewModel = partyMemberCreateViewModel,
+                    isCheckFirstType = isCheckFirstType,
+                    onTypeChange = { isCheckFirstType = it },
+                    playItems = playItems,
+                    musicalItems = musicalItems,
                     selectedIndex = selectedPerformanceIndex,
                     onChangeSelect = { selectedPerformanceIndex = it }
                 )
 
                 STEP.PHASE2 -> showPerformanceSecondStep(
+                    partyMemberCreateViewModel = partyMemberCreateViewModel,
                     modifier = Modifier.fillMaxWidth(),
                     selectedDate = selectedDateState,
                     selectedTime = selectedTimeState,
@@ -143,7 +194,18 @@ private fun PartyMemberCreateContent(
         when (currentStep) {
             STEP.PHASE1 -> {
                 Button(
-                    onClick = { onChangeStep(STEP.PHASE2) },
+                    onClick = {
+                        if (isCheckFirstType) {
+                            playItems[selectedPerformanceIndex]?.let { playItem ->
+                                partyMemberCreateViewModel.setShowId(playItem.id)
+                            }
+                        } else {
+                            musicalItems[selectedPerformanceIndex]?.let { musicalItem ->
+                                partyMemberCreateViewModel.setShowId(musicalItem.id)
+                            }
+                        }
+                        onChangeStep(STEP.PHASE2)
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter)
@@ -169,7 +231,10 @@ private fun PartyMemberCreateContent(
 
             STEP.PHASE2 -> {
                 Button(
-                    onClick = { onChangeStep(STEP.PHASE3) },
+                    onClick = {
+                        partyMemberCreateViewModel.setPartyInfo(selectedDateState, selectedTimeState, personnelCountState)
+                        onChangeStep(STEP.PHASE3)
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter)
@@ -199,7 +264,10 @@ private fun PartyMemberCreateContent(
 
             STEP.PHASE3, STEP.PHASE1_2 -> {
                 Button(
-                    onClick = { onNavigateUpload(partyType) },
+                    onClick = {
+                        partyMemberCreateViewModel.setPartyDescription(titleTextState, contentTextState)
+                        partyMemberCreateViewModel.createParty()
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter)
@@ -226,7 +294,22 @@ private fun PartyMemberCreateContent(
             STEP.PHASE1_1 -> {
                 var validation = (selectedDateState.isNotEmpty() or clickedUndeterminDateState) and (personnelCountState > DEFAULT_PERSONNEL_COUNT)
                 Button(
-                    onClick = { onChangeStep(STEP.PHASE1_2) },
+                    onClick = {
+                        if (clickedUndeterminDateState) {
+                            partyMemberCreateViewModel.setPartyInfo(
+                                date = "0000. 00. 00",
+                                time = "00:00",
+                                maxMemberNum = personnelCountState
+                            )
+                        } else {
+                            partyMemberCreateViewModel.setPartyInfo(
+                                date = selectedDateState,
+                                time = "00:00",
+                                maxMemberNum = personnelCountState
+                            )
+                        }
+                        onChangeStep(STEP.PHASE1_2)
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.BottomCenter)
