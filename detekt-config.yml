@@ -5,6 +5,8 @@ complexity:
     active: false
   CyclomaticComplexMethod:
     active: false
+  TooManyFunctions:
+    active: false
 
 style:
   MagicNumber:

@@ -28,12 +28,11 @@ interface ShowSearchDao {
     fun findOldestSearch(): Flow<ShowSearchWordEntity>
 
     @Transaction
-    suspend fun insertShowSearch(showSearchWordEntity: ShowSearchWordEntity){
+    suspend fun insertShowSearch(showSearchWordEntity: ShowSearchWordEntity) {
         val searchList = getAll().first()
-        if(searchList.size >= 10){
+        if (searchList.size >= 10) {
             deleteShowSearch(findOldestSearch().first())
         }
         insertSearchEntity(showSearchWordEntity)
     }
-
 }
