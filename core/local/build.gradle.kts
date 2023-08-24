@@ -18,6 +18,8 @@ dependencies {
     implementation(project(":domain"))
     implementation(libs.timber)
     implementation(libs.datastore.preferences)
+    implementation(libs.androidx.room.runtime)
+    kapt(libs.androidx.room.compiler)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
     implementation(libs.androidx.core.ktx)
