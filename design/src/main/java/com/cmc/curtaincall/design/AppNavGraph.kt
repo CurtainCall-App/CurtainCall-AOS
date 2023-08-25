@@ -7,7 +7,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.cmc.curtaincall.design.ui.screen.AlertScreen
 import com.cmc.curtaincall.design.ui.screen.AppBarScreen
 import com.cmc.curtaincall.design.ui.screen.BottomSheetScreen
 import com.cmc.curtaincall.design.ui.screen.ButtonScreen
@@ -17,9 +16,7 @@ import com.cmc.curtaincall.design.ui.screen.ColorScreen
 import com.cmc.curtaincall.design.ui.screen.DialogScreen
 import com.cmc.curtaincall.design.ui.screen.HomeScreen
 import com.cmc.curtaincall.design.ui.screen.IconScreen
-import com.cmc.curtaincall.design.ui.screen.RatingBarScreen
 import com.cmc.curtaincall.design.ui.screen.TextFieldScreen
-import com.cmc.curtaincall.design.ui.screen.TextScreen
 import com.cmc.curtaincall.design.ui.screen.TimePickerScreen
 import com.cmc.curtaincall.design.ui.screen.TypoGraphyScreen
 
@@ -60,16 +57,8 @@ object Typography : DesignSystemDestination {
     override val route = TYPOGRAPHY
 }
 
-object Alert : DesignSystemDestination {
-    override val route = ALERT
-}
-
 object Button : DesignSystemDestination {
     override val route = BUTTON
-}
-
-object Text : DesignSystemDestination {
-    override val route = TEXT
 }
 
 object TextField : DesignSystemDestination {
@@ -90,10 +79,6 @@ object BottomSheet : DesignSystemDestination {
 
 object Calendar : DesignSystemDestination {
     override val route = CALENDAR
-}
-
-object RatingBar : DesignSystemDestination {
-    override val route = RATING_BAR
 }
 
 object TimePicker : DesignSystemDestination {
@@ -119,15 +104,12 @@ internal fun AppNavHost(
                 onNavigateColor = { navHostController.navigate(Color.route) },
                 onNavigateIcons = { navHostController.navigate(Icons.route) },
                 onNavigateTypography = { navHostController.navigate(Typography.route) },
-                onNavigateAlert = { navHostController.navigate(Alert.route) },
                 onNavigateButton = { navHostController.navigate(Button.route) },
-                onNavigateText = { navHostController.navigate(Text.route) },
                 onNavigateTextField = { navHostController.navigate(TextField.route) },
                 onNavigateAppbar = { navHostController.navigate(Appbar.route) },
                 onNavigateCard = { navHostController.navigate(Card.route) },
                 onNavigateBottomSheet = { navHostController.navigate(BottomSheet.route) },
                 onNavigateCalendar = { navHostController.navigate(Calendar.route) },
-                onNavigateRatingBar = { navHostController.navigate(RatingBar.route) },
                 onNavigateTimePicker = { navHostController.navigate(TimePicker.route) },
                 onNavigateDialog = { navHostController.navigate(Dialog.route) }
             )
@@ -145,16 +127,8 @@ internal fun AppNavHost(
             TypoGraphyScreen { navHostController.popBackStack() }
         }
 
-        composable(route = Alert.route) {
-            AlertScreen { navHostController.popBackStack() }
-        }
-
         composable(route = Button.route) {
             ButtonScreen { navHostController.popBackStack() }
-        }
-
-        composable(route = Text.route) {
-            TextScreen { navHostController.popBackStack() }
         }
 
         composable(route = TextField.route) {
@@ -179,10 +153,6 @@ internal fun AppNavHost(
 
         composable(route = Calendar.route) {
             CalendarScreen { navHostController.popBackStack() }
-        }
-
-        composable(route = RatingBar.route) {
-            RatingBarScreen { navHostController.popBackStack() }
         }
 
         composable(route = TimePicker.route) {
