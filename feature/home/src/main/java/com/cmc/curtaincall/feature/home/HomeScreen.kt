@@ -241,7 +241,8 @@ private fun HomeContent(
                                     rate = if (showRank.reviewCount == 0) 0.0f else showRank.reviewGradeSum / showRank.reviewCount.toFloat(),
                                     numberOfTotal = showRank.reviewCount,
                                     isShowMetadata = true,
-                                    meta = showRank.rank.toString()
+                                    meta = (index + 1).toString(),
+                                    onClick = { onNavigatePerformanceDetail(showRank.id) }
                                 )
                                 Spacer(Modifier.size(12.dp))
                             }

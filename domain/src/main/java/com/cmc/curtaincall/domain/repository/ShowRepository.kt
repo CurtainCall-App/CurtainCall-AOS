@@ -28,6 +28,10 @@ interface ShowRepository {
         genre: String
     ): Flow<List<ShowInfoModel>>
 
+    fun fetchSearchShowList(
+        keyword: String
+    ): Flow<PagingData<ShowInfoModel>>
+
     fun searchShowList(
         page: Int,
         size: Int,

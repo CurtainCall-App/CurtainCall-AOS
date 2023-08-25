@@ -7,7 +7,9 @@ import androidx.paging.map
 import com.cmc.curtaincall.core.network.service.show.ShowService
 import com.cmc.curtaincall.data.source.local.ShowLocalSource
 import com.cmc.curtaincall.data.source.paging.SHOW_PAGE_SIZE
+import com.cmc.curtaincall.data.source.paging.SHOW_SEARCH_PAGE_SIZE
 import com.cmc.curtaincall.data.source.paging.ShowPagingSource
+import com.cmc.curtaincall.data.source.paging.ShowSearchPagingSource
 import com.cmc.curtaincall.data.source.remote.ShowRemoteSource
 import com.cmc.curtaincall.domain.model.show.FacilityDetailModel
 import com.cmc.curtaincall.domain.model.show.ShowDetailModel
@@ -55,6 +57,18 @@ class ShowRepositoryImpl @Inject constructor(
         showRemoteSource.requestShowList(page, size, genre).map { showInfoResponses ->
             showInfoResponses.map { it.toModel() }
         }
+
+    override fun fetchSearchShowList(keyword: String): Flow<PagingData<ShowInfoModel>> {
+        return Pager(
+            config = PagingConfig(pageSize = SHOW_SEARCH_PAGE_SIZE),
+            pagingSourceFactory = { ShowSearchPagingSource(showService, keyword) }
+        ).flow
+            .map { pagingData ->
+                pagingData.map { response ->
+                    response.toModel()
+                }
+            }
+    }
 
     override fun searchShowList(page: Int, size: Int, keyword: String): Flow<List<ShowInfoModel>> =
         showRemoteSource.searchShowList(page, size, keyword).map { showInfoResponse ->
