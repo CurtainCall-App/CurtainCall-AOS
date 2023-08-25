@@ -72,7 +72,8 @@ internal fun MyPageProfileEditScreen(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
-                .background(White)
+                .background(White),
+            onBack = onBack
         )
     }
 }
@@ -171,7 +172,8 @@ private fun MyPageProfile() {
 
 @Composable
 private fun MyPageProfileEditContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onBack: () -> Unit = {}
 ) {
     Column(
         modifier = modifier,
@@ -185,7 +187,7 @@ private fun MyPageProfileEditContent(
         )
         Spacer(Modifier.weight(1f))
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { onBack() },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)

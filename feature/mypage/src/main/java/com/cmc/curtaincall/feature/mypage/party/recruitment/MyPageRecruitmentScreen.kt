@@ -18,21 +18,33 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.component.content.card.PartyMemberContentCard
 import com.cmc.curtaincall.common.design.component.content.card.PartyType
+import com.cmc.curtaincall.common.design.component.items.EmptyItem
 import com.cmc.curtaincall.common.design.theme.Bright_Gray
+import com.cmc.curtaincall.common.design.theme.Me_Pink
 import com.cmc.curtaincall.common.design.theme.Nero
+import com.cmc.curtaincall.common.utility.extensions.toChangeDate
+import com.cmc.curtaincall.common.utility.extensions.toDateWithDay
+import com.cmc.curtaincall.common.utility.extensions.toTime
+import com.cmc.curtaincall.feature.mypage.MyPageViewModel
 import com.cmc.curtaincall.feature.mypage.party.MyPagePartyMenuTab
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MyPageRecruitmentScreen(
-    onNavigatRecruitmentDetail: (PartyType) -> Unit,
+    myPageViewModel: MyPageViewModel = hiltViewModel(),
+    onNavigateRecruitmentDetail: (PartyType) -> Unit,
     onBack: () -> Unit
 ) {
+    Timber.d("MyPageRecruitmentScreen ${myPageViewModel.hashCode()}")
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(Bright_Gray)
 
@@ -50,21 +62,37 @@ internal fun MyPageRecruitmentScreen(
         }
     ) { paddingValues ->
         MyPageRecruitmentContent(
+            myPageViewModel = myPageViewModel,
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
                 .background(Bright_Gray),
-            onNavigatRecruitmentDetail = onNavigatRecruitmentDetail
+            onNavigateRecruitmentDetail = onNavigateRecruitmentDetail
         )
     }
 }
 
 @Composable
 private fun MyPageRecruitmentContent(
+    myPageViewModel: MyPageViewModel,
     modifier: Modifier = Modifier,
-    onNavigatRecruitmentDetail: (PartyType) -> Unit
+    onNavigateRecruitmentDetail: (PartyType) -> Unit
 ) {
     var partyTypeState by remember { mutableStateOf(PartyType.PERFORMANCE) }
+    val recruitmentItems = when (partyTypeState) {
+        PartyType.PERFORMANCE -> {
+            myPageViewModel.watchingRecruitmentItems.collectAsLazyPagingItems()
+        }
+
+        PartyType.MEAL -> {
+            myPageViewModel.foodRecruitmentItems.collectAsLazyPagingItems()
+        }
+
+        PartyType.ETC -> {
+            myPageViewModel.etcRecruitmentItems.collectAsLazyPagingItems()
+        }
+    }
+
     Column(modifier) {
         MyPagePartyMenuTab(
             modifier = Modifier
@@ -74,32 +102,48 @@ private fun MyPageRecruitmentContent(
             onChangePartType = { partyTypeState = it }
         )
 
-        LazyColumn(
-            modifier = Modifier
-                .padding(top = 11.dp)
-                .fillMaxSize()
-        ) {
-            item(10) {
-                PartyMemberContentCard(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .wrapContentHeight()
-                        .padding(bottom = 20.dp),
-                    partyType = partyTypeState,
-                    title = "비스티",
-                    nickname = "고라파덕",
-                    createAtDate = "2023.06.07",
-                    createAtTime = "11:51",
-                    numberOfMember = 1,
-                    numberOfTotal = 5,
-                    description = "비스티 이번주 토욜 저녁 공연 같이 봐요~",
-                    posterUrl = "",
-                    date = "2023.6.24(토)",
-                    time = "19:30",
-                    location = "링크아트센터",
-                    hasLiveTalk = true,
-                    onClick = { onNavigatRecruitmentDetail(partyTypeState) }
-                )
+        if (recruitmentItems.itemCount == 0) {
+            EmptyItem(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 238.dp),
+                alert = "아직 참여 중인 파티원이 없어요",
+                iconColor = Me_Pink,
+                contentColor = Nero
+            )
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(top = 11.dp)
+                    .fillMaxSize()
+                    .padding(horizontal = 20.dp)
+            ) {
+                items(recruitmentItems) { recruitmentModel ->
+                    recruitmentModel?.let { recruit ->
+                        PartyMemberContentCard(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight()
+                                .padding(bottom = 20.dp),
+                            partyType = partyTypeState,
+                            title = recruit.showName,
+                            nickname = recruit.creatorNickname,
+                            createAtDate = recruit.createdAt.toChangeDate(),
+                            createAtTime = recruit.createdAt.toTime(),
+                            numberOfMember = recruit.curMemberNum,
+                            numberOfTotal = recruit.maxMemberNum,
+                            description = recruit.title,
+                            posterUrl = recruit.showPoster,
+                            date = recruit.showAt.toDateWithDay(),
+                            time = recruit.showAt.toTime(),
+                            location = recruit.facilityName,
+                            hasLiveTalk = false,
+                            onClick = {
+                                // onNavigateRecruitmentDetail(partyTypeState)
+                            }
+                        )
+                    }
+                }
             }
         }
     }

@@ -22,7 +22,9 @@ import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 @Composable
 fun EmptyItem(
     modifier: Modifier = Modifier,
-    alert: String
+    alert: String,
+    iconColor: Color = Color.Unspecified,
+    contentColor: Color = Silver_Sand
 ) {
     Column(
         modifier = modifier,
@@ -32,12 +34,12 @@ fun EmptyItem(
             painter = painterResource(R.drawable.ic_empty_item),
             contentDescription = null,
             modifier = Modifier.size(60.dp),
-            tint = Color.Unspecified
+            tint = iconColor
         )
         Text(
             text = alert,
             modifier = Modifier.padding(top = 20.dp),
-            color = Silver_Sand,
+            color = contentColor,
             fontSize = 15.dp.toSp(),
             fontWeight = FontWeight.Medium,
             fontFamily = spoqahansanseeo,
