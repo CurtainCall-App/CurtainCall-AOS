@@ -1,18 +1,54 @@
 package com.cmc.curtaincall.data.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.map
+import com.cmc.curtaincall.core.network.service.member.MemberService
 import com.cmc.curtaincall.data.source.local.MemberLocalSource
+import com.cmc.curtaincall.data.source.paging.MyParticipationPagingSource
+import com.cmc.curtaincall.data.source.paging.MyRecruitmentPagingSource
+import com.cmc.curtaincall.data.source.paging.PARTICIPATION_PAGE_SIZE
+import com.cmc.curtaincall.data.source.paging.RECRUITMENT_PAGE_SIZE
 import com.cmc.curtaincall.data.source.remote.MemberRemoteSource
 import com.cmc.curtaincall.domain.model.home.MemberInfoModel
 import com.cmc.curtaincall.domain.model.home.MyParticipationModel
 import com.cmc.curtaincall.domain.model.home.MyRecruitmentModel
 import com.cmc.curtaincall.domain.repository.MemberRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class MemberRepositoryImpl @Inject constructor(
     private val memberRemoteSource: MemberRemoteSource,
-    private val memberLocalSource: MemberLocalSource
+    private val memberLocalSource: MemberLocalSource,
+    private val memberService: MemberService
 ) : MemberRepository {
+
+    override fun fetchMyRecruitments(memberId: Int, category: String): Flow<PagingData<MyRecruitmentModel>> {
+        return Pager(
+            config = PagingConfig(pageSize = RECRUITMENT_PAGE_SIZE),
+            pagingSourceFactory = { MyRecruitmentPagingSource(memberService, memberId, category) }
+        ).flow
+            .map { pagingData ->
+                pagingData.map { response ->
+                    response.toModel()
+                }
+            }
+    }
+
+    override fun fetchMyParticipations(memberId: Int, category: String): Flow<PagingData<MyParticipationModel>> {
+        return Pager(
+            config = PagingConfig(pageSize = PARTICIPATION_PAGE_SIZE),
+            pagingSourceFactory = { MyParticipationPagingSource(memberService, memberId, category) }
+        ).flow
+            .map { pagingData ->
+                pagingData.map { response ->
+                    response.toModel()
+                }
+            }
+    }
+
     override fun checkDuplicateNickname(nickname: String): Flow<Boolean> =
         memberRemoteSource.checkDuplicateNickname(nickname)
 

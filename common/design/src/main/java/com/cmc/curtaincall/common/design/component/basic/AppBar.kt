@@ -1,6 +1,7 @@
 package com.cmc.curtaincall.common.design.component.basic
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -383,6 +385,57 @@ fun TopAppBarWithReportAction(
                     tint = Silver_Sand
                 )
             }
+        },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = containerColor)
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopAppBarWithDelete(
+    title: String,
+    containerColor: Color,
+    contentColor: Color,
+    deleteColor: Color,
+    onBack: () -> Unit = {},
+    onDelete: () -> Unit = {}
+) {
+    CenterAlignedTopAppBar(
+        title = {
+            Text(
+                text = title,
+                color = contentColor,
+                fontSize = 17.dp.toSp(),
+                fontWeight = FontWeight.Bold,
+                fontFamily = spoqahansanseeo
+            )
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(54.dp)
+            .background(containerColor)
+            .padding(top = 20.dp, bottom = 10.dp),
+        navigationIcon = {
+            IconButton(onClick = onBack) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_arrow_back),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                    tint = contentColor
+                )
+            }
+        },
+        actions = {
+            Text(
+                text = stringResource(R.string.mypage_writing_remove),
+                modifier = Modifier
+                    .padding(end = 11.dp)
+                    .clickable { onDelete() },
+                color = deleteColor,
+                fontSize = 14.dp.toSp(),
+                fontWeight = FontWeight.Medium,
+                fontFamily = spoqahansanseeo
+            )
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = containerColor)
     )

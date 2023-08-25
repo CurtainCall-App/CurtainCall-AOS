@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.partymember.ui.create
+package com.cmc.curtaincall.feature.partymember.ui.create.screen
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background

@@ -15,6 +15,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.DottedLine
 import com.cmc.curtaincall.common.design.component.content.card.PartyMemberCard
@@ -26,7 +27,10 @@ import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
-fun PartyMemberScreen(onNavigateList: (PartyType) -> Unit) {
+fun PartyMemberScreen(
+    partyMemberViewModel: PartyMemberViewModel = hiltViewModel(),
+    onNavigateList: (PartyType) -> Unit
+) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(Cultured)
 

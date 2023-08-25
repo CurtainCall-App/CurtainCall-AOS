@@ -25,11 +25,11 @@ interface ReviewRepository {
     ): Flow<List<ShowReviewModel>>
 
     fun deleteShowReview(
-        reviewId: String
+        reviewId: Int
     ): Flow<Boolean>
 
     fun updateShowReview(
-        reviewId: String,
+        reviewId: Int,
         content: String,
         grade: Int
     ): Flow<Boolean>

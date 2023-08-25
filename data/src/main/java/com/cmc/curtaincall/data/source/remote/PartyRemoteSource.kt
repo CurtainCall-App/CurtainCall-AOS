@@ -44,7 +44,7 @@ class PartyRemoteSource @Inject constructor(
     }
 
     fun requestPartyDetail(
-        partyId: String
+        partyId: Int
     ): Flow<PartyDetailResponse> = flow {
         emit(
             partyService.requestPartyDetail(
@@ -76,7 +76,7 @@ class PartyRemoteSource @Inject constructor(
     }
 
     fun deleteParty(
-        partyId: String
+        partyId: Int
     ): Flow<Boolean> = flow {
         emit(
             partyService.deleteParty(partyId).isSuccessful

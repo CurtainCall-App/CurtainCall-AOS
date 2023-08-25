@@ -1,6 +1,5 @@
 package com.cmc.curtaincall.common.design.component.content.card
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -42,8 +42,22 @@ import com.cmc.curtaincall.common.design.theme.Silver_Sand
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 
-enum class PartyType(val value: String) {
-    PERFORMANCE("공연 관람"), MEAL("식사/카페"), ETC("기타")
+enum class PartyType(
+    val value: String,
+    val category: String
+) {
+    PERFORMANCE(
+        value = "공연 관람",
+        category = "WATCHING"
+    ),
+    MEAL(
+        value = "식사/카페",
+        category = "FOOD_CAFE"
+    ),
+    ETC(
+        value = "기타",
+        category = "ETC"
+    )
 }
 
 @Composable
@@ -93,17 +107,17 @@ fun PartyMemberContentCard(
     numberOfMember: Int,
     numberOfTotal: Int,
     description: String,
-    poster: Painter,
+    posterUrl: String? = null,
     date: String,
     time: String,
     location: String,
     hasLiveTalk: Boolean = false,
-    onNavigateDetail: (PartyType) -> Unit = {},
-    onNavigateLiveTalk: () -> Unit = {}
+    onClick: () -> Unit = {},
+    onAction: () -> Unit = {}
 ) {
     Box(
         modifier = modifier
-            .clickable { onNavigateDetail(partyType) }
+            .clickable { onClick() }
             .padding(bottom = 10.dp)
     ) {
         Card(
@@ -151,14 +165,14 @@ fun PartyMemberContentCard(
                 )
                 PartyMemberContentCardBody(
                     partyType = partyType,
-                    poster = poster,
+                    posterUrl = posterUrl,
                     date = date,
                     time = time,
                     location = location
                 )
                 if (hasLiveTalk) {
                     CurtainCallRoundedTextButton(
-                        onClick = onNavigateLiveTalk,
+                        onClick = onAction,
                         modifier = Modifier
                             .padding(top = 22.dp)
                             .fillMaxWidth()
@@ -180,7 +194,9 @@ fun PartyMemberContentCard(
             color = White,
             fontSize = 16.dp.toSp(),
             fontWeight = FontWeight.Bold,
-            fontFamily = spoqahansanseeo
+            fontFamily = spoqahansanseeo,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
@@ -188,7 +204,7 @@ fun PartyMemberContentCard(
 @Composable
 private fun PartyMemberContentCardBody(
     partyType: PartyType,
-    poster: Painter,
+    posterUrl: String? = null,
     date: String,
     time: String,
     location: String
@@ -208,10 +224,13 @@ private fun PartyMemberContentCardBody(
             modifier = Modifier.wrapContentHeight(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = poster,
+            AsyncImage(
+                model = posterUrl,
                 contentDescription = null,
-                modifier = Modifier.size(64.dp, 85.dp)
+                modifier = Modifier
+                    .size(64.dp, 85.dp)
+                    .clip(RoundedCornerShape(6.dp)),
+                contentScale = ContentScale.FillBounds
             )
 
             Column(
@@ -279,10 +298,13 @@ private fun PartyMemberContentCardHeader(
                     color = Nero,
                     fontSize = 16.dp.toSp(),
                     fontWeight = FontWeight.Bold,
-                    fontFamily = spoqahansanseeo
+                    fontFamily = spoqahansanseeo,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
                 Text(
                     text = String.format("%d/%d", numberOfMember, numberOfTotal),
+                    modifier = Modifier.padding(start = 4.dp),
                     color = Nero,
                     fontSize = 15.dp.toSp(),
                     fontWeight = FontWeight.Medium,

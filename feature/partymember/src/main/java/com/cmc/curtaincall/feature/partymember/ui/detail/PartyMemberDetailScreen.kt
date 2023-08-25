@@ -18,21 +18,31 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallRoundedTextButton
 import com.cmc.curtaincall.common.design.component.basic.DottedLine
-import com.cmc.curtaincall.common.design.component.basic.MoreTopAppBarWithBack
+import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithDelete
+import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithReportAction
 import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.cmc.curtaincall.common.design.component.custom.EditBottomSheet
 import com.cmc.curtaincall.common.design.component.dialog.CurtainCallBasicDialog
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.common.utility.extensions.toChangeDate
+import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
+import com.cmc.curtaincall.common.utility.extensions.toTime
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PartyMemberDetailScreen(
+    partyMemberDetailViewModel: PartyMemberDetailViewModel = hiltViewModel(),
+    partyId: Int,
+    myWriting: Boolean = false,
     fromRecruitment: Boolean = false,
     fromParticipation: Boolean = false,
     partyType: PartyType,
@@ -70,7 +80,10 @@ fun PartyMemberDetailScreen(
             dismissText = stringResource(R.string.dialog_performance_review_remove_dismiss),
             positiveText = stringResource(R.string.dialog_performance_review_remove_positive),
             onDismiss = { isShowRemoveDialog = false },
-            onPositive = { isShowRemoveDialog = false }
+            onPositive = {
+                partyMemberDetailViewModel.deleteParty(partyId)
+                isShowRemoveDialog = false
+            }
         )
     }
 
@@ -90,46 +103,60 @@ fun PartyMemberDetailScreen(
         )
     }
 
+    LaunchedEffect(partyMemberDetailViewModel) {
+        partyMemberDetailViewModel.requestPartyDetail(partyId)
+        partyMemberDetailViewModel.effects.collectLatest {
+            when (it) {
+                PartyMemberDetailSideEffect.SuccessDelete -> {
+                    onBack()
+                }
+            }
+        }
+    }
+
     Scaffold(
         topBar = {
-            MoreTopAppBarWithBack(
-                title = stringResource(
-                    if (fromRecruitment) {
-                        R.string.mypage_my_gathering_tab
-                    } else if (fromParticipation) {
-                        R.string.mypage_my_participation_tab
-                    } else {
-                        when (partyType) {
-                            PartyType.PERFORMANCE -> R.string.partymember_performance_title
-                            PartyType.MEAL -> R.string.partymember_restaurant_title
-                            PartyType.ETC -> R.string.partymember_etc_title
+            if (myWriting) {
+                TopAppBarWithDelete(
+                    title = stringResource(
+                        if (fromRecruitment) {
+                            R.string.mypage_my_gathering_tab
+                        } else if (fromParticipation) {
+                            R.string.mypage_my_participation_tab
+                        } else {
+                            when (partyType) {
+                                PartyType.PERFORMANCE -> R.string.partymember_performance_title
+                                PartyType.MEAL -> R.string.partymember_restaurant_title
+                                PartyType.ETC -> R.string.partymember_etc_title
+                            }
                         }
-                    }
-                ),
-                containerColor = White,
-                contentColor = Nero,
-                tint = Silver_Sand,
-                onBack = onBack,
-                onClick = { isShowBottomSheeet = true }
-            )
-//            TopAppBarWithReportAction(
-//                title = stringResource(
-//                    if (fromRecruitment) {
-//                        R.string.mypage_my_gathering_tab
-//                    } else if (fromParticipation) {
-//                        R.string.mypage_my_participation_tab
-//                    } else {
-//                        when (partyType) {
-//                            PartyType.PERFORMANCE -> R.string.partymember_performance_title
-//                            PartyType.MEAL -> R.string.partymember_restaurant_title
-//                            PartyType.ETC -> R.string.partymember_etc_title
-//                        }
-//                    }
-//                ),
-//                containerColor = White,
-//                contentColor = Nero,
-//                onBack = onBack
-//            )
+                    ),
+                    containerColor = White,
+                    contentColor = Nero,
+                    deleteColor = Black_Coral,
+                    onBack = onBack,
+                    onDelete = { isShowRemoveDialog = true }
+                )
+            } else {
+                TopAppBarWithReportAction(
+                    title = stringResource(
+                        if (fromRecruitment) {
+                            R.string.mypage_my_gathering_tab
+                        } else if (fromParticipation) {
+                            R.string.mypage_my_participation_tab
+                        } else {
+                            when (partyType) {
+                                PartyType.PERFORMANCE -> R.string.partymember_performance_title
+                                PartyType.MEAL -> R.string.partymember_restaurant_title
+                                PartyType.ETC -> R.string.partymember_etc_title
+                            }
+                        }
+                    ),
+                    containerColor = White,
+                    contentColor = Nero,
+                    onBack = onBack
+                )
+            }
         },
         floatingActionButton = {
             CurtainCallRoundedTextButton(
@@ -154,6 +181,7 @@ fun PartyMemberDetailScreen(
         floatingActionButtonPosition = FabPosition.Center
     ) { paddingValues ->
         PartyMemberDetailContent(
+            partyMemberDetailViewModel = partyMemberDetailViewModel,
             partyType = partyType,
             modifier = Modifier
                 .padding(paddingValues)
@@ -165,21 +193,23 @@ fun PartyMemberDetailScreen(
 
 @Composable
 private fun PartyMemberDetailContent(
+    partyMemberDetailViewModel: PartyMemberDetailViewModel,
     partyType: PartyType,
     modifier: Modifier = Modifier
 ) {
     val scrollState = rememberScrollState()
+    val partyMemberDetailUiState by partyMemberDetailViewModel.uiState.collectAsStateWithLifecycle()
     Column(modifier.verticalScroll(scrollState)) {
         PartyMemberDetailHeader(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 30.dp)
                 .padding(horizontal = 20.dp),
-            nickname = "고라파덕",
-            createAtDate = "2023.06.07",
-            createAtTime = "12:37",
-            title = "리어왕 lg센터 끝나고 밥 드실 분",
-            description = "등촌칼국수 드실 분 있나여?! 다들 참여 기기 등촌칼국수 드실 분 있나여?! 다들 참여 기기"
+            nickname = partyMemberDetailUiState.partyDetailModel.creatorNickname,
+            createAtDate = partyMemberDetailUiState.partyDetailModel.createdAt.toChangeDate(),
+            createAtTime = partyMemberDetailUiState.partyDetailModel.createdAt.toTime(),
+            title = partyMemberDetailUiState.partyDetailModel.title,
+            description = partyMemberDetailUiState.partyDetailModel.content
         )
         Spacer(
             modifier = Modifier
@@ -192,7 +222,12 @@ private fun PartyMemberDetailContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 24.dp)
-                .padding(horizontal = 20.dp)
+                .padding(horizontal = 20.dp),
+            showName = partyMemberDetailUiState.partyDetailModel.showName,
+            curMemberNum = partyMemberDetailUiState.partyDetailModel.curMemberNum,
+            maxMemberNum = partyMemberDetailUiState.partyDetailModel.maxMemberNum,
+            showAt = partyMemberDetailUiState.partyDetailModel.showAt,
+            facilityName = partyMemberDetailUiState.partyDetailModel.facilityName
         )
     }
 }
@@ -268,7 +303,12 @@ fun PartyMemberDetailHeader(
 @Composable
 fun PartyMemberDetailBody(
     partyType: PartyType,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    showName: String,
+    curMemberNum: Int,
+    maxMemberNum: Int,
+    showAt: String,
+    facilityName: String
 ) {
     Column(modifier) {
         Text(
@@ -300,7 +340,7 @@ fun PartyMemberDetailBody(
                 modifier = Modifier.padding(top = 20.dp),
                 icon = painterResource(R.drawable.ic_dns),
                 category = stringResource(R.string.partymember_detail_performance_title),
-                description = "리어왕"
+                description = showName
             )
             DottedLine(
                 modifier = Modifier
@@ -310,7 +350,7 @@ fun PartyMemberDetailBody(
             PartyMemberDetailInfo(
                 icon = painterResource(R.drawable.ic_party_state),
                 category = stringResource(R.string.partymember_detail_join_state),
-                description = "2/5"
+                description = "$curMemberNum/$maxMemberNum"
             )
             DottedLine(
                 modifier = Modifier
@@ -320,7 +360,7 @@ fun PartyMemberDetailBody(
             PartyMemberDetailInfo(
                 icon = painterResource(R.drawable.ic_calendar),
                 category = stringResource(R.string.partymember_detail_performance_date),
-                description = "2023.06.24"
+                description = showAt.toChangeFullDate()
             )
             DottedLine(
                 modifier = Modifier
@@ -330,7 +370,7 @@ fun PartyMemberDetailBody(
             PartyMemberDetailInfo(
                 icon = painterResource(R.drawable.ic_clock),
                 category = stringResource(R.string.partymember_detail_performance_time),
-                description = "19:3019:3019:3019:3019:3019:3019:3019:3019:3019:3019:30"
+                description = showAt.toTime()
             )
             DottedLine(
                 modifier = Modifier
@@ -340,7 +380,7 @@ fun PartyMemberDetailBody(
             PartyMemberDetailInfo(
                 icon = painterResource(R.drawable.ic_location),
                 category = stringResource(R.string.partymember_detail_performance_location),
-                description = "LG아트센터 서울"
+                description = facilityName
             )
         }
     }
