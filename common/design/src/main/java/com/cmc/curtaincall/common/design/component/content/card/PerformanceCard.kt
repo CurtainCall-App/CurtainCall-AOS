@@ -240,10 +240,13 @@ fun PerformanceCard(
     rate: Float,
     numberOfTotal: Int,
     isShowMetadata: Boolean = false,
-    meta: String = ""
+    meta: String = "",
+    onClick: () -> Unit = {}
 ) {
     Card(
-        modifier = modifier.aspectRatio(120 / 218f),
+        modifier = modifier
+            .aspectRatio(120 / 218f)
+            .clickable { onClick() },
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = White,
