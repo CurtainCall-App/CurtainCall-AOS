@@ -1,5 +1,6 @@
 package com.cmc.curtaincall.domain.repository
 
+import androidx.paging.PagingData
 import com.cmc.curtaincall.domain.model.home.MemberInfoModel
 import com.cmc.curtaincall.domain.model.home.MyParticipationModel
 import com.cmc.curtaincall.domain.model.home.MyRecruitmentModel
@@ -20,12 +21,22 @@ interface MemberRepository {
         category: String
     ): Flow<List<MyRecruitmentModel>>
 
+    fun fetchMyRecruitments(
+        memberId: Int,
+        category: String
+    ): Flow<PagingData<MyRecruitmentModel>>
+
     fun requestMyParticipations(
         memberId: Int,
         page: Int,
         size: Int,
         category: String
     ): Flow<List<MyParticipationModel>>
+
+    fun fetchMyParticipations(
+        memberId: Int,
+        category: String
+    ): Flow<PagingData<MyParticipationModel>>
 
     suspend fun saveMemberId(id: Int)
 

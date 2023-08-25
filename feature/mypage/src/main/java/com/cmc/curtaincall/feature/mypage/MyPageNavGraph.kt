@@ -1,5 +1,7 @@
 package com.cmc.curtaincall.feature.mypage
 
+import androidx.compose.runtime.remember
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -7,9 +9,9 @@ import androidx.navigation.navigation
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
+import com.cmc.curtaincall.feature.mypage.editprofile.MyPageProfileEditScreen
 import com.cmc.curtaincall.feature.mypage.notice.MyPageNoticeDetailScreen
 import com.cmc.curtaincall.feature.mypage.notice.MyPageNoticeScreen
-import com.cmc.curtaincall.feature.mypage.editprofile.MyPageProfileEditScreen
 import com.cmc.curtaincall.feature.mypage.party.participation.MyPageParticipationScreen
 import com.cmc.curtaincall.feature.mypage.party.recruitment.MyPageRecruitmentScreen
 import com.cmc.curtaincall.feature.mypage.saveperformance.MyPageSavedPerformanceScreen
@@ -172,9 +174,11 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
             }
         }
 
-        composable(MyPageDestination.Recruitment.route) {
+        composable(MyPageDestination.Recruitment.route) { entry ->
+            val parentEntry = remember(entry) { navHostController.getBackStackEntry(MyPageDestination.MyPage.route) }
             MyPageRecruitmentScreen(
-                onNavigatRecruitmentDetail = {
+                myPageViewModel = hiltViewModel(parentEntry),
+                onNavigateRecruitmentDetail = {
                     navHostController.navigate(
                         PartyMemberDestination.Detail.route + "?" +
                             "${PartyMemberDestination.Detail.typeArg}=$it" + "&" +

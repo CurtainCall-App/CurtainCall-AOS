@@ -88,15 +88,19 @@ class PartyMemberCreateViewModel @Inject constructor(
     }
 
     fun createParty() {
-        partyRepository.createParty(
-            showId = uiState.value.showId,
-            showAt = uiState.value.showAt,
-            title = uiState.value.title,
-            content = uiState.value.content,
-            maxMemberNum = uiState.value.maxMemberNum,
-            category = uiState.value.category
-        )
-            .onEach { sendSideEffect(PartyMemberCreateSideEffect.SuccessUpload) }
-            .launchIn(viewModelScope)
+        if (uiState.value.category != "ETC") {
+            partyRepository.createParty(
+                showId = uiState.value.showId,
+                showAt = uiState.value.showAt,
+                title = uiState.value.title,
+                content = uiState.value.content,
+                maxMemberNum = uiState.value.maxMemberNum,
+                category = uiState.value.category
+            )
+                .onEach { sendSideEffect(PartyMemberCreateSideEffect.SuccessUpload) }
+                .launchIn(viewModelScope)
+        } else {
+            sendSideEffect(PartyMemberCreateSideEffect.SuccessUpload)
+        }
     }
 }

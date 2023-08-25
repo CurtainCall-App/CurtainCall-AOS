@@ -32,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarOnlySetting
 import com.cmc.curtaincall.common.design.extensions.toSp
@@ -48,10 +49,12 @@ import com.cmc.curtaincall.common.design.theme.Silver_Sand
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyPageScreen(
+    myPageViewModel: MyPageViewModel = hiltViewModel(),
     onNavigateSetting: () -> Unit,
     onNavigateProfileEdit: () -> Unit,
     onNavigateRecruitment: () -> Unit,
@@ -60,6 +63,7 @@ fun MyPageScreen(
     onNavigateWrite: () -> Unit,
     onNavigateAnnouncement: () -> Unit
 ) {
+    Timber.d("MyPageScreen ${myPageViewModel.hashCode()}")
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(White)
 
