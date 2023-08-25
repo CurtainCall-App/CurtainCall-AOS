@@ -236,7 +236,7 @@ private fun HomeContent(
                                 PerformanceCard(
                                     modifier = Modifier.width(120.dp),
                                     title = showRank.name,
-                                    painter = painterResource(R.drawable.dummy_poster),
+                                    painter = painterResource(R.drawable.ic_error_poster),
                                     imageUrl = showRank.poster,
                                     rate = if (showRank.reviewCount == 0) 0.0f else showRank.reviewGradeSum / showRank.reviewCount.toFloat(),
                                     numberOfTotal = showRank.reviewCount,
@@ -271,7 +271,7 @@ private fun HomeContent(
                                     modifier = Modifier.width(120.dp),
                                     title = openShowInfo.name,
                                     imageUrl = openShowInfo.poster,
-                                    painter = painterResource(R.drawable.dummy_poster),
+                                    painter = painterResource(R.drawable.ic_error_poster),
                                     rate = if (openShowInfo.reviewCount == 0) 0.0f else openShowInfo.reviewGradeSum / openShowInfo.reviewCount.toFloat(),
                                     numberOfTotal = openShowInfo.reviewCount,
                                     isShowMetadata = true,

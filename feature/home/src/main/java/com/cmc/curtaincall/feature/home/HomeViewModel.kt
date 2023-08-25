@@ -105,7 +105,7 @@ class HomeViewModel @Inject constructor(
 
     private fun requestPopularShowList() {
         val today = SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().time)
-        showRepository.requestPopularShowList(type = "WEEK", genre = "ALL", baseDate = today)
+        showRepository.requestPopularShowList(type = "WEEK", genre = "ALL", baseDate = "2023-08-18")
             .onEach {
                 sendAction(HomeEvent.RequestPopularShowList(it.sortedBy { it.rank }.take(10)))
             }

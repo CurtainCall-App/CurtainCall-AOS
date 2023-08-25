@@ -191,7 +191,7 @@ private fun PerformanceSearchContent(
                                 .fillMaxWidth()
                                 .padding(vertical = 12.dp, horizontal = 20.dp),
                             imageUrl = showInfoModel.poster,
-                            painter = painterResource(R.drawable.img_poster),
+                            painter = painterResource(R.drawable.ic_error_poster),
                             title = showInfoModel.name,
                             rate = if (showInfoModel.reviewCount == 0) 0.0f else (showInfoModel.reviewGradeSum / showInfoModel.reviewCount.toFloat()),
                             numberOfTotal = showInfoModel.reviewCount,
@@ -295,7 +295,7 @@ private fun PerformanceContent(
                                 .fillMaxWidth()
                                 .padding(vertical = 12.dp),
                             imageUrl = showInfoModel.poster,
-                            painter = painterResource(R.drawable.img_poster),
+                            painter = painterResource(R.drawable.ic_error_poster),
                             title = showInfoModel.name,
                             rate = if (showInfoModel.reviewCount == 0) 0.0f else (showInfoModel.reviewGradeSum / showInfoModel.reviewCount.toFloat()),
                             numberOfTotal = showInfoModel.reviewCount,
@@ -327,7 +327,7 @@ private fun PerformanceContent(
                                 .fillMaxWidth()
                                 .padding(vertical = 12.dp),
                             imageUrl = showInfoModel.poster,
-                            painter = painterResource(R.drawable.img_poster),
+                            painter = painterResource(R.drawable.ic_error_poster),
                             title = showInfoModel.name,
                             rate = if (showInfoModel.reviewCount == 0) 0.0f else (showInfoModel.reviewGradeSum / showInfoModel.reviewCount.toFloat()),
                             numberOfTotal = showInfoModel.reviewCount,

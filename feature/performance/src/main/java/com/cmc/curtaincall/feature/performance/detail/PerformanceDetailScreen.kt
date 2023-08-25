@@ -275,6 +275,7 @@ private fun PerformanceDetailContent(
     Box(modifier) {
         AsyncImage(
             model = posterUrl,
+            error = painterResource(R.drawable.ic_error_poster),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxSize()
@@ -327,6 +328,7 @@ private fun PerformanceDetailInfoContent(
     ) {
         AsyncImage(
             model = posterUrl,
+            error = painterResource(R.drawable.ic_error_poster),
             contentDescription = null,
             modifier = Modifier
                 .padding(top = 43.dp)
