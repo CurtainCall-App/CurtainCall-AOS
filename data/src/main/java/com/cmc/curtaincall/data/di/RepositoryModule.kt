@@ -11,6 +11,7 @@ import com.cmc.curtaincall.data.repository.ShowRepositoryImpl
 import com.cmc.curtaincall.data.repository.TokenRepositoryImpl
 import com.cmc.curtaincall.domain.repository.AuthRepository
 import com.cmc.curtaincall.domain.repository.FavoriteRepository
+import com.cmc.curtaincall.domain.repository.LostItemRepository
 import com.cmc.curtaincall.domain.repository.MemberRepository
 import com.cmc.curtaincall.domain.repository.NoticeRepository
 import com.cmc.curtaincall.domain.repository.PartyRepository
@@ -80,4 +81,10 @@ interface RepositoryModule {
     fun bindReportRepository(
         reportRepositoryImpl: ReportRepositoryImpl
     ): ReportRepository
+
+    @Binds
+    @Singleton
+    fun bindLostItemRepository(
+        lostItemRepository: LostItemRepository
+    ): LostItemRepository
 }

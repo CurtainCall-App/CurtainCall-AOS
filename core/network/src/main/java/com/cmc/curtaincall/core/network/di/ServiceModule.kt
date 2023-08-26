@@ -4,6 +4,7 @@ import com.cmc.curtaincall.core.network.qualifiers.LoggingRetrofit
 import com.cmc.curtaincall.core.network.qualifiers.RefreshTokenRetrofit
 import com.cmc.curtaincall.core.network.service.auth.AuthService
 import com.cmc.curtaincall.core.network.service.favorite.FavoriteService
+import com.cmc.curtaincall.core.network.service.lostitem.LostItemService
 import com.cmc.curtaincall.core.network.service.member.MemberService
 import com.cmc.curtaincall.core.network.service.notice.NoticeService
 import com.cmc.curtaincall.core.network.service.party.PartyService
@@ -69,4 +70,10 @@ object ServiceModule {
     fun provideReportService(
         @RefreshTokenRetrofit retrofit: Retrofit
     ): ReportService = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun provideLostItemService(
+        @RefreshTokenRetrofit retrofit: Retrofit
+    ): LostItemService = retrofit.create()
 }
