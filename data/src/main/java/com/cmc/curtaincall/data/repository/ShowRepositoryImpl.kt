@@ -4,6 +4,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
+import com.cmc.curtaincall.core.network.service.favorite.FavoriteService
 import com.cmc.curtaincall.core.network.service.show.ShowService
 import com.cmc.curtaincall.data.source.local.ShowLocalSource
 import com.cmc.curtaincall.data.source.paging.SHOW_PAGE_SIZE
@@ -24,6 +25,7 @@ import javax.inject.Inject
 class ShowRepositoryImpl @Inject constructor(
     private val showRemoteSource: ShowRemoteSource,
     private val showService: ShowService,
+    private val favoriteService: FavoriteService,
     private val showLocalSource: ShowLocalSource
 ) : ShowRepository {
 
@@ -44,13 +46,8 @@ class ShowRepositoryImpl @Inject constructor(
     override fun fetchShowList(genre: String): Flow<PagingData<ShowInfoModel>> {
         return Pager(
             config = PagingConfig(pageSize = SHOW_PAGE_SIZE),
-            pagingSourceFactory = { ShowPagingSource(showService, genre) }
+            pagingSourceFactory = { ShowPagingSource(showService, favoriteService, genre) }
         ).flow
-            .map { pagingData ->
-                pagingData.map { response ->
-                    response.toModel()
-                }
-            }
     }
 
     override fun requestShowList(page: Int, size: Int, genre: String): Flow<List<ShowInfoModel>> =
@@ -61,13 +58,8 @@ class ShowRepositoryImpl @Inject constructor(
     override fun fetchSearchShowList(keyword: String): Flow<PagingData<ShowInfoModel>> {
         return Pager(
             config = PagingConfig(pageSize = SHOW_SEARCH_PAGE_SIZE),
-            pagingSourceFactory = { ShowSearchPagingSource(showService, keyword) }
+            pagingSourceFactory = { ShowSearchPagingSource(showService, favoriteService, keyword) }
         ).flow
-            .map { pagingData ->
-                pagingData.map { response ->
-                    response.toModel()
-                }
-            }
     }
 
     override fun searchShowList(page: Int, size: Int, keyword: String): Flow<List<ShowInfoModel>> =

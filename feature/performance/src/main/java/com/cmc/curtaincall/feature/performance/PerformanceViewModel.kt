@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.cmc.curtaincall.core.base.BaseViewModel
 import com.cmc.curtaincall.domain.model.show.ShowSearchWordModel
+import com.cmc.curtaincall.domain.repository.FavoriteRepository
 import com.cmc.curtaincall.domain.repository.ShowRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PerformanceViewModel @Inject constructor(
-    private val showRepository: ShowRepository
+    private val showRepository: ShowRepository,
+    private val favoriteRepository: FavoriteRepository
 ) : BaseViewModel<PerformanceState, PerformanceEvent, Nothing>(
     initialState = PerformanceState()
 ) {
@@ -70,6 +72,11 @@ class PerformanceViewModel @Inject constructor(
 
     fun changeGenre(genre: String) {
         sendAction(PerformanceEvent.ChangeGenre(genre))
+        if (genre == "PLAY") {
+            loadPlayItems()
+        } else {
+            loadMusicalItems()
+        }
     }
 
     fun changeActiveSearch(isActive: Boolean) {
@@ -112,6 +119,18 @@ class PerformanceViewModel @Inject constructor(
                 ).cachedIn(viewModelScope)
             )
         )
+    }
+
+    fun requestFavoriteShow(showId: String) {
+        favoriteRepository.requestFavoriteShow(showId)
+            .onEach {
+            }.launchIn(viewModelScope)
+    }
+
+    fun deleteFavoriteShow(showId: String) {
+        favoriteRepository.deleteFavoriteShow(showId)
+            .onEach {
+            }.launchIn(viewModelScope)
     }
 
     private fun requestShowSearchWords() {

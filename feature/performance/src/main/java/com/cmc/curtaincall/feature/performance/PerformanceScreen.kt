@@ -199,7 +199,10 @@ private fun PerformanceSearchContent(
                             runningTime = if (showInfoModel.runtime.isEmpty()) "해당 정보 없음" else "${showInfoModel.runtime.toRunningTime()}분",
                             date = "화-금 19:00",
                             location = showInfoModel.facilityName,
-                            onClick = { onNavigateDetail(showInfoModel.id) }
+                            onClick = { onNavigateDetail(showInfoModel.id) },
+                            isFavorite = showInfoModel.favorite,
+                            onFavorite = { performanceViewModel.requestFavoriteShow(showInfoModel.id) },
+                            onDisFavorite = { performanceViewModel.deleteFavoriteShow(showInfoModel.id) }
                         )
                         if (index != showSearchItems.itemCount) {
                             Spacer(
@@ -306,7 +309,10 @@ private fun PerformanceContent(
                             onClick = {
                                 performanceViewModel.changeLastIndex(index)
                                 onNavigateDetail(showInfoModel.id)
-                            }
+                            },
+                            isFavorite = showInfoModel.favorite,
+                            onFavorite = { performanceViewModel.requestFavoriteShow(showInfoModel.id) },
+                            onDisFavorite = { performanceViewModel.deleteFavoriteShow(showInfoModel.id) }
                         )
                         if (index != musicalItems.itemCount) {
                             Spacer(
@@ -338,7 +344,10 @@ private fun PerformanceContent(
                             onClick = {
                                 performanceViewModel.changeLastIndex(index)
                                 onNavigateDetail(showInfoModel.id)
-                            }
+                            },
+                            isFavorite = showInfoModel.favorite,
+                            onFavorite = { performanceViewModel.requestFavoriteShow(showInfoModel.id) },
+                            onDisFavorite = { performanceViewModel.deleteFavoriteShow(showInfoModel.id) }
                         )
                         if (index != musicalItems.itemCount) {
                             Spacer(

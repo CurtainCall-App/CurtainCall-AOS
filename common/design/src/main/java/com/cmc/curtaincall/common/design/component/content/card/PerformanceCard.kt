@@ -68,9 +68,11 @@ fun PerformanceDetailCard(
     date: String,
     location: String,
     onClick: () -> Unit = {},
-    onSave: (Boolean) -> Unit = {}
+    isFavorite: Boolean = false,
+    onFavorite: () -> Unit = {},
+    onDisFavorite: () -> Unit = {}
 ) {
-    var savePerformance by remember { mutableStateOf(false) }
+    var favoriteState by remember { mutableStateOf(isFavorite) }
     Row(modifier.clickable { onClick() }) {
         AsyncImage(
             model = imageUrl,
@@ -128,19 +130,19 @@ fun PerformanceDetailCard(
                 }
                 IconButton(
                     onClick = {
-                        savePerformance = savePerformance.not()
-                        onSave(savePerformance)
+                        favoriteState = favoriteState.not()
+                        if (favoriteState) onFavorite() else onDisFavorite()
                     },
                     modifier = Modifier
                         .padding(start = 3.dp)
                         .clip(CircleShape)
                         .size(26.dp),
                     colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = if (savePerformance) Cetacean_Blue else Bright_Gray
+                        containerColor = if (favoriteState) Cetacean_Blue else Bright_Gray
                     )
                 ) {
                     Icon(
-                        painter = painterResource(if (savePerformance) R.drawable.ic_bookmark_sel else R.drawable.ic_bookmark),
+                        painter = painterResource(if (favoriteState) R.drawable.ic_bookmark_sel else R.drawable.ic_bookmark),
                         contentDescription = null,
                         tint = Color.Unspecified
                     )
