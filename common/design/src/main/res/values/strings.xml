@@ -189,6 +189,7 @@
     <string name="home_coming_livetalk">커밍순 라이브톡</string>
     <string name="home_top10_popular_performance">TOP10 인기 작품</string>
     <string name="home_scheduled_open_performance">오픈 예정 공연</string>
+    <string name="home_scheduled_end_performance">마감 예정 공연</string>
     <string name="home_value_for_money_performance">가성비 좋은 공연</string>
     <string name="home_guide_title">입문자를 위한 연뮤 가이드</string>
     <string name="home_guide_total_menu">전체</string>

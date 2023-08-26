@@ -54,6 +54,22 @@ class ShowRemoteSource @Inject constructor(
         )
     }
 
+    fun requestEndShowList(
+        page: Int,
+        size: Int,
+        endDate: String,
+        genre: String?
+    ): Flow<List<ShowInfoResponse>> = flow {
+        emit(
+            showService.requestEndShowList(
+                page = page,
+                size = size,
+                endDate = endDate,
+                genre = genre
+            ).showInfos
+        )
+    }
+
     fun requestShowDetail(
         showId: String
     ): Flow<ShowDetailResponse> = flow {
@@ -64,7 +80,7 @@ class ShowRemoteSource @Inject constructor(
 
     fun requestPopularShowList(
         type: String,
-        genre: String,
+        genre: String?,
         baseDate: String
     ): Flow<List<ShowRankResponse>> = flow {
         emit(

@@ -18,7 +18,7 @@ interface MemberRepository {
         memberId: Int,
         page: Int,
         size: Int,
-        category: String
+        category: String?
     ): Flow<List<MyRecruitmentModel>>
 
     fun fetchMyRecruitments(
@@ -30,13 +30,18 @@ interface MemberRepository {
         memberId: Int,
         page: Int,
         size: Int,
-        category: String
+        category: String?
     ): Flow<List<MyParticipationModel>>
 
     fun fetchMyParticipations(
         memberId: Int,
         category: String
     ): Flow<PagingData<MyParticipationModel>>
+
+    fun deleteMember(
+        reason: String,
+        content: String
+    ): Flow<Boolean>
 
     suspend fun saveMemberId(id: Int)
 

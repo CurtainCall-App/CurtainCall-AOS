@@ -28,6 +28,10 @@ sealed class HomeEvent : BaseEvent {
         val openShowInfos: List<ShowInfoModel>
     ) : HomeEvent()
 
+    data class RequestEndShowList(
+        val endShowInfos: List<ShowInfoModel>
+    ) : HomeEvent()
+
     data class RequestShowSearchWords(
         val searchWords: List<ShowSearchWordModel>
     ) : HomeEvent()

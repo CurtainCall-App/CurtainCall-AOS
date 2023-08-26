@@ -1,6 +1,7 @@
 package com.cmc.curtaincall.data.source.remote
 
 import com.cmc.curtaincall.core.network.service.member.MemberService
+import com.cmc.curtaincall.core.network.service.member.request.DeleteMemberRequest
 import com.cmc.curtaincall.core.network.service.member.request.MemberCreateRequest
 import com.cmc.curtaincall.domain.model.home.MemberInfoModel
 import com.cmc.curtaincall.domain.model.home.MyParticipationModel
@@ -28,7 +29,7 @@ class MemberRemoteSource @Inject constructor(
         memberId: Int,
         page: Int,
         size: Int,
-        category: String
+        category: String?
     ): Flow<List<MyRecruitmentModel>> = flow {
         emit(
             memberService.requestMyRecruitments(
@@ -44,7 +45,7 @@ class MemberRemoteSource @Inject constructor(
         memberId: Int,
         page: Int,
         size: Int,
-        category: String
+        category: String?
     ): Flow<List<MyParticipationModel>> = flow {
         emit(
             memberService.requestMyParticipations(
@@ -53,6 +54,20 @@ class MemberRemoteSource @Inject constructor(
                 size = size,
                 category = category
             ).participations.map { it.toModel() }
+        )
+    }
+
+    fun deleteMember(
+        reason: String,
+        content: String
+    ): Flow<Boolean> = flow {
+        emit(
+            memberService.deleteMember(
+                deleteMemberRequest = DeleteMemberRequest(
+                    reason = reason,
+                    content = content
+                )
+            ).isSuccessful
         )
     }
 }

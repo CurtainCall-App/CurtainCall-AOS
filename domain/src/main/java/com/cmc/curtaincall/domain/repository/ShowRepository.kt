@@ -44,13 +44,20 @@ interface ShowRepository {
         startDate: String
     ): Flow<List<ShowInfoModel>>
 
+    fun requestEndShowList(
+        page: Int,
+        size: Int,
+        endDate: String,
+        genre: String?
+    ): Flow<List<ShowInfoModel>>
+
     fun requestShowDetail(
         showId: String
     ): Flow<ShowDetailModel>
 
     fun requestPopularShowList(
         type: String,
-        genre: String,
+        genre: String?,
         baseDate: String
     ): Flow<List<ShowRankModel>>
 
