@@ -11,5 +11,6 @@ data class ShowInfoModel(
     val reviewGradeSum: Int = 0,
     val runtime: String = "",
     val showTimes: List<ShowTimeModel> = listOf(),
-    val startDate: String = ""
+    val startDate: String = "",
+    val favorite: Boolean = false
 )

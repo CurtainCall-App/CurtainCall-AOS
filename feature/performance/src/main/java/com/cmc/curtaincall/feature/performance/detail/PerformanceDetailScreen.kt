@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -89,7 +88,7 @@ internal fun PerformanceDetailScreen(
         PerformanceDetailContent(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(666.dp)
+                .height((666 + if (ticketPrices.size > 2) (22 * (ticketPrices.size - 2)) else 0).dp)
                 .background(Cetacean_Blue.copy(0.8f)),
             posterUrl = performanceDetailUiState.showDetailModel.poster,
             title = performanceDetailUiState.showDetailModel.name,
@@ -105,8 +104,7 @@ internal fun PerformanceDetailScreen(
         )
         Column(
             modifier = Modifier
-                .offset(y = (-1 * (2 - ticketPrices.size) * 22).dp)
-                .padding(top = 644.dp)
+                .padding(top = (644 + (-1 * (2 - ticketPrices.size) * 22)).dp)
                 .fillMaxSize()
                 .background(White, RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
         ) {
@@ -277,6 +275,7 @@ private fun PerformanceDetailContent(
     Box(modifier) {
         AsyncImage(
             model = posterUrl,
+            error = painterResource(R.drawable.ic_error_poster),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxSize()
@@ -329,6 +328,7 @@ private fun PerformanceDetailInfoContent(
     ) {
         AsyncImage(
             model = posterUrl,
+            error = painterResource(R.drawable.ic_error_poster),
             contentDescription = null,
             modifier = Modifier
                 .padding(top = 43.dp)

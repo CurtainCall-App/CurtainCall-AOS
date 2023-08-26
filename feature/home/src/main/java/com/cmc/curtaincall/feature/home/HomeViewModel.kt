@@ -51,6 +51,12 @@ class HomeViewModel @Inject constructor(
             is HomeEvent.RequestOpenShowList -> {
                 currentState.copy(openShowInfos = event.openShowInfos)
             }
+
+            is HomeEvent.RequestShowSearchWords -> {
+                currentState.copy(searchWords = event.searchWords)
+            }
+
+            else -> currentState
         }
 
     private fun getMemberNickname() {

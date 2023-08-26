@@ -7,13 +7,13 @@ import com.cmc.curtaincall.core.network.service.show.ShowService
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import javax.inject.Inject
 
-private const val SHOW_STARTING_KEY = 0
-const val SHOW_PAGE_SIZE = 10
+private const val SHOW_SEARCH_STARTING_KEY = 0
+const val SHOW_SEARCH_PAGE_SIZE = 10
 
-class ShowPagingSource @Inject constructor(
+class ShowSearchPagingSource @Inject constructor(
     private val showService: ShowService,
     private val favoriteService: FavoriteService,
-    private val genre: String
+    private val keyword: String
 ) : PagingSource<Int, ShowInfoModel>() {
     override fun getRefreshKey(state: PagingState<Int, ShowInfoModel>): Int? {
         return state.anchorPosition?.let { position ->
@@ -24,11 +24,11 @@ class ShowPagingSource @Inject constructor(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, ShowInfoModel> {
         try {
-            val pageKey = params.key ?: SHOW_STARTING_KEY
-            val response = showService.requestShowList(
+            val pageKey = params.key ?: SHOW_SEARCH_STARTING_KEY
+            val response = showService.searchShowList(
                 page = pageKey,
-                size = SHOW_PAGE_SIZE,
-                genre = genre
+                size = SHOW_SEARCH_PAGE_SIZE,
+                keyword = keyword
             )
             val models = response.showInfos.map { response ->
                 response.toModel().copy(

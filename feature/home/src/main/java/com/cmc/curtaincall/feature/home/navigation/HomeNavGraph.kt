@@ -76,8 +76,8 @@ fun HomeNavHost(navHostController: NavHostController = rememberNavController()) 
                     onNavigateGuide = {
                         navHostController.navigate("${HomeDestination.Guide.route}/$it")
                     },
-                    onNavigatePerformance = {
-                        navHostController.navigate(PerformanceDestination.Performance.route)
+                    onNavigatePerformanceDetail = {
+                        navHostController.navigate("${PerformanceDestination.Detail.route}/$it")
                     },
                     onNavigateLiveTalk = {
                         navHostController.navigate(LiveTalkDestination.LiveTalk.route)

@@ -10,8 +10,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,8 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.common.design.component.basic.SearchAppBar
-import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithSearch
 import com.cmc.curtaincall.common.design.component.content.card.LiveTalkContentCard
 import com.cmc.curtaincall.common.design.component.content.card.MyContentCard
 import com.cmc.curtaincall.common.design.component.content.card.PerformanceCard
@@ -44,34 +40,70 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 fun HomeScreen(
     homeViewModel: HomeViewModel = hiltViewModel(),
     onNavigateGuide: (GuideType) -> Unit,
-    onNavigatePerformance: () -> Unit,
+    onNavigatePerformanceDetail: (String) -> Unit,
     onNavigateLiveTalk: () -> Unit,
     onNavigatePartyMember: () -> Unit,
     onNavigateMyPage: () -> Unit
 ) {
-    var isActiveSearchState by remember { mutableStateOf(false) }
     val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(if (isActiveSearchState) White else Cetacean_Blue)
+    systemUiController.setStatusBarColor(Cetacean_Blue)
 
-    var queryState by remember { mutableStateOf("") }
     Scaffold(topBar = {
-        if (isActiveSearchState) {
-            SearchAppBar(value = queryState, onValueChange = { queryState = it }, containerColor = White, contentColor = Nero, placeholder = stringResource(R.string.search_performance_title), onClick = { isActiveSearchState = false })
-        } else {
-            TopAppBarWithSearch(title = stringResource(R.string.home_appbar_title), containerColor = Cetacean_Blue, contentColor = White, onClick = { isActiveSearchState = true })
-        }
+        TopAppBar(
+            title = {
+                Text(
+                    text = stringResource(R.string.home_appbar_title),
+                    color = White,
+                    fontSize = 18.dp.toSp(),
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = avenirnext
+                )
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(54.dp)
+                .background(Cetacean_Blue)
+                .padding(top = 20.dp, bottom = 10.dp),
+            actions = {},
+            colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = Cetacean_Blue)
+        )
     }) { paddingValues ->
-        if (isActiveSearchState) {
-            // TODO
-        } else {
-            HomeContent(
-                homeViewModel = homeViewModel,
+        HomeContent(
+            homeViewModel = homeViewModel,
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
+                .background(White),
+            onNavigateGuide = onNavigateGuide,
+            onNavigatePerformanceDetail = onNavigatePerformanceDetail
+        )
+    }
+}
+
+@Composable
+private fun HomeSearchContent(
+    homeViewModel: HomeViewModel,
+    modifier: Modifier = Modifier
+) {
+    val scrollState = rememberScrollState()
+    val searchWords = homeViewModel.uiState.collectAsStateWithLifecycle().value.searchWords
+    Column(modifier.verticalScroll(scrollState)) {
+        searchWords.forEach { searchWord ->
+            Row(
                 modifier = Modifier
-                    .padding(paddingValues)
-                    .fillMaxSize()
-                    .background(White),
-                onNavigateGuide = onNavigateGuide
-            )
+                    .fillMaxWidth()
+                    .padding(vertical = 6.dp, horizontal = 20.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = searchWord.word,
+                    modifier = Modifier.weight(1f)
+                )
+                Icon(
+                    painter = painterResource(R.drawable.ic_close),
+                    contentDescription = null
+                )
+            }
         }
     }
 }
@@ -80,7 +112,8 @@ fun HomeScreen(
 private fun HomeContent(
     homeViewModel: HomeViewModel,
     modifier: Modifier = Modifier,
-    onNavigateGuide: (GuideType) -> Unit
+    onNavigateGuide: (GuideType) -> Unit,
+    onNavigatePerformanceDetail: (String) -> Unit
 ) {
     val scrollState = rememberScrollState()
     val homeUiState by homeViewModel.uiState.collectAsStateWithLifecycle()
@@ -203,12 +236,13 @@ private fun HomeContent(
                                 PerformanceCard(
                                     modifier = Modifier.width(120.dp),
                                     title = showRank.name,
-                                    painter = painterResource(R.drawable.dummy_poster),
+                                    painter = painterResource(R.drawable.ic_error_poster),
                                     imageUrl = showRank.poster,
                                     rate = if (showRank.reviewCount == 0) 0.0f else showRank.reviewGradeSum / showRank.reviewCount.toFloat(),
                                     numberOfTotal = showRank.reviewCount,
                                     isShowMetadata = true,
-                                    meta = showRank.rank.toString()
+                                    meta = (index + 1).toString(),
+                                    onClick = { onNavigatePerformanceDetail(showRank.id) }
                                 )
                                 Spacer(Modifier.size(12.dp))
                             }
@@ -237,11 +271,12 @@ private fun HomeContent(
                                     modifier = Modifier.width(120.dp),
                                     title = openShowInfo.name,
                                     imageUrl = openShowInfo.poster,
-                                    painter = painterResource(R.drawable.dummy_poster),
+                                    painter = painterResource(R.drawable.ic_error_poster),
                                     rate = if (openShowInfo.reviewCount == 0) 0.0f else openShowInfo.reviewGradeSum / openShowInfo.reviewCount.toFloat(),
                                     numberOfTotal = openShowInfo.reviewCount,
                                     isShowMetadata = true,
-                                    meta = if (openShowInfo.startDate.toDday() == 0L) "D-DAY" else "D${openShowInfo.startDate.toDday()}"
+                                    meta = if (openShowInfo.startDate.toDday() == 0L) "D-DAY" else "D${openShowInfo.startDate.toDday()}",
+                                    onClick = { onNavigatePerformanceDetail(openShowInfo.id) }
                                 )
                                 Spacer(Modifier.size(12.dp))
                             }
