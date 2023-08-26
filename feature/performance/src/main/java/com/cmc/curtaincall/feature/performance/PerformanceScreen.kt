@@ -144,7 +144,7 @@ private fun PerformanceSearchContent(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 20.dp)
-                            .padding(top = 20.dp),
+                            .padding(top = 20.dp)
                     ) {
                         Row(
                             modifier = Modifier

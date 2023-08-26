@@ -51,7 +51,7 @@ fun HomeBottomBar(navHostController: NavHostController) {
             containerColor = if (currentDestination?.route == LiveTalkDestination.LiveTalk.route) Cetacean_Blue else White,
             modifier = Modifier
                 .height(80.dp)
-                .clip(RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp)),
+                .clip(RoundedCornerShape(topStart = 15.dp, topEnd = 15.dp))
         ) {
             bottomDestinations.forEach { bottomDestination ->
                 if (bottomDestination.route == LiveTalkDestination.LiveTalk.route) {
