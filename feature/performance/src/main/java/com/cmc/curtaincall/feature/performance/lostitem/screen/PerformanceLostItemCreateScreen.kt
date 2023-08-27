@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.performance.lostitem
+package com.cmc.curtaincall.feature.performance.lostitem.screen
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -46,6 +46,7 @@ import com.cmc.curtaincall.common.design.component.custom.CurtainCallTimePicker
 import com.cmc.curtaincall.common.design.component.custom.SelectedDateCalender
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.feature.performance.lostitem.LostItemTypeGrid
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

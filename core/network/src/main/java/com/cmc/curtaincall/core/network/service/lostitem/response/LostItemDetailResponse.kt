@@ -8,7 +8,7 @@ data class LostItemDetailResponse(
     val facilityPhone: String,
     val foundDate: String,
     val foundPlaceDetail: String,
-    val foundTime: String,
+    val foundTime: String?,
     val id: Int,
     val imageId: Int,
     val imageUrl: String,

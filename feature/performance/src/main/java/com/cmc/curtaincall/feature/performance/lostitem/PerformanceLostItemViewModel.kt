@@ -52,6 +52,10 @@ class PerformanceLostItemViewModel @Inject constructor(
                 currentState.copy(lostItemSearchItems = event.lostItems)
             }
 
+            is PerformanceLostItemEvent.LoadLostDetailItem -> {
+                currentState.copy(lostDetailItem = event.lostDetailItem)
+            }
+
             else -> currentState
         }
 
@@ -110,6 +114,12 @@ class PerformanceLostItemViewModel @Inject constructor(
                     ).cachedIn(viewModelScope)
             )
         )
+    }
+
+    fun requestLostDetailItem(lostItemId: Int) {
+        lostItemRepository.requestLostItemDetail(lostItemId)
+            .onEach { sendAction(PerformanceLostItemEvent.LoadLostDetailItem(it)) }
+            .launchIn(viewModelScope)
     }
 
     private fun requestLostItemSearchWords() {

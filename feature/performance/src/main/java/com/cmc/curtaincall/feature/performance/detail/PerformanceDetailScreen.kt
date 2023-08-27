@@ -52,7 +52,7 @@ import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
 import com.cmc.curtaincall.common.utility.extensions.toRunningTime
-import com.cmc.curtaincall.feature.performance.lostitem.PerformanceLostItemTabScreen
+import com.cmc.curtaincall.feature.performance.lostitem.screen.PerformanceLostItemTabScreen
 import com.cmc.curtaincall.feature.performance.review.PerformanceReviewTabScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 

@@ -2,6 +2,7 @@ package com.cmc.curtaincall.feature.performance.lostitem
 
 import androidx.paging.PagingData
 import com.cmc.curtaincall.core.base.BaseEvent
+import com.cmc.curtaincall.domain.model.lostItem.LostItemDetailModel
 import com.cmc.curtaincall.domain.model.lostItem.LostItemModel
 import kotlinx.coroutines.flow.Flow
 
@@ -29,5 +30,9 @@ sealed class PerformanceLostItemEvent : BaseEvent {
 
     data class SearchLostItemList(
         val lostItems: Flow<PagingData<LostItemModel>>
+    ) : PerformanceLostItemEvent()
+
+    data class LoadLostDetailItem(
+        val lostDetailItem: LostItemDetailModel
     ) : PerformanceLostItemEvent()
 }

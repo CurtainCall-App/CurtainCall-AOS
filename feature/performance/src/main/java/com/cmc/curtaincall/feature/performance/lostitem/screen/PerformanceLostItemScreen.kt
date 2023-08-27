@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.performance.lostitem
+package com.cmc.curtaincall.feature.performance.lostitem.screen
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -32,6 +32,8 @@ import com.cmc.curtaincall.common.design.component.items.SearchItem
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.cmc.curtaincall.feature.performance.detail.PerformanceDetailViewModel
+import com.cmc.curtaincall.feature.performance.lostitem.LostItemTypeGrid
+import com.cmc.curtaincall.feature.performance.lostitem.PerformanceLostItemViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,7 +42,7 @@ internal fun PerformanceLostItemScreen(
     performanceLostItemViewModel: PerformanceLostItemViewModel = hiltViewModel(),
     performanceDetailViewModel: PerformanceDetailViewModel,
     facilityName: String,
-    onNavigateLostItemDetail: () -> Unit,
+    onNavigateLostItemDetail: (Int) -> Unit,
     onNavigateLostItemCreate: () -> Unit,
     onBack: () -> Unit
 ) {
@@ -125,6 +127,7 @@ internal fun PerformanceLostItemScreen(
             )
         } else {
             PerformanceLostItemContent(
+                performanceLostItemViewModel = performanceLostItemViewModel,
                 performanceDetailViewModel = performanceDetailViewModel,
                 modifier = Modifier
                     .padding(paddingValues)
@@ -142,7 +145,7 @@ private fun PerformanceLostItemSearchContent(
     performanceLostItemViewModel: PerformanceLostItemViewModel,
     modifier: Modifier = Modifier,
     onClick: (String) -> Unit,
-    onNavigateLostItemDetail: () -> Unit
+    onNavigateLostItemDetail: (Int) -> Unit
 ) {
     val searchWords by performanceLostItemViewModel.searchWords.collectAsStateWithLifecycle()
     val performanceLostItemUiState by performanceLostItemViewModel.uiState.collectAsStateWithLifecycle()
@@ -227,7 +230,10 @@ private fun PerformanceLostItemSearchContent(
                                     start = if (index % 2 == 0) 20.dp else 0.dp,
                                     end = if (index % 2 == 0) 0.dp else 20.dp
                                 )
-                                .clickable { onNavigateLostItemDetail() }
+                                .clickable {
+                                    performanceLostItemViewModel.requestLostDetailItem(lostItem.id)
+                                    onNavigateLostItemDetail(lostItem.id)
+                                }
                                 .background(Cultured, RoundedCornerShape(10.dp))
                                 .padding(horizontal = 8.dp)
                                 .padding(top = 8.dp, bottom = 15.dp),
@@ -245,21 +251,19 @@ private fun PerformanceLostItemSearchContent(
 
 @Composable
 private fun PerformanceLostItemContent(
+    performanceLostItemViewModel: PerformanceLostItemViewModel,
     performanceDetailViewModel: PerformanceDetailViewModel,
     modifier: Modifier = Modifier,
     facilityName: String,
-    onNavigateLostItemDetail: () -> Unit
+    onNavigateLostItemDetail: (Int) -> Unit
 ) {
     val lostItems = performanceDetailViewModel.lostItems.collectAsLazyPagingItems()
     var isClickedDate by remember { mutableStateOf(false) }
     var isClickedType by remember { mutableStateOf(false) }
     var lostDateState by remember { mutableStateOf("") }
     var lostTypeState by remember { mutableStateOf("") }
-    Box(
-        modifier = modifier
-            .padding(top = 23.dp)
-            .padding(horizontal = 20.dp)
-    ) {
+
+    Box(modifier.padding(vertical = 23.dp, horizontal = 20.dp)) {
         PerformanceLostItemHeader(
             modifier = Modifier
                 .zIndex(if (isClickedDate or isClickedType) 1f else 0f)
@@ -334,7 +338,10 @@ private fun PerformanceLostItemContent(
                     lostItems[index]?.let { lostItem ->
                         GridLostItem(
                             modifier = Modifier
-                                .clickable { onNavigateLostItemDetail() }
+                                .clickable {
+                                    performanceLostItemViewModel.requestLostDetailItem(lostItem.id)
+                                    onNavigateLostItemDetail(lostItem.id)
+                                }
                                 .background(Cultured, RoundedCornerShape(10.dp))
                                 .padding(horizontal = 8.dp)
                                 .padding(top = 8.dp, bottom = 15.dp),

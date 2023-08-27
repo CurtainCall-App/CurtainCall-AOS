@@ -133,6 +133,7 @@
     <string name="performance_find_lost_item_date">잃어버린 날짜</string>
     <string name="performance_find_lost_item_type">물건 분류</string>
     <string name="performance_find_lost_item_repot">신고</string>
+    <string name="performance_find_lost_item_detail_subtitle">제목</string>
     <string name="performance_find_lost_item_detail_classification">분류</string>
     <string name="performance_find_lost_item_detail_place_of_acquisition">습득장소</string>
     <string name="performance_find_lost_item_detail_place_of_acquisition_format">습득장소 | %s</string>

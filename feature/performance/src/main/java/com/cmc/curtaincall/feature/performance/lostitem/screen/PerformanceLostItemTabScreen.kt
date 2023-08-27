@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.performance.lostitem
+package com.cmc.curtaincall.feature.performance.lostitem.screen
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image

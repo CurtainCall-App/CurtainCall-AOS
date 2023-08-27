@@ -12,9 +12,9 @@ import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.feature.performance.detail.PerformanceDetailScreen
-import com.cmc.curtaincall.feature.performance.lostitem.PerformanceLostItemCreateScreen
-import com.cmc.curtaincall.feature.performance.lostitem.PerformanceLostItemDetailScreen
-import com.cmc.curtaincall.feature.performance.lostitem.PerformanceLostItemScreen
+import com.cmc.curtaincall.feature.performance.lostitem.screen.PerformanceLostItemCreateScreen
+import com.cmc.curtaincall.feature.performance.lostitem.screen.PerformanceLostItemDetailScreen
+import com.cmc.curtaincall.feature.performance.lostitem.screen.PerformanceLostItemScreen
 import com.cmc.curtaincall.feature.performance.review.PerformanceReviewCreateScreen
 import com.cmc.curtaincall.feature.performance.review.PerformanceReviewScreen
 import com.cmc.curtaincall.feature.performance.upload.PerformanceUploadScreen
@@ -112,6 +112,14 @@ sealed interface PerformanceDestination : CurtainCallDestination {
 
     object LostItemDetail : PerformanceDestination {
         override val route = PERFORMANCE_LOST_ITEM_DETAIL
+        const val lostItemIdArg = "lostItemId"
+        val routeWithArg = "$route/{$lostItemIdArg}"
+
+        val arguments = listOf(
+            navArgument(lostItemIdArg) {
+                type = NavType.IntType
+            }
+        )
     }
 
     object LostItemCreate : PerformanceDestination {
@@ -209,7 +217,7 @@ fun NavGraphBuilder.performanceNavGraph(
                 performanceDetailViewModel = hiltViewModel(parentEntry),
                 facilityName = facilityName,
                 onNavigateLostItemDetail = {
-                    navHostController.navigate(PerformanceDestination.LostItemDetail.route)
+                    navHostController.navigate("${PerformanceDestination.LostItemDetail.route}/$it")
                 },
                 onNavigateLostItemCreate = {
                     navHostController.navigate(PerformanceDestination.LostItemCreate.route)
@@ -219,10 +227,17 @@ fun NavGraphBuilder.performanceNavGraph(
                 }
             )
         }
-        composable(route = PerformanceDestination.LostItemDetail.route) {
-            PerformanceLostItemDetailScreen {
-                navHostController.popBackStack()
-            }
+        composable(
+            route = PerformanceDestination.LostItemDetail.routeWithArg,
+            arguments = PerformanceDestination.LostItemDetail.arguments
+        ) { entry ->
+            val parentEntry = remember(entry) { navHostController.getBackStackEntry(PerformanceDestination.LostItem.routeWithArgs) }
+            val lostItemId = entry.arguments?.getInt(PerformanceDestination.LostItemDetail.lostItemIdArg) ?: Int.MIN_VALUE
+            PerformanceLostItemDetailScreen(
+                performanceLostItemViewModel = hiltViewModel(parentEntry),
+                lostItem = lostItemId,
+                onBack = { navHostController.popBackStack() }
+            )
         }
         composable(route = PerformanceDestination.LostItemCreate.route) {
             PerformanceLostItemCreateScreen(
