@@ -1,6 +1,8 @@
-package com.cmc.curtaincall.feature.performance.lostitem.screen
+package com.cmc.curtaincall.feature.performance.lostitem.create
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
@@ -35,6 +37,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.core.content.ContextCompat
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallDropDownButton
@@ -46,12 +51,18 @@ import com.cmc.curtaincall.common.design.component.custom.CurtainCallTimePicker
 import com.cmc.curtaincall.common.design.component.custom.SelectedDateCalender
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.feature.performance.lostitem.LostItemType
 import com.cmc.curtaincall.feature.performance.lostitem.LostItemTypeGrid
+import timber.log.Timber
+import java.io.ByteArrayOutputStream
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PerformanceLostItemCreateScreen(
+    performanceLostItemCreateViewModel: PerformanceLostItemCreateViewModel = hiltViewModel(),
     fromMyPage: Boolean = false,
+    facilityId: String,
+    facilityName: String,
     onNavigateUpload: () -> Unit,
     onBack: () -> Unit
 ) {
@@ -86,10 +97,12 @@ internal fun PerformanceLostItemCreateScreen(
         floatingActionButtonPosition = FabPosition.Center
     ) { paddingValues ->
         PerformanceLostItemCreateContent(
+            performanceLostItemCreateViewModel = performanceLostItemCreateViewModel,
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
                 .background(White),
+            facilityName = facilityName,
             onCompleteChange = { completeState = it },
             onNavigateUpload = onNavigateUpload
         )
@@ -98,31 +111,32 @@ internal fun PerformanceLostItemCreateScreen(
 
 @Composable
 private fun PerformanceLostItemCreateContent(
+    performanceLostItemCreateViewModel: PerformanceLostItemCreateViewModel,
     modifier: Modifier = Modifier,
+    facilityName: String,
     onCompleteChange: (Boolean) -> Unit,
     onNavigateUpload: () -> Unit
 ) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
-    var lostItemName by remember { mutableStateOf("") } // 필수
-    var lostItemType by remember { mutableStateOf("") } // 필수
-    var detailPlaceAcquisition by remember { mutableStateOf("") }
-    var dateAcquisition by remember { mutableStateOf("") } // 필수
-    var timeAcquisition by remember { mutableStateOf("") }
-    var significant by remember { mutableStateOf("") }
+    val lostItemCreateUiState by performanceLostItemCreateViewModel.lostCreateInfo.collectAsStateWithLifecycle()
+
+    LaunchedEffect(lostItemCreateUiState) {
+        onCompleteChange(
+            listOf(
+                lostItemCreateUiState.title,
+                lostItemCreateUiState.type,
+                lostItemCreateUiState.foundDate,
+                lostItemCreateUiState.particulars
+            ).all { it.isNotEmpty() }
+        )
+    }
 
     var isSelectAttachment by remember { mutableStateOf(false) }
     var isClickLostItemType by remember { mutableStateOf(false) }
     var isClickDateAcquisition by remember { mutableStateOf(false) }
     var isClickTimeAcquisition by remember { mutableStateOf(false) }
     var isClickAttachmentFile by remember { mutableStateOf(false) }
-
-    LaunchedEffect(lostItemName, lostItemType, dateAcquisition, isSelectAttachment) {
-        onCompleteChange(
-            listOf(lostItemName, lostItemType, dateAcquisition).all { it.isNotEmpty() } && isSelectAttachment
-        )
-    }
-
     val scrollState = rememberScrollState()
     Box(
         modifier = modifier
@@ -130,10 +144,10 @@ private fun PerformanceLostItemCreateContent(
             .verticalScroll(scrollState)
     ) {
         Row(
-            modifier = Modifier.padding(top = 36.dp),
+            modifier = Modifier.padding(top = 30.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(Modifier.width(84.dp)) {
+            Row(Modifier.width(76.dp)) {
                 Text(
                     text = stringResource(R.string.performance_find_lost_item_create_location),
                     color = Nero,
@@ -151,7 +165,7 @@ private fun PerformanceLostItemCreateContent(
                 contentAlignment = Alignment.CenterStart
             ) {
                 Text(
-                    text = "LG아트센터 서울",
+                    text = facilityName,
                     color = Me_Pink,
                     fontSize = 16.dp.toSp(),
                     fontWeight = FontWeight.Bold,
@@ -162,12 +176,11 @@ private fun PerformanceLostItemCreateContent(
         LostItemInfoTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 90.dp),
+                .padding(top = 86.dp),
             title = stringResource(R.string.performance_find_lost_item_create_title),
             placeholder = stringResource(R.string.performance_find_lost_item_create_title_placeholder),
-            isEssential = true,
-            value = lostItemName,
-            onValueChange = { lostItemName = it },
+            value = lostItemCreateUiState.title,
+            onValueChange = { performanceLostItemCreateViewModel.setTitle(it) },
             onFocused = {
                 isClickLostItemType = false
                 isClickDateAcquisition = false
@@ -178,7 +191,7 @@ private fun PerformanceLostItemCreateContent(
         LostItemTypeDropDown(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 144.dp),
+                .padding(top = 142.dp),
             isClicked = isClickLostItemType,
             onClickChange = { isClick ->
                 isClickLostItemType = isClick
@@ -191,8 +204,7 @@ private fun PerformanceLostItemCreateContent(
             },
             title = stringResource(R.string.performance_find_lost_item_create_classification),
             placeholder = stringResource(R.string.performance_find_lost_item_create_classification_placeholder),
-            isEssential = true,
-            value = lostItemType
+            value = lostItemCreateUiState.type
         ) {
             LostItemTypeGrid(
                 modifier = Modifier
@@ -201,7 +213,19 @@ private fun PerformanceLostItemCreateContent(
                     .padding(vertical = 24.dp, horizontal = 20.dp),
                 itemModifier = Modifier.size(48.dp, 72.dp),
                 onTypeChange = {
-                    lostItemType = it.label
+                    performanceLostItemCreateViewModel.setItemType(
+                        type = when (lostItemCreateUiState.type) {
+                            LostItemType.BAG.code -> LostItemType.BAG.label
+                            LostItemType.WALLET.code -> LostItemType.WALLET.label
+                            LostItemType.MONEY.code -> LostItemType.MONEY.label
+                            LostItemType.CARD.code -> LostItemType.CARD.label
+                            LostItemType.JEWELRY.code -> LostItemType.JEWELRY.label
+                            LostItemType.ELECTRONICS.code -> LostItemType.ELECTRONICS.label
+                            LostItemType.BOOKS.code -> LostItemType.BOOKS.label
+                            LostItemType.CLOTHES.code -> LostItemType.CLOTHES.label
+                            else -> LostItemType.ETC.label
+                        }
+                    )
                     isClickLostItemType = false
                 }
             )
@@ -212,8 +236,9 @@ private fun PerformanceLostItemCreateContent(
                 .padding(top = 198.dp),
             title = stringResource(R.string.performance_find_lost_item_create_place),
             placeholder = stringResource(R.string.performance_find_lost_item_create_place_placeholder),
-            value = detailPlaceAcquisition,
-            onValueChange = { detailPlaceAcquisition = it },
+            isEssential = false,
+            value = lostItemCreateUiState.foundPlaceDetail,
+            onValueChange = { performanceLostItemCreateViewModel.setFoundPlaceDetail(it) },
             onFocused = {
                 isClickLostItemType = false
                 isClickDateAcquisition = false
@@ -224,7 +249,7 @@ private fun PerformanceLostItemCreateContent(
         LostItemTypeDropDown(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 252.dp),
+                .padding(top = 254.dp),
             isClicked = isClickDateAcquisition,
             onClickChange = { isClick ->
                 isClickDateAcquisition = isClick
@@ -237,17 +262,18 @@ private fun PerformanceLostItemCreateContent(
             },
             title = stringResource(R.string.performance_find_lost_item_create_acquistion_date),
             placeholder = stringResource(R.string.performance_find_lost_item_create_acquistion_date_placeholder),
-            isEssential = true,
-            value = dateAcquisition
+            value = lostItemCreateUiState.foundDate
         ) {
             SelectedDateCalender(
                 modifier = Modifier.padding(top = 10.dp),
                 onDateClick = {
-                    dateAcquisition = String.format(
-                        "%d.%d.%d",
-                        it.date.year,
-                        it.date.month.value,
-                        it.date.dayOfMonth
+                    performanceLostItemCreateViewModel.setFoundDate(
+                        foundDate = String.format(
+                            "%d.%02d.%02d",
+                            it.date.year,
+                            it.date.month.value,
+                            it.date.dayOfMonth
+                        )
                     )
                     isClickDateAcquisition = false
                 }
@@ -256,7 +282,7 @@ private fun PerformanceLostItemCreateContent(
         LostItemTypeDropDown(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 306.dp),
+                .padding(top = 310.dp),
             isClicked = isClickTimeAcquisition,
             onClickChange = { isClick ->
                 isClickTimeAcquisition = isClick
@@ -268,16 +294,19 @@ private fun PerformanceLostItemCreateContent(
                 }
             },
             title = stringResource(R.string.performance_find_lost_item_create_acquistion_time),
+            isEssential = false,
             placeholder = stringResource(R.string.performance_find_lost_item_create_acquistion_time_placeholder),
-            value = timeAcquisition
+            value = lostItemCreateUiState.foundTime ?: ""
         ) {
             CurtainCallTimePicker(
                 modifier = Modifier.padding(top = 10.dp),
                 onClick = {
-                    timeAcquisition = String.format(
-                        context.getString(R.string.performance_find_lost_item_create_time_format),
-                        it.hour,
-                        it.minute
+                    performanceLostItemCreateViewModel.setFoundTime(
+                        String.format(
+                            context.getString(R.string.performance_find_lost_item_create_time_format),
+                            it.hour,
+                            it.minute
+                        )
                     )
                     isClickTimeAcquisition = false
                 }
@@ -286,11 +315,11 @@ private fun PerformanceLostItemCreateContent(
         LostItemInfoTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 360.dp),
+                .padding(top = 366.dp),
             title = stringResource(R.string.performance_find_lost_item_create_significant),
             placeholder = stringResource(R.string.performance_find_lost_item_create_significant_placeholder),
-            value = significant,
-            onValueChange = { significant = it },
+            value = lostItemCreateUiState.particulars,
+            onValueChange = { performanceLostItemCreateViewModel.setParticulars(it) },
             onFocused = {
                 isClickLostItemType = false
                 isClickDateAcquisition = false
@@ -300,9 +329,10 @@ private fun PerformanceLostItemCreateContent(
             isSingleLine = false
         )
         LostItemAttachmentDropDown(
+            performanceLostItemCreateViewModel = performanceLostItemCreateViewModel,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 546.dp),
+                .padding(top = 532.dp),
             isClicked = isClickAttachmentFile,
             onClickChange = { isClick ->
                 isClickAttachmentFile = isClick
@@ -321,6 +351,7 @@ private fun PerformanceLostItemCreateContent(
 
 @Composable
 private fun LostItemAttachmentDropDown(
+    performanceLostItemCreateViewModel: PerformanceLostItemCreateViewModel,
     modifier: Modifier = Modifier,
     isClicked: Boolean = false,
     onClickChange: (Boolean) -> Unit,
@@ -328,23 +359,46 @@ private fun LostItemAttachmentDropDown(
     onSelectChange: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
-    var attachmentFile by remember { mutableStateOf<Bitmap?>(null) }
+    val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        Manifest.permission.READ_MEDIA_IMAGES
+    } else {
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    }
+
+    val launcherPermission = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) {
+            Timber.d("권한 동의")
+        } else {
+            Timber.d("권한 거부")
+        }
+    }
+
+    var attachmentFile by remember { mutableStateOf<Uri?>(null) }
     val takePhotoFromAlbum = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let { uri ->
-            attachmentFile = uri.parseBitmap(context)
+            attachmentFile = uri
+            performanceLostItemCreateViewModel.uploadImage(uri.toString())
             onSelectChange(true)
         }
     }
     val takePhotoFromCameraLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap ->
-        attachmentFile = bitmap
-        onSelectChange(true)
+        bitmap?.let { bitmap ->
+            val bytes = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+            val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "", null)
+            attachmentFile = Uri.parse(path)
+            performanceLostItemCreateViewModel.uploadImage(path)
+            onSelectChange(true)
+        }
     }
 
     Row(modifier.zIndex(if (isClicked) 1f else 0f)) {
         Row(
             modifier = Modifier
                 .padding(top = 10.dp)
-                .width(84.dp)
+                .width(76.dp)
         ) {
             Text(
                 text = stringResource(R.string.performance_find_lost_item_create_attachment),
@@ -353,17 +407,11 @@ private fun LostItemAttachmentDropDown(
                 fontWeight = FontWeight.Medium,
                 fontFamily = spoqahansanseeo
             )
-            Spacer(
-                modifier = Modifier
-                    .padding(start = 2.dp)
-                    .size(4.dp)
-                    .background(Me_Pink, CircleShape)
-            )
         }
         Column(Modifier.fillMaxWidth()) {
             Box {
                 if (isSelectAttachment) {
-                    Box(Modifier.size(83.dp)) {
+                    Box(Modifier.size(76.dp)) {
                         AsyncImage(
                             model = attachmentFile,
                             contentDescription = null,
@@ -431,7 +479,13 @@ private fun LostItemAttachmentDropDown(
                                 ) {
                                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                                         IconButton(
-                                            onClick = { takePhotoFromAlbum.launch("image/*") },
+                                            onClick = {
+                                                if (ContextCompat.checkSelfPermission(context, permission) == PackageManager.PERMISSION_GRANTED) {
+                                                    takePhotoFromAlbum.launch("image/*")
+                                                } else {
+                                                    launcherPermission.launch(permission)
+                                                }
+                                            },
                                             modifier = Modifier
                                                 .size(48.dp)
                                                 .clip(CircleShape),
@@ -492,13 +546,16 @@ private fun LostItemTypeDropDown(
     onClickChange: (Boolean) -> Unit,
     title: String,
     placeholder: String,
-    isEssential: Boolean = false,
+    isEssential: Boolean = true,
     value: String,
     content: @Composable () -> Unit,
 ) {
     Column(modifier.zIndex(if (isClicked) 1f else 0f)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Row(Modifier.width(84.dp)) {
+            Column(
+                modifier = Modifier.width(76.dp),
+                verticalArrangement = Arrangement.Center
+            ) {
                 Text(
                     text = title,
                     color = Nero,
@@ -506,12 +563,13 @@ private fun LostItemTypeDropDown(
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo
                 )
-                if (isEssential) {
-                    Spacer(
-                        modifier = Modifier
-                            .padding(start = 2.dp)
-                            .size(4.dp)
-                            .background(Me_Pink, CircleShape)
+                if (isEssential.not()) {
+                    Text(
+                        text = "(선택)",
+                        color = Roman_Silver,
+                        fontSize = 12.dp.toSp(),
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = spoqahansanseeo
                     )
                 }
             }
@@ -546,7 +604,7 @@ private fun LostItemInfoTextField(
     modifier: Modifier = Modifier,
     title: String,
     placeholder: String,
-    isEssential: Boolean = false,
+    isEssential: Boolean = true,
     value: String,
     onValueChange: (String) -> Unit,
     onFocused: () -> Unit,
@@ -558,10 +616,11 @@ private fun LostItemInfoTextField(
         modifier = modifier,
         verticalAlignment = if (isSingleLine) Alignment.CenterVertically else Alignment.Top
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .padding(top = if (isSingleLine) 0.dp else 12.dp)
-                .width(84.dp)
+                .width(76.dp),
+            verticalArrangement = Arrangement.Center
         ) {
             Text(
                 text = title,
@@ -570,12 +629,13 @@ private fun LostItemInfoTextField(
                 fontWeight = FontWeight.Medium,
                 fontFamily = spoqahansanseeo
             )
-            if (isEssential) {
-                Spacer(
-                    modifier = Modifier
-                        .padding(start = 2.dp)
-                        .size(4.dp)
-                        .background(Me_Pink, CircleShape)
+            if (isEssential.not()) {
+                Text(
+                    text = "(선택)",
+                    color = Roman_Silver,
+                    fontSize = 12.dp.toSp(),
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = spoqahansanseeo
                 )
             }
         }
@@ -611,7 +671,7 @@ private fun LostItemInfoTextField(
                         if (it.isFocused) onFocused()
                     }
                     .fillMaxWidth()
-                    .height(174.dp)
+                    .height(152.dp)
                     .border(BorderStroke(1.dp, if (isFocused) Roman_Silver else Color.Transparent), RoundedCornerShape(8.dp)),
                 fontSize = 14.dp.toSp(),
                 shape = RoundedCornerShape(8.dp),

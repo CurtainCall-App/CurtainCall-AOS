@@ -167,7 +167,7 @@
     <string name="performance_find_lost_item_create_select_image">이미지 선택</string>
     <string name="performance_find_lost_item_create_capture">사진 촬영</string>
     <string name="performance_find_lost_item_create_write_complete">작성 완료</string>
-    <string name="performance_find_lost_item_create_time_format">%d:%d</string>
+    <string name="performance_find_lost_item_create_time_format">%02d:%02d</string>
     <string name="performance_lost_item_upload_complete">분실물 작성이 모두 끝났습니다.</string>
     <string name="performance_lost_item_upload_complete_description">해당 게시물은 작품 상세페이지 및\n마이페이지에서 확인할 수 있습니다.</string>
 

@@ -43,7 +43,7 @@ internal fun PerformanceLostItemScreen(
     performanceDetailViewModel: PerformanceDetailViewModel,
     facilityName: String,
     onNavigateLostItemDetail: (Int) -> Unit,
-    onNavigateLostItemCreate: () -> Unit,
+    onNavigateLostItemCreate: (String, String) -> Unit,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -91,7 +91,12 @@ internal fun PerformanceLostItemScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { onNavigateLostItemCreate() },
+                onClick = {
+                    onNavigateLostItemCreate(
+                        performanceDetailViewModel.uiState.value.facilityDetailModel.id,
+                        facilityName
+                    )
+                },
                 modifier = Modifier
                     .padding(bottom = 40.dp)
                     .size(58.dp),
