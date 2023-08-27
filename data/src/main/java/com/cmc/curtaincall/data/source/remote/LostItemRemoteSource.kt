@@ -23,16 +23,18 @@ class LostItemRemoteSource @Inject constructor(
         particulars: String,
         imageId: Int
     ): Flow<CreateLostItemResponse> = flow {
-        lostItemService.createLostItem(
-            createLostItemRequest = CreateLostItemRequest(
-                title = title,
-                type = type,
-                facilityId = facilityId,
-                foundPlaceDetail = foundPlaceDetail,
-                foundDate = foundDate,
-                foundTime = foundTime,
-                particulars = particulars,
-                imageId = imageId
+        emit(
+            lostItemService.createLostItem(
+                createLostItemRequest = CreateLostItemRequest(
+                    title = title,
+                    type = type,
+                    facilityId = facilityId,
+                    foundPlaceDetail = foundPlaceDetail,
+                    foundDate = foundDate,
+                    foundTime = foundTime,
+                    particulars = particulars,
+                    imageId = imageId
+                )
             )
         )
     }
@@ -41,32 +43,38 @@ class LostItemRemoteSource @Inject constructor(
         page: Int,
         size: Int,
         facilityId: String,
-        type: String,
-        foundDate: String,
-        title: String
+        type: String?,
+        foundDate: String?,
+        title: String?
     ): Flow<List<LostItemResponse>> = flow {
-        lostItemService.requestLostItemList(
-            page = page,
-            size = size,
-            facilityId = facilityId,
-            type = type,
-            foundDate = foundDate,
-            title = title
+        emit(
+            lostItemService.requestLostItemList(
+                page = page,
+                size = size,
+                facilityId = facilityId,
+                type = type,
+                foundDate = foundDate,
+                title = title
+            ).lostItems
         )
     }
 
     fun requestLostItemDetail(
         lostItemId: Int
     ): Flow<LostItemDetailResponse> = flow {
-        lostItemService.requestLostItemDetail(
-            lostItemId = lostItemId
+        emit(
+            lostItemService.requestLostItemDetail(
+                lostItemId = lostItemId
+            )
         )
     }
 
     fun deleteLostItem(
         lostItemId: Int
     ): Flow<Boolean> = flow {
-        lostItemService.deleteLostItem(lostItemId).isSuccessful
+        emit(
+            lostItemService.deleteLostItem(lostItemId).isSuccessful
+        )
     }
 
     fun updateLostItem(
@@ -79,17 +87,19 @@ class LostItemRemoteSource @Inject constructor(
         particulars: String,
         imageId: Int
     ): Flow<Boolean> = flow {
-        lostItemService.updateLostItem(
-            lostItemId = lostItemId,
-            updateLostItemRequest = UpdateLostItemRequest(
-                title = title,
-                type = type,
-                foundPlaceDetail = foundPlaceDetail,
-                foundDate = foundDate,
-                foundTime = foundTime,
-                particulars = particulars,
-                imageId = imageId
-            )
-        ).isSuccessful
+        emit(
+            lostItemService.updateLostItem(
+                lostItemId = lostItemId,
+                updateLostItemRequest = UpdateLostItemRequest(
+                    title = title,
+                    type = type,
+                    foundPlaceDetail = foundPlaceDetail,
+                    foundDate = foundDate,
+                    foundTime = foundTime,
+                    particulars = particulars,
+                    imageId = imageId
+                )
+            ).isSuccessful
+        )
     }
 }

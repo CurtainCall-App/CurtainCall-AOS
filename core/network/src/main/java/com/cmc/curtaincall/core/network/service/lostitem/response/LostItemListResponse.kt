@@ -13,7 +13,7 @@ data class LostItemResponse(
     val facilityName: String,
     val title: String,
     val foundDate: String,
-    val foundTime: String,
+    val foundTime: String?,
     val imageUrl: String
 ) {
     fun toModel() = LostItemModel(

@@ -23,6 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.items.EmptyItem
+import com.cmc.curtaincall.common.design.component.items.LostItem
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.Black_Coral
 import com.cmc.curtaincall.common.design.theme.Bright_Gray
@@ -30,13 +31,17 @@ import com.cmc.curtaincall.common.design.theme.Chinese_Black
 import com.cmc.curtaincall.common.design.theme.Me_Pink
 import com.cmc.curtaincall.common.design.theme.Roman_Silver
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
+import com.cmc.curtaincall.domain.model.lostItem.LostItemModel
+import timber.log.Timber
 
 @Composable
 internal fun PerformanceLostItemTabScreen(
     modifier: Modifier = Modifier,
     facilityName: String,
+    lostItems: List<LostItemModel> = listOf(),
     onNavigateLostItem: (String) -> Unit
 ) {
+    Timber.d("PerformanceLostItemTabScreen $lostItems")
     Column(modifier.padding(horizontal = 20.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
@@ -68,42 +73,27 @@ internal fun PerformanceLostItemTabScreen(
                 .padding(top = 14.dp)
                 .heightIn(min = 317.dp)
         ) {
-            EmptyItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 70.dp),
-                alert = stringResource(R.string.performance_lostitem_empty)
-            )
-//            LostItem(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(bottom = 12.dp),
-//                painter = painterResource(R.drawable.img_default_performance),
-//                title = "닥스지갑",
-//                date = "2023.6.15",
-//                getLocation = "LG아트센터 서울",
-//                storeLocation = "LG아트센터 서울"
-//            )
-//            LostItem(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(bottom = 12.dp),
-//                painter = painterResource(R.drawable.img_default_performance),
-//                title = "닥스지갑",
-//                date = "2023.6.15",
-//                getLocation = "LG아트센터 서울",
-//                storeLocation = "LG아트센터 서울"
-//            )
-//            LostItem(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(bottom = 12.dp),
-//                painter = painterResource(R.drawable.img_default_performance),
-//                title = "닥스지갑",
-//                date = "2023.6.15",
-//                getLocation = "LG아트센터 서울",
-//                storeLocation = "LG아트센터 서울"
-//            )
+            if (lostItems.isEmpty()) {
+                EmptyItem(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 70.dp),
+                    alert = stringResource(R.string.performance_lostitem_empty)
+                )
+            } else {
+                lostItems.forEach { lostItem ->
+                    LostItem(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 12.dp),
+                        imageUrl = lostItem.imageUrl,
+                        title = lostItem.title,
+                        date = lostItem.foundDate,
+                        getLocation = lostItem.facilityName,
+                        storeLocation = lostItem.facilityName
+                    )
+                }
+            }
         }
     }
 }

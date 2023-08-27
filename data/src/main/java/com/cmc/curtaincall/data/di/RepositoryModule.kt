@@ -2,6 +2,7 @@ package com.cmc.curtaincall.data.di
 
 import com.cmc.curtaincall.data.repository.AuthRepositoryImpl
 import com.cmc.curtaincall.data.repository.FavoriteRepositoryImpl
+import com.cmc.curtaincall.data.repository.LostItemRepositoryImpl
 import com.cmc.curtaincall.data.repository.MemberRepositoryImpl
 import com.cmc.curtaincall.data.repository.NoticeRepositoryImpl
 import com.cmc.curtaincall.data.repository.PartyRepositoryImpl
@@ -85,6 +86,6 @@ interface RepositoryModule {
     @Binds
     @Singleton
     fun bindLostItemRepository(
-        lostItemRepository: LostItemRepository
+        lostItemRepositoryImpl: LostItemRepositoryImpl
     ): LostItemRepository
 }

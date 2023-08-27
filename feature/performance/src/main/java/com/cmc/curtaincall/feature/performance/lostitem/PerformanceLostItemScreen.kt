@@ -2,29 +2,43 @@ package com.cmc.curtaincall.feature.performance.lostitem
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallDropDownButton
 import com.cmc.curtaincall.common.design.component.basic.SearchAppBar
 import com.cmc.curtaincall.common.design.component.basic.SearchTopAppBarWithBack
 import com.cmc.curtaincall.common.design.component.custom.SelectedDateCalender
 import com.cmc.curtaincall.common.design.component.items.EmptyItem
+import com.cmc.curtaincall.common.design.component.items.GridLostItem
+import com.cmc.curtaincall.common.design.component.items.SearchItem
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.feature.performance.detail.PerformanceDetailViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PerformanceLostItemScreen(
+    performanceLostItemViewModel: PerformanceLostItemViewModel = hiltViewModel(),
+    performanceDetailViewModel: PerformanceDetailViewModel,
     facilityName: String,
     onNavigateLostItemDetail: () -> Unit,
     onNavigateLostItemCreate: () -> Unit,
@@ -33,18 +47,34 @@ internal fun PerformanceLostItemScreen(
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(White)
 
-    var isActiveSearchState by remember { mutableStateOf(false) }
-    var queryState by remember { mutableStateOf("") }
+    val performanceLostItemUiState by performanceLostItemViewModel.uiState.collectAsStateWithLifecycle()
     Scaffold(
         topBar = {
-            if (isActiveSearchState) {
+            if (performanceLostItemUiState.isActiveSearch) {
                 SearchAppBar(
-                    value = queryState,
-                    onValueChange = { queryState = it },
+                    value = performanceLostItemUiState.queryString,
+                    onValueChange = {
+                        performanceLostItemViewModel.setQueryString(it)
+                        performanceLostItemViewModel.changeDoneSearch(false)
+                    },
                     containerColor = White,
                     contentColor = Nero,
                     placeholder = stringResource(R.string.search_lostitem_title),
-                    onClick = { isActiveSearchState = false }
+                    onDone = {
+                        if (performanceLostItemUiState.queryString.isNotEmpty()) {
+                            performanceLostItemViewModel.searchLostItemList(
+                                performanceDetailViewModel.uiState.value.facilityDetailModel.id,
+                                performanceLostItemUiState.queryString
+                            )
+                            performanceLostItemViewModel.insertLostItemSearchWord()
+                        }
+                        performanceLostItemViewModel.changeDoneSearch(true)
+                    },
+                    onClick = {
+                        performanceLostItemViewModel.changeActiveSearch(false)
+                        performanceLostItemViewModel.setQueryString("")
+                    },
+                    onAction = { performanceLostItemViewModel.setQueryString("") }
                 )
             } else {
                 SearchTopAppBarWithBack(
@@ -53,32 +83,49 @@ internal fun PerformanceLostItemScreen(
                     contentColor = Nero,
                     tint = Roman_Silver,
                     onBack = onBack,
-                    onClick = { isActiveSearchState = true }
+                    onClick = { performanceLostItemViewModel.changeActiveSearch(true) }
                 )
             }
         },
         floatingActionButton = {
-//            FloatingActionButton(
-//                onClick = { onNavigateLostItemCreate() },
-//                modifier = Modifier
-//                    .padding(bottom = 40.dp)
-//                    .size(58.dp),
-//                shape = CircleShape,
-//                containerColor = Cetacean_Blue
-//            ) {
-//                Icon(
-//                    painter = painterResource(R.drawable.ic_pen),
-//                    contentDescription = null,
-//                    modifier = Modifier.size(29.dp),
-//                    tint = Color.Unspecified
-//                )
-//            }
+            FloatingActionButton(
+                onClick = { onNavigateLostItemCreate() },
+                modifier = Modifier
+                    .padding(bottom = 40.dp)
+                    .size(58.dp),
+                shape = CircleShape,
+                containerColor = Cetacean_Blue
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_pen),
+                    contentDescription = null,
+                    modifier = Modifier.size(29.dp),
+                    tint = Color.Unspecified
+                )
+            }
         }
     ) { paddingValues ->
-        if (isActiveSearchState) {
-            // TODO
+        if (performanceLostItemUiState.isActiveSearch) {
+            PerformanceLostItemSearchContent(
+                performanceLostItemViewModel = performanceLostItemViewModel,
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
+                    .background(White),
+                onClick = {
+                    performanceLostItemViewModel.setQueryString(it)
+                    performanceLostItemViewModel.searchLostItemList(
+                        performanceDetailViewModel.uiState.value.facilityDetailModel.id,
+                        it
+                    )
+                    performanceLostItemViewModel.insertLostItemSearchWord()
+                    performanceLostItemViewModel.changeDoneSearch(true)
+                },
+                onNavigateLostItemDetail = onNavigateLostItemDetail
+            )
         } else {
             PerformanceLostItemContent(
+                performanceDetailViewModel = performanceDetailViewModel,
                 modifier = Modifier
                     .padding(paddingValues)
                     .fillMaxSize()
@@ -91,11 +138,119 @@ internal fun PerformanceLostItemScreen(
 }
 
 @Composable
+private fun PerformanceLostItemSearchContent(
+    performanceLostItemViewModel: PerformanceLostItemViewModel,
+    modifier: Modifier = Modifier,
+    onClick: (String) -> Unit,
+    onNavigateLostItemDetail: () -> Unit
+) {
+    val searchWords by performanceLostItemViewModel.searchWords.collectAsStateWithLifecycle()
+    val performanceLostItemUiState by performanceLostItemViewModel.uiState.collectAsStateWithLifecycle()
+    val lostItems = performanceLostItemUiState.lostItemSearchItems.collectAsLazyPagingItems()
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(18.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        item(span = { GridItemSpan(2) }) {
+            Spacer(
+                modifier = Modifier
+                    .padding(top = 20.dp)
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(Cultured)
+            )
+        }
+
+        if (performanceLostItemUiState.queryString.isEmpty()) {
+            if (searchWords.isEmpty()) {
+                item(span = { GridItemSpan(2) }) {
+                    EmptyItem(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 232.dp),
+                        alert = stringResource(R.string.search_empty_recently_word)
+                    )
+                }
+            } else {
+                item(span = { GridItemSpan(2) }) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp)
+                            .padding(top = 2.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 10.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = stringResource(R.string.search_recently_word),
+                                modifier = Modifier.weight(1f),
+                                color = Chinese_Black,
+                                fontSize = 16.dp.toSp(),
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = spoqahansanseeo
+                            )
+                            Text(
+                                text = stringResource(R.string.search_delete_recentyl_word),
+                                modifier = Modifier.clickable { performanceLostItemViewModel.deleteLostItemSearchWordList() },
+                                color = Roman_Silver,
+                                fontSize = 14.dp.toSp(),
+                                fontWeight = FontWeight.Medium,
+                                fontFamily = spoqahansanseeo
+                            )
+                        }
+                        searchWords.forEach { searchWord ->
+                            SearchItem(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 10.dp),
+                                word = searchWord.word,
+                                onClick = { onClick(searchWord.word) },
+                                onDelete = { performanceLostItemViewModel.deleteLostItemSearchWord(searchWord) }
+                            )
+                        }
+                    }
+                }
+            }
+        } else {
+            if (performanceLostItemUiState.isDoneSearch) {
+                items(lostItems.itemCount) { index ->
+                    lostItems[index]?.let { lostItem ->
+                        GridLostItem(
+                            modifier = Modifier
+                                .padding(
+                                    start = if (index % 2 == 0) 20.dp else 0.dp,
+                                    end = if (index % 2 == 0) 0.dp else 20.dp
+                                )
+                                .clickable { onNavigateLostItemDetail() }
+                                .background(Cultured, RoundedCornerShape(10.dp))
+                                .padding(horizontal = 8.dp)
+                                .padding(top = 8.dp, bottom = 15.dp),
+                            imageUrl = lostItem.imageUrl,
+                            title = lostItem.title,
+                            location = lostItem.facilityName,
+                            date = lostItem.foundDate
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
 private fun PerformanceLostItemContent(
+    performanceDetailViewModel: PerformanceDetailViewModel,
     modifier: Modifier = Modifier,
     facilityName: String,
     onNavigateLostItemDetail: () -> Unit
 ) {
+    val lostItems = performanceDetailViewModel.lostItems.collectAsLazyPagingItems()
     var isClickedDate by remember { mutableStateOf(false) }
     var isClickedType by remember { mutableStateOf(false) }
     var lostDateState by remember { mutableStateOf("") }
@@ -128,6 +283,15 @@ private fun PerformanceLostItemContent(
                                 it.date.dayOfMonth
                             )
                             isClickedDate = false
+                            performanceDetailViewModel.requestLostItemList(
+                                foundDate = String.format(
+                                    "%d-%02d-%02d",
+                                    it.date.year,
+                                    it.date.month.value,
+                                    it.date.dayOfMonth
+                                )
+                            )
+                            lostItems.refresh()
                         }
                     )
                 }
@@ -141,41 +305,48 @@ private fun PerformanceLostItemContent(
                         onTypeChange = {
                             lostTypeState = it.label
                             isClickedType = false
+                            performanceDetailViewModel.requestLostItemList(type = it.code)
+                            lostItems.refresh()
                         }
                     )
                 }
             }
         )
-        Box(
-            modifier = Modifier
-                .padding(top = 88.dp)
-                .fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            EmptyItem(
-                alert = stringResource(R.string.performance_lostitem_empty)
-            )
+        if (lostItems.itemCount == 0) {
+            Box(
+                modifier = Modifier
+                    .padding(top = 88.dp)
+                    .fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                EmptyItem(
+                    alert = stringResource(R.string.performance_lostitem_empty)
+                )
+            }
+        } else {
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                modifier = Modifier.padding(top = 108.dp),
+                verticalArrangement = Arrangement.spacedBy(18.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(lostItems.itemCount) { index ->
+                    lostItems[index]?.let { lostItem ->
+                        GridLostItem(
+                            modifier = Modifier
+                                .clickable { onNavigateLostItemDetail() }
+                                .background(Cultured, RoundedCornerShape(10.dp))
+                                .padding(horizontal = 8.dp)
+                                .padding(top = 8.dp, bottom = 15.dp),
+                            imageUrl = lostItem.imageUrl,
+                            title = lostItem.title,
+                            location = lostItem.facilityName,
+                            date = lostItem.foundDate
+                        )
+                    }
+                }
+            }
         }
-//        LazyVerticalGrid(
-//            columns = GridCells.Fixed(2),
-//            modifier = Modifier.padding(top = 108.dp),
-//            verticalArrangement = Arrangement.spacedBy(18.dp),
-//            horizontalArrangement = Arrangement.spacedBy(12.dp)
-//        ) {
-//            itemsIndexed(List(9) { it }) { index, item ->
-//                GridLostItem(
-//                    modifier = Modifier
-//                        .clickable { onNavigateLostItemDetail() }
-//                        .background(Cultured, RoundedCornerShape(10.dp))
-//                        .padding(horizontal = 8.dp)
-//                        .padding(top = 8.dp, bottom = 15.dp),
-//                    painter = painterResource(R.drawable.img_poster),
-//                    title = "아이폰 핑크",
-//                    location = "LG 아트센터 서울",
-//                    date = "2023.7.15"
-//                )
-//            }
-//        }
     }
 }
 

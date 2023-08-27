@@ -180,6 +180,7 @@ fun NavGraphBuilder.performanceNavGraph(
             route = PerformanceDestination.ReviewCreate.routeWithArgs,
             arguments = PerformanceDestination.ReviewCreate.arguments
         ) { entry ->
+            val parentEntry = remember(entry) { navHostController.getBackStackEntry(PerformanceDestination.Detail.routeWithArgs) }
             val showId = entry.arguments?.getString(PerformanceDestination.ReviewCreate.showIdArgs) ?: ""
             val fromMypage = entry.arguments?.getBoolean(PerformanceDestination.ReviewCreate.fromMypageArg) ?: false
             val posterUrl = entry.arguments?.getString(PerformanceDestination.ReviewCreate.posterUrlArg)
@@ -188,6 +189,7 @@ fun NavGraphBuilder.performanceNavGraph(
             val reviewId = entry.arguments?.getInt(PerformanceDestination.ReviewCreate.reviewIdArg) ?: Int.MIN_VALUE
 
             PerformanceReviewCreateScreen(
+                performanceDetailViewModel = hiltViewModel(parentEntry),
                 showId = showId,
                 fromMypage = fromMypage,
                 posterUrl = posterUrl,
@@ -201,8 +203,10 @@ fun NavGraphBuilder.performanceNavGraph(
             route = PerformanceDestination.LostItem.routeWithArgs,
             arguments = PerformanceDestination.LostItem.arguments
         ) { entry ->
+            val parentEntry = remember(entry) { navHostController.getBackStackEntry(PerformanceDestination.Detail.routeWithArgs) }
             val facilityName = entry.arguments?.getString(PerformanceDestination.LostItem.facilityNameArg) ?: ""
             PerformanceLostItemScreen(
+                performanceDetailViewModel = hiltViewModel(parentEntry),
                 facilityName = facilityName,
                 onNavigateLostItemDetail = {
                     navHostController.navigate(PerformanceDestination.LostItemDetail.route)

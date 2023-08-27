@@ -84,8 +84,8 @@ internal fun PerformanceReviewScreen(
 
 @Composable
 private fun PerformanceReviewContent(
-    performanceDetailViewModel: PerformanceDetailViewModel,
     performanceReviewViewModel: PerformanceReviewViewModel = hiltViewModel(),
+    performanceDetailViewModel: PerformanceDetailViewModel,
     modifier: Modifier = Modifier,
     showId: String,
     onNavigateReviewCreate: (String?, String, String, Boolean, Int) -> Unit
@@ -102,6 +102,7 @@ private fun PerformanceReviewContent(
             onDismiss = { isShowRemoveDialog = false },
             onPositive = {
                 performanceReviewViewModel.deleteShowReview(removeReviewId)
+                performanceDetailViewModel.requestShowReviewList(showId)
                 isShowRemoveDialog = false
             }
         )

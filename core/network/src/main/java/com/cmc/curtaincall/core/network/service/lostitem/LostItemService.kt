@@ -26,9 +26,9 @@ interface LostItemService {
         @Query("page") page: Int,
         @Query("size") size: Int,
         @Query("facilityId") facilityId: String,
-        @Query("type") type: String,
-        @Query("foundDate") foundDate: String,
-        @Query("title") title: String
+        @Query("type") type: String?,
+        @Query("foundDate") foundDate: String?,
+        @Query("title") title: String?
     ): LostItemListResponse
 
     @GET("lostItems/{lostItemId}")

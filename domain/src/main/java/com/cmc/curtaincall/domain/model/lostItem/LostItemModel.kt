@@ -6,6 +6,6 @@ data class LostItemModel(
     val facilityName: String,
     val title: String,
     val foundDate: String,
-    val foundTime: String,
+    val foundTime: String?,
     val imageUrl: String
 )

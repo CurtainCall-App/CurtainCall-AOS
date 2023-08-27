@@ -23,8 +23,8 @@ class HomeViewModel @Inject constructor(
 ) {
     init {
         getMemberNickname()
-        // requestMyRecruitments()
-        // requestMyParticipations()
+        requestMyRecruitments()
+        requestMyParticipations()
         requestPopularShowList()
         requestOpenShowList()
         requestEndShowList()
