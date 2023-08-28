@@ -1,12 +1,15 @@
 package com.cmc.curtaincall.core.network.service.member
 
+import com.cmc.curtaincall.core.network.service.member.request.DeleteMemberRequest
 import com.cmc.curtaincall.core.network.service.member.request.MemberCreateRequest
 import com.cmc.curtaincall.core.network.service.member.response.MemberCreateResponse
 import com.cmc.curtaincall.core.network.service.member.response.MemberDuplicateNickNameResponse
 import com.cmc.curtaincall.core.network.service.member.response.MemberInfoResponse
 import com.cmc.curtaincall.core.network.service.member.response.MemberParticipationsResponse
 import com.cmc.curtaincall.core.network.service.member.response.MemberRecruitmentsResponse
+import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -34,7 +37,7 @@ interface MemberService {
         @Path("memberId") memberId: Int,
         @Query("page") page: Int,
         @Query("size") size: Int,
-        @Query("category") category: String
+        @Query("category") category: String?
     ): MemberRecruitmentsResponse
 
     @GET("members/{memberId}/participations")
@@ -42,6 +45,11 @@ interface MemberService {
         @Path("memberId") memberId: Int,
         @Query("page") page: Int,
         @Query("size") size: Int,
-        @Query("category") category: String
+        @Query("category") category: String?
     ): MemberParticipationsResponse
+
+    @DELETE("member")
+    suspend fun deleteMember(
+        @Body deleteMemberRequest: DeleteMemberRequest
+    ): Response<Unit>
 }

@@ -26,7 +26,9 @@ import com.cmc.curtaincall.common.design.component.basic.CurtainCallBorderTextBu
 import com.cmc.curtaincall.common.design.component.content.card.PerformanceCard
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.common.utility.extensions.getShowTimes
 import com.cmc.curtaincall.domain.model.show.FacilityDetailModel
+import com.cmc.curtaincall.domain.model.show.ShowTimeModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.compose.*
@@ -35,6 +37,7 @@ import com.naver.maps.map.compose.*
 internal fun PerformanceDetailTabScreen(
     modifier: Modifier = Modifier,
     introductionImage: String? = null,
+    showTimes: List<ShowTimeModel> = listOf(),
     facilityDetailModel: FacilityDetailModel
 ) {
     Column(modifier) {
@@ -50,7 +53,8 @@ internal fun PerformanceDetailTabScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
-                .padding(bottom = 40.dp)
+                .padding(bottom = 40.dp),
+            showTimes = showTimes
         )
         Spacer(
             modifier = Modifier
@@ -262,7 +266,8 @@ private fun PerformancePlace(
 
 @Composable
 private fun PerformanceTimeRow(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    showTimes: List<ShowTimeModel>
 ) {
     Column(modifier) {
         Text(
@@ -280,7 +285,7 @@ private fun PerformanceTimeRow(
                     .background(Nero, CircleShape)
             )
             Text(
-                text = "화, 수, 목, 금 | 19:30\n주말 | 15:00\n공휴일 | 15:00",
+                text = showTimes.getShowTimes(),
                 modifier = Modifier.padding(start = 10.dp),
                 color = Nero,
                 fontSize = 14.dp.toSp(),

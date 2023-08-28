@@ -14,7 +14,8 @@ interface ShowService {
     suspend fun requestShowList(
         @Query("page") page: Int,
         @Query("size") size: Int,
-        @Query("genre") genre: String
+        @Query("genre") genre: String,
+        @Query("sort") sort: String?
     ): ShowInfosResponse
 
     @GET("search/shows")
@@ -31,6 +32,14 @@ interface ShowService {
         @Query("startDate") startDate: String
     ): ShowInfosResponse
 
+    @GET("shows-to-end")
+    suspend fun requestEndShowList(
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+        @Query("endDate") endDate: String,
+        @Query("genre") genre: String?
+    ): ShowInfosResponse
+
     @GET("shows/{showId}")
     suspend fun requestShowDetail(
         @Path("showId") showId: String
@@ -39,7 +48,7 @@ interface ShowService {
     @GET("box-office")
     suspend fun requestPopularShowList(
         @Query("type") type: String,
-        @Query("genre") genre: String,
+        @Query("genre") genre: String?,
         @Query("baseDate") baseDate: String
     ): ShowRanksResponse
 

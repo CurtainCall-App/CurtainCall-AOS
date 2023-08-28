@@ -30,8 +30,13 @@ import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 import com.holix.android.bottomsheetdialog.compose.BottomSheetDialog
 
-enum class SortType(val value: String) {
-    STAR("별점순"), END("종료 임박순"), KOREAN("가나다순")
+enum class SortType(
+    val value: String,
+    val code: String
+) {
+    STAR("별점순", "reviewGradeAvg,desc"),
+    END("종료 임박순", "endDate"),
+    KOREAN("가나다순", "name")
 }
 
 @Composable

@@ -133,6 +133,7 @@
     <string name="performance_find_lost_item_date">잃어버린 날짜</string>
     <string name="performance_find_lost_item_type">물건 분류</string>
     <string name="performance_find_lost_item_repot">신고</string>
+    <string name="performance_find_lost_item_detail_subtitle">제목</string>
     <string name="performance_find_lost_item_detail_classification">분류</string>
     <string name="performance_find_lost_item_detail_place_of_acquisition">습득장소</string>
     <string name="performance_find_lost_item_detail_place_of_acquisition_format">습득장소 | %s</string>
@@ -166,7 +167,7 @@
     <string name="performance_find_lost_item_create_select_image">이미지 선택</string>
     <string name="performance_find_lost_item_create_capture">사진 촬영</string>
     <string name="performance_find_lost_item_create_write_complete">작성 완료</string>
-    <string name="performance_find_lost_item_create_time_format">%d:%d</string>
+    <string name="performance_find_lost_item_create_time_format">%02d:%02d</string>
     <string name="performance_lost_item_upload_complete">분실물 작성이 모두 끝났습니다.</string>
     <string name="performance_lost_item_upload_complete_description">해당 게시물은 작품 상세페이지 및\n마이페이지에서 확인할 수 있습니다.</string>
 
@@ -189,6 +190,7 @@
     <string name="home_coming_livetalk">커밍순 라이브톡</string>
     <string name="home_top10_popular_performance">TOP10 인기 작품</string>
     <string name="home_scheduled_open_performance">오픈 예정 공연</string>
+    <string name="home_scheduled_end_performance">마감 임박 공연</string>
     <string name="home_value_for_money_performance">가성비 좋은 공연</string>
     <string name="home_guide_title">입문자를 위한 연뮤 가이드</string>
     <string name="home_guide_total_menu">전체</string>

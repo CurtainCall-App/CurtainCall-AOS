@@ -26,12 +26,14 @@ import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.component.custom.RatingBar
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.feature.performance.detail.PerformanceDetailViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PerformanceReviewCreateScreen(
+    performanceDetailViewModel: PerformanceDetailViewModel = hiltViewModel(),
     performanceReviewViewModel: PerformanceReviewViewModel = hiltViewModel(),
     showId: String,
     fromMypage: Boolean = false,
@@ -62,7 +64,10 @@ internal fun PerformanceReviewCreateScreen(
             showId = showId,
             fromMypage = fromMypage,
             reviewId = reviewId,
-            onBack = onBack
+            onBack = {
+                performanceDetailViewModel.requestShowReviewList(showId)
+                onBack()
+            }
         )
     }
 }

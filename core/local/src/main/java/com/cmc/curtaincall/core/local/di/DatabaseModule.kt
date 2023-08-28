@@ -3,6 +3,7 @@ package com.cmc.curtaincall.core.local.di
 import android.content.Context
 import androidx.room.Room
 import com.cmc.curtaincall.core.local.db.CurtainCallDatabase
+import com.cmc.curtaincall.core.local.db.dao.LostItemSearchDao
 import com.cmc.curtaincall.core.local.db.dao.ShowSearchDao
 import dagger.Module
 import dagger.Provides
@@ -34,4 +35,11 @@ object DatabaseModule {
         curtainCallDatabase: CurtainCallDatabase
     ): ShowSearchDao =
         curtainCallDatabase.showSearchDao()
+
+    @Provides
+    @Singleton
+    fun provideLostItemSearchDao(
+        curtainCallDatabase: CurtainCallDatabase
+    ): LostItemSearchDao =
+        curtainCallDatabase.lostItemSearchDao()
 }

@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -24,15 +23,14 @@ import com.cmc.curtaincall.common.design.component.basic.TopAppBarOnlySearch
 import com.cmc.curtaincall.common.design.component.content.card.PerformanceDetailCard
 import com.cmc.curtaincall.common.design.component.content.row.SortTypeRow
 import com.cmc.curtaincall.common.design.component.custom.SelectSortTypeBottomSheet
-import com.cmc.curtaincall.common.design.component.custom.SortType
 import com.cmc.curtaincall.common.design.component.items.EmptyItem
 import com.cmc.curtaincall.common.design.component.items.SearchItem
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.common.utility.extensions.ShowDay
 import com.cmc.curtaincall.common.utility.extensions.toChangeDate
 import com.cmc.curtaincall.common.utility.extensions.toRunningTime
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -114,7 +112,6 @@ private fun PerformanceSearchContent(
     onNavigateDetail: (String) -> Unit
 ) {
     val searchWords by performanceViewModel.searchWords.collectAsStateWithLifecycle()
-
     val performanceUiState by performanceViewModel.uiState.collectAsStateWithLifecycle()
     val showSearchItems = performanceUiState.showSearchItems.collectAsLazyPagingItems()
     LazyColumn(modifier) {
@@ -197,7 +194,17 @@ private fun PerformanceSearchContent(
                             numberOfTotal = showInfoModel.reviewCount,
                             period = "${showInfoModel.startDate.toChangeDate()}-${showInfoModel.endDate.toChangeDate()}",
                             runningTime = if (showInfoModel.runtime.isEmpty()) "해당 정보 없음" else "${showInfoModel.runtime.toRunningTime()}분",
-                            date = "화-금 19:00",
+                            date = showInfoModel.showTimes.map {
+                                when (it.dayOfWeek) {
+                                    ShowDay.Monday.dayOfWeek -> ShowDay.Monday
+                                    ShowDay.Tuesday.dayOfWeek -> ShowDay.Tuesday
+                                    ShowDay.Wednesday.dayOfWeek -> ShowDay.Wednesday
+                                    ShowDay.Thursday.dayOfWeek -> ShowDay.Thursday
+                                    ShowDay.Friday.dayOfWeek -> ShowDay.Friday
+                                    ShowDay.Saturday.dayOfWeek -> ShowDay.Saturday
+                                    else -> ShowDay.Sunday
+                                }
+                            }.sortedBy { it.id }.toSet().joinToString(", ") { it.label },
                             location = showInfoModel.facilityName,
                             onClick = { onNavigateDetail(showInfoModel.id) },
                             isFavorite = showInfoModel.favorite,
@@ -226,138 +233,145 @@ private fun PerformanceContent(
     modifier: Modifier = Modifier,
     onNavigateDetail: (String) -> Unit
 ) {
-    var sortType by remember { mutableStateOf(SortType.STAR) }
     var showDialog by remember { mutableStateOf(false) }
-
     val performanceUiState by performanceViewModel.uiState.collectAsStateWithLifecycle()
     val playItems = performanceUiState.playItems.collectAsLazyPagingItems()
     val musicalItems = performanceUiState.musicalItems.collectAsLazyPagingItems()
-    val lazyListState = rememberLazyListState()
-    val coroutineScope = rememberCoroutineScope()
-
-    LaunchedEffect(Unit) {
-        coroutineScope.launch {
-            lazyListState.scrollToItem(performanceUiState.lastIndex)
-        }
-    }
 
     if (showDialog) {
         SelectSortTypeBottomSheet(
-            sortType = sortType,
+            sortType = performanceUiState.sortType,
             onSelectSortType = {
-                sortType = it
+                performanceViewModel.changeSortType(it)
                 showDialog = false
             },
             onDismissRequest = { showDialog = false }
         )
     }
-    Column(modifier) {
-        LazyColumn(
-            modifier = Modifier
-                .padding(top = 6.dp)
-                .padding(horizontal = 20.dp)
-                .fillMaxSize(),
-            state = lazyListState
-        ) {
-            item {
-                Column {
-                    Text(
-                        text = stringResource(R.string.performance_search),
-                        color = Black,
-                        fontSize = 24.dp.toSp(),
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = spoqahansanseeo
-                    )
-                    CurtainCallSelectTypeButton(
-                        modifier = Modifier
-                            .padding(top = 16.dp)
-                            .fillMaxWidth()
-                            .height(45.dp),
-                        firstType = stringResource(R.string.partymember_create_classification_theater),
-                        lastType = stringResource(R.string.partymember_create_classification_musical),
-                        isCheckFirstType = performanceUiState.genre == "PLAY",
-                        onTypeChange = { check ->
-                            performanceViewModel.changeGenre(
-                                if (check) "PLAY" else "MUSICAL"
-                            )
-                        }
-                    )
-                    SortTypeRow(
-                        modifier = Modifier.padding(top = 28.dp),
-                        sortType = sortType,
-                        onClick = { showDialog = true }
-                    )
-                }
-            }
-
-            if (performanceUiState.genre == "PLAY") {
-                itemsIndexed(playItems) { index, showInfoModel ->
-                    showInfoModel?.let { showInfoModel ->
-                        PerformanceDetailCard(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 12.dp),
-                            imageUrl = showInfoModel.poster,
-                            painter = painterResource(R.drawable.ic_error_poster),
-                            title = showInfoModel.name,
-                            rate = if (showInfoModel.reviewCount == 0) 0.0f else (showInfoModel.reviewGradeSum / showInfoModel.reviewCount.toFloat()),
-                            numberOfTotal = showInfoModel.reviewCount,
-                            period = "${showInfoModel.startDate.toChangeDate()}-${showInfoModel.endDate.toChangeDate()}",
-                            runningTime = if (showInfoModel.runtime.isEmpty()) "해당 정보 없음" else "${showInfoModel.runtime.toRunningTime()}분",
-                            date = "화-금 19:00",
-                            location = showInfoModel.facilityName,
-                            onClick = {
-                                performanceViewModel.changeLastIndex(index)
-                                onNavigateDetail(showInfoModel.id)
-                            },
-                            isFavorite = showInfoModel.favorite,
-                            onFavorite = { performanceViewModel.requestFavoriteShow(showInfoModel.id) },
-                            onDisFavorite = { performanceViewModel.deleteFavoriteShow(showInfoModel.id) }
+    LazyColumn(
+        modifier = modifier
+            .padding(top = 6.dp)
+            .padding(horizontal = 20.dp)
+            .fillMaxSize()
+    ) {
+        item {
+            Column {
+                Text(
+                    text = stringResource(R.string.performance_search),
+                    color = Black,
+                    fontSize = 24.dp.toSp(),
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = spoqahansanseeo
+                )
+                CurtainCallSelectTypeButton(
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .fillMaxWidth()
+                        .height(45.dp),
+                    firstType = stringResource(R.string.partymember_create_classification_theater),
+                    lastType = stringResource(R.string.partymember_create_classification_musical),
+                    isCheckFirstType = performanceUiState.genre == "PLAY",
+                    onTypeChange = { check ->
+                        performanceViewModel.changeGenre(
+                            if (check) "PLAY" else "MUSICAL"
                         )
-                        if (index != musicalItems.itemCount) {
-                            Spacer(
-                                modifier = Modifier
-                                    .padding(vertical = 16.dp)
-                                    .fillMaxWidth()
-                                    .height(1.dp)
-                                    .background(Cultured)
-                            )
-                        }
+                    }
+                )
+                SortTypeRow(
+                    modifier = Modifier.padding(top = 28.dp),
+                    sortType = performanceUiState.sortType,
+                    onClick = { showDialog = true }
+                )
+            }
+        }
+
+        if (performanceUiState.genre == "PLAY") {
+            itemsIndexed(playItems) { index, showInfoModel ->
+                showInfoModel?.let { showInfoModel ->
+                    PerformanceDetailCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 12.dp),
+                        imageUrl = showInfoModel.poster,
+                        painter = painterResource(R.drawable.ic_error_poster),
+                        title = showInfoModel.name,
+                        rate = if (showInfoModel.reviewCount == 0) 0.0f else (showInfoModel.reviewGradeSum / showInfoModel.reviewCount.toFloat()),
+                        numberOfTotal = showInfoModel.reviewCount,
+                        period = "${showInfoModel.startDate.toChangeDate()}-${showInfoModel.endDate.toChangeDate()}",
+                        runningTime = if (showInfoModel.runtime.isEmpty()) "해당 정보 없음" else "${showInfoModel.runtime.toRunningTime()}분",
+                        date = showInfoModel.showTimes.map {
+                            when (it.dayOfWeek) {
+                                ShowDay.Monday.dayOfWeek -> ShowDay.Monday
+                                ShowDay.Tuesday.dayOfWeek -> ShowDay.Tuesday
+                                ShowDay.Wednesday.dayOfWeek -> ShowDay.Wednesday
+                                ShowDay.Thursday.dayOfWeek -> ShowDay.Thursday
+                                ShowDay.Friday.dayOfWeek -> ShowDay.Friday
+                                ShowDay.Saturday.dayOfWeek -> ShowDay.Saturday
+                                else -> ShowDay.Sunday
+                            }
+                        }.sortedBy { it.id }.toSet().joinToString(", ") { it.label },
+                        location = showInfoModel.facilityName,
+                        onClick = {
+                            performanceViewModel.changeLastIndex(index)
+                            onNavigateDetail(showInfoModel.id)
+                        },
+                        isFavorite = showInfoModel.favorite,
+                        onFavorite = { performanceViewModel.requestFavoriteShow(showInfoModel.id) },
+                        onDisFavorite = { performanceViewModel.deleteFavoriteShow(showInfoModel.id) }
+                    )
+                    if (index != musicalItems.itemCount) {
+                        Spacer(
+                            modifier = Modifier
+                                .padding(vertical = 16.dp)
+                                .fillMaxWidth()
+                                .height(1.dp)
+                                .background(Cultured)
+                        )
                     }
                 }
-            } else {
-                itemsIndexed(musicalItems) { index, showInfoModel ->
-                    showInfoModel?.let { showInfoModel ->
-                        PerformanceDetailCard(
+            }
+        } else {
+            itemsIndexed(musicalItems) { index, showInfoModel ->
+                showInfoModel?.let { showInfoModel ->
+                    PerformanceDetailCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 12.dp),
+                        imageUrl = showInfoModel.poster,
+                        painter = painterResource(R.drawable.ic_error_poster),
+                        title = showInfoModel.name,
+                        rate = if (showInfoModel.reviewCount == 0) 0.0f else (showInfoModel.reviewGradeSum / showInfoModel.reviewCount.toFloat()),
+                        numberOfTotal = showInfoModel.reviewCount,
+                        period = "${showInfoModel.startDate.toChangeDate()}-${showInfoModel.endDate.toChangeDate()}",
+                        runningTime = if (showInfoModel.runtime.isEmpty()) "해당 정보 없음" else "${showInfoModel.runtime.toRunningTime()}분",
+                        date = showInfoModel.showTimes.map {
+                            when (it.dayOfWeek) {
+                                ShowDay.Monday.dayOfWeek -> ShowDay.Monday
+                                ShowDay.Tuesday.dayOfWeek -> ShowDay.Tuesday
+                                ShowDay.Wednesday.dayOfWeek -> ShowDay.Wednesday
+                                ShowDay.Thursday.dayOfWeek -> ShowDay.Thursday
+                                ShowDay.Friday.dayOfWeek -> ShowDay.Friday
+                                ShowDay.Saturday.dayOfWeek -> ShowDay.Saturday
+                                else -> ShowDay.Sunday
+                            }
+                        }.sortedBy { it.id }.toSet().joinToString(", ") { it.label },
+                        location = showInfoModel.facilityName,
+                        onClick = {
+                            performanceViewModel.changeLastIndex(index)
+                            onNavigateDetail(showInfoModel.id)
+                        },
+                        isFavorite = showInfoModel.favorite,
+                        onFavorite = { performanceViewModel.requestFavoriteShow(showInfoModel.id) },
+                        onDisFavorite = { performanceViewModel.deleteFavoriteShow(showInfoModel.id) }
+                    )
+                    if (index != musicalItems.itemCount) {
+                        Spacer(
                             modifier = Modifier
+                                .padding(vertical = 16.dp)
                                 .fillMaxWidth()
-                                .padding(vertical = 12.dp),
-                            imageUrl = showInfoModel.poster,
-                            painter = painterResource(R.drawable.ic_error_poster),
-                            title = showInfoModel.name,
-                            rate = if (showInfoModel.reviewCount == 0) 0.0f else (showInfoModel.reviewGradeSum / showInfoModel.reviewCount.toFloat()),
-                            numberOfTotal = showInfoModel.reviewCount,
-                            period = "${showInfoModel.startDate.toChangeDate()}-${showInfoModel.endDate.toChangeDate()}",
-                            runningTime = if (showInfoModel.runtime.isEmpty()) "해당 정보 없음" else "${showInfoModel.runtime.toRunningTime()}분",
-                            date = "화-금 19:00",
-                            location = showInfoModel.facilityName,
-                            onClick = {
-                                performanceViewModel.changeLastIndex(index)
-                                onNavigateDetail(showInfoModel.id)
-                            },
-                            isFavorite = showInfoModel.favorite,
-                            onFavorite = { performanceViewModel.requestFavoriteShow(showInfoModel.id) },
-                            onDisFavorite = { performanceViewModel.deleteFavoriteShow(showInfoModel.id) }
+                                .height(1.dp)
+                                .background(Cultured)
                         )
-                        if (index != musicalItems.itemCount) {
-                            Spacer(
-                                modifier = Modifier
-                                    .padding(vertical = 16.dp)
-                                    .fillMaxWidth()
-                                    .height(1.dp)
-                                    .background(Cultured)
-                            )
-                        }
                     }
                 }
             }

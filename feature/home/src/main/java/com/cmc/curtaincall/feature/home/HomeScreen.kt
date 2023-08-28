@@ -283,32 +283,34 @@ private fun HomeContent(
                         }
                     }
                 }
-            }
-            if (homeUiState.cheapShowInfos.isNotEmpty()) {
-                HomeContentRow(
-                    modifier = Modifier
-                        .padding(top = 40.dp)
-                        .fillMaxWidth(),
-                    titleModifier = Modifier.padding(start = 20.dp),
-                    painter = painterResource(R.drawable.ic_value_of_money),
-                    title = stringResource(R.string.home_value_for_money_performance)
-                ) {
-                    LazyRow(
+                if (homeUiState.endShowInfos.isNotEmpty()) {
+                    HomeContentRow(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 12.dp)
+                            .padding(top = 40.dp)
+                            .fillMaxWidth(),
+                        titleModifier = Modifier.padding(start = 20.dp),
+                        painter = painterResource(R.drawable.ic_end_clock),
+                        title = stringResource(R.string.home_scheduled_end_performance)
                     ) {
-                        itemsIndexed(List(10) {}) { index, item ->
-                            if (index == 0) Spacer(Modifier.size(20.dp))
-                            Row {
-                                PerformanceCard(
-                                    modifier = Modifier.width(120.dp),
-                                    title = "데스노트",
-                                    painter = painterResource(R.drawable.dummy_poster),
-                                    rate = 4.89f,
-                                    numberOfTotal = 1012
-                                )
-                                Spacer(Modifier.size(12.dp))
+                        LazyRow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 12.dp)
+                        ) {
+                            itemsIndexed(homeUiState.endShowInfos) { index, endShowInfo ->
+                                if (index == 0) Spacer(Modifier.size(20.dp))
+                                Row {
+                                    PerformanceCard(
+                                        modifier = Modifier.width(120.dp),
+                                        title = endShowInfo.name,
+                                        imageUrl = endShowInfo.poster,
+                                        painter = painterResource(R.drawable.ic_error_poster),
+                                        rate = if (endShowInfo.reviewCount == 0) 0.0f else endShowInfo.reviewGradeSum / endShowInfo.reviewCount.toFloat(),
+                                        numberOfTotal = endShowInfo.reviewCount,
+                                        onClick = { onNavigatePerformanceDetail(endShowInfo.id) }
+                                    )
+                                    Spacer(Modifier.size(12.dp))
+                                }
                             }
                         }
                     }

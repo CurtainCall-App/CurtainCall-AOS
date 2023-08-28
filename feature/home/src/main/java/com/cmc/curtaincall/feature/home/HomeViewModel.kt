@@ -9,7 +9,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -28,6 +27,7 @@ class HomeViewModel @Inject constructor(
         requestMyParticipations()
         requestPopularShowList()
         requestOpenShowList()
+        requestEndShowList()
     }
 
     override fun reduceState(currentState: HomeState, event: HomeEvent): HomeState =
@@ -52,6 +52,10 @@ class HomeViewModel @Inject constructor(
                 currentState.copy(openShowInfos = event.openShowInfos)
             }
 
+            is HomeEvent.RequestEndShowList -> {
+                currentState.copy(endShowInfos = event.endShowInfos)
+            }
+
             is HomeEvent.RequestShowSearchWords -> {
                 currentState.copy(searchWords = event.searchWords)
             }
@@ -68,38 +72,40 @@ class HomeViewModel @Inject constructor(
     private fun requestMyRecruitments() {
         viewModelScope.launch {
             val memberId = memberRepository.getMemberId().first()
-            memberRepository.requestMyRecruitments(memberId = memberId, page = 0, size = 2, category = "WATCHING")
-                .zip(memberRepository.requestMyRecruitments(memberId = memberId, page = 0, size = 2, category = "FOOD_CAFE")) { watchings, foods -> watchings + foods }
-                .zip(memberRepository.requestMyRecruitments(memberId = memberId, page = 0, size = 2, category = "ETC")) { list, etcs -> list + etcs }
-                .onEach { recruitments ->
-                    sendAction(
-                        HomeEvent.RequestMyRecruitment(
-                            recruitments
-                                .sortedByDescending { it.createdAt }
-                                .take(2)
-                        )
+            memberRepository.requestMyRecruitments(
+                memberId = memberId,
+                page = 0,
+                size = 2,
+                category = null
+            ).onEach { recruitments ->
+                sendAction(
+                    HomeEvent.RequestMyRecruitment(
+                        recruitments
+                            .sortedByDescending { it.createdAt }
+                            .take(2)
                     )
-                }
-                .launchIn(this)
+                )
+            }.launchIn(this)
         }
     }
 
     private fun requestMyParticipations() {
         viewModelScope.launch {
             val memberId = memberRepository.getMemberId().first()
-            memberRepository.requestMyParticipations(memberId = memberId, page = 0, size = 2, category = "WATCHING")
-                .zip(memberRepository.requestMyParticipations(memberId = memberId, page = 0, size = 2, category = "FOOD_CAFE")) { watchings, foods -> watchings + foods }
-                .zip(memberRepository.requestMyParticipations(memberId = memberId, page = 0, size = 2, category = "ETC")) { list, etcs -> list + etcs }
-                .onEach { participations ->
-                    sendAction(
-                        HomeEvent.RequestMyParticipations(
-                            participations
-                                .sortedByDescending { it.createdAt }
-                                .take(2)
-                        )
+            memberRepository.requestMyParticipations(
+                memberId = memberId,
+                page = 0,
+                size = 2,
+                category = null
+            ).onEach { participations ->
+                sendAction(
+                    HomeEvent.RequestMyParticipations(
+                        participations
+                            .sortedByDescending { it.createdAt }
+                            .take(2)
                     )
-                }
-                .launchIn(this)
+                )
+            }.launchIn(this)
         }
     }
 
@@ -117,6 +123,15 @@ class HomeViewModel @Inject constructor(
         showRepository.requestOpenShowList(page = 0, size = 10, startDate = today)
             .onEach {
                 sendAction(HomeEvent.RequestOpenShowList(it.sortedByDescending { it.startDate.toDday() }.take(10)))
+            }
+            .launchIn(viewModelScope)
+    }
+
+    private fun requestEndShowList() {
+        val today = SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().time)
+        showRepository.requestEndShowList(page = 0, size = 10, endDate = today, genre = null)
+            .onEach {
+                sendAction(HomeEvent.RequestEndShowList(it.sortedBy { it.endDate.toDday() }.take(10)))
             }
             .launchIn(viewModelScope)
     }

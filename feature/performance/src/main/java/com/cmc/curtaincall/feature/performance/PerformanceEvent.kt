@@ -1,6 +1,7 @@
 package com.cmc.curtaincall.feature.performance
 
 import androidx.paging.PagingData
+import com.cmc.curtaincall.common.design.component.custom.SortType
 import com.cmc.curtaincall.core.base.BaseEvent
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import kotlinx.coroutines.flow.Flow
@@ -20,6 +21,10 @@ sealed class PerformanceEvent : BaseEvent {
 
     data class ChangeDoneSearch(
         val isDoneSearch: Boolean
+    ) : PerformanceEvent()
+
+    data class ChangeSort(
+        val sortType: SortType
     ) : PerformanceEvent()
 
     data class SetQueryString(

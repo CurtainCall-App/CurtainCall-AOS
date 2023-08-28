@@ -2,6 +2,7 @@ package com.cmc.curtaincall.feature.performance
 
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
+import com.cmc.curtaincall.common.design.component.custom.SortType
 import com.cmc.curtaincall.core.base.BaseViewModel
 import com.cmc.curtaincall.domain.model.show.ShowSearchWordModel
 import com.cmc.curtaincall.domain.repository.FavoriteRepository
@@ -49,6 +50,10 @@ class PerformanceViewModel @Inject constructor(
                 currentState.copy(isDoneSearch = event.isDoneSearch)
             }
 
+            is PerformanceEvent.ChangeSort -> {
+                currentState.copy(sortType = event.sortType)
+            }
+
             is PerformanceEvent.SetQueryString -> {
                 currentState.copy(queryString = event.queryString)
             }
@@ -87,6 +92,16 @@ class PerformanceViewModel @Inject constructor(
         sendAction(PerformanceEvent.ChangeDoneSearch(isDone))
     }
 
+    fun changeSortType(sortType: SortType) {
+        sendAction(
+            PerformanceEvent.ChangeSort(
+                sortType = sortType
+            )
+        )
+        loadPlayItems()
+        loadMusicalItems()
+    }
+
     fun setQueryString(query: String) {
         sendAction(PerformanceEvent.SetQueryString(query))
     }
@@ -101,22 +116,24 @@ class PerformanceViewModel @Inject constructor(
         )
     }
 
-    private fun loadPlayItems() {
+    fun loadPlayItems() {
         sendAction(
             PerformanceEvent.LoadPlayItems(
                 playItems = showRepository.fetchShowList(
-                    "PLAY"
-                ).cachedIn(viewModelScope)
+                    "PLAY",
+                    uiState.value.sortType.code
+                )
             )
         )
     }
 
-    private fun loadMusicalItems() {
+    fun loadMusicalItems() {
         sendAction(
             PerformanceEvent.LoadMusicalItems(
                 musicalItems = showRepository.fetchShowList(
-                    "MUSICAL"
-                ).cachedIn(viewModelScope)
+                    "MUSICAL",
+                    uiState.value.sortType.code
+                )
             )
         )
     }

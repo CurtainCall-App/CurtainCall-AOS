@@ -227,7 +227,9 @@ fun PerformanceDetailCard(
                     color = Nero,
                     fontSize = 14.dp.toSp(),
                     fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo
+                    fontFamily = spoqahansanseeo,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }
@@ -276,13 +278,13 @@ fun PerformanceCard(
                 Box(
                     modifier = Modifier
                         .background(Coal.copy(0.7f), RoundedCornerShape(topStart = 10.dp, bottomEnd = 10.dp))
-                        .padding(horizontal = 10.dp, vertical = 7.dp),
+                        .padding(horizontal = 10.dp, vertical = 4.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = meta,
                         color = White,
-                        fontSize = 18.dp.toSp(),
+                        fontSize = 14.dp.toSp(),
                         fontWeight = FontWeight.Bold,
                         fontFamily = spoqahansanseeo
                     )
