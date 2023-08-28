@@ -17,7 +17,7 @@ sealed class PartyMemberCreateEvent : BaseEvent {
     ) : PartyMemberCreateEvent()
 
     data class SetPartyInfo(
-        val showAt: String,
+        val showAt: String?,
         val maxMemberNum: Int
     ) : PartyMemberCreateEvent()
 

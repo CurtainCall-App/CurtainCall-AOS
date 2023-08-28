@@ -185,6 +185,8 @@ private fun PerformanceSearchContent(
                     showInfoModel?.let { showInfoModel ->
                         PerformanceDetailCard(
                             modifier = Modifier
+                                .padding(horizontal = 20.dp)
+                                .padding(bottom = 20.dp)
                                 .fillMaxWidth()
                                 .padding(vertical = 12.dp, horizontal = 20.dp),
                             imageUrl = showInfoModel.poster,

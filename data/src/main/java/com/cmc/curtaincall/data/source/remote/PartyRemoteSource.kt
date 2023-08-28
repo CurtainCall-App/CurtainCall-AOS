@@ -54,8 +54,8 @@ class PartyRemoteSource @Inject constructor(
     }
 
     fun createParty(
-        showId: String,
-        showAt: String,
+        showId: String?,
+        showAt: String?,
         title: String,
         content: String,
         maxMemberNum: Int,

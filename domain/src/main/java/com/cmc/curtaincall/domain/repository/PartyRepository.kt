@@ -44,8 +44,8 @@ interface PartyRepository {
     ): Flow<PartyDetailModel>
 
     fun createParty(
-        showId: String,
-        showAt: String,
+        showId: String?,
+        showAt: String?,
         title: String,
         content: String,
         maxMemberNum: Int,

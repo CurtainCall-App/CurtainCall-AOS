@@ -147,7 +147,7 @@ private fun HomeContent(
                             containColor = Cultured,
                             shape = RoundedCornerShape(10.dp),
                             imageUrl = myRecruitment.showPoster,
-                            showName = myRecruitment.showName,
+                            showName = myRecruitment.showName ?: "",
                             description = myRecruitment.title,
                             numberOfPartyMember = myRecruitment.curMemberNum,
                             numberOfTotalMember = myRecruitment.maxMemberNum,

@@ -5,8 +5,8 @@ import com.cmc.curtaincall.domain.model.show.ShowDetailModel
 
 data class PartyMemberCreateState(
     val showDetailModel: ShowDetailModel = ShowDetailModel(),
-    val showId: String = "",
-    val showAt: String = "",
+    val showId: String? = null,
+    val showAt: String? = null,
     val title: String = "",
     val content: String = "",
     val maxMemberNum: Int = 0,

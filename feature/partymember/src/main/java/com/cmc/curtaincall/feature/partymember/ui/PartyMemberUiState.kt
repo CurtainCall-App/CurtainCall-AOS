@@ -12,5 +12,8 @@ data class PartyMemberUiState(
     val isActiveSearch: Boolean = false,
     val isDoneSearch: Boolean = false,
     val queryString: String = "",
-    val partySearchItems: Flow<PagingData<PartyModel>> = flowOf()
+    val partySearchItems: Flow<PagingData<PartyModel>> = flowOf(),
+    val watchingItems: Flow<PagingData<PartyModel>> = flowOf(),
+    val foodCafeItems: Flow<PagingData<PartyModel>> = flowOf(),
+    val etcItems: Flow<PagingData<PartyModel>> = flowOf()
 ) : BaseState

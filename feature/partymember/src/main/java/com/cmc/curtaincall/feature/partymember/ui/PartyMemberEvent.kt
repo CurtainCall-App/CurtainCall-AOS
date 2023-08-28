@@ -27,4 +27,16 @@ sealed class PartyMemberEvent : BaseEvent {
     data class SearchPartyList(
         val partySearchItems: Flow<PagingData<PartyModel>>
     ) : PartyMemberEvent()
+
+    data class LoadWatchingItems(
+        val watchingItems: Flow<PagingData<PartyModel>>
+    ) : PartyMemberEvent()
+
+    data class LoadFoodCafeItems(
+        val foodCafeItems: Flow<PagingData<PartyModel>>
+    ) : PartyMemberEvent()
+
+    data class LoadEtcItems(
+        val etcItems: Flow<PagingData<PartyModel>>
+    ) : PartyMemberEvent()
 }

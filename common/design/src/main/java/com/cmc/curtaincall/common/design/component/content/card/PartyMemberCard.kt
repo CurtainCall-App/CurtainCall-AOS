@@ -103,18 +103,120 @@ fun PartyMemberCard(
 }
 
 @Composable
+fun PartyMemberEtcItemCard(
+    modifier: Modifier = Modifier,
+    profileImageUrl: String? = null,
+    nickname: String,
+    createAtDate: String,
+    createAtTime: String,
+    description: String,
+    date: String?,
+    numberOfMember: Int,
+    numberOfTotal: Int,
+    onClick: () -> Unit = {}
+) {
+    Box(
+        modifier = modifier
+            .clickable { onClick() }
+            .padding(bottom = 10.dp)
+    ) {
+        Card(
+            modifier = Modifier.fillMaxSize(),
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = Color.Transparent,
+                contentColor = Color.Transparent
+            ),
+            elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(155.dp)
+                    .background(White, RoundedCornerShape(12.dp))
+                    .padding(top = 15.dp, bottom = 20.dp)
+                    .padding(horizontal = 20.dp)
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    AsyncImage(
+                        model = profileImageUrl,
+                        error = painterResource(R.drawable.ic_default_profile),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.FillBounds
+                    )
+                    Column(Modifier.padding(start = 10.dp)) {
+                        Text(
+                            text = nickname,
+                            color = Nero,
+                            fontSize = 14.dp.toSp(),
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = spoqahansanseeo
+                        )
+                        Text(
+                            text = "$createAtDate $createAtTime",
+                            color = Silver_Sand,
+                            fontSize = 12.dp.toSp(),
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = spoqahansanseeo
+                        )
+                    }
+                }
+                Text(
+                    text = description,
+                    modifier = Modifier.padding(top = 18.dp),
+                    color = Nero,
+                    fontSize = 14.dp.toSp(),
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = spoqahansanseeo,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CurtainCallIconText(
+                        modifier = Modifier.wrapContentHeight(),
+                        painter = painterResource(R.drawable.ic_calendar),
+                        text = date ?: "날짜 미정",
+                        containerColor = Cultured,
+                        contentColor = Nero,
+                        fontSize = 12.dp.toSp(),
+                        iconModifier = Modifier.size(16.dp)
+                    )
+                    Text(
+                        text = "$numberOfMember/$numberOfTotal",
+                        modifier = Modifier.fillMaxWidth(),
+                        color = Nero,
+                        fontSize = 13.dp.toSp(),
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = spoqahansanseeo,
+                        textAlign = TextAlign.End
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
 fun PartyMemberItemCard(
     modifier: Modifier = Modifier,
-    title: String,
+    title: String? = null,
     profileImageUrl: String? = null,
     nickname: String,
     createAtDate: String,
     createAtTime: String,
     description: String,
     posterUrl: String? = null,
-    date: String,
-    time: String,
-    location: String,
+    date: String?,
+    time: String?,
+    location: String?,
     numberOfMember: Int,
     numberOfTotal: Int,
     onClick: () -> Unit = {},
@@ -141,19 +243,21 @@ fun PartyMemberItemCard(
                         .background(White, RoundedCornerShape(12.dp)),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    Text(
-                        text = title,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 18.dp, vertical = 16.dp),
-                        color = Chinese_Black,
-                        fontSize = 16.dp.toSp(),
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = spoqahansanseeo,
-                        textAlign = TextAlign.Center,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
+                    if (title != null) {
+                        Text(
+                            text = title,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 18.dp, vertical = 16.dp),
+                            color = Chinese_Black,
+                            fontSize = 16.dp.toSp(),
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = spoqahansanseeo,
+                            textAlign = TextAlign.Center,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
                 }
                 DottedLine(
                     modifier = Modifier
@@ -225,37 +329,43 @@ fun PartyMemberItemCard(
                         Column(
                             modifier = Modifier
                                 .weight(1f)
-                                .padding(start = 10.dp)
+                                .padding(horizontal = 10.dp)
                                 .fillMaxHeight(),
                             verticalArrangement = Arrangement.SpaceBetween
                         ) {
-                            CurtainCallIconText(
-                                modifier = Modifier.wrapContentHeight(),
-                                painter = painterResource(R.drawable.ic_calendar),
-                                text = date,
-                                containerColor = Cultured,
-                                contentColor = Nero,
-                                fontSize = 12.dp.toSp(),
-                                iconModifier = Modifier.size(16.dp)
-                            )
-                            CurtainCallIconText(
-                                modifier = Modifier.wrapContentHeight(),
-                                painter = painterResource(R.drawable.ic_clock),
-                                text = time,
-                                containerColor = Cultured,
-                                contentColor = Nero,
-                                fontSize = 12.dp.toSp(),
-                                iconModifier = Modifier.size(16.dp)
-                            )
-                            CurtainCallIconText(
-                                modifier = Modifier.wrapContentHeight(),
-                                painter = painterResource(R.drawable.ic_location),
-                                text = location,
-                                containerColor = Cultured,
-                                contentColor = Nero,
-                                fontSize = 12.dp.toSp(),
-                                iconModifier = Modifier.size(16.dp)
-                            )
+                            if (date != null) {
+                                CurtainCallIconText(
+                                    modifier = Modifier.wrapContentHeight(),
+                                    painter = painterResource(R.drawable.ic_calendar),
+                                    text = date,
+                                    containerColor = Cultured,
+                                    contentColor = Nero,
+                                    fontSize = 12.dp.toSp(),
+                                    iconModifier = Modifier.size(16.dp)
+                                )
+                            }
+                            if (time != null) {
+                                CurtainCallIconText(
+                                    modifier = Modifier.wrapContentHeight(),
+                                    painter = painterResource(R.drawable.ic_clock),
+                                    text = time,
+                                    containerColor = Cultured,
+                                    contentColor = Nero,
+                                    fontSize = 12.dp.toSp(),
+                                    iconModifier = Modifier.size(16.dp)
+                                )
+                            }
+                            if (location != null) {
+                                CurtainCallIconText(
+                                    modifier = Modifier.wrapContentHeight(),
+                                    painter = painterResource(R.drawable.ic_location),
+                                    text = location,
+                                    containerColor = Cultured,
+                                    contentColor = Nero,
+                                    fontSize = 12.dp.toSp(),
+                                    iconModifier = Modifier.size(16.dp)
+                                )
+                            }
                         }
                         Column {
                             Spacer(Modifier.weight(1f))

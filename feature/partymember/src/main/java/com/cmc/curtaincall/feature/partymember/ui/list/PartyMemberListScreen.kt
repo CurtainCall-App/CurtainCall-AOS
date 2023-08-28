@@ -22,6 +22,7 @@ import androidx.paging.compose.itemsIndexed
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.SearchAppBar
 import com.cmc.curtaincall.common.design.component.basic.SearchTopAppBarWithBack
+import com.cmc.curtaincall.common.design.component.content.card.PartyMemberEtcItemCard
 import com.cmc.curtaincall.common.design.component.content.card.PartyMemberItemCard
 import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.cmc.curtaincall.common.design.component.items.EmptyItem
@@ -31,6 +32,7 @@ import com.cmc.curtaincall.common.design.theme.*
 import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
 import com.cmc.curtaincall.common.utility.extensions.toDateWithDay
 import com.cmc.curtaincall.common.utility.extensions.toTime
+import com.cmc.curtaincall.feature.partymember.ui.PartyMemberUiState
 import com.cmc.curtaincall.feature.partymember.ui.PartyMemberViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -49,6 +51,10 @@ internal fun PartyMemberListScreen(
     systemUiController.setStatusBarColor(
         if (partyMemberUiState.isActiveSearch) White else Cultured
     )
+
+    LaunchedEffect(partyMemberViewModel) {
+        partyMemberViewModel.changePartType(partyType)
+    }
 
     Scaffold(
         topBar = {
@@ -123,6 +129,7 @@ internal fun PartyMemberListScreen(
             )
         } else {
             PartyMemberListContent(
+                partyMemberUiState = partyMemberUiState,
                 partyMemberViewModel = partyMemberViewModel,
                 partyType = partyType,
                 modifier = Modifier
@@ -219,6 +226,7 @@ private fun PartyMemberListSearchContent(
                         PartyMemberItemCard(
                             modifier = Modifier
                                 .fillMaxWidth()
+                                .padding(horizontal = 20.dp)
                                 .wrapContentHeight()
                                 .padding(bottom = 20.dp),
                             title = partyModel.showName,
@@ -229,8 +237,8 @@ private fun PartyMemberListSearchContent(
                             numberOfTotal = partyModel.maxMemberNum,
                             description = partyModel.title,
                             posterUrl = partyModel.showPoster,
-                            date = partyModel.showAt.toDateWithDay(),
-                            time = partyModel.showAt.toTime(),
+                            date = partyModel.showAt?.toDateWithDay(),
+                            time = partyModel.showAt?.toTime(),
                             location = partyModel.facilityName,
                             onClick = {
                                 onNavigateDetail(
@@ -249,6 +257,7 @@ private fun PartyMemberListSearchContent(
 
 @Composable
 private fun PartyMemberListContent(
+    partyMemberUiState: PartyMemberUiState,
     partyMemberViewModel: PartyMemberViewModel,
     partyType: PartyType,
     modifier: Modifier = Modifier,
@@ -256,15 +265,15 @@ private fun PartyMemberListContent(
 ) {
     val pagingItems = when (partyType) {
         PartyType.PERFORMANCE -> {
-            partyMemberViewModel.watchingItems.collectAsLazyPagingItems()
+            partyMemberUiState.watchingItems.collectAsLazyPagingItems()
         }
 
         PartyType.MEAL -> {
-            partyMemberViewModel.foodCafeItems.collectAsLazyPagingItems()
+            partyMemberUiState.foodCafeItems.collectAsLazyPagingItems()
         }
 
         PartyType.ETC -> {
-            partyMemberViewModel.etcItems.collectAsLazyPagingItems()
+            partyMemberUiState.etcItems.collectAsLazyPagingItems()
         }
     }
 
@@ -299,30 +308,55 @@ private fun PartyMemberListContent(
                 }
                 items(pagingItems) { partyModel ->
                     partyModel?.let { partyModel ->
-                        PartyMemberItemCard(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentHeight()
-                                .padding(bottom = 20.dp),
-                            title = partyModel.showName,
-                            nickname = partyModel.creatorNickname,
-                            createAtDate = partyModel.createdAt.toChangeFullDate(),
-                            createAtTime = partyModel.createdAt.toTime(),
-                            numberOfMember = partyModel.curMemberNum,
-                            numberOfTotal = partyModel.maxMemberNum,
-                            description = partyModel.title,
-                            posterUrl = partyModel.showPoster,
-                            date = partyModel.showAt.toDateWithDay(),
-                            time = partyModel.showAt.toTime(),
-                            location = partyModel.facilityName,
-                            onClick = {
-                                onNavigateDetail(
-                                    partyType,
-                                    partyModel.id,
-                                    partyModel.creatorId == partyMemberViewModel.memberId.value
-                                )
-                            }
-                        )
+                        if (partyType == PartyType.ETC) {
+                            PartyMemberEtcItemCard(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentHeight()
+                                    .padding(bottom = 16.dp),
+                                profileImageUrl = partyModel.creatorImageUrl,
+                                nickname = partyModel.creatorNickname,
+                                createAtDate = partyModel.createdAt.toChangeFullDate(),
+                                createAtTime = partyModel.createdAt.toTime(),
+                                description = partyModel.title,
+                                date = partyModel.showAt?.toDateWithDay(),
+                                numberOfMember = partyModel.curMemberNum,
+                                numberOfTotal = partyModel.maxMemberNum,
+                                onClick = {
+                                    onNavigateDetail(
+                                        partyType,
+                                        partyModel.id,
+                                        partyModel.creatorId == partyMemberViewModel.memberId.value
+                                    )
+                                }
+                            )
+                        } else {
+                            PartyMemberItemCard(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentHeight()
+                                    .padding(bottom = 20.dp),
+                                title = partyModel.showName,
+                                profileImageUrl = partyModel.creatorImageUrl,
+                                nickname = partyModel.creatorNickname,
+                                createAtDate = partyModel.createdAt.toChangeFullDate(),
+                                createAtTime = partyModel.createdAt.toTime(),
+                                numberOfMember = partyModel.curMemberNum,
+                                numberOfTotal = partyModel.maxMemberNum,
+                                description = partyModel.title,
+                                posterUrl = partyModel.showPoster,
+                                date = partyModel.showAt?.toDateWithDay(),
+                                time = partyModel.showAt?.toTime(),
+                                location = partyModel.facilityName,
+                                onClick = {
+                                    onNavigateDetail(
+                                        partyType,
+                                        partyModel.id,
+                                        partyModel.creatorId == partyMemberViewModel.memberId.value
+                                    )
+                                }
+                            )
+                        }
                     }
                 }
             }

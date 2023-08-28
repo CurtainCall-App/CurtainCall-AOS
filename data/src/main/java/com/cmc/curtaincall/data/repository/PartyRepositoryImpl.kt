@@ -75,7 +75,14 @@ class PartyRepositoryImpl @Inject constructor(
     override fun requestPartyDetail(partyId: Int): Flow<PartyDetailModel> =
         partyRemoteSource.requestPartyDetail(partyId).map { it.toModel() }
 
-    override fun createParty(showId: String, showAt: String, title: String, content: String, maxMemberNum: Int, category: String): Flow<CreatePartyModel> =
+    override fun createParty(
+        showId: String?,
+        showAt: String?,
+        title: String,
+        content: String,
+        maxMemberNum: Int,
+        category: String
+    ): Flow<CreatePartyModel> =
         partyRemoteSource.createParty(
             showId = showId,
             showAt = showAt,
