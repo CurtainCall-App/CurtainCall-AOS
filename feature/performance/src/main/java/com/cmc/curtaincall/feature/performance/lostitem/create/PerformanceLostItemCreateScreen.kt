@@ -53,6 +53,7 @@ import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.cmc.curtaincall.feature.performance.lostitem.LostItemType
 import com.cmc.curtaincall.feature.performance.lostitem.LostItemTypeGrid
+import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
 import java.io.ByteArrayOutputStream
 
@@ -66,6 +67,14 @@ internal fun PerformanceLostItemCreateScreen(
     onNavigateUpload: () -> Unit,
     onBack: () -> Unit
 ) {
+    LaunchedEffect(performanceLostItemCreateViewModel) {
+        performanceLostItemCreateViewModel.completeEffect.collectLatest { isComplete ->
+            if (isComplete) {
+                onBack()
+            }
+        }
+    }
+
     var completeState by remember { mutableStateOf(false) }
     Scaffold(
         topBar = {
@@ -82,7 +91,7 @@ internal fun PerformanceLostItemCreateScreen(
         },
         floatingActionButton = {
             CurtainCallRoundedTextButton(
-                onClick = { onNavigateUpload() },
+                onClick = { performanceLostItemCreateViewModel.createLostItem(facilityId) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
@@ -204,7 +213,18 @@ private fun PerformanceLostItemCreateContent(
             },
             title = stringResource(R.string.performance_find_lost_item_create_classification),
             placeholder = stringResource(R.string.performance_find_lost_item_create_classification_placeholder),
-            value = lostItemCreateUiState.type
+            value = when (lostItemCreateUiState.type) {
+                LostItemType.BAG.code -> LostItemType.BAG.label
+                LostItemType.WALLET.code -> LostItemType.WALLET.label
+                LostItemType.MONEY.code -> LostItemType.MONEY.label
+                LostItemType.CARD.code -> LostItemType.CARD.label
+                LostItemType.JEWELRY.code -> LostItemType.JEWELRY.label
+                LostItemType.ELECTRONICS.code -> LostItemType.ELECTRONICS.label
+                LostItemType.BOOKS.code -> LostItemType.BOOKS.label
+                LostItemType.CLOTHES.code -> LostItemType.CLOTHES.label
+                LostItemType.ETC.code -> LostItemType.ETC.label
+                else -> ""
+            }
         ) {
             LostItemTypeGrid(
                 modifier = Modifier
@@ -214,17 +234,7 @@ private fun PerformanceLostItemCreateContent(
                 itemModifier = Modifier.size(48.dp, 72.dp),
                 onTypeChange = {
                     performanceLostItemCreateViewModel.setItemType(
-                        type = when (lostItemCreateUiState.type) {
-                            LostItemType.BAG.code -> LostItemType.BAG.label
-                            LostItemType.WALLET.code -> LostItemType.WALLET.label
-                            LostItemType.MONEY.code -> LostItemType.MONEY.label
-                            LostItemType.CARD.code -> LostItemType.CARD.label
-                            LostItemType.JEWELRY.code -> LostItemType.JEWELRY.label
-                            LostItemType.ELECTRONICS.code -> LostItemType.ELECTRONICS.label
-                            LostItemType.BOOKS.code -> LostItemType.BOOKS.label
-                            LostItemType.CLOTHES.code -> LostItemType.CLOTHES.label
-                            else -> LostItemType.ETC.label
-                        }
+                        type = it.code
                     )
                     isClickLostItemType = false
                 }
@@ -379,7 +389,9 @@ private fun LostItemAttachmentDropDown(
     val takePhotoFromAlbum = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let { uri ->
             attachmentFile = uri
-            performanceLostItemCreateViewModel.uploadImage(uri.toString())
+            context.contentResolver.openInputStream(uri)?.let { inputStream ->
+                performanceLostItemCreateViewModel.uploadImage(inputStream)
+            }
             onSelectChange(true)
         }
     }
@@ -389,7 +401,7 @@ private fun LostItemAttachmentDropDown(
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
             val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "", null)
             attachmentFile = Uri.parse(path)
-            performanceLostItemCreateViewModel.uploadImage(path)
+            // performanceLostItemCreateViewModel.uploadImage(path)
             onSelectChange(true)
         }
     }

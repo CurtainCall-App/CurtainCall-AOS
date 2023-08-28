@@ -34,6 +34,12 @@ fun String.toChangeFullDate(): String {
     return SimpleDateFormat("yyyy.MM.dd").format(date)
 }
 
+fun String.toChangeServerDate(): String {
+    if (isEmpty()) return ""
+    val date = SimpleDateFormat("yyyy.MM.dd").parse(this)
+    return SimpleDateFormat("yyyy-MM-dd").format(date)
+}
+
 fun changeShowAt(date: String, time: String): String {
     val showDate = SimpleDateFormat("yyyy. MM. dd").parse(date)
     val changeDate = SimpleDateFormat("yyyy-MM-dd").format(showDate)

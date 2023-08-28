@@ -5,7 +5,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.provider.MediaStore
 
-fun Uri.getAbsolutePath(context: Context): String? {
+fun Uri.getAbsolutePath(context: Context): String {
     val proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
     val c: Cursor? = context.contentResolver.query(
         this,
@@ -14,11 +14,11 @@ fun Uri.getAbsolutePath(context: Context): String? {
         null,
         null
     )
-    val index = c?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
     c?.moveToFirst()
+    val index = c?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
 
     val resultPath = c?.getString(index!!)
     c?.close()
 
-    return resultPath
+    return resultPath!!
 }

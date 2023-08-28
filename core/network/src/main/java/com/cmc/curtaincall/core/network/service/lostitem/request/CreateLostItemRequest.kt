@@ -6,7 +6,7 @@ data class CreateLostItemRequest(
     val facilityId: String,
     val foundPlaceDetail: String,
     val foundDate: String,
-    val foundTime: String,
+    val foundTime: String?,
     val particulars: String,
     val imageId: Int
 )

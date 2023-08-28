@@ -2,14 +2,17 @@ package com.cmc.curtaincall.feature.performance.lostitem.create
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cmc.curtaincall.common.utility.extensions.toChangeServerDate
 import com.cmc.curtaincall.domain.repository.ImageRepository
 import com.cmc.curtaincall.domain.repository.LostItemRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import timber.log.Timber
+import java.io.InputStream
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,6 +25,9 @@ class PerformanceLostItemCreateViewModel @Inject constructor(
         PerformanceLostItemCreateUiState()
     )
     val lostCreateInfo = _lostCreateInfo.asStateFlow()
+
+    private val _completeEffect = MutableSharedFlow<Boolean>()
+    val completeEffect = _completeEffect.asSharedFlow()
 
     fun setTitle(title: String) {
         _lostCreateInfo.value = _lostCreateInfo.value.copy(
@@ -43,7 +49,7 @@ class PerformanceLostItemCreateViewModel @Inject constructor(
 
     fun setFoundDate(foundDate: String) {
         _lostCreateInfo.value = _lostCreateInfo.value.copy(
-            foundDate = foundDate
+            foundDate = foundDate.toChangeServerDate()
         )
     }
 
@@ -65,9 +71,23 @@ class PerformanceLostItemCreateViewModel @Inject constructor(
         )
     }
 
-    fun uploadImage(imageUrl: String) {
-        imageRepository.saveImage(image = imageUrl)
-            .onEach { Timber.d("uploadImage $imageUrl") }
+    fun uploadImage(inputStream: InputStream) {
+        imageRepository.uploadGalleryImage(inputStream)
+            .onEach { setImageId(it.id) }
+            .launchIn(viewModelScope)
+    }
+
+    fun createLostItem(facilityId: String) {
+        lostItemRepository.createLostItem(
+            title = lostCreateInfo.value.title,
+            type = lostCreateInfo.value.type,
+            facilityId = facilityId,
+            foundPlaceDetail = lostCreateInfo.value.foundPlaceDetail,
+            foundDate = lostCreateInfo.value.foundDate,
+            foundTime = lostCreateInfo.value.foundTime,
+            particulars = lostCreateInfo.value.particulars,
+            imageId = lostCreateInfo.value.imageId
+        ).onEach { _completeEffect.emit(true) }
             .launchIn(viewModelScope)
     }
 }

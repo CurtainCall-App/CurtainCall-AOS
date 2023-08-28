@@ -10,7 +10,7 @@ interface ImageService {
 
     @Multipart
     @POST("images")
-    fun saveImage(
+    suspend fun uploadImage(
         @Part image: MultipartBody.Part
     ): SaveImageResponse
 }

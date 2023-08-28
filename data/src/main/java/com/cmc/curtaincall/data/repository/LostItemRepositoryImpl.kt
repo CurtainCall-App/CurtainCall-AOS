@@ -44,7 +44,7 @@ class LostItemRepositoryImpl @Inject constructor(
         facilityId: String,
         foundPlaceDetail: String,
         foundDate: String,
-        foundTime: String,
+        foundTime: String?,
         particulars: String,
         imageId: Int
     ): Flow<CreateLostItemModel> =

@@ -157,21 +157,36 @@ fun NavGraphBuilder.performanceNavGraph(
             route = PerformanceDestination.Detail.routeWithArgs,
             arguments = PerformanceDestination.Detail.arguments
         ) { entry ->
-            val parentEntry = remember(entry) { navHostController.getBackStackEntry(PerformanceDestination.Performance.route) }
             val showIdType = entry.arguments?.getString(PerformanceDestination.Detail.showIdArg) ?: ""
-            PerformanceDetailScreen(
-                performanceViewModel = hiltViewModel(parentEntry),
-                showId = showIdType,
-                onNavigateReview = {
-                    navHostController.navigate("${PerformanceDestination.Review.route}/$it")
-                },
-                onNavigateLostItem = {
-                    navHostController.navigate("${PerformanceDestination.LostItem.route}/$it")
-                },
-                onBack = {
-                    navHostController.popBackStack()
-                }
-            )
+            if (navHostController.previousBackStackEntry?.destination?.route == PerformanceDestination.Performance.route) {
+                val parentEntry = remember(entry) { navHostController.getBackStackEntry(PerformanceDestination.Performance.route) }
+                PerformanceDetailScreen(
+                    performanceViewModel = hiltViewModel(parentEntry),
+                    showId = showIdType,
+                    onNavigateReview = {
+                        navHostController.navigate("${PerformanceDestination.Review.route}/$it")
+                    },
+                    onNavigateLostItem = {
+                        navHostController.navigate("${PerformanceDestination.LostItem.route}/$it")
+                    },
+                    onBack = {
+                        navHostController.popBackStack()
+                    }
+                )
+            } else {
+                PerformanceDetailScreen(
+                    showId = showIdType,
+                    onNavigateReview = {
+                        navHostController.navigate("${PerformanceDestination.Review.route}/$it")
+                    },
+                    onNavigateLostItem = {
+                        navHostController.navigate("${PerformanceDestination.LostItem.route}/$it")
+                    },
+                    onBack = {
+                        navHostController.popBackStack()
+                    }
+                )
+            }
         }
         composable(
             route = PerformanceDestination.Review.routeWithArgs,

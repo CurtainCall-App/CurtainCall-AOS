@@ -61,7 +61,7 @@ enum class TabType(val label: String) {
 
 @Composable
 internal fun PerformanceDetailScreen(
-    performanceViewModel: PerformanceViewModel,
+    performanceViewModel: PerformanceViewModel = hiltViewModel(),
     performanceDetailViewModel: PerformanceDetailViewModel = hiltViewModel(),
     showId: String,
     onNavigateReview: (String) -> Unit,
