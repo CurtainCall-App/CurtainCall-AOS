@@ -68,7 +68,7 @@ class ReviewRemoteSource @Inject constructor(
     }
 
     fun requestLikeReview(
-        reviewId: String
+        reviewId: Int
     ): Flow<Boolean> = flow {
         emit(
             reviewService.requestLikeReview(reviewId).isSuccessful
@@ -76,7 +76,7 @@ class ReviewRemoteSource @Inject constructor(
     }
 
     fun requestDislikeReview(
-        reviewId: String
+        reviewId: Int
     ): Flow<Boolean> = flow {
         emit(
             reviewService.requestDislikeReview(reviewId).isSuccessful
@@ -84,7 +84,7 @@ class ReviewRemoteSource @Inject constructor(
     }
 
     fun checkLikeReviews(
-        reviewIds: List<String>
+        reviewIds: List<Int>
     ): Flow<List<LikeReviewResponse>> = flow {
         emit(
             reviewService.checkLikeReviews(reviewIds).likeReviews

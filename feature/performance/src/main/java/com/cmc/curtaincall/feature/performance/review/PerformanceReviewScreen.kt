@@ -133,7 +133,15 @@ private fun PerformanceReviewContent(
                         name = reviewItem.creatorNickname,
                         date = reviewItem.createdAt.toChangeFullDate(),
                         comment = reviewItem.content,
-                        numberOfLike = 37,
+                        numberOfLike = reviewItem.likeCount,
+                        isFavorite = reviewItem.isFavortie,
+                        onFavoriteChange = { check ->
+                            if (check) {
+                                performanceReviewViewModel.requestLikeReview(reviewItem.id)
+                            } else {
+                                performanceReviewViewModel.requestDislikeReview(reviewItem.id)
+                            }
+                        },
                         isMyWriting = performanceDetailViewModel.uiState.value.memberId == reviewItem.creatorId,
                         onChangeWriting = {
                             onNavigateReviewCreate(

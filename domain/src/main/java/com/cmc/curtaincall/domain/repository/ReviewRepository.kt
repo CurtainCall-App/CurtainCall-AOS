@@ -35,14 +35,14 @@ interface ReviewRepository {
     ): Flow<Boolean>
 
     fun requestLikeReview(
-        reviewId: String
+        reviewId: Int
     ): Flow<Boolean>
 
     fun requestDislikeReview(
-        reviewId: String
+        reviewId: Int
     ): Flow<Boolean>
 
     fun checkLikeReviews(
-        reviewIds: List<String>
+        reviewIds: List<Int>
     ): Flow<List<LikeReviewModel>>
 }

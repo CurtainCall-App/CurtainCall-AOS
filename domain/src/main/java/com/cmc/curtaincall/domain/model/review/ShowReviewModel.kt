@@ -8,5 +8,7 @@ data class ShowReviewModel(
     val creatorNickname: String = "",
     val grade: Int = 0,
     val id: Int = 0,
-    val showId: String = ""
+    val showId: String = "",
+    val likeCount: Int = 0,
+    val isFavortie: Boolean = false
 )

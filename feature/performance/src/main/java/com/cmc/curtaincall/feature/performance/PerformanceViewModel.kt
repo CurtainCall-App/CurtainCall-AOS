@@ -116,24 +116,24 @@ class PerformanceViewModel @Inject constructor(
         )
     }
 
-    private fun loadPlayItems() {
+    fun loadPlayItems() {
         sendAction(
             PerformanceEvent.LoadPlayItems(
                 playItems = showRepository.fetchShowList(
                     "PLAY",
                     uiState.value.sortType.code
-                ).cachedIn(viewModelScope)
+                )
             )
         )
     }
 
-    private fun loadMusicalItems() {
+    fun loadMusicalItems() {
         sendAction(
             PerformanceEvent.LoadMusicalItems(
                 musicalItems = showRepository.fetchShowList(
                     "MUSICAL",
                     uiState.value.sortType.code
-                ).cachedIn(viewModelScope)
+                )
             )
         )
     }

@@ -157,8 +157,10 @@ fun NavGraphBuilder.performanceNavGraph(
             route = PerformanceDestination.Detail.routeWithArgs,
             arguments = PerformanceDestination.Detail.arguments
         ) { entry ->
+            val parentEntry = remember(entry) { navHostController.getBackStackEntry(PerformanceDestination.Performance.route) }
             val showIdType = entry.arguments?.getString(PerformanceDestination.Detail.showIdArg) ?: ""
             PerformanceDetailScreen(
+                performanceViewModel = hiltViewModel(parentEntry),
                 showId = showIdType,
                 onNavigateReview = {
                     navHostController.navigate("${PerformanceDestination.Review.route}/$it")

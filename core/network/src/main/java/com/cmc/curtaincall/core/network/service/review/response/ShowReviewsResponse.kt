@@ -15,7 +15,8 @@ data class ShowReviewResponse(
     val creatorNickname: String,
     val grade: Int,
     val id: Int,
-    val showId: String
+    val showId: String,
+    val likeCount: Int,
 ) {
     fun toModel() = ShowReviewModel(
         content = content,
@@ -25,6 +26,7 @@ data class ShowReviewResponse(
         creatorNickname = creatorNickname,
         grade = grade,
         id = id,
-        showId = showId
+        showId = showId,
+        likeCount = likeCount
     )
 }

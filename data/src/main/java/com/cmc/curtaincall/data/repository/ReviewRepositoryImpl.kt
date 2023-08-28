@@ -32,11 +32,6 @@ class ReviewRepositoryImpl @Inject constructor(
             config = PagingConfig(pageSize = REVIEW_PAGE_SIZE),
             pagingSourceFactory = { ReviewPagingSource(reviewService, showId) }
         ).flow
-            .map { pagingData ->
-                pagingData.map { response ->
-                    response.toModel()
-                }
-            }
     }
 
     override fun requestShowReviewList(showId: String, page: Int, size: Int): Flow<List<ShowReviewModel>> =
@@ -50,13 +45,13 @@ class ReviewRepositoryImpl @Inject constructor(
     override fun updateShowReview(reviewId: Int, content: String, grade: Int): Flow<Boolean> =
         reviewRemoteSource.updateShowReview(reviewId, content, grade)
 
-    override fun requestLikeReview(reviewId: String): Flow<Boolean> =
+    override fun requestLikeReview(reviewId: Int): Flow<Boolean> =
         reviewRemoteSource.requestLikeReview(reviewId)
 
-    override fun requestDislikeReview(reviewId: String): Flow<Boolean> =
+    override fun requestDislikeReview(reviewId: Int): Flow<Boolean> =
         reviewRemoteSource.requestDislikeReview(reviewId)
 
-    override fun checkLikeReviews(reviewIds: List<String>): Flow<List<LikeReviewModel>> =
+    override fun checkLikeReviews(reviewIds: List<Int>): Flow<List<LikeReviewModel>> =
         reviewRemoteSource.checkLikeReviews(reviewIds).map { likeReviews ->
             likeReviews.map { it.toModel() }
         }

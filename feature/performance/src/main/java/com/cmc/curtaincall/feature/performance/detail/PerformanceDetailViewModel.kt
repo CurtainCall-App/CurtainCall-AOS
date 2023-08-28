@@ -64,11 +64,11 @@ class PerformanceDetailViewModel @Inject constructor(
             }
 
             PerformanceDetailEvent.FavoriteShow -> {
-                currentState.copy(showDetailModel = currentState.showDetailModel.copy(isFavorite = true))
+                currentState.copy(isFavorite = true)
             }
 
             PerformanceDetailEvent.DeleteFavoriteShow -> {
-                currentState.copy(showDetailModel = currentState.showDetailModel.copy(isFavorite = false))
+                currentState.copy(isFavorite = false)
             }
 
             is PerformanceDetailEvent.ChangeTabType -> {

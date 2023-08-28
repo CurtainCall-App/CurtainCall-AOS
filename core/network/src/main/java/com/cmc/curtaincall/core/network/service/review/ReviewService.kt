@@ -43,16 +43,16 @@ interface ReviewService {
 
     @PUT("reviews/{reviewId}/like")
     suspend fun requestLikeReview(
-        @Path("reviewId") reviewId: String
+        @Path("reviewId") reviewId: Int
     ): Response<Unit>
 
     @DELETE("reviews/{reviewId}/like")
     suspend fun requestDislikeReview(
-        @Path("reviewId") reviewId: String
+        @Path("reviewId") reviewId: Int
     ): Response<Unit>
 
     @GET("member/like")
     suspend fun checkLikeReviews(
-        @Query("reviewIds") reviewIds: List<String>
+        @Query("reviewIds") reviewIds: List<Int>
     ): LikeReviewsResponse
 }

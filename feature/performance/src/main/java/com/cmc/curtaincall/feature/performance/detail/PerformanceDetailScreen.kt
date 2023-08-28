@@ -22,8 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -52,6 +50,7 @@ import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
 import com.cmc.curtaincall.common.utility.extensions.toRunningTime
+import com.cmc.curtaincall.feature.performance.PerformanceViewModel
 import com.cmc.curtaincall.feature.performance.lostitem.screen.PerformanceLostItemTabScreen
 import com.cmc.curtaincall.feature.performance.review.PerformanceReviewTabScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -62,6 +61,7 @@ enum class TabType(val label: String) {
 
 @Composable
 internal fun PerformanceDetailScreen(
+    performanceViewModel: PerformanceViewModel,
     performanceDetailViewModel: PerformanceDetailViewModel = hiltViewModel(),
     showId: String,
     onNavigateReview: (String) -> Unit,
@@ -87,6 +87,7 @@ internal fun PerformanceDetailScreen(
         contentAlignment = Alignment.TopCenter
     ) {
         PerformanceDetailContent(
+            performanceViewModel = performanceViewModel,
             performanceDetailViewModel = performanceDetailViewModel,
             modifier = Modifier
                 .fillMaxWidth()
@@ -262,6 +263,7 @@ private fun PerformanceDetailTab(
 
 @Composable
 private fun PerformanceDetailContent(
+    performanceViewModel: PerformanceViewModel,
     performanceDetailViewModel: PerformanceDetailViewModel,
     modifier: Modifier = Modifier,
     posterUrl: String? = null,
@@ -292,7 +294,11 @@ private fun PerformanceDetailContent(
             containerColor = Color.Transparent,
             contentColor = White,
             textModifier = Modifier.width(160.dp),
-            onClick = onBack
+            onClick = {
+                performanceViewModel.loadPlayItems()
+                performanceViewModel.loadMusicalItems()
+                onBack()
+            }
         )
         PerformanceDetailInfoContent(
             performanceDetailViewModel = performanceDetailViewModel,
@@ -479,9 +485,6 @@ private fun PerformanceDetailHeader(
     reviewGradeSum: Int
 ) {
     val performanceDetailUiState by performanceDetailViewModel.uiState.collectAsStateWithLifecycle()
-    var isSelectBookmark by remember {
-        mutableStateOf(performanceDetailUiState.showDetailModel.isFavorite)
-    }
     Column(modifier) {
         Box(
             modifier = Modifier
@@ -538,11 +541,10 @@ private fun PerformanceDetailHeader(
             }
             IconButton(
                 onClick = {
-                    isSelectBookmark = isSelectBookmark.not()
-                    if (isSelectBookmark) {
-                        performanceDetailViewModel.requestFavoriteShow(performanceDetailUiState.showDetailModel.id)
-                    } else {
+                    if (performanceDetailUiState.isFavorite) {
                         performanceDetailViewModel.deleteFavoriteShow(performanceDetailUiState.showDetailModel.id)
+                    } else {
+                        performanceDetailViewModel.requestFavoriteShow(performanceDetailUiState.showDetailModel.id)
                     }
                 },
                 modifier = Modifier
@@ -550,11 +552,11 @@ private fun PerformanceDetailHeader(
                     .padding(start = 6.dp)
                     .size(30.dp),
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = if (isSelectBookmark) Cetacean_Blue else Bright_Gray
+                    containerColor = if (performanceDetailUiState.isFavorite) Cetacean_Blue else Bright_Gray
                 )
             ) {
                 Icon(
-                    painter = painterResource(if (isSelectBookmark) R.drawable.ic_bookmark_sel else R.drawable.ic_bookmark),
+                    painter = painterResource(if (performanceDetailUiState.isFavorite) R.drawable.ic_bookmark_sel else R.drawable.ic_bookmark),
                     contentDescription = null,
                     tint = Color.Unspecified
                 )
