@@ -252,7 +252,7 @@ private fun PerformanceContent(
         modifier = modifier
             .padding(top = 6.dp)
             .padding(horizontal = 20.dp)
-            .fillMaxSize(),
+            .fillMaxSize()
     ) {
         item {
             Column {
