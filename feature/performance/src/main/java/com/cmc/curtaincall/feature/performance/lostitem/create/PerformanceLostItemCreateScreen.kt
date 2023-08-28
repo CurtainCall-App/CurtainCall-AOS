@@ -55,6 +55,7 @@ import com.cmc.curtaincall.feature.performance.lostitem.LostItemType
 import com.cmc.curtaincall.feature.performance.lostitem.LostItemTypeGrid
 import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
+import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -137,7 +138,7 @@ private fun PerformanceLostItemCreateContent(
                 lostItemCreateUiState.type,
                 lostItemCreateUiState.foundDate,
                 lostItemCreateUiState.particulars
-            ).all { it.isNotEmpty() }
+            ).all { it.isNotEmpty() } && lostItemCreateUiState.imageId != Int.MIN_VALUE
         )
     }
 
@@ -189,7 +190,9 @@ private fun PerformanceLostItemCreateContent(
             title = stringResource(R.string.performance_find_lost_item_create_title),
             placeholder = stringResource(R.string.performance_find_lost_item_create_title_placeholder),
             value = lostItemCreateUiState.title,
-            onValueChange = { performanceLostItemCreateViewModel.setTitle(it) },
+            onValueChange = {
+                if (it.length < 20) performanceLostItemCreateViewModel.setTitle(it)
+            },
             onFocused = {
                 isClickLostItemType = false
                 isClickDateAcquisition = false
@@ -248,7 +251,9 @@ private fun PerformanceLostItemCreateContent(
             placeholder = stringResource(R.string.performance_find_lost_item_create_place_placeholder),
             isEssential = false,
             value = lostItemCreateUiState.foundPlaceDetail,
-            onValueChange = { performanceLostItemCreateViewModel.setFoundPlaceDetail(it) },
+            onValueChange = {
+                if (it.length < 30) performanceLostItemCreateViewModel.setFoundPlaceDetail(it)
+            },
             onFocused = {
                 isClickLostItemType = false
                 isClickDateAcquisition = false
@@ -329,7 +334,9 @@ private fun PerformanceLostItemCreateContent(
             title = stringResource(R.string.performance_find_lost_item_create_significant),
             placeholder = stringResource(R.string.performance_find_lost_item_create_significant_placeholder),
             value = lostItemCreateUiState.particulars,
-            onValueChange = { performanceLostItemCreateViewModel.setParticulars(it) },
+            onValueChange = {
+                if (it.length < 100) performanceLostItemCreateViewModel.setParticulars(it)
+            },
             onFocused = {
                 isClickLostItemType = false
                 isClickDateAcquisition = false
@@ -385,10 +392,10 @@ private fun LostItemAttachmentDropDown(
         }
     }
 
-    var attachmentFile by remember { mutableStateOf<Uri?>(null) }
+    var attachmentFile by remember { mutableStateOf<Bitmap?>(null) }
     val takePhotoFromAlbum = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let { uri ->
-            attachmentFile = uri
+            attachmentFile = uri.parseBitmap(context)
             context.contentResolver.openInputStream(uri)?.let { inputStream ->
                 performanceLostItemCreateViewModel.uploadImage(inputStream)
             }
@@ -399,9 +406,9 @@ private fun LostItemAttachmentDropDown(
         bitmap?.let { bitmap ->
             val bytes = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-            val path = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "", null)
-            attachmentFile = Uri.parse(path)
-            // performanceLostItemCreateViewModel.uploadImage(path)
+            val inputStream = ByteArrayInputStream(bytes.toByteArray())
+            performanceLostItemCreateViewModel.uploadImage(inputStream)
+            attachmentFile = bitmap
             onSelectChange(true)
         }
     }
@@ -438,7 +445,10 @@ private fun LostItemAttachmentDropDown(
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)
                                 .size(22.dp)
-                                .clickable { onSelectChange(false) },
+                                .clickable {
+                                    performanceLostItemCreateViewModel.setImageId(Int.MIN_VALUE)
+                                    onSelectChange(false)
+                                },
                             tint = Color.Unspecified
                         )
                     }
