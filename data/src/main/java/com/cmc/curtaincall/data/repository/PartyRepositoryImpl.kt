@@ -5,12 +5,16 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
 import com.cmc.curtaincall.core.network.service.party.PartyService
+import com.cmc.curtaincall.data.source.local.PartyLocalSource
 import com.cmc.curtaincall.data.source.paging.PARTY_PAGE_SIZE
+import com.cmc.curtaincall.data.source.paging.PARTY_SEARCH_PAGE_SIZE
 import com.cmc.curtaincall.data.source.paging.PartyPagingSource
+import com.cmc.curtaincall.data.source.paging.PartySearchPagingSource
 import com.cmc.curtaincall.data.source.remote.PartyRemoteSource
 import com.cmc.curtaincall.domain.model.party.CreatePartyModel
 import com.cmc.curtaincall.domain.model.party.PartyDetailModel
 import com.cmc.curtaincall.domain.model.party.PartyModel
+import com.cmc.curtaincall.domain.model.party.PartySearchWordModel
 import com.cmc.curtaincall.domain.repository.PartyRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -18,8 +22,26 @@ import javax.inject.Inject
 
 class PartyRepositoryImpl @Inject constructor(
     private val partyRemoteSource: PartyRemoteSource,
-    private val partyService: PartyService
+    private val partyService: PartyService,
+    private val partyLocalSource: PartyLocalSource
 ) : PartyRepository {
+
+    override fun getPartySearchWordList(): Flow<List<PartySearchWordModel>> =
+        partyLocalSource.getPartySearchWordList().map { partySearchWordEntityList ->
+            partySearchWordEntityList.map { it.toModel() }
+        }
+
+    override suspend fun insertPartySearchWord(partySearchWordModel: PartySearchWordModel) {
+        partyLocalSource.insertPartySearchWord(partySearchWordModel)
+    }
+
+    override suspend fun deletePartySearchWord(partySearchWordModel: PartySearchWordModel) {
+        partyLocalSource.deletePartySearchWord(partySearchWordModel)
+    }
+
+    override suspend fun deletePartySearchWordList() {
+        partyLocalSource.deletePartySearchWordList()
+    }
 
     override fun fetchPartyList(category: String): Flow<PagingData<PartyModel>> {
         return Pager(
@@ -37,6 +59,13 @@ class PartyRepositoryImpl @Inject constructor(
         partyRemoteSource.requestPartyList(page, size, category).map { parties ->
             parties.map { it.toModel() }
         }
+
+    override fun fetchSearchPartyList(category: String, keyword: String): Flow<PagingData<PartyModel>> {
+        return Pager(
+            config = PagingConfig(pageSize = PARTY_SEARCH_PAGE_SIZE),
+            pagingSourceFactory = { PartySearchPagingSource(partyService, category, keyword) }
+        ).flow
+    }
 
     override fun searchPartyList(page: Int, size: Int, category: String, keyword: String): Flow<List<PartyModel>> =
         partyRemoteSource.searchPartyList(page, size, category, keyword).map { parties ->

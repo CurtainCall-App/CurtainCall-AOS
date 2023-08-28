@@ -3,7 +3,9 @@ package com.cmc.curtaincall.core.local.di
 import android.content.Context
 import androidx.room.Room
 import com.cmc.curtaincall.core.local.db.CurtainCallDatabase
+import com.cmc.curtaincall.core.local.db.MIGRATION_2_3
 import com.cmc.curtaincall.core.local.db.dao.LostItemSearchDao
+import com.cmc.curtaincall.core.local.db.dao.PartySearchDao
 import com.cmc.curtaincall.core.local.db.dao.ShowSearchDao
 import dagger.Module
 import dagger.Provides
@@ -27,7 +29,9 @@ object DatabaseModule {
             context,
             CurtainCallDatabase::class.java,
             CURTAINCALL_DB
-        ).build()
+        )
+            .addMigrations(MIGRATION_2_3)
+            .build()
 
     @Provides
     @Singleton
@@ -42,4 +46,11 @@ object DatabaseModule {
         curtainCallDatabase: CurtainCallDatabase
     ): LostItemSearchDao =
         curtainCallDatabase.lostItemSearchDao()
+
+    @Provides
+    @Singleton
+    fun providePartySearchDao(
+        curtainCallDatabase: CurtainCallDatabase
+    ): PartySearchDao =
+        curtainCallDatabase.partySearchDao()
 }

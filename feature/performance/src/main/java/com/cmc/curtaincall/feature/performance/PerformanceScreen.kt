@@ -118,7 +118,7 @@ private fun PerformanceSearchContent(
         item {
             Spacer(
                 modifier = Modifier
-                    .padding(top = 20.dp)
+                    .padding(vertical = 20.dp)
                     .fillMaxWidth()
                     .height(1.dp)
                     .background(Cultured)
@@ -130,8 +130,8 @@ private fun PerformanceSearchContent(
                 item {
                     EmptyItem(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 232.dp),
+                            .padding(top = 232.dp)
+                            .fillMaxWidth(),
                         alert = stringResource(R.string.search_empty_recently_word)
                     )
                 }
@@ -141,7 +141,7 @@ private fun PerformanceSearchContent(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 20.dp)
-                            .padding(top = 20.dp)
+                            .padding(bottom = 20.dp)
                     ) {
                         Row(
                             modifier = Modifier

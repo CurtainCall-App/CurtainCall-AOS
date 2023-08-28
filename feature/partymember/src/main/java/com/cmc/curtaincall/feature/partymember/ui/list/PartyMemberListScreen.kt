@@ -1,6 +1,7 @@
 package com.cmc.curtaincall.feature.partymember.ui.list
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
@@ -14,14 +15,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import androidx.paging.compose.itemsIndexed
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.SearchAppBar
 import com.cmc.curtaincall.common.design.component.basic.SearchTopAppBarWithBack
 import com.cmc.curtaincall.common.design.component.content.card.PartyMemberItemCard
 import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.cmc.curtaincall.common.design.component.items.EmptyItem
+import com.cmc.curtaincall.common.design.component.items.SearchItem
+import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
 import com.cmc.curtaincall.common.utility.extensions.toDateWithDay
@@ -38,21 +43,37 @@ internal fun PartyMemberListScreen(
     onNavigateCreate: (PartyType) -> Unit,
     onBack: () -> Unit
 ) {
-    val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(Cultured)
+    val partyMemberUiState by partyMemberViewModel.uiState.collectAsStateWithLifecycle()
 
-    var isActiveSearchState by remember { mutableStateOf(false) }
-    var queryState by remember { mutableStateOf("") }
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setStatusBarColor(
+        if (partyMemberUiState.isActiveSearch) White else Cultured
+    )
+
     Scaffold(
         topBar = {
-            if (isActiveSearchState) {
+            if (partyMemberUiState.isActiveSearch) {
                 SearchAppBar(
-                    value = queryState,
-                    onValueChange = { queryState = it },
+                    value = partyMemberUiState.queryString,
+                    onValueChange = {
+                        partyMemberViewModel.setQueryString(it)
+                        partyMemberViewModel.changeDoneSearch(false)
+                    },
                     containerColor = White,
                     contentColor = Nero,
                     placeholder = stringResource(R.string.search_performance_title),
-                    onClick = { isActiveSearchState = false }
+                    onDone = {
+                        if (partyMemberUiState.queryString.isNotEmpty()) {
+                            partyMemberViewModel.searchPartyList(partyMemberUiState.queryString)
+                            partyMemberViewModel.insertPartySearchWord()
+                        }
+                        partyMemberViewModel.changeDoneSearch(true)
+                    },
+                    onClick = {
+                        partyMemberViewModel.changeActiveSearch(false)
+                        partyMemberViewModel.setQueryString("")
+                    },
+                    onAction = { partyMemberViewModel.setQueryString("") }
                 )
             } else {
                 SearchTopAppBarWithBack(
@@ -67,7 +88,7 @@ internal fun PartyMemberListScreen(
                     contentColor = Nero,
                     tint = Roman_Silver,
                     onBack = onBack,
-                    onClick = { isActiveSearchState = true }
+                    onClick = { partyMemberViewModel.changeActiveSearch(true) }
                 )
             }
         },
@@ -84,8 +105,22 @@ internal fun PartyMemberListScreen(
             }
         }
     ) { paddingValues ->
-        if (isActiveSearchState) {
-            // TODO
+        if (partyMemberUiState.isActiveSearch) {
+            PartyMemberListSearchContent(
+                partyMemberViewModel = partyMemberViewModel,
+                partyType = partyType,
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
+                    .background(White),
+                onSearchClick = {
+                    partyMemberViewModel.setQueryString(it)
+                    partyMemberViewModel.searchPartyList(it)
+                    partyMemberViewModel.insertPartySearchWord()
+                    partyMemberViewModel.changeDoneSearch(true)
+                },
+                onNavigateDetail = onNavigateDetail
+            )
         } else {
             PartyMemberListContent(
                 partyMemberViewModel = partyMemberViewModel,
@@ -96,6 +131,118 @@ internal fun PartyMemberListScreen(
                     .background(Cultured),
                 onNavigateDetail = onNavigateDetail
             )
+        }
+    }
+}
+
+@Composable
+private fun PartyMemberListSearchContent(
+    partyMemberViewModel: PartyMemberViewModel,
+    partyType: PartyType,
+    modifier: Modifier = Modifier,
+    onSearchClick: (String) -> Unit,
+    onNavigateDetail: (PartyType, Int, Boolean) -> Unit,
+) {
+    val searchWords by partyMemberViewModel.searchWords.collectAsStateWithLifecycle()
+    val partyMemberUiState by partyMemberViewModel.uiState.collectAsStateWithLifecycle()
+    val partySearchItems = partyMemberUiState.partySearchItems.collectAsLazyPagingItems()
+
+    LazyColumn(modifier) {
+        item {
+            Spacer(
+                modifier = Modifier
+                    .padding(vertical = 20.dp)
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(Cultured)
+            )
+        }
+
+        if (partyMemberUiState.queryString.isEmpty()) {
+            if (searchWords.isEmpty()) {
+                item {
+                    EmptyItem(
+                        modifier = Modifier
+                            .padding(top = 232.dp)
+                            .fillMaxWidth(),
+                        alert = stringResource(R.string.search_empty_recently_word)
+                    )
+                }
+            } else {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp)
+                            .padding(bottom = 20.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 10.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = stringResource(R.string.search_recently_word),
+                                modifier = Modifier.weight(1f),
+                                color = Chinese_Black,
+                                fontSize = 16.dp.toSp(),
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = spoqahansanseeo
+                            )
+                            Text(
+                                text = stringResource(R.string.search_delete_recentyl_word),
+                                modifier = Modifier.clickable { partyMemberViewModel.deletePartySearchWordList() },
+                                color = Roman_Silver,
+                                fontSize = 14.dp.toSp(),
+                                fontWeight = FontWeight.Medium,
+                                fontFamily = spoqahansanseeo
+                            )
+                        }
+                        searchWords.forEach { searchWord ->
+                            SearchItem(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 10.dp),
+                                word = searchWord.word,
+                                onClick = { onSearchClick(searchWord.word) },
+                                onDelete = { partyMemberViewModel.deletePartySearchWord(searchWord) }
+                            )
+                        }
+                    }
+                }
+            }
+        } else {
+            if (partyMemberUiState.isDoneSearch) {
+                itemsIndexed(partySearchItems) { index, partyModel ->
+                    partyModel?.let { partyModel ->
+                        PartyMemberItemCard(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentHeight()
+                                .padding(bottom = 20.dp),
+                            title = partyModel.showName,
+                            nickname = partyModel.creatorNickname,
+                            createAtDate = partyModel.createdAt.toChangeFullDate(),
+                            createAtTime = partyModel.createdAt.toTime(),
+                            numberOfMember = partyModel.curMemberNum,
+                            numberOfTotal = partyModel.maxMemberNum,
+                            description = partyModel.title,
+                            posterUrl = partyModel.showPoster,
+                            date = partyModel.showAt.toDateWithDay(),
+                            time = partyModel.showAt.toTime(),
+                            location = partyModel.facilityName,
+                            onClick = {
+                                onNavigateDetail(
+                                    partyType,
+                                    partyModel.id,
+                                    partyModel.creatorId == partyMemberViewModel.memberId.value
+                                )
+                            }
+                        )
+                    }
+                }
+            }
         }
     }
 }
