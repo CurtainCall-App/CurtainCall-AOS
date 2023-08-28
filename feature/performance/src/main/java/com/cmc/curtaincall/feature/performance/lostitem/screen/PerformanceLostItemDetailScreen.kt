@@ -101,7 +101,7 @@ private fun PerformanceLostItemDetailContent(
         PerformanceLostItemDetailFooter(
             modifier = Modifier.fillMaxWidth(),
             facilityName = performanceLostItemDetailUiState.lostDetailItem.facilityName,
-            facilityPhone = performanceLostItemDetailUiState.lostDetailItem.facilityPhone,
+            facilityPhone = performanceLostItemDetailUiState.lostDetailItem.facilityPhone
         )
     }
 }
