@@ -19,13 +19,15 @@ interface ShowRepository {
     suspend fun deleteShowSearchWordList()
 
     fun fetchShowList(
-        genre: String
+        genre: String,
+        sort: String?
     ): Flow<PagingData<ShowInfoModel>>
 
     fun requestShowList(
         page: Int,
         size: Int,
-        genre: String
+        genre: String,
+        sort: String?
     ): Flow<List<ShowInfoModel>>
 
     fun fetchSearchShowList(

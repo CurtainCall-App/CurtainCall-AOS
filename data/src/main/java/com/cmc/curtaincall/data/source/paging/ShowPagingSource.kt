@@ -13,7 +13,8 @@ const val SHOW_PAGE_SIZE = 10
 class ShowPagingSource @Inject constructor(
     private val showService: ShowService,
     private val favoriteService: FavoriteService,
-    private val genre: String
+    private val genre: String,
+    private val sort: String?
 ) : PagingSource<Int, ShowInfoModel>() {
     override fun getRefreshKey(state: PagingState<Int, ShowInfoModel>): Int? {
         return state.anchorPosition?.let { position ->
@@ -28,21 +29,23 @@ class ShowPagingSource @Inject constructor(
             val response = showService.requestShowList(
                 page = pageKey,
                 size = SHOW_PAGE_SIZE,
-                genre = genre
+                genre = genre,
+                sort = sort
             )
-            val models = response.showInfos.map { response ->
-                response.toModel().copy(
-                    favorite =
-                    favoriteService.checkFavoriteShows(listOf(response.id))
-                        .checkFavoriteShows
-                        .first()
-                        .favorite
+
+            val favoriteShows = favoriteService.checkFavoriteShows(response.showInfos.map { it.id })
+            val result = response.showInfos.map { showInfo ->
+                showInfo.toModel().copy(
+                    favorite = favoriteShows.checkFavoriteShows.find {
+                        it.showId == showInfo.id
+                    }?.favorite ?: false
                 )
             }
+
             return LoadResult.Page(
-                models,
+                result,
                 prevKey = null,
-                nextKey = if (models.isEmpty()) null else pageKey + 1
+                nextKey = if (result.isEmpty()) null else pageKey + 1
             )
         } catch (e: Exception) {
             return LoadResult.Error(e)

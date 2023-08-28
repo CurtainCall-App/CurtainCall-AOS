@@ -229,6 +229,7 @@ private fun PerformanceDetailTab(
                         .fillMaxWidth()
                         .padding(top = 50.dp),
                     introductionImage = performanceDetailUiState.showDetailModel.introductionImages.firstOrNull(),
+                    showTimes = performanceDetailUiState.showDetailModel.showTimes,
                     facilityDetailModel = performanceDetailUiState.facilityDetailModel
                 )
             }

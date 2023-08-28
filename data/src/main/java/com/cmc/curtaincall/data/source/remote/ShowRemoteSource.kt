@@ -15,13 +15,15 @@ class ShowRemoteSource @Inject constructor(
     fun requestShowList(
         page: Int,
         size: Int,
-        genre: String
+        genre: String,
+        sort: String?
     ): Flow<List<ShowInfoResponse>> = flow {
         emit(
             showService.requestShowList(
                 page = page,
                 size = size,
-                genre = genre
+                genre = genre,
+                sort = sort
             ).showInfos
         )
     }

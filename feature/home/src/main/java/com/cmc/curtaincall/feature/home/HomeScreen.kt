@@ -289,7 +289,7 @@ private fun HomeContent(
                             .padding(top = 40.dp)
                             .fillMaxWidth(),
                         titleModifier = Modifier.padding(start = 20.dp),
-                        painter = painterResource(R.drawable.ic_open_clock),
+                        painter = painterResource(R.drawable.ic_end_clock),
                         title = stringResource(R.string.home_scheduled_end_performance)
                     ) {
                         LazyRow(
@@ -311,36 +311,6 @@ private fun HomeContent(
                                     )
                                     Spacer(Modifier.size(12.dp))
                                 }
-                            }
-                        }
-                    }
-                }
-            }
-            if (homeUiState.cheapShowInfos.isNotEmpty()) {
-                HomeContentRow(
-                    modifier = Modifier
-                        .padding(top = 40.dp)
-                        .fillMaxWidth(),
-                    titleModifier = Modifier.padding(start = 20.dp),
-                    painter = painterResource(R.drawable.ic_value_of_money),
-                    title = stringResource(R.string.home_value_for_money_performance)
-                ) {
-                    LazyRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 12.dp)
-                    ) {
-                        itemsIndexed(List(10) {}) { index, item ->
-                            if (index == 0) Spacer(Modifier.size(20.dp))
-                            Row {
-                                PerformanceCard(
-                                    modifier = Modifier.width(120.dp),
-                                    title = "데스노트",
-                                    painter = painterResource(R.drawable.dummy_poster),
-                                    rate = 4.89f,
-                                    numberOfTotal = 1012
-                                )
-                                Spacer(Modifier.size(12.dp))
                             }
                         }
                     }

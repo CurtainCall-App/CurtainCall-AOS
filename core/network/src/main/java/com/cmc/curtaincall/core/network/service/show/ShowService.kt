@@ -14,7 +14,8 @@ interface ShowService {
     suspend fun requestShowList(
         @Query("page") page: Int,
         @Query("size") size: Int,
-        @Query("genre") genre: String
+        @Query("genre") genre: String,
+        @Query("sort") sort: String?
     ): ShowInfosResponse
 
     @GET("search/shows")

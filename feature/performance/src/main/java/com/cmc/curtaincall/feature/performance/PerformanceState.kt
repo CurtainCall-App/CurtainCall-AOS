@@ -1,6 +1,7 @@
 package com.cmc.curtaincall.feature.performance
 
 import androidx.paging.PagingData
+import com.cmc.curtaincall.common.design.component.custom.SortType
 import com.cmc.curtaincall.core.base.BaseState
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import kotlinx.coroutines.flow.Flow
@@ -12,6 +13,7 @@ data class PerformanceState(
     val isActiveSearch: Boolean = false,
     val isDoneSearch: Boolean = false,
     val queryString: String = "",
+    val sortType: SortType = SortType.STAR,
     val playItems: Flow<PagingData<ShowInfoModel>> = flowOf(),
     val musicalItems: Flow<PagingData<ShowInfoModel>> = flowOf(),
     val showSearchItems: Flow<PagingData<ShowInfoModel>> = flowOf()

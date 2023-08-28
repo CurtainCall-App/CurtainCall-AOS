@@ -43,15 +43,18 @@ class ShowRepositoryImpl @Inject constructor(
     override suspend fun deleteShowSearchWordList() =
         showLocalSource.deleteShowSearchWordList()
 
-    override fun fetchShowList(genre: String): Flow<PagingData<ShowInfoModel>> {
+    override fun fetchShowList(
+        genre: String,
+        sort: String?
+    ): Flow<PagingData<ShowInfoModel>> {
         return Pager(
             config = PagingConfig(pageSize = SHOW_PAGE_SIZE),
-            pagingSourceFactory = { ShowPagingSource(showService, favoriteService, genre) }
+            pagingSourceFactory = { ShowPagingSource(showService, favoriteService, genre, sort) }
         ).flow
     }
 
-    override fun requestShowList(page: Int, size: Int, genre: String): Flow<List<ShowInfoModel>> =
-        showRemoteSource.requestShowList(page, size, genre).map { showInfoResponses ->
+    override fun requestShowList(page: Int, size: Int, genre: String, sort: String?): Flow<List<ShowInfoModel>> =
+        showRemoteSource.requestShowList(page, size, genre, sort).map { showInfoResponses ->
             showInfoResponses.map { it.toModel() }
         }
 

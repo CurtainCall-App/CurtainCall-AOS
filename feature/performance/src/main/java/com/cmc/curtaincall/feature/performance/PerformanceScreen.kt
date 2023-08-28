@@ -24,15 +24,14 @@ import com.cmc.curtaincall.common.design.component.basic.TopAppBarOnlySearch
 import com.cmc.curtaincall.common.design.component.content.card.PerformanceDetailCard
 import com.cmc.curtaincall.common.design.component.content.row.SortTypeRow
 import com.cmc.curtaincall.common.design.component.custom.SelectSortTypeBottomSheet
-import com.cmc.curtaincall.common.design.component.custom.SortType
 import com.cmc.curtaincall.common.design.component.items.EmptyItem
 import com.cmc.curtaincall.common.design.component.items.SearchItem
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.common.utility.extensions.ShowDay
 import com.cmc.curtaincall.common.utility.extensions.toChangeDate
 import com.cmc.curtaincall.common.utility.extensions.toRunningTime
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -197,7 +196,17 @@ private fun PerformanceSearchContent(
                             numberOfTotal = showInfoModel.reviewCount,
                             period = "${showInfoModel.startDate.toChangeDate()}-${showInfoModel.endDate.toChangeDate()}",
                             runningTime = if (showInfoModel.runtime.isEmpty()) "해당 정보 없음" else "${showInfoModel.runtime.toRunningTime()}분",
-                            date = "화-금 19:00",
+                            date = showInfoModel.showTimes.map {
+                                when (it.dayOfWeek) {
+                                    ShowDay.Monday.dayOfWeek -> ShowDay.Monday
+                                    ShowDay.Tuesday.dayOfWeek -> ShowDay.Tuesday
+                                    ShowDay.Wednesday.dayOfWeek -> ShowDay.Wednesday
+                                    ShowDay.Thursday.dayOfWeek -> ShowDay.Thursday
+                                    ShowDay.Friday.dayOfWeek -> ShowDay.Friday
+                                    ShowDay.Saturday.dayOfWeek -> ShowDay.Saturday
+                                    else -> ShowDay.Sunday
+                                }
+                            }.sortedBy { it.id }.toSet().joinToString(", ") { it.label },
                             location = showInfoModel.facilityName,
                             onClick = { onNavigateDetail(showInfoModel.id) },
                             isFavorite = showInfoModel.favorite,
@@ -226,26 +235,18 @@ private fun PerformanceContent(
     modifier: Modifier = Modifier,
     onNavigateDetail: (String) -> Unit
 ) {
-    var sortType by remember { mutableStateOf(SortType.STAR) }
     var showDialog by remember { mutableStateOf(false) }
-
     val performanceUiState by performanceViewModel.uiState.collectAsStateWithLifecycle()
     val playItems = performanceUiState.playItems.collectAsLazyPagingItems()
     val musicalItems = performanceUiState.musicalItems.collectAsLazyPagingItems()
     val lazyListState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(Unit) {
-        coroutineScope.launch {
-            lazyListState.scrollToItem(performanceUiState.lastIndex)
-        }
-    }
-
     if (showDialog) {
         SelectSortTypeBottomSheet(
-            sortType = sortType,
+            sortType = performanceUiState.sortType,
             onSelectSortType = {
-                sortType = it
+                performanceViewModel.changeSortType(it)
                 showDialog = false
             },
             onDismissRequest = { showDialog = false }
@@ -284,7 +285,7 @@ private fun PerformanceContent(
                     )
                     SortTypeRow(
                         modifier = Modifier.padding(top = 28.dp),
-                        sortType = sortType,
+                        sortType = performanceUiState.sortType,
                         onClick = { showDialog = true }
                     )
                 }
@@ -304,7 +305,17 @@ private fun PerformanceContent(
                             numberOfTotal = showInfoModel.reviewCount,
                             period = "${showInfoModel.startDate.toChangeDate()}-${showInfoModel.endDate.toChangeDate()}",
                             runningTime = if (showInfoModel.runtime.isEmpty()) "해당 정보 없음" else "${showInfoModel.runtime.toRunningTime()}분",
-                            date = "화-금 19:00",
+                            date = showInfoModel.showTimes.map {
+                                when (it.dayOfWeek) {
+                                    ShowDay.Monday.dayOfWeek -> ShowDay.Monday
+                                    ShowDay.Tuesday.dayOfWeek -> ShowDay.Tuesday
+                                    ShowDay.Wednesday.dayOfWeek -> ShowDay.Wednesday
+                                    ShowDay.Thursday.dayOfWeek -> ShowDay.Thursday
+                                    ShowDay.Friday.dayOfWeek -> ShowDay.Friday
+                                    ShowDay.Saturday.dayOfWeek -> ShowDay.Saturday
+                                    else -> ShowDay.Sunday
+                                }
+                            }.sortedBy { it.id }.toSet().joinToString(", ") { it.label },
                             location = showInfoModel.facilityName,
                             onClick = {
                                 performanceViewModel.changeLastIndex(index)
@@ -339,7 +350,17 @@ private fun PerformanceContent(
                             numberOfTotal = showInfoModel.reviewCount,
                             period = "${showInfoModel.startDate.toChangeDate()}-${showInfoModel.endDate.toChangeDate()}",
                             runningTime = if (showInfoModel.runtime.isEmpty()) "해당 정보 없음" else "${showInfoModel.runtime.toRunningTime()}분",
-                            date = "화-금 19:00",
+                            date = showInfoModel.showTimes.map {
+                                when (it.dayOfWeek) {
+                                    ShowDay.Monday.dayOfWeek -> ShowDay.Monday
+                                    ShowDay.Tuesday.dayOfWeek -> ShowDay.Tuesday
+                                    ShowDay.Wednesday.dayOfWeek -> ShowDay.Wednesday
+                                    ShowDay.Thursday.dayOfWeek -> ShowDay.Thursday
+                                    ShowDay.Friday.dayOfWeek -> ShowDay.Friday
+                                    ShowDay.Saturday.dayOfWeek -> ShowDay.Saturday
+                                    else -> ShowDay.Sunday
+                                }
+                            }.sortedBy { it.id }.toSet().joinToString(", ") { it.label },
                             location = showInfoModel.facilityName,
                             onClick = {
                                 performanceViewModel.changeLastIndex(index)

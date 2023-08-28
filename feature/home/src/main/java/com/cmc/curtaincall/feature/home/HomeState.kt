@@ -15,6 +15,5 @@ data class HomeState(
     val showRanks: List<ShowRankModel> = listOf(),
     val openShowInfos: List<ShowInfoModel> = listOf(),
     val endShowInfos: List<ShowInfoModel> = listOf(),
-    val cheapShowInfos: List<ShowInfoModel> = listOf(),
     val searchWords: List<ShowSearchWordModel> = listOf()
 ) : BaseState

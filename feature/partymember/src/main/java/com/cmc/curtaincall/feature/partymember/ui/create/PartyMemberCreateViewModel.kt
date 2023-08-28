@@ -23,10 +23,10 @@ class PartyMemberCreateViewModel @Inject constructor(
     initialState = PartyMemberCreateState()
 ) {
 
-    val playItems: Flow<PagingData<ShowInfoModel>> = showRepository.fetchShowList("PLAY")
+    val playItems: Flow<PagingData<ShowInfoModel>> = showRepository.fetchShowList("PLAY", null)
         .cachedIn(viewModelScope)
 
-    val musicalItems: Flow<PagingData<ShowInfoModel>> = showRepository.fetchShowList("MUSICAL")
+    val musicalItems: Flow<PagingData<ShowInfoModel>> = showRepository.fetchShowList("MUSICAL", null)
         .cachedIn(viewModelScope)
 
     override fun reduceState(currentState: PartyMemberCreateState, event: PartyMemberCreateEvent): PartyMemberCreateState =
