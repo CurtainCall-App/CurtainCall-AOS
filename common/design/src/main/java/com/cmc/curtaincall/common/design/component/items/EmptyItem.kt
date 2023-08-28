@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -23,6 +24,7 @@ import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 fun EmptyItem(
     modifier: Modifier = Modifier,
     alert: String,
+    painter: Painter = painterResource(R.drawable.ic_empty_item),
     iconColor: Color = Color.Unspecified,
     contentColor: Color = Silver_Sand
 ) {
@@ -31,7 +33,7 @@ fun EmptyItem(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon(
-            painter = painterResource(R.drawable.ic_empty_item),
+            painter = painter,
             contentDescription = null,
             modifier = Modifier.size(60.dp),
             tint = iconColor

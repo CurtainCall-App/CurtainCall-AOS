@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -18,7 +19,7 @@ import androidx.paging.compose.items
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.SearchAppBar
 import com.cmc.curtaincall.common.design.component.basic.SearchTopAppBarWithBack
-import com.cmc.curtaincall.common.design.component.content.card.PartyMemberContentCard
+import com.cmc.curtaincall.common.design.component.content.card.PartyMemberItemCard
 import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.cmc.curtaincall.common.design.component.items.EmptyItem
 import com.cmc.curtaincall.common.design.theme.*
@@ -122,12 +123,17 @@ private fun PartyMemberListContent(
 
     Column(modifier = modifier.background(Cultured)) {
         if (pagingItems.itemCount == 0) {
-            EmptyItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 252.dp),
-                alert = stringResource(R.string.partymember_empty_text)
-            )
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(Modifier.weight(252f))
+                EmptyItem(
+                    alert = stringResource(R.string.partymember_empty_text),
+                    painter = painterResource(R.drawable.ic_dark_empty_item)
+                )
+                Spacer(Modifier.weight(327f))
+            }
         } else {
             LazyColumn(
                 modifier = Modifier
@@ -146,12 +152,11 @@ private fun PartyMemberListContent(
                 }
                 items(pagingItems) { partyModel ->
                     partyModel?.let { partyModel ->
-                        PartyMemberContentCard(
+                        PartyMemberItemCard(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .wrapContentHeight()
                                 .padding(bottom = 20.dp),
-                            partyType = partyType,
                             title = partyModel.showName,
                             nickname = partyModel.creatorNickname,
                             createAtDate = partyModel.createdAt.toChangeFullDate(),
