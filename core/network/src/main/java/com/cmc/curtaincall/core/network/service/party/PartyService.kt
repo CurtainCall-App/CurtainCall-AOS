@@ -2,6 +2,7 @@ package com.cmc.curtaincall.core.network.service.party
 
 import com.cmc.curtaincall.core.network.service.party.request.CreatePartyRequest
 import com.cmc.curtaincall.core.network.service.party.request.UpdatePartyRequest
+import com.cmc.curtaincall.core.network.service.party.response.CheckPartiesResponse
 import com.cmc.curtaincall.core.network.service.party.response.CreatePartyResponse
 import com.cmc.curtaincall.core.network.service.party.response.PartyDetailResponse
 import com.cmc.curtaincall.core.network.service.party.response.PartyListResponse
@@ -56,4 +57,9 @@ interface PartyService {
     suspend fun participateParty(
         @Path("partyId") partyId: String
     ): Response<Unit>
+
+    @GET("member/participated")
+    suspend fun checkParties(
+        @Query("partyIds") partyIds: List<Int>
+    ): CheckPartiesResponse
 }

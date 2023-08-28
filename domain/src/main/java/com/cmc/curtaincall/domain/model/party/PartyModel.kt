@@ -15,5 +15,6 @@ data class PartyModel(
     val showId: String? = null,
     val showName: String? = null,
     val showPoster: String? = null,
-    val title: String = ""
+    val title: String = "",
+    val isParticipation: Boolean = false
 )

@@ -23,7 +23,6 @@ class PartyMemberViewModel @Inject constructor(
 ) : BaseViewModel<PartyMemberUiState, PartyMemberEvent, Nothing>(
     initialState = PartyMemberUiState()
 ) {
-
     private val _memberId = MutableStateFlow(0)
     val memberId: StateFlow<Int> = _memberId.asStateFlow()
 
@@ -71,6 +70,8 @@ class PartyMemberViewModel @Inject constructor(
             is PartyMemberEvent.LoadEtcItems -> {
                 currentState.copy(etcItems = event.etcItems)
             }
+
+            else -> currentState
         }
 
     fun loadWatchingItems() {

@@ -3,7 +3,6 @@ package com.cmc.curtaincall.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.paging.map
 import com.cmc.curtaincall.core.network.service.party.PartyService
 import com.cmc.curtaincall.data.source.local.PartyLocalSource
 import com.cmc.curtaincall.data.source.paging.PARTY_PAGE_SIZE
@@ -48,11 +47,6 @@ class PartyRepositoryImpl @Inject constructor(
             config = PagingConfig(pageSize = PARTY_PAGE_SIZE),
             pagingSourceFactory = { PartyPagingSource(partyService, category) }
         ).flow
-            .map { pagingData ->
-                pagingData.map { response ->
-                    response.toModel()
-                }
-            }
     }
 
     override fun requestPartyList(page: Int, size: Int, category: String): Flow<List<PartyModel>> =
