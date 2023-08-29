@@ -5,7 +5,7 @@ data class MyRecruitmentModel(
     val title: String = "",
     val curMemberNum: Int = 0,
     val maxMemberNum: Int = 0,
-    val showAt: String = "",
+    val showAt: String? = null,
     val createdAt: String = "",
     val category: String = "",
     val creatorId: Int = 0,

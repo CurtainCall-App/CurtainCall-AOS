@@ -62,6 +62,6 @@ interface PartyRepository {
     ): Flow<Boolean>
 
     fun participateParty(
-        partyId: String
+        partyId: Int
     ): Flow<Boolean>
 }

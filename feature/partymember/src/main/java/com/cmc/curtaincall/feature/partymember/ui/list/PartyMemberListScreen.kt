@@ -41,7 +41,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 internal fun PartyMemberListScreen(
     partyMemberViewModel: PartyMemberViewModel = hiltViewModel(),
     partyType: PartyType,
-    onNavigateDetail: (PartyType, Int, Boolean) -> Unit,
+    onNavigateDetail: (PartyType, Boolean, Int, Boolean) -> Unit,
     onNavigateCreate: (PartyType) -> Unit,
     onBack: () -> Unit
 ) {
@@ -148,7 +148,7 @@ private fun PartyMemberListSearchContent(
     partyType: PartyType,
     modifier: Modifier = Modifier,
     onSearchClick: (String) -> Unit,
-    onNavigateDetail: (PartyType, Int, Boolean) -> Unit,
+    onNavigateDetail: (PartyType, Boolean, Int, Boolean) -> Unit,
 ) {
     val searchWords by partyMemberViewModel.searchWords.collectAsStateWithLifecycle()
     val partyMemberUiState by partyMemberViewModel.uiState.collectAsStateWithLifecycle()
@@ -243,6 +243,7 @@ private fun PartyMemberListSearchContent(
                             onClick = {
                                 onNavigateDetail(
                                     partyType,
+                                    partyModel.isParticipation,
                                     partyModel.id,
                                     partyModel.creatorId == partyMemberViewModel.memberId.value
                                 )
@@ -261,7 +262,7 @@ private fun PartyMemberListContent(
     partyMemberViewModel: PartyMemberViewModel,
     partyType: PartyType,
     modifier: Modifier = Modifier,
-    onNavigateDetail: (PartyType, Int, Boolean) -> Unit
+    onNavigateDetail: (PartyType, Boolean, Int, Boolean) -> Unit
 ) {
     val pagingItems = when (partyType) {
         PartyType.PERFORMANCE -> {
@@ -325,6 +326,7 @@ private fun PartyMemberListContent(
                                 onClick = {
                                     onNavigateDetail(
                                         partyType,
+                                        partyModel.isParticipation,
                                         partyModel.id,
                                         partyModel.creatorId == partyMemberViewModel.memberId.value
                                     )
@@ -351,6 +353,7 @@ private fun PartyMemberListContent(
                                 onClick = {
                                     onNavigateDetail(
                                         partyType,
+                                        partyModel.isParticipation,
                                         partyModel.id,
                                         partyModel.creatorId == partyMemberViewModel.memberId.value
                                     )

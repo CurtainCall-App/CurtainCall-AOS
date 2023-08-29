@@ -134,8 +134,8 @@ private fun MyPageRecruitmentContent(
                             numberOfTotal = recruit.maxMemberNum,
                             description = recruit.title,
                             posterUrl = recruit.showPoster,
-                            date = recruit.showAt.toDateWithDay(),
-                            time = recruit.showAt.toTime(),
+                            date = recruit.showAt?.toDateWithDay() ?: "",
+                            time = recruit.showAt?.toTime() ?: "",
                             location = recruit.facilityName ?: "",
                             hasLiveTalk = false,
                             onClick = {

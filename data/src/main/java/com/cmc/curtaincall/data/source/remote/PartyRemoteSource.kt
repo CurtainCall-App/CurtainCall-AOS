@@ -98,7 +98,7 @@ class PartyRemoteSource @Inject constructor(
     }
 
     fun participateParty(
-        partyId: String
+        partyId: Int
     ): Flow<Boolean> = flow {
         emit(
             partyService.participateParty(partyId = partyId).isSuccessful

@@ -55,7 +55,7 @@ interface PartyService {
 
     @PUT("member/parties/{partyId}")
     suspend fun participateParty(
-        @Path("partyId") partyId: String
+        @Path("partyId") partyId: Int
     ): Response<Unit>
 
     @GET("member/participated")

@@ -29,12 +29,20 @@ class PartySearchPagingSource @Inject constructor(
                 size = PARTY_SEARCH_PAGE_SIZE,
                 category = category,
                 keyword = keyword
-            ).parties.map { it.toModel() }
+            )
+            val participateParties = partyService.checkParties(response.parties.map { it.id })
+            val result = response.parties.map { party ->
+                party.toModel().copy(
+                    isParticipation = participateParties.checkParties.find {
+                        it.partyId == party.id
+                    }?.participated ?: false
+                )
+            }
 
             return LoadResult.Page(
-                response,
+                result,
                 prevKey = null,
-                nextKey = if (response.isEmpty()) null else pageKey + 1
+                nextKey = if (result.isEmpty()) null else pageKey + 1
             )
         } catch (e: Exception) {
             return LoadResult.Error(e)

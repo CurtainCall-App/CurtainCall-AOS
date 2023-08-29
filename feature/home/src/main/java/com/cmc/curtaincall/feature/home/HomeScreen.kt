@@ -151,8 +151,8 @@ private fun HomeContent(
                             description = myRecruitment.title,
                             numberOfPartyMember = myRecruitment.curMemberNum,
                             numberOfTotalMember = myRecruitment.maxMemberNum,
-                            date = myRecruitment.showAt.toDateWithDay(),
-                            time = myRecruitment.showAt.toTime()
+                            date = myRecruitment.showAt?.toDateWithDay() ?: "",
+                            time = myRecruitment.showAt?.toTime() ?: ""
                         )
                     }
                 }

@@ -18,7 +18,7 @@ data class MemberRecruitmentResponse(
     val facilityName: String?,
     val id: Int,
     val maxMemberNum: Int,
-    val showAt: String,
+    val showAt: String?,
     val showId: String?,
     val showName: String?,
     val showPoster: String?,
