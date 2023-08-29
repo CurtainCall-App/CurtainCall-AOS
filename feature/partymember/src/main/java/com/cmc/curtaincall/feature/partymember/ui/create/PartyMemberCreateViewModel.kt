@@ -69,10 +69,12 @@ class PartyMemberCreateViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    fun setPartyInfo(date: String, time: String, maxMemberNum: Int) {
+    fun setPartyInfo(date: String?, time: String, maxMemberNum: Int) {
         sendAction(
             PartyMemberCreateEvent.SetPartyInfo(
-                showAt = changeShowAt(date, time),
+                showAt = date?.let {
+                    changeShowAt(it, time)
+                },
                 maxMemberNum = maxMemberNum
             )
         )
@@ -88,19 +90,14 @@ class PartyMemberCreateViewModel @Inject constructor(
     }
 
     fun createParty() {
-        if (uiState.value.category != "ETC") {
-            partyRepository.createParty(
-                showId = uiState.value.showId,
-                showAt = uiState.value.showAt,
-                title = uiState.value.title,
-                content = uiState.value.content,
-                maxMemberNum = uiState.value.maxMemberNum,
-                category = uiState.value.category
-            )
-                .onEach { sendSideEffect(PartyMemberCreateSideEffect.SuccessUpload) }
-                .launchIn(viewModelScope)
-        } else {
-            sendSideEffect(PartyMemberCreateSideEffect.SuccessUpload)
-        }
+        partyRepository.createParty(
+            showId = uiState.value.showId,
+            showAt = uiState.value.showAt,
+            title = uiState.value.title,
+            content = uiState.value.content,
+            maxMemberNum = uiState.value.maxMemberNum,
+            category = uiState.value.category
+        ).onEach { sendSideEffect(PartyMemberCreateSideEffect.SuccessUpload) }
+            .launchIn(viewModelScope)
     }
 }

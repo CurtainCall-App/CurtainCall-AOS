@@ -6,12 +6,13 @@ import com.cmc.curtaincall.core.network.service.party.PartyService
 import com.cmc.curtaincall.domain.model.party.PartyModel
 import javax.inject.Inject
 
-private const val PARTY_STARTING_KEY = 0
-const val PARTY_PAGE_SIZE = 20
+private const val PARTY_SEARCH_STARTING_KEY = 0
+const val PARTY_SEARCH_PAGE_SIZE = 20
 
-class PartyPagingSource @Inject constructor(
+class PartySearchPagingSource @Inject constructor(
     private val partyService: PartyService,
-    private val category: String
+    private val category: String,
+    private val keyword: String
 ) : PagingSource<Int, PartyModel>() {
     override fun getRefreshKey(state: PagingState<Int, PartyModel>): Int? {
         return state.anchorPosition?.let { position ->
@@ -22,11 +23,12 @@ class PartyPagingSource @Inject constructor(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PartyModel> {
         try {
-            val pageKey = params.key ?: PARTY_STARTING_KEY
-            val response = partyService.requestPartyList(
+            val pageKey = params.key ?: PARTY_SEARCH_STARTING_KEY
+            val response = partyService.searchPartyList(
                 page = pageKey,
-                size = PARTY_PAGE_SIZE,
-                category = category
+                size = PARTY_SEARCH_PAGE_SIZE,
+                category = category,
+                keyword = keyword
             )
             val participateParties = partyService.checkParties(response.parties.map { it.id })
             val result = response.parties.map { party ->
@@ -36,6 +38,7 @@ class PartyPagingSource @Inject constructor(
                     }?.participated ?: false
                 )
             }
+
             return LoadResult.Page(
                 result,
                 prevKey = null,

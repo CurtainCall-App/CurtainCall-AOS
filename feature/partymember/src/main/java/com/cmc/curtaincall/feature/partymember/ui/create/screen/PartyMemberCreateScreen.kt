@@ -297,7 +297,7 @@ private fun PartyMemberCreateContent(
                     onClick = {
                         if (clickedUndeterminDateState) {
                             partyMemberCreateViewModel.setPartyInfo(
-                                date = "0000. 00. 00",
+                                date = null,
                                 time = "00:00",
                                 maxMemberNum = personnelCountState
                             )

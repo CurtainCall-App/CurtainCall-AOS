@@ -14,14 +14,14 @@ data class MemberRecruitmentResponse(
     val creatorImageUrl: String?,
     val creatorNickname: String,
     val curMemberNum: Int,
-    val facilityId: String,
-    val facilityName: String,
+    val facilityId: String?,
+    val facilityName: String?,
     val id: Int,
     val maxMemberNum: Int,
-    val showAt: String,
-    val showId: String,
-    val showName: String,
-    val showPoster: String,
+    val showAt: String?,
+    val showId: String?,
+    val showName: String?,
+    val showPoster: String?,
     val title: String
 ) {
     fun toModel() = MyRecruitmentModel(

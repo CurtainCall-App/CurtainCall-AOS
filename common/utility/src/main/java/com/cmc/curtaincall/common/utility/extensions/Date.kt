@@ -18,7 +18,13 @@ fun String.toTime(): String {
 fun String.toDday(): Long {
     if (isEmpty()) return 0L
     val date = SimpleDateFormat("yyyy-MM-dd").parse(this)
-    val dday = (Calendar.getInstance().time.time - date.time) / (60 * 60 * 24 * 1000)
+    val today = Calendar.getInstance().apply {
+        set(Calendar.HOUR, 0)
+        set(Calendar.MINUTE, 0)
+        set(Calendar.SECOND, 0)
+        set(Calendar.MILLISECOND, 0)
+    }
+    val dday = (today.time.time - date.time) / (60 * 60 * 24 * 1000)
     return dday
 }
 

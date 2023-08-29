@@ -126,7 +126,7 @@ private fun MyPageRecruitmentContent(
                                 .wrapContentHeight()
                                 .padding(bottom = 20.dp),
                             partyType = partyTypeState,
-                            title = recruit.showName,
+                            title = recruit.showName ?: "",
                             nickname = recruit.creatorNickname,
                             createAtDate = recruit.createdAt.toChangeDate(),
                             createAtTime = recruit.createdAt.toTime(),
@@ -134,9 +134,9 @@ private fun MyPageRecruitmentContent(
                             numberOfTotal = recruit.maxMemberNum,
                             description = recruit.title,
                             posterUrl = recruit.showPoster,
-                            date = recruit.showAt.toDateWithDay(),
-                            time = recruit.showAt.toTime(),
-                            location = recruit.facilityName,
+                            date = recruit.showAt?.toDateWithDay() ?: "",
+                            time = recruit.showAt?.toTime() ?: "",
+                            location = recruit.facilityName ?: "",
                             hasLiveTalk = false,
                             onClick = {
                                 // onNavigateRecruitmentDetail(partyTypeState)

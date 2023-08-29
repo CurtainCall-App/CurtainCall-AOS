@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -35,7 +36,7 @@ fun CurtainCallBasicDialog(
     onDismiss: () -> Unit = {},
     onPositive: () -> Unit = {}
 ) {
-    Dialog(onDismissRequest = { /*TODO*/ }) {
+    Dialog(onDismissRequest = { onDismiss() }) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -88,6 +89,60 @@ fun CurtainCallBasicDialog(
                         .fillMaxHeight(),
                     title = positiveText,
                     fontSize = 14.dp.toSp(),
+                    containerColor = Me_Pink,
+                    contentColor = White,
+                    radiusSize = 10.dp
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun CurtainCallConfirmDialog(
+    title: String,
+    description: String = "",
+    positiveText: String = "",
+    onDismiss: () -> Unit = {},
+    onPositive: () -> Unit = {}
+) {
+    Dialog(onDismissRequest = { onDismiss() }) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(White, RoundedCornerShape(15.dp))
+                .padding(top = 34.dp, bottom = 20.dp)
+                .padding(horizontal = 48.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = title,
+                color = Chinese_Black,
+                fontSize = 17.dp.toSp(),
+                fontWeight = FontWeight.Bold,
+                fontFamily = spoqahansanseeo
+            )
+            Text(
+                text = description,
+                modifier = Modifier.padding(top = 10.dp),
+                color = Roman_Silver,
+                fontSize = 14.dp.toSp(),
+                fontWeight = FontWeight.Medium,
+                fontFamily = spoqahansanseeo,
+                lineHeight = 22.dp.toSp(),
+                textAlign = TextAlign.Center
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp)
+                    .height(46.dp)
+            ) {
+                CurtainCallRoundedTextButton(
+                    onClick = onPositive,
+                    modifier = Modifier.fillMaxSize(),
+                    title = positiveText,
+                    fontSize = 16.dp.toSp(),
                     containerColor = Me_Pink,
                     contentColor = White,
                     radiusSize = 10.dp
