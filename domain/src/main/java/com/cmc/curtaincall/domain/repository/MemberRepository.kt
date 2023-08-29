@@ -14,6 +14,11 @@ interface MemberRepository {
 
     fun requestMemberInfo(memberId: Int): Flow<MemberInfoModel>
 
+    fun updateMember(
+        nickname: String,
+        imageId: Int?
+    ): Flow<Boolean>
+
     fun requestMyRecruitments(
         memberId: Int,
         page: Int,

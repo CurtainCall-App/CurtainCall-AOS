@@ -1,9 +1,9 @@
 package com.cmc.curtaincall.feature.mypage
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.cmc.curtaincall.core.base.BaseViewModel
 import com.cmc.curtaincall.domain.model.home.MyParticipationModel
 import com.cmc.curtaincall.domain.model.home.MyRecruitmentModel
 import com.cmc.curtaincall.domain.repository.MemberRepository
@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -19,7 +20,9 @@ import javax.inject.Inject
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
     private val memberRepository: MemberRepository
-) : ViewModel() {
+) : BaseViewModel<MyPageUiState, MyPageEvent, Nothing>(
+    initialState = MyPageUiState()
+) {
 
     private var _memberId = MutableStateFlow(0)
     val memberId: StateFlow<Int> = _memberId.asStateFlow()
@@ -53,10 +56,12 @@ class MyPageViewModel @Inject constructor(
         memberId = memberId.value,
         category = "ETC"
     ).cachedIn(viewModelScope)
-
-    init {
-        getMemberId()
-    }
+    override fun reduceState(currentState: MyPageUiState, event: MyPageEvent): MyPageUiState =
+        when (event) {
+            is MyPageEvent.LoadMemberInfo -> {
+                currentState.copy(memberInfoModel = event.memberInfoModel)
+            }
+        }
 
     fun getMemberId() {
         memberRepository.getMemberId()
@@ -86,7 +91,8 @@ class MyPageViewModel @Inject constructor(
                     memberId = it,
                     category = "ETC"
                 ).cachedIn(viewModelScope)
-            }
+            }.flatMapLatest { memberRepository.requestMemberInfo(it) }
+            .onEach { sendAction(MyPageEvent.LoadMemberInfo(it)) }
             .launchIn(viewModelScope)
     }
 }

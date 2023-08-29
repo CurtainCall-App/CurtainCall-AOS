@@ -58,6 +58,9 @@ class MemberRepositoryImpl @Inject constructor(
     override fun requestMemberInfo(memberId: Int): Flow<MemberInfoModel> =
         memberRemoteSource.requestMemberInfo(memberId)
 
+    override fun updateMember(nickname: String, imageId: Int?): Flow<Boolean> =
+        memberRemoteSource.updateMember(nickname, imageId)
+
     override fun requestMyRecruitments(
         memberId: Int,
         page: Int,

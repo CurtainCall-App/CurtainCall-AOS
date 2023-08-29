@@ -11,7 +11,7 @@ if (hasLibraryPlugin || hasApplicationPlugin) {
 
             if(hasApplicationPlugin){
                 applicationId = "com.cmc.curtaincall"
-                versionCode = 1
+                versionCode = 3
                 versionName = "1.0"
             }
 

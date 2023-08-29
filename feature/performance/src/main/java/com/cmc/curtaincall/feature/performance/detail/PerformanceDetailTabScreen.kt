@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallBorderTextButton
 import com.cmc.curtaincall.common.design.component.content.card.PerformanceCard
@@ -125,6 +126,7 @@ private fun PerformanceNotice(
     introductionImage: String
 ) {
     var isClickMore by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(true) }
     Column(modifier) {
         AsyncImage(
             model = introductionImage,
@@ -138,21 +140,34 @@ private fun PerformanceNotice(
                         Modifier
                     }
                 ),
+            onState = { state ->
+                when (state) {
+                    is AsyncImagePainter.State.Success -> {
+                        isLoading = false
+                    }
+
+                    else -> {
+                        isLoading = true
+                    }
+                }
+            },
             contentScale = ContentScale.FillWidth
         )
-        CurtainCallBorderTextButton(
-            onClick = { isClickMore = isClickMore.not() },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp)
-                .padding(horizontal = 20.dp),
-            title = stringResource(R.string.performance_detail_more_view),
-            fontSize = 16.dp.toSp(),
-            containerColor = White,
-            contentColor = Me_Pink,
-            borderColor = Me_Pink,
-            radiusSize = 12.dp
-        )
+        if (isLoading.not()) {
+            CurtainCallBorderTextButton(
+                onClick = { isClickMore = isClickMore.not() },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp)
+                    .padding(horizontal = 20.dp),
+                title = stringResource(R.string.performance_detail_more_view),
+                fontSize = 16.dp.toSp(),
+                containerColor = White,
+                contentColor = Me_Pink,
+                borderColor = Me_Pink,
+                radiusSize = 12.dp
+            )
+        }
     }
 }
 

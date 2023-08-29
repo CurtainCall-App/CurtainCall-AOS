@@ -4,7 +4,9 @@ import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.core.base.BottomDestination
@@ -46,6 +48,14 @@ sealed interface MyPageDestination : CurtainCallDestination {
 
     object ProfileEdit : MyPageDestination {
         override val route = MYPAGE_PROFILE_EDIT
+        const val profileUrlArg = "profileUrl"
+        val routeWithArgs = "$route?" +
+            "$profileUrlArg={$profileUrlArg}"
+        val arguments = listOf(
+            navArgument(profileUrlArg) {
+                type = NavType.StringType
+            }
+        )
     }
 
     object SavedPerformance : MyPageDestination {
@@ -93,7 +103,10 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
                     navHostController.navigate(MyPageDestination.Setting.route)
                 },
                 onNavigateProfileEdit = {
-                    navHostController.navigate(MyPageDestination.ProfileEdit.route)
+                    navHostController.navigate(
+                        MyPageDestination.ProfileEdit.route + "?" +
+                            "${MyPageDestination.ProfileEdit.profileUrlArg}=$it"
+                    )
                 },
                 onNavigateRecruitment = {
                     navHostController.navigate(MyPageDestination.Recruitment.route)
@@ -113,8 +126,13 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
             )
         }
 
-        composable(MyPageDestination.ProfileEdit.route) {
+        composable(
+            route = MyPageDestination.ProfileEdit.routeWithArgs,
+            arguments = MyPageDestination.ProfileEdit.arguments
+        ) { entry ->
+            val profileUrl = entry.arguments?.getString(MyPageDestination.ProfileEdit.profileUrlArg)
             MyPageProfileEditScreen(
+                profileUrl = profileUrl,
                 onBack = {
                     navHostController.popBackStack()
                 }

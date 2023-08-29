@@ -2,6 +2,7 @@ package com.cmc.curtaincall.core.network.service.member
 
 import com.cmc.curtaincall.core.network.service.member.request.DeleteMemberRequest
 import com.cmc.curtaincall.core.network.service.member.request.MemberCreateRequest
+import com.cmc.curtaincall.core.network.service.member.request.UpdateMemberRequest
 import com.cmc.curtaincall.core.network.service.member.response.MemberCreateResponse
 import com.cmc.curtaincall.core.network.service.member.response.MemberDuplicateNickNameResponse
 import com.cmc.curtaincall.core.network.service.member.response.MemberInfoResponse
@@ -11,6 +12,7 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -31,6 +33,11 @@ interface MemberService {
     suspend fun requestMemberInfo(
         @Path("memberId") memberId: Int
     ): MemberInfoResponse
+
+    @PATCH("member")
+    suspend fun updateMember(
+        @Body updateMemberRequest: UpdateMemberRequest
+    ): Response<Unit>
 
     @GET("members/{memberId}/recruitments")
     suspend fun requestMyRecruitments(
