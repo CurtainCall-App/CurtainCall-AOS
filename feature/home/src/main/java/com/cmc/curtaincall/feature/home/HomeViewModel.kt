@@ -131,7 +131,7 @@ class HomeViewModel @Inject constructor(
         val today = SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().time)
         showRepository.requestEndShowList(page = 0, size = 10, endDate = today, genre = null)
             .onEach {
-                sendAction(HomeEvent.RequestEndShowList(it.sortedBy { it.endDate.toDday() }.take(10)))
+                sendAction(HomeEvent.RequestEndShowList(it.sortedByDescending { it.endDate.toDday() }.take(10)))
             }
             .launchIn(viewModelScope)
     }

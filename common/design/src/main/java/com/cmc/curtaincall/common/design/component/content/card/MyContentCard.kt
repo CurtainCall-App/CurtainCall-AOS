@@ -1,166 +1,266 @@
 package com.cmc.curtaincall.common.design.component.content.card
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.extensions.toSp
+import com.cmc.curtaincall.common.design.theme.Black_Coral
 import com.cmc.curtaincall.common.design.theme.Cultured
 import com.cmc.curtaincall.common.design.theme.Me_Pink
 import com.cmc.curtaincall.common.design.theme.Nero
-import com.cmc.curtaincall.common.design.theme.Roman_Silver
+import com.cmc.curtaincall.common.design.theme.Silver_Sand
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 
 @Composable
 fun MyContentCard(
     modifier: Modifier = Modifier,
-    containColor: Color,
-    shape: Shape,
-    imageUrl: String? = null,
-    showName: String,
-    description: String,
+    category: String,
+    title: String,
     numberOfPartyMember: Int,
     numberOfTotalMember: Int,
-    date: String,
-    time: String
+    description: String,
+    date: String? = null,
+    imageUrl: String? = null,
+    showName: String?,
+    time: String?
 ) {
-    Row(
-        modifier = modifier
-            .background(containColor, shape)
-            .height(97.dp)
-            .padding(9.dp)
+    Card(
+        modifier = modifier.padding(bottom = 10.dp),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(containerColor = White),
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 10.dp)
     ) {
-        AsyncImage(
-            model = imageUrl,
-            contentDescription = null,
+        Column(
             modifier = Modifier
-                .fillMaxHeight()
-                .aspectRatio(58 / 77f)
-                .clip(RoundedCornerShape(4.dp)),
-            contentScale = ContentScale.FillBounds
-        )
-        Column(Modifier.padding(start = 10.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = String.format("%s", showName),
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(end = 16.dp),
-                    color = Nero,
-                    fontSize = 14.dp.toSp(),
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = spoqahansanseeo,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 1
-                )
-                Text(
-                    text = String.format("%d/%d", numberOfPartyMember, numberOfTotalMember),
-                    color = Roman_Silver,
-                    fontSize = 12.dp.toSp(),
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo
-                )
-            }
-            Text(
-                text = description,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 4.dp),
-                color = Nero,
-                fontSize = 14.dp.toSp(),
-                fontWeight = FontWeight.Medium,
-                fontFamily = spoqahansanseeo,
-                overflow = TextOverflow.Ellipsis,
-                maxLines = 1
-            )
-            Spacer(Modifier.weight(1f))
-            Row {
-                Row(
-                    modifier = Modifier
-                        .background(Me_Pink, RoundedCornerShape(4.dp))
-                        .padding(horizontal = 6.dp, vertical = 4.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_calendar),
-                        contentDescription = null,
-                        modifier = Modifier.size(16.dp),
-                        tint = White
+                .padding(12.dp)
+                .fillMaxWidth()
+        ) {
+            if (category == PartyType.ETC.category) {
+                Row(Modifier.fillMaxWidth()) {
+                    Text(
+                        text = title,
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(end = 18.dp),
+                        color = Nero,
+                        fontSize = 14.dp.toSp(),
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = spoqahansanseeo,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                     Text(
-                        text = date,
-                        modifier = Modifier.padding(start = 6.dp),
-                        color = White,
-                        fontSize = 12.dp.toSp(),
-                        fontWeight = FontWeight.Medium,
+                        text = "$numberOfPartyMember/$numberOfTotalMember",
+                        color = Silver_Sand,
+                        fontSize = 14.dp.toSp(),
+                        fontWeight = FontWeight.Bold,
                         fontFamily = spoqahansanseeo
                     )
                 }
-                Row(
+                Text(
+                    text = description,
                     modifier = Modifier
-                        .padding(start = 6.dp)
-                        .background(Me_Pink, RoundedCornerShape(4.dp))
-                        .padding(horizontal = 6.dp, vertical = 4.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_clock),
+                        .fillMaxWidth()
+                        .padding(top = 4.dp),
+                    color = Black_Coral,
+                    fontSize = 14.dp.toSp(),
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = spoqahansanseeo,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Row(Modifier.padding(top = 16.dp)) {
+                    Box(
+                        modifier = Modifier
+                            .background(Cultured, RoundedCornerShape(4.dp))
+                            .padding(horizontal = 6.dp, vertical = 4.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = PartyType.ETC.value,
+                            color = Black_Coral,
+                            fontSize = 12.dp.toSp(),
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = spoqahansanseeo
+                        )
+                    }
+                    Row(
+                        modifier = Modifier
+                            .padding(start = 8.dp)
+                            .background(Cultured, RoundedCornerShape(4.dp))
+                            .padding(horizontal = 6.dp, vertical = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_calendar),
+                            contentDescription = null,
+                            modifier = Modifier.size(13.dp),
+                            tint = Black_Coral
+                        )
+                        Text(
+                            text = date ?: "날짜 미정",
+                            modifier = Modifier.padding(start = 4.dp),
+                            color = Black_Coral,
+                            fontSize = 12.dp.toSp(),
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = spoqahansanseeo
+                        )
+                    }
+                }
+            } else {
+                Row(Modifier.fillMaxWidth()) {
+                    AsyncImage(
+                        model = imageUrl,
                         contentDescription = null,
-                        modifier = Modifier.size(16.dp),
-                        tint = White
+                        error = painterResource(R.drawable.ic_error_poster),
+                        modifier = Modifier
+                            .size(56.dp, 76.dp)
+                            .clip(RoundedCornerShape(4.dp)),
+                        contentScale = ContentScale.FillBounds
                     )
-                    Text(
-                        text = time,
-                        modifier = Modifier.padding(start = 6.dp),
-                        color = White,
-                        fontSize = 12.dp.toSp(),
-                        fontWeight = FontWeight.Medium,
-                        fontFamily = spoqahansanseeo
-                    )
+                    Column(Modifier.padding(start = 12.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Box(
+                                modifier = Modifier
+                                    .background(Me_Pink, RoundedCornerShape(4.dp))
+                                    .padding(horizontal = 8.dp, vertical = 3.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = showName ?: "제목없음",
+                                    color = White,
+                                    fontSize = 14.dp.toSp(),
+                                    fontWeight = FontWeight.Bold,
+                                    fontFamily = spoqahansanseeo,
+                                    overflow = TextOverflow.Ellipsis,
+                                    maxLines = 1
+                                )
+                            }
+
+                            Text(
+                                text = "$numberOfPartyMember/$numberOfTotalMember",
+                                modifier = Modifier
+                                    .padding(start = 10.dp)
+                                    .weight(1f),
+                                color = Silver_Sand,
+                                fontSize = 14.dp.toSp(),
+                                fontWeight = FontWeight.Medium,
+                                fontFamily = spoqahansanseeo,
+                                textAlign = TextAlign.End
+                            )
+                        }
+                        Text(
+                            text = title,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 10.dp),
+                            color = Nero,
+                            fontSize = 14.dp.toSp(),
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = spoqahansanseeo,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1
+                        )
+                        Text(
+                            text = description,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 4.dp),
+                            color = Black_Coral,
+                            fontSize = 14.dp.toSp(),
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = spoqahansanseeo,
+                            overflow = TextOverflow.Ellipsis,
+                            maxLines = 1
+                        )
+                    }
+                }
+                Row(Modifier.padding(top = 14.dp)) {
+                    Box(
+                        modifier = Modifier
+                            .background(Cultured, RoundedCornerShape(4.dp))
+                            .padding(horizontal = 6.dp, vertical = 4.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = when (category) {
+                                PartyType.PERFORMANCE.category -> PartyType.PERFORMANCE.value
+                                else -> PartyType.MEAL.value
+                            },
+                            color = Black_Coral,
+                            fontSize = 12.dp.toSp(),
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = spoqahansanseeo
+                        )
+                    }
+                    Row(
+                        modifier = Modifier
+                            .padding(start = 8.dp)
+                            .background(Cultured, RoundedCornerShape(4.dp))
+                            .padding(horizontal = 6.dp, vertical = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_calendar),
+                            contentDescription = null,
+                            modifier = Modifier.size(13.dp),
+                            tint = Black_Coral
+                        )
+                        Text(
+                            text = date ?: "날짜 미정",
+                            modifier = Modifier.padding(start = 4.dp),
+                            color = Black_Coral,
+                            fontSize = 12.dp.toSp(),
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = spoqahansanseeo
+                        )
+                    }
+                    Row(
+                        modifier = Modifier
+                            .padding(start = 8.dp)
+                            .background(Cultured, RoundedCornerShape(4.dp))
+                            .padding(horizontal = 6.dp, vertical = 4.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_clock),
+                            contentDescription = null,
+                            modifier = Modifier.size(13.dp),
+                            tint = Black_Coral
+                        )
+                        Text(
+                            text = time ?: "00:00",
+                            modifier = Modifier.padding(start = 4.dp),
+                            color = Black_Coral,
+                            fontSize = 12.dp.toSp(),
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = spoqahansanseeo
+                        )
+                    }
                 }
             }
         }
     }
-}
-
-@Preview
-@Composable
-private fun MyContentCardPreview() {
-    MyContentCard(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 12.dp),
-        containColor = Cultured,
-        shape = RoundedCornerShape(10.dp),
-        showName = "시카고",
-        description = "공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹공연 끝나고 같이 근처에서 야식 먹",
-        numberOfPartyMember = 2,
-        numberOfTotalMember = 4,
-        date = "2023.7.16(토)",
-        time = "19:30"
-    )
 }

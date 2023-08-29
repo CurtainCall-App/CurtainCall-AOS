@@ -144,15 +144,15 @@ private fun HomeContent(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(top = 12.dp),
-                            containColor = Cultured,
-                            shape = RoundedCornerShape(10.dp),
-                            imageUrl = myRecruitment.showPoster,
-                            showName = myRecruitment.showName ?: "",
-                            description = myRecruitment.title,
+                            category = myRecruitment.category,
+                            title = myRecruitment.title,
                             numberOfPartyMember = myRecruitment.curMemberNum,
                             numberOfTotalMember = myRecruitment.maxMemberNum,
-                            date = myRecruitment.showAt?.toDateWithDay() ?: "",
-                            time = myRecruitment.showAt?.toTime() ?: ""
+                            description = myRecruitment.title,
+                            date = myRecruitment.showAt?.toDateWithDay(),
+                            imageUrl = myRecruitment.showPoster,
+                            showName = myRecruitment.showName ?: "",
+                            time = myRecruitment.showAt?.toTime()
                         )
                     }
                 }
@@ -170,16 +170,15 @@ private fun HomeContent(
                         MyContentCard(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(top = 12.dp)
-                                .height(97.dp),
-                            containColor = Cultured,
-                            shape = RoundedCornerShape(10.dp),
-                            imageUrl = myParticipation.showPoster,
-                            showName = myParticipation.showName,
-                            description = myParticipation.title,
+                                .padding(top = 12.dp),
+                            category = myParticipation.category,
+                            title = myParticipation.title,
                             numberOfPartyMember = myParticipation.curMemberNum,
                             numberOfTotalMember = myParticipation.maxMemberNum,
+                            description = myParticipation.title,
                             date = myParticipation.showAt.toDateWithDay(),
+                            imageUrl = myParticipation.showPoster,
+                            showName = myParticipation.showName ?: "",
                             time = myParticipation.showAt.toTime()
                         )
                     }
@@ -307,6 +306,8 @@ private fun HomeContent(
                                         painter = painterResource(R.drawable.ic_error_poster),
                                         rate = if (endShowInfo.reviewCount == 0) 0.0f else endShowInfo.reviewGradeSum / endShowInfo.reviewCount.toFloat(),
                                         numberOfTotal = endShowInfo.reviewCount,
+                                        isShowMetadata = true,
+                                        meta = if (endShowInfo.endDate.toDday() == 0L) "D-DAY" else "D${endShowInfo.endDate.toDday()}",
                                         onClick = { onNavigatePerformanceDetail(endShowInfo.id) }
                                     )
                                     Spacer(Modifier.size(12.dp))

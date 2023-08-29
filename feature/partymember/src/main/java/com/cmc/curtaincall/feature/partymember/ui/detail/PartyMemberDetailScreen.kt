@@ -28,6 +28,7 @@ import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithDelete
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithReportAction
 import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.cmc.curtaincall.common.design.component.dialog.CurtainCallBasicDialog
+import com.cmc.curtaincall.common.design.component.dialog.CurtainCallConfirmDialog
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.cmc.curtaincall.common.utility.extensions.toChangeDate
@@ -73,10 +74,10 @@ fun PartyMemberDetailScreen(
     }
 
     if (isShowRemoveDialog) {
-        CurtainCallBasicDialog(
+        CurtainCallConfirmDialog(
             title = stringResource(R.string.dialog_performance_review_remove_title),
-            dismissText = stringResource(R.string.dialog_performance_review_remove_dismiss),
-            positiveText = stringResource(R.string.dialog_performance_review_remove_positive),
+            description = stringResource(R.string.dialog_partymember_detail_remove_description),
+            positiveText = stringResource(R.string.dialog_partymember_detail_remove_positive_text),
             onDismiss = { isShowRemoveDialog = false },
             onPositive = {
                 partyMemberDetailViewModel.deleteParty(partyId)

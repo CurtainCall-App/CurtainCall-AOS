@@ -236,6 +236,8 @@
 
     <!-- dialog -->
     <string name="dialog_performance_review_remove_title">해당 글을 삭제할까요?</string>
+    <string name="dialog_partymember_detail_remove_description">※ 글 삭제 시, 톡방도 함께 삭제돼요!</string>
+    <string name="dialog_partymember_detail_remove_positive_text">확인</string>
     <string name="dialog_performance_review_remove_description">삭제하기를 하면 되돌릴 수 없습니다.</string>
     <string name="dialog_performance_review_remove_dismiss">아니요</string>
     <string name="dialog_performance_review_remove_positive">네, 삭제할래요</string>
