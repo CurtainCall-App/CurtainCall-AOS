@@ -224,6 +224,9 @@
     <string name="mypage_writing_lost_item_find_date_format">습득 일자 | %s</string>
     <string name="mypage_writing_find_lost_item_edit">분실물 게시물 수정</string>
     <string name="mypage_writing_review_edit">한 줄 리뷰 수정</string>
+    <string name="mypage_setting_empty">파티원으로 이동하기</string>
+    <string name="mypage_setting_empty_partmember_title">참여 중인 파티원이 없어요.</string>
+    <string name="mypage_setting_empty_partymember_subtitle">다양한 파티원 모집에 참여하여\n네트워킹을 즐겨보세요!</string>
     <string name="mypage_setting">설정</string>
     <string name="mypage_setting_account">계정</string>
     <string name="mypage_setting_logout">로그아웃</string>

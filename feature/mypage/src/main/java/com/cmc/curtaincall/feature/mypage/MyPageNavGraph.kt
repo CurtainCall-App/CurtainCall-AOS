@@ -196,13 +196,19 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
             val parentEntry = remember(entry) { navHostController.getBackStackEntry(MyPageDestination.MyPage.route) }
             MyPageRecruitmentScreen(
                 myPageViewModel = hiltViewModel(parentEntry),
-                onNavigateRecruitmentDetail = {
+                onNavigateRecruitmentDetail = { partyType, partyId ->
                     navHostController.navigate(
                         PartyMemberDestination.Detail.route + "?" +
-                            "${PartyMemberDestination.Detail.typeArg}=$it" + "&" +
+                            "${PartyMemberDestination.Detail.isParticipationArg}=true" + "&" +
+                            "${PartyMemberDestination.Detail.partyIdArg}=$partyId" + "&" +
+                            "${PartyMemberDestination.Detail.typeArg}=$partyType" + "&" +
+                            "${PartyMemberDestination.Detail.myWritingArg}=true" + "&" +
                             "${PartyMemberDestination.Detail.fromRecruitmentArg}=true" + "&" +
-                            "${PartyMemberDestination.Detail.fromParticipationArg}={${PartyMemberDestination.Detail.fromParticipationArg}}"
+                            "${PartyMemberDestination.Detail.fromParticipationArg}=false"
                     )
+                },
+                onNavigatePartyMember = {
+                    navHostController.navigate("${PartyMemberDestination.List.route}/$it")
                 },
                 onBack = {
                     navHostController.popBackStack()
@@ -210,15 +216,23 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
             )
         }
 
-        composable(MyPageDestination.Participation.route) {
+        composable(MyPageDestination.Participation.route) { entry ->
+            val parentEntry = remember(entry) { navHostController.getBackStackEntry(MyPageDestination.MyPage.route) }
             MyPageParticipationScreen(
-                onNavigateParticipationDetail = {
+                myPageViewModel = hiltViewModel(parentEntry),
+                onNavigateParticipationDetail = { partyType, partyId ->
                     navHostController.navigate(
                         PartyMemberDestination.Detail.route + "?" +
-                            "${PartyMemberDestination.Detail.typeArg}=$it" + "&" +
+                            "${PartyMemberDestination.Detail.isParticipationArg}=true" + "&" +
+                            "${PartyMemberDestination.Detail.partyIdArg}=$partyId" + "&" +
+                            "${PartyMemberDestination.Detail.typeArg}=$partyType" + "&" +
+                            "${PartyMemberDestination.Detail.myWritingArg}=false" + "&" +
                             "${PartyMemberDestination.Detail.fromRecruitmentArg}=false" + "&" +
                             "${PartyMemberDestination.Detail.fromParticipationArg}=true"
                     )
+                },
+                onNavigatePartyMember = {
+                    navHostController.navigate("${PartyMemberDestination.List.route}/$it")
                 },
                 onBack = {
                     navHostController.popBackStack()
