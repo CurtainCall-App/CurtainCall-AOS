@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -144,6 +146,8 @@ fun MyContentCard(
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Box(
                                 modifier = Modifier
+                                    .widthIn(max = 170.dp)
+                                    .wrapContentWidth()
                                     .background(Me_Pink, RoundedCornerShape(4.dp))
                                     .padding(horizontal = 8.dp, vertical = 3.dp),
                                 contentAlignment = Alignment.Center
@@ -158,12 +162,9 @@ fun MyContentCard(
                                     maxLines = 1
                                 )
                             }
-
                             Text(
                                 text = "$numberOfPartyMember/$numberOfTotalMember",
-                                modifier = Modifier
-                                    .padding(start = 10.dp)
-                                    .weight(1f),
+                                modifier = Modifier.weight(1f),
                                 color = Silver_Sand,
                                 fontSize = 14.dp.toSp(),
                                 fontWeight = FontWeight.Medium,
