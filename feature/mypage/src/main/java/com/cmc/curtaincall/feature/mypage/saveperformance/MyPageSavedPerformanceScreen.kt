@@ -32,9 +32,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
-import com.cmc.curtaincall.common.design.theme.White
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.Arsenic
 import com.cmc.curtaincall.common.design.theme.Black_Coral
@@ -43,11 +45,14 @@ import com.cmc.curtaincall.common.design.theme.Chinese_Black
 import com.cmc.curtaincall.common.design.theme.Cultured
 import com.cmc.curtaincall.common.design.theme.Nero
 import com.cmc.curtaincall.common.design.theme.Roman_Silver
+import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
+import com.cmc.curtaincall.feature.mypage.MyPageViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MyPageSavedPerformanceScreen(
+    myPageViewModel: MyPageViewModel = hiltViewModel(),
     onBack: () -> Unit
 ) {
     Scaffold(
@@ -64,6 +69,7 @@ internal fun MyPageSavedPerformanceScreen(
         }
     ) { paddingValues ->
         MyPageSavedPerformanceContent(
+            myPageViewModel = myPageViewModel,
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
@@ -74,13 +80,28 @@ internal fun MyPageSavedPerformanceScreen(
 
 @Composable
 private fun MyPageSavedPerformanceContent(
+    myPageViewModel: MyPageViewModel,
     modifier: Modifier = Modifier
 ) {
+    val myFavoriteItems = myPageViewModel.favoriteShowItems.collectAsLazyPagingItems()
     LazyColumn(
         modifier = modifier
-            .padding(top = 10.dp)
+            .padding(top = 2.dp)
             .padding(horizontal = 20.dp)
     ) {
+        items(myFavoriteItems) { favoriteShowModel ->
+            favoriteShowModel?.let { favoriteShowModel ->
+//                PerformanceDetailCard(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(vertical = 28.dp),
+//                    imageUrl = favoriteShowModel.poster,
+//                    painter = painterResource(R.drawable.ic_error_poster),
+//                    title = favoriteShowModel.name,
+//                    rate = favoriteShowModel.reviewGradeSum
+//                )
+            }
+        }
         itemsIndexed(List(10) {}) { index, item ->
             SavedPerformanceItem(
                 modifier = Modifier

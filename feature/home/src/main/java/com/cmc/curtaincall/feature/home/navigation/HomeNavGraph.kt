@@ -57,7 +57,10 @@ sealed interface HomeDestination : CurtainCallDestination {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeNavHost(navHostController: NavHostController = rememberNavController()) {
+fun HomeNavHost(
+    navHostController: NavHostController = rememberNavController(),
+    onNavigateAuth: () -> Unit = {}
+) {
     Scaffold(
         bottomBar = { HomeBottomBar(navHostController) },
         floatingActionButton = { HomeFloatingButton(navHostController) },
@@ -126,7 +129,10 @@ fun HomeNavHost(navHostController: NavHostController = rememberNavController()) 
                     }
                 }
             )
-            mypageNavGraph(navHostController)
+            mypageNavGraph(
+                navHostController = navHostController,
+                onNavigateAuth = onNavigateAuth
+            )
         }
     }
 }

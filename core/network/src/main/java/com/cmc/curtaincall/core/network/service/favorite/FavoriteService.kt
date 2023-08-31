@@ -28,6 +28,6 @@ interface FavoriteService {
 
     @GET("member/{memberId}/favorite")
     suspend fun requestFavoriteShows(
-        @Path("memberId") memberId: String
+        @Path("memberId") memberId: Int
     ): FavoriteShowsResponse
 }

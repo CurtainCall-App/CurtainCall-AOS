@@ -100,6 +100,7 @@ private fun MyPageParticipationContent(
             partyType = myParticipationPartyType,
             onChangePartType = { myPageViewModel.setParticipationPartyType(it) }
         )
+
         if (participationItems.itemCount == 0) {
             Column {
                 Spacer(Modifier.weight(150f))

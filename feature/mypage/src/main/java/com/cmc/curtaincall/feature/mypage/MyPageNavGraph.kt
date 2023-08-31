@@ -17,6 +17,7 @@ import com.cmc.curtaincall.feature.mypage.notice.MyPageNoticeScreen
 import com.cmc.curtaincall.feature.mypage.party.participation.MyPageParticipationScreen
 import com.cmc.curtaincall.feature.mypage.party.recruitment.MyPageRecruitmentScreen
 import com.cmc.curtaincall.feature.mypage.saveperformance.MyPageSavedPerformanceScreen
+import com.cmc.curtaincall.feature.mypage.setting.MyPageDeleteMemberScreen
 import com.cmc.curtaincall.feature.mypage.setting.MyPageSettingScreen
 import com.cmc.curtaincall.feature.mypage.terms.MyPagePrivacyTermsScreen
 import com.cmc.curtaincall.feature.mypage.terms.MyPageServiceTermsScreen
@@ -31,6 +32,7 @@ private const val MYPAGE_PROFILE_EDIT = "mypage_profile_edit"
 private const val MYPAGE_SAVED_PERFORMANCE = "mypage_saved_performance"
 private const val MYPAGE_WRITE = "mypage_write"
 private const val MYPAGE_SETTING = "mypage_setting"
+private const val MYPAGE_DELETE_MEMBER = "mypage_delete_member"
 private const val MYPAGE_NOTICE = "mypage_notice"
 private const val MYPAGE_NOTICE_DETAIL = "mypage_notice_detail"
 private const val MYPAGE_RECRUITMENT = "mypage_recruitment"
@@ -70,6 +72,10 @@ sealed interface MyPageDestination : CurtainCallDestination {
         override val route = MYPAGE_SETTING
     }
 
+    object DeleteMember : MyPageDestination {
+        override val route = MYPAGE_DELETE_MEMBER
+    }
+
     object Notice : MyPageDestination {
         override val route = MYPAGE_NOTICE
     }
@@ -95,7 +101,10 @@ sealed interface MyPageDestination : CurtainCallDestination {
     }
 }
 
-fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
+fun NavGraphBuilder.mypageNavGraph(
+    navHostController: NavHostController,
+    onNavigateAuth: () -> Unit
+) {
     navigation(startDestination = MyPageDestination.MyPage.route, MYPAGE_GRAPH) {
         composable(MyPageDestination.MyPage.route) {
             MyPageScreen(
@@ -139,11 +148,11 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
             )
         }
 
-        composable(MyPageDestination.SavedPerformance.route) {
+        composable(MyPageDestination.SavedPerformance.route) { entry ->
+            val parentEntry = remember(entry) { navHostController.getBackStackEntry(MyPageDestination.MyPage.route) }
             MyPageSavedPerformanceScreen(
-                onBack = {
-                    navHostController.popBackStack()
-                }
+                myPageViewModel = hiltViewModel(parentEntry),
+                onBack = { navHostController.popBackStack() }
             )
         }
 
@@ -163,12 +172,25 @@ fun NavGraphBuilder.mypageNavGraph(navHostController: NavHostController) {
 
         composable(MyPageDestination.Setting.route) {
             MyPageSettingScreen(
+                onNavigateAuth = onNavigateAuth,
+                onNavigateDeleteMember = {
+                    navHostController.navigate(MyPageDestination.DeleteMember.route)
+                },
                 onNavigatePrivacyTerms = {
                     navHostController.navigate(MyPageDestination.PrivacyTerms.route)
                 },
                 onNavigateServiceTerms = {
                     navHostController.navigate(MyPageDestination.ServiceTerms.route)
                 },
+                onBack = {
+                    navHostController.popBackStack()
+                }
+            )
+        }
+
+        composable(MyPageDestination.DeleteMember.route) {
+            MyPageDeleteMemberScreen(
+                onNavigateAuth = onNavigateAuth,
                 onBack = {
                     navHostController.popBackStack()
                 }

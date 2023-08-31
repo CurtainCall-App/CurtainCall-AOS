@@ -12,6 +12,7 @@ import com.cmc.curtaincall.feature.auth.AuthDestination
 import com.cmc.curtaincall.feature.auth.authNavGraph
 import com.cmc.curtaincall.feature.home.navigation.HomeDestination
 import com.cmc.curtaincall.feature.home.navigation.HomeNavHost
+import com.cmc.curtaincall.feature.mypage.MyPageDestination
 import com.cmc.curtaincall.ui.OnBoardingScreen
 import com.cmc.curtaincall.ui.SplashScreen
 
@@ -65,7 +66,16 @@ internal fun AppNavHost(navHostController: NavHostController = rememberNavContro
         }
 
         composable(route = HomeDestination.Home.route) {
-            HomeNavHost()
+            HomeNavHost(
+                onNavigateAuth = {
+                    navHostController.navigate(AuthDestination.Login.route) {
+                        popUpTo(MyPageDestination.Setting.route) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                }
+            )
         }
 
         authNavGraph(navHostController)

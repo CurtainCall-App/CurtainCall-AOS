@@ -255,7 +255,7 @@ private fun ReviewCreateBody(
         )
         CurtainCallMultiLineTextField(
             value = review,
-            onValueChange = { if (it.length < 20) onReviewChange(it) },
+            onValueChange = { if (it.length <= 20) onReviewChange(it) },
             modifier = Modifier
                 .padding(top = 12.dp)
                 .fillMaxWidth()

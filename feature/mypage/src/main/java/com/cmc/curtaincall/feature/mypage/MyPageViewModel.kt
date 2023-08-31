@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.cmc.curtaincall.core.base.BaseViewModel
+import com.cmc.curtaincall.domain.repository.FavoriteRepository
 import com.cmc.curtaincall.domain.repository.MemberRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MyPageViewModel @Inject constructor(
-    private val memberRepository: MemberRepository
+    private val memberRepository: MemberRepository,
+    private val favoriteRepository: FavoriteRepository
 ) : BaseViewModel<MyPageUiState, MyPageEvent, Nothing>(
     initialState = MyPageUiState()
 ) {
@@ -58,6 +60,10 @@ class MyPageViewModel @Inject constructor(
     var etcParticipationItems = memberRepository.fetchMyParticipations(
         memberId = memberId.value,
         category = PartyType.ETC.category
+    ).cachedIn(viewModelScope)
+
+    var favoriteShowItems = favoriteRepository.fetchFavoriteShows(
+        memberId = memberId.value
     ).cachedIn(viewModelScope)
 
     override fun reduceState(currentState: MyPageUiState, event: MyPageEvent): MyPageUiState =

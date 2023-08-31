@@ -15,6 +15,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,6 +26,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.component.dialog.CurtainCallBasicDialog
@@ -35,10 +37,14 @@ import com.cmc.curtaincall.common.design.theme.Nero
 import com.cmc.curtaincall.common.design.theme.Silver_Sand
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
+import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MyPageSettingScreen(
+    myPageSettingViewModel: MyPageSettingViewModel = hiltViewModel(),
+    onNavigateAuth: () -> Unit,
+    onNavigateDeleteMember: () -> Unit,
     onNavigatePrivacyTerms: () -> Unit,
     onNavigateServiceTerms: () -> Unit,
     onBack: () -> Unit
@@ -54,10 +60,13 @@ internal fun MyPageSettingScreen(
         }
     ) { paddingValues ->
         MyPageSettingContent(
+            myPageSettingViewModel = myPageSettingViewModel,
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
                 .background(White),
+            onNavigateAuth = onNavigateAuth,
+            onNavigateDeleteMember = onNavigateDeleteMember,
             onNavigatePrivacyTerms = onNavigatePrivacyTerms,
             onNavigateServiceTerms = onNavigateServiceTerms
         )
@@ -66,9 +75,12 @@ internal fun MyPageSettingScreen(
 
 @Composable
 private fun MyPageSettingContent(
+    myPageSettingViewModel: MyPageSettingViewModel,
     modifier: Modifier = Modifier,
+    onNavigateAuth: () -> Unit,
+    onNavigateDeleteMember: () -> Unit,
     onNavigatePrivacyTerms: () -> Unit,
-    onNavigateServiceTerms: () -> Unit,
+    onNavigateServiceTerms: () -> Unit
 ) {
     var isShowDialog by remember { mutableStateOf(false) }
     if (isShowDialog) {
@@ -77,8 +89,17 @@ private fun MyPageSettingContent(
             dismissText = stringResource(R.string.dialog_logout_dismiss),
             positiveText = stringResource(R.string.dialog_logout_positive),
             onDismiss = { isShowDialog = false },
-            onPositive = { isShowDialog = false }
+            onPositive = {
+                myPageSettingViewModel.memberLogout()
+                isShowDialog = false
+            }
         )
+    }
+
+    LaunchedEffect(myPageSettingViewModel) {
+        myPageSettingViewModel.isLogout.collectLatest { isLogout ->
+            if (isLogout) onNavigateAuth()
+        }
     }
 
     Column(modifier) {
@@ -102,7 +123,15 @@ private fun MyPageSettingContent(
                     .fillMaxWidth()
                     .padding(top = 18.dp),
                 title = stringResource(R.string.mypage_setting_logout),
+                isShowIcon = false,
                 onClick = { isShowDialog = true }
+            )
+            SettingItem(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 18.dp),
+                title = stringResource(R.string.mypage_setting_remove_member),
+                onClick = onNavigateDeleteMember
             )
             Spacer(
                 modifier = Modifier
@@ -141,6 +170,7 @@ private fun MyPageSettingContent(
 private fun SettingItem(
     modifier: Modifier = Modifier,
     title: String,
+    isShowIcon: Boolean = true,
     onClick: () -> Unit
 ) {
     Row(
@@ -155,11 +185,13 @@ private fun SettingItem(
             fontWeight = FontWeight.Medium,
             fontFamily = spoqahansanseeo
         )
-        Icon(
-            painter = painterResource(R.drawable.ic_arrow_right_pink),
-            contentDescription = null,
-            modifier = Modifier.size(12.dp),
-            tint = Arsenic
-        )
+        if (isShowIcon) {
+            Icon(
+                painter = painterResource(R.drawable.ic_arrow_right_pink),
+                contentDescription = null,
+                modifier = Modifier.size(12.dp),
+                tint = Arsenic
+            )
+        }
     }
 }
