@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -30,6 +31,7 @@ import com.cmc.curtaincall.common.design.theme.*
 import com.cmc.curtaincall.common.utility.extensions.getShowTimes
 import com.cmc.curtaincall.domain.model.show.FacilityDetailModel
 import com.cmc.curtaincall.domain.model.show.ShowTimeModel
+import com.cmc.curtaincall.domain.model.show.SimilarShowInfoModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.compose.*
@@ -39,6 +41,7 @@ internal fun PerformanceDetailTabScreen(
     modifier: Modifier = Modifier,
     introductionImage: String? = null,
     showTimes: List<ShowTimeModel> = listOf(),
+    similarShows: List<SimilarShowInfoModel> = listOf(),
     facilityDetailModel: FacilityDetailModel
 ) {
     Column(modifier) {
@@ -70,24 +73,29 @@ internal fun PerformanceDetailTabScreen(
                 .padding(vertical = 30.dp),
             facilityDetailModel = facilityDetailModel
         )
-//        Spacer(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(horizontal = 20.dp)
-//                .background(Bright_Gray)
-//                .height(1.dp)
-//        )
-//        PerformanceSimilarContent(
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .padding(top = 30.dp, bottom = 103.dp)
-//        )
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .background(Bright_Gray)
+                .height(1.dp)
+        )
+
+        if (similarShows.isNotEmpty()) {
+            PerformanceSimilarContent(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 30.dp, bottom = 50.dp),
+                similarShows = similarShows
+            )
+        }
     }
 }
 
 @Composable
 private fun PerformanceSimilarContent(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    similarShows: List<SimilarShowInfoModel> = listOf()
 ) {
     Column(modifier) {
         Text(
@@ -103,15 +111,21 @@ private fun PerformanceSimilarContent(
                 .fillMaxWidth()
                 .padding(top = 14.dp)
         ) {
-            itemsIndexed(List(10) {}) { index, item ->
+            itemsIndexed(similarShows) { index, similarShow ->
                 if (index == 0) Spacer(Modifier.size(20.dp))
                 Row {
                     PerformanceCard(
                         modifier = Modifier.width(120.dp),
-                        title = "데스노트",
-                        painter = painterResource(R.drawable.dummy_poster),
-                        rate = 4.89f,
-                        numberOfTotal = 1012
+                        title = similarShow.name,
+                        painter = painterResource(R.drawable.ic_error_poster),
+                        imageUrl = similarShow.poster,
+                        rate = if (similarShow.reviewCount == 0) 0.0f else similarShow.reviewGradeSum / similarShow.reviewCount.toFloat(),
+                        numberOfTotal = similarShow.reviewCount,
+                        isShowMetadata = true,
+                        meta = (index + 1).toString(),
+                        onClick = {
+                            // onNavigatePerformanceDetail(similarShow.id)
+                        }
                     )
                     Spacer(Modifier.size(12.dp))
                 }
@@ -151,9 +165,10 @@ private fun PerformanceNotice(
                     }
                 }
             },
+            alignment = Alignment.TopCenter,
             contentScale = ContentScale.FillWidth
         )
-        if (isLoading.not()) {
+        if (isLoading.not() && isClickMore.not()) {
             CurtainCallBorderTextButton(
                 onClick = { isClickMore = isClickMore.not() },
                 modifier = Modifier

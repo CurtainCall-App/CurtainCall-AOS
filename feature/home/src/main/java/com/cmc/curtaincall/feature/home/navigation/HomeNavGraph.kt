@@ -59,7 +59,8 @@ sealed interface HomeDestination : CurtainCallDestination {
 @Composable
 fun HomeNavHost(
     navHostController: NavHostController = rememberNavController(),
-    onNavigateAuth: () -> Unit = {}
+    onLogout: () -> Unit = {},
+    onDeleteMember: () -> Unit = {}
 ) {
     Scaffold(
         bottomBar = { HomeBottomBar(navHostController) },
@@ -131,7 +132,8 @@ fun HomeNavHost(
             )
             mypageNavGraph(
                 navHostController = navHostController,
-                onNavigateAuth = onNavigateAuth
+                onLogout = onLogout,
+                onDeleteMember = onDeleteMember
             )
         }
     }

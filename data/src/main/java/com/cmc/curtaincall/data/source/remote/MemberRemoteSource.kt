@@ -73,11 +73,13 @@ class MemberRemoteSource @Inject constructor(
     }
 
     fun deleteMember(
+        authorization: String,
         reason: String,
         content: String
     ): Flow<Boolean> = flow {
         emit(
             memberService.deleteMember(
+                authorization = "Bearer $authorization",
                 deleteMemberRequest = DeleteMemberRequest(
                     reason = reason,
                     content = content

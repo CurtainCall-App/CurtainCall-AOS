@@ -3,7 +3,6 @@ package com.cmc.curtaincall.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.paging.map
 import com.cmc.curtaincall.core.network.service.favorite.FavoriteService
 import com.cmc.curtaincall.core.network.service.show.ShowService
 import com.cmc.curtaincall.data.source.local.ShowLocalSource
@@ -17,6 +16,7 @@ import com.cmc.curtaincall.domain.model.show.ShowDetailModel
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import com.cmc.curtaincall.domain.model.show.ShowRankModel
 import com.cmc.curtaincall.domain.model.show.ShowSearchWordModel
+import com.cmc.curtaincall.domain.model.show.SimilarShowInfoModel
 import com.cmc.curtaincall.domain.repository.ShowRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -90,4 +90,14 @@ class ShowRepositoryImpl @Inject constructor(
 
     override fun requestFacilityDetail(facilityId: String): Flow<FacilityDetailModel> =
         showRemoteSource.requestFacilityDetail(facilityId).map { it.toModel() }
+
+    override fun requestSimilarShowList(facilityId: String, page: Int, size: Int?, genre: String?): Flow<List<SimilarShowInfoModel>> =
+        showRemoteSource.requestSimilarShowList(
+            facilityId = facilityId,
+            page = page,
+            size = size,
+            genre = genre
+        ).map { similarShowInfo ->
+            similarShowInfo.map { it.toModel() }
+        }
 }

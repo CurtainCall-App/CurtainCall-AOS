@@ -23,11 +23,6 @@ class HomeViewModel @Inject constructor(
 ) {
     init {
         getMemberNickname()
-        requestMyRecruitments()
-        requestMyParticipations()
-        requestPopularShowList()
-        requestOpenShowList()
-        requestEndShowList()
     }
 
     override fun reduceState(currentState: HomeState, event: HomeEvent): HomeState =
@@ -69,7 +64,7 @@ class HomeViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    private fun requestMyRecruitments() {
+    fun requestMyRecruitments() {
         viewModelScope.launch {
             val memberId = memberRepository.getMemberId().first()
             memberRepository.requestMyRecruitments(
@@ -89,7 +84,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun requestMyParticipations() {
+    fun requestMyParticipations() {
         viewModelScope.launch {
             val memberId = memberRepository.getMemberId().first()
             memberRepository.requestMyParticipations(
@@ -109,7 +104,7 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun requestPopularShowList() {
+    fun requestPopularShowList() {
         val today = SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().time)
         showRepository.requestPopularShowList(type = "WEEK", genre = "ALL", baseDate = today)
             .onEach {
@@ -118,7 +113,7 @@ class HomeViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    private fun requestOpenShowList() {
+    fun requestOpenShowList() {
         val today = SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().time)
         showRepository.requestOpenShowList(page = 0, size = 10, startDate = today)
             .onEach {
@@ -127,7 +122,7 @@ class HomeViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    private fun requestEndShowList() {
+    fun requestEndShowList() {
         val today = SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().time)
         showRepository.requestEndShowList(page = 0, size = 10, endDate = today, genre = null)
             .onEach {

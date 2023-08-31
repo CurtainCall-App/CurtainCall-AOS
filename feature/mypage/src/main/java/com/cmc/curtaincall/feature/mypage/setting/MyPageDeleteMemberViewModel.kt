@@ -2,10 +2,13 @@ package com.cmc.curtaincall.feature.mypage.setting
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cmc.curtaincall.domain.model.auth.LoginResultModel
 import com.cmc.curtaincall.domain.repository.MemberRepository
+import com.cmc.curtaincall.domain.repository.TokenRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -22,6 +25,7 @@ enum class DeleteReason(val value: String) {
 
 @HiltViewModel
 class MyPageDeleteMemberViewModel @Inject constructor(
+    private val tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository
 ) : ViewModel() {
     private var _deleteReason = MutableStateFlow<DeleteReason>(DeleteReason.NONE)
@@ -43,11 +47,16 @@ class MyPageDeleteMemberViewModel @Inject constructor(
     }
 
     fun deleteMember() {
-        memberRepository.deleteMember(
-            reason = deleteReason.value.name,
-            content = content.value
-        ).onEach {
-            _isSuccessDelete.value = it
-        }.launchIn(viewModelScope)
+        tokenRepository.getAccessToken()
+            .flatMapLatest { accessToken ->
+                memberRepository.deleteMember(
+                    authorization = accessToken,
+                    reason = deleteReason.value.name,
+                    content = content.value
+                )
+            }.onEach { isSuccess ->
+                _isSuccessDelete.value = isSuccess
+                if (isSuccess) tokenRepository.saveToken(LoginResultModel())
+            }.launchIn(viewModelScope)
     }
 }

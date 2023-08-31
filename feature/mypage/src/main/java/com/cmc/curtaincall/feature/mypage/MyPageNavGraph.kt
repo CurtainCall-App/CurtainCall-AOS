@@ -103,7 +103,8 @@ sealed interface MyPageDestination : CurtainCallDestination {
 
 fun NavGraphBuilder.mypageNavGraph(
     navHostController: NavHostController,
-    onNavigateAuth: () -> Unit
+    onLogout: () -> Unit,
+    onDeleteMember: () -> Unit
 ) {
     navigation(startDestination = MyPageDestination.MyPage.route, MYPAGE_GRAPH) {
         composable(MyPageDestination.MyPage.route) {
@@ -172,7 +173,7 @@ fun NavGraphBuilder.mypageNavGraph(
 
         composable(MyPageDestination.Setting.route) {
             MyPageSettingScreen(
-                onNavigateAuth = onNavigateAuth,
+                onLogout = onLogout,
                 onNavigateDeleteMember = {
                     navHostController.navigate(MyPageDestination.DeleteMember.route)
                 },
@@ -190,7 +191,7 @@ fun NavGraphBuilder.mypageNavGraph(
 
         composable(MyPageDestination.DeleteMember.route) {
             MyPageDeleteMemberScreen(
-                onNavigateAuth = onNavigateAuth,
+                onDeleteMember = onDeleteMember,
                 onBack = {
                     navHostController.popBackStack()
                 }

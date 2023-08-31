@@ -54,7 +54,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun MyPageDeleteMemberScreen(
     myPageDeleteMemberViewModel: MyPageDeleteMemberViewModel = hiltViewModel(),
-    onNavigateAuth: () -> Unit,
+    onDeleteMember: () -> Unit,
     onBack: () -> Unit
 ) {
     var step by remember { mutableStateOf(0) }
@@ -92,7 +92,7 @@ fun MyPageDeleteMemberScreen(
                     } else if (step == 1) {
                         myPageDeleteMemberViewModel.deleteMember()
                     } else {
-                        onNavigateAuth()
+                        onDeleteMember()
                     }
                 },
                 modifier = Modifier

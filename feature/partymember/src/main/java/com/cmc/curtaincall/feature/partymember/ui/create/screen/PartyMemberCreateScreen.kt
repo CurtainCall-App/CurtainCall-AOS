@@ -14,6 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallRoundedText
@@ -43,6 +44,8 @@ internal fun PartyMemberCreateScreen(
 ) {
     LaunchedEffect(Unit) {
         partyMemberCreateViewModel.setPartyCategory(partyType)
+        partyMemberCreateViewModel.loadPlayItems()
+        partyMemberCreateViewModel.loadMusicalItems()
     }
 
     val systemUiController = rememberSystemUiController()
@@ -103,8 +106,9 @@ private fun PartyMemberCreateContent(
     // 1-1 step
     var clickedUndeterminDateState by remember { mutableStateOf(false) }
 
-    val playItems = partyMemberCreateViewModel.playItems.collectAsLazyPagingItems()
-    val musicalItems = partyMemberCreateViewModel.musicalItems.collectAsLazyPagingItems()
+    val partyMemberCreateUiState by partyMemberCreateViewModel.uiState.collectAsStateWithLifecycle()
+    val playItems = partyMemberCreateUiState.playItems.collectAsLazyPagingItems()
+    val musicalItems = partyMemberCreateUiState.musicalItems.collectAsLazyPagingItems()
 
     LaunchedEffect(currentStep) {
         if (currentStep == STEP.PHASE1) {

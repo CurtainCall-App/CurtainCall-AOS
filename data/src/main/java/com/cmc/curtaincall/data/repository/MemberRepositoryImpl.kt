@@ -87,8 +87,8 @@ class MemberRepositoryImpl @Inject constructor(
             category = category
         )
 
-    override fun deleteMember(reason: String, content: String): Flow<Boolean> =
-        memberRemoteSource.deleteMember(reason, content)
+    override fun deleteMember(authorization: String, reason: String, content: String): Flow<Boolean> =
+        memberRemoteSource.deleteMember(authorization, reason, content)
 
     override suspend fun saveMemberId(id: Int) =
         memberLocalSource.saveMemberId(id)

@@ -67,12 +67,18 @@ internal fun AppNavHost(navHostController: NavHostController = rememberNavContro
 
         composable(route = HomeDestination.Home.route) {
             HomeNavHost(
-                onNavigateAuth = {
+                onLogout = {
                     navHostController.navigate(AuthDestination.Login.route) {
                         popUpTo(MyPageDestination.Setting.route) {
                             inclusive = true
                         }
-                        launchSingleTop = true
+                    }
+                },
+                onDeleteMember = {
+                    navHostController.navigate(AuthDestination.Login.route) {
+                        popUpTo(MyPageDestination.DeleteMember.route) {
+                            inclusive = true
+                        }
                     }
                 }
             )

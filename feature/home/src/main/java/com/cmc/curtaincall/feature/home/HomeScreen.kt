@@ -9,6 +9,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -117,6 +118,15 @@ private fun HomeContent(
 ) {
     val scrollState = rememberScrollState()
     val homeUiState by homeViewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(homeViewModel) {
+        homeViewModel.requestMyRecruitments()
+        homeViewModel.requestMyParticipations()
+        homeViewModel.requestPopularShowList()
+        homeViewModel.requestOpenShowList()
+        homeViewModel.requestEndShowList()
+    }
+
     Column(modifier.verticalScroll(scrollState)) {
         HomeBanner(
             modifier = Modifier

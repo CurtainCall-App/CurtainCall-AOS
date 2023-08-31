@@ -44,6 +44,7 @@ interface MemberRepository {
     ): Flow<PagingData<MyParticipationModel>>
 
     fun deleteMember(
+        authorization: String,
         reason: String,
         content: String
     ): Flow<Boolean>

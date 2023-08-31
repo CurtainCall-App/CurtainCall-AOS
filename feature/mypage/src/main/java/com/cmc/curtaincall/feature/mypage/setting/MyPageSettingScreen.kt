@@ -43,7 +43,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 internal fun MyPageSettingScreen(
     myPageSettingViewModel: MyPageSettingViewModel = hiltViewModel(),
-    onNavigateAuth: () -> Unit,
+    onLogout: () -> Unit,
     onNavigateDeleteMember: () -> Unit,
     onNavigatePrivacyTerms: () -> Unit,
     onNavigateServiceTerms: () -> Unit,
@@ -65,7 +65,7 @@ internal fun MyPageSettingScreen(
                 .padding(paddingValues)
                 .fillMaxSize()
                 .background(White),
-            onNavigateAuth = onNavigateAuth,
+            onLogout = onLogout,
             onNavigateDeleteMember = onNavigateDeleteMember,
             onNavigatePrivacyTerms = onNavigatePrivacyTerms,
             onNavigateServiceTerms = onNavigateServiceTerms
@@ -77,7 +77,7 @@ internal fun MyPageSettingScreen(
 private fun MyPageSettingContent(
     myPageSettingViewModel: MyPageSettingViewModel,
     modifier: Modifier = Modifier,
-    onNavigateAuth: () -> Unit,
+    onLogout: () -> Unit,
     onNavigateDeleteMember: () -> Unit,
     onNavigatePrivacyTerms: () -> Unit,
     onNavigateServiceTerms: () -> Unit
@@ -98,7 +98,7 @@ private fun MyPageSettingContent(
 
     LaunchedEffect(myPageSettingViewModel) {
         myPageSettingViewModel.isLogout.collectLatest { isLogout ->
-            if (isLogout) onNavigateAuth()
+            if (isLogout) onLogout()
         }
     }
 
