@@ -112,7 +112,7 @@ private fun MyPageWriteItem(
     onNavigateLostItemEdit: () -> Unit,
     onNavigateReviewEdit: () -> Unit
 ) {
-    var isClickMoreTab by remember { mutableStateOf(false) }
+//    var isClickMoreTab by remember { mutableStateOf(false) }
 //    Box(
 //        modifier = modifier
 //            .background(Cultured, RoundedCornerShape(15.dp))

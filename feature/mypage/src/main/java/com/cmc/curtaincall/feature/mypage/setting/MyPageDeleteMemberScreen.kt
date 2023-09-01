@@ -129,7 +129,7 @@ fun MyPageDeleteMemberScreen(
                     .padding(paddingValues)
                     .fillMaxSize()
                     .background(White),
-                step = step,
+                step = step
             )
         } else {
             Column(
