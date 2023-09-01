@@ -75,7 +75,11 @@ fun RowScope.HomeBottomBarItem(
     val selected = bottomDestination.route == currentDestination?.route
     NavigationBarItem(
         selected = selected,
-        onClick = { navHostController.navigate(bottomDestination.route) },
+        onClick = {
+            navHostController.navigate(bottomDestination.route) {
+                launchSingleTop = true
+            }
+        },
         icon = {
             Icon(
                 painter = painterResource(

@@ -71,7 +71,6 @@ fun LoginScreen(
     systemUiController.setStatusBarColor(Cetacean_Blue)
 
     LaunchedEffect(loginViewModel) {
-        loginViewModel.isValidationToken()
         loginViewModel.effects.collectLatest { sideEffect ->
             Timber.d("LoginScreen $sideEffect")
             when (sideEffect) {
@@ -79,8 +78,7 @@ fun LoginScreen(
                     onNavigateSignUpTerms()
                 }
 
-                LoginSideEffect.ExistMember,
-                LoginSideEffect.AutoLogin -> {
+                LoginSideEffect.ExistMember -> {
                     onNavigateHome()
                 }
             }
@@ -104,12 +102,7 @@ fun LoginScreen(
         Image(
             painter = painterResource(R.drawable.ic_social_login),
             contentDescription = null,
-            modifier = Modifier
-                .size(180.dp, 47.dp)
-                .clickable {
-                    // 추후 제거
-                    onNavigateHome()
-                },
+            modifier = Modifier.size(180.dp, 47.dp),
             contentScale = ContentScale.FillBounds
         )
         Row(
@@ -160,7 +153,7 @@ private fun LoginKaKao(
                     val result = loginKaKao(context)
                     when (result) {
                         is AuthResult.Success -> {
-                            // TODO 카카오 AccessToken 서버 전달
+                            // TODO 카카오  AccessToken 서버 전달
                             loginViewModel.fetchLogin("kakao", result.idToken)
                             // onNavigateSignUpTerms()
                         }

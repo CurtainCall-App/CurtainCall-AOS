@@ -157,7 +157,7 @@ private fun PerformanceLostItemSearchContent(
     val lostItems = performanceLostItemUiState.lostItemSearchItems.collectAsLazyPagingItems()
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
-        modifier = modifier,
+        modifier = modifier.padding(bottom = 18.dp),
         verticalArrangement = Arrangement.spacedBy(18.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp)
     ) {

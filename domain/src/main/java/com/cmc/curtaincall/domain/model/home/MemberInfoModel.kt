@@ -5,6 +5,6 @@ data class MemberInfoModel(
     val nickname: String = "",
     val imageId: String? = null,
     val imageUrl: String? = null,
-    val recruitingNum: Int = Int.MIN_VALUE,
-    val participationNum: Int = Int.MIN_VALUE
+    val recruitingNum: Int = 0,
+    val participationNum: Int = 0
 )

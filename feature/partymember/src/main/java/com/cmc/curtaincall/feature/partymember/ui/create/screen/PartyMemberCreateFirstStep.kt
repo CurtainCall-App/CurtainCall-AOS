@@ -71,6 +71,7 @@ fun LazyGridScope.showPerformanceFirstStep(
                 sortType = partyMemberCreateUiState.sortType,
                 onSelectSortType = {
                     partyMemberCreateViewModel.setSortType(it)
+                    onChangeSelect(-1)
                     showDialog = false
                 },
                 onDismissRequest = { showDialog = false }

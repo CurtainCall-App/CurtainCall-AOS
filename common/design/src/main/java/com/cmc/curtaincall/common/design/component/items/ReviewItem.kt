@@ -103,13 +103,14 @@ fun ReviewDetailItem(
     comment: String,
     numberOfLike: Int,
     isFavorite: Boolean = false,
+    isClickMoreVert: Boolean = false,
+    onClickMoreVert: (Boolean) -> Unit,
     onFavoriteChange: (Boolean) -> Unit,
     isMyWriting: Boolean = false,
     onChangeWriting: () -> Unit = {},
     onRemoveWriting: () -> Unit = {}
 ) {
     var isFavoriteState by remember { mutableStateOf(isFavorite) }
-    var isClickMoreVert by remember { mutableStateOf(false) }
     var isTouchChangeButton by remember { mutableStateOf(false) }
     var isTouchRemoveButton by remember { mutableStateOf(false) }
     Box(modifier) {
@@ -173,7 +174,7 @@ fun ReviewDetailItem(
                     contentDescription = null,
                     modifier = Modifier
                         .size(24.dp)
-                        .clickable { isClickMoreVert = isClickMoreVert.not() },
+                        .clickable { onClickMoreVert(isClickMoreVert.not()) },
                     tint = Eerie_Black
                 )
                 if (isClickMoreVert) {
@@ -202,7 +203,7 @@ fun ReviewDetailItem(
                                         MotionEvent.ACTION_MOVE,
                                         MotionEvent.ACTION_UP -> {
                                             isTouchChangeButton = false
-                                            isClickMoreVert = false
+                                            onClickMoreVert(false)
                                             onChangeWriting()
                                         }
 
@@ -237,7 +238,7 @@ fun ReviewDetailItem(
                                         MotionEvent.ACTION_MOVE,
                                         MotionEvent.ACTION_UP -> {
                                             isTouchRemoveButton = false
-                                            isClickMoreVert = false
+                                            onClickMoreVert(false)
                                             onRemoveWriting()
                                         }
 

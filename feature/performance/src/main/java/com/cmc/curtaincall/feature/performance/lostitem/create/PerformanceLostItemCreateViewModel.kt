@@ -1,5 +1,6 @@
 package com.cmc.curtaincall.feature.performance.lostitem.create
 
+import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cmc.curtaincall.common.utility.extensions.toChangeServerDate
@@ -28,6 +29,9 @@ class PerformanceLostItemCreateViewModel @Inject constructor(
 
     private val _completeEffect = MutableSharedFlow<Boolean>()
     val completeEffect = _completeEffect.asSharedFlow()
+
+    private var _atttachImage = MutableStateFlow<Bitmap?>(null)
+    val attachImage = _atttachImage.asStateFlow()
 
     fun setTitle(title: String) {
         _lostCreateInfo.value = _lostCreateInfo.value.copy(
@@ -71,9 +75,16 @@ class PerformanceLostItemCreateViewModel @Inject constructor(
         )
     }
 
-    fun uploadImage(inputStream: InputStream) {
+    fun setAttachImage(bitmap: Bitmap?) {
+        _atttachImage.value = bitmap
+    }
+
+    fun uploadImage(inputStream: InputStream, bitmap: Bitmap) {
         imageRepository.uploadGalleryImage(inputStream)
-            .onEach { setImageId(it.id) }
+            .onEach {
+                setImageId(it.id)
+                setAttachImage(bitmap)
+            }
             .launchIn(viewModelScope)
     }
 

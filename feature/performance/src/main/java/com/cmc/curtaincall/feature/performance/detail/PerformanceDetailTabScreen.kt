@@ -22,7 +22,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallBorderTextButton
 import com.cmc.curtaincall.common.design.component.content.card.PerformanceCard
@@ -154,17 +153,9 @@ private fun PerformanceNotice(
                         Modifier
                     }
                 ),
-            onState = { state ->
-                when (state) {
-                    is AsyncImagePainter.State.Success -> {
-                        isLoading = false
-                    }
-
-                    else -> {
-                        isLoading = true
-                    }
-                }
-            },
+            error = painterResource(R.drawable.ic_erro_introduction),
+            onLoading = { isLoading = true },
+            onSuccess = { isLoading = false },
             alignment = Alignment.TopCenter,
             contentScale = ContentScale.FillWidth
         )
@@ -284,6 +275,7 @@ private fun PerformancePlace(
                 isTiltGesturesEnabled = false,
                 isRotateGesturesEnabled = false,
                 isStopGesturesEnabled = false,
+                scrollGesturesFriction = 1f,
                 isZoomGesturesEnabled = false,
                 isZoomControlEnabled = false,
                 isLogoClickEnabled = false

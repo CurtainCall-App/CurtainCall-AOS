@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -99,13 +100,18 @@ internal fun PartyMemberListScreen(
             }
         },
         floatingActionButton = {
-            IconButton(
+            FloatingActionButton(
                 onClick = { onNavigateCreate(partyType) },
-                modifier = Modifier.size(85.dp)
+                modifier = Modifier
+                    .padding(bottom = 40.dp)
+                    .size(58.dp),
+                shape = CircleShape,
+                containerColor = Cetacean_Blue
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_fab_write),
+                    painter = painterResource(R.drawable.ic_pen),
                     contentDescription = null,
+                    modifier = Modifier.size(29.dp),
                     tint = Color.Unspecified
                 )
             }
@@ -243,7 +249,7 @@ private fun PartyMemberListSearchContent(
                             onClick = {
                                 onNavigateDetail(
                                     partyType,
-                                    partyModel.isParticipation,
+                                    if (partyModel.creatorId == partyMemberViewModel.memberId.value) true else partyModel.isParticipation,
                                     partyModel.id,
                                     partyModel.creatorId == partyMemberViewModel.memberId.value
                                 )
@@ -326,7 +332,7 @@ private fun PartyMemberListContent(
                                 onClick = {
                                     onNavigateDetail(
                                         partyType,
-                                        partyModel.isParticipation,
+                                        if (partyModel.creatorId == partyMemberViewModel.memberId.value) true else partyModel.isParticipation,
                                         partyModel.id,
                                         partyModel.creatorId == partyMemberViewModel.memberId.value
                                     )
@@ -353,7 +359,7 @@ private fun PartyMemberListContent(
                                 onClick = {
                                     onNavigateDetail(
                                         partyType,
-                                        partyModel.isParticipation,
+                                        if (partyModel.creatorId == partyMemberViewModel.memberId.value) true else partyModel.isParticipation,
                                         partyModel.id,
                                         partyModel.creatorId == partyMemberViewModel.memberId.value
                                     )

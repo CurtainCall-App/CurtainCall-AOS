@@ -192,20 +192,14 @@ fun NavGraphBuilder.mypageNavGraph(
         composable(MyPageDestination.DeleteMember.route) {
             MyPageDeleteMemberScreen(
                 onDeleteMember = onDeleteMember,
-                onBack = {
-                    navHostController.popBackStack()
-                }
+                onBack = { navHostController.popBackStack() }
             )
         }
 
         composable(MyPageDestination.Notice.route) {
             MyPageNoticeScreen(
-                onNavigateNoticeDetail = {
-                    navHostController.navigate(MyPageDestination.NoticeDetail.route)
-                },
-                onBack = {
-                    navHostController.popBackStack()
-                }
+                onNavigateNoticeDetail = { navHostController.navigate(MyPageDestination.NoticeDetail.route) },
+                onBack = { navHostController.popBackStack() }
             )
         }
 

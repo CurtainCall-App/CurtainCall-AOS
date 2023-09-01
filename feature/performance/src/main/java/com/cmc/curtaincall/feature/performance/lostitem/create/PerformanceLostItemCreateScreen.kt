@@ -48,7 +48,7 @@ import com.cmc.curtaincall.common.design.component.basic.CurtainCallRoundedTextB
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallSingleLineTextField
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithClose
 import com.cmc.curtaincall.common.design.component.custom.CurtainCallTimePicker
-import com.cmc.curtaincall.common.design.component.custom.SelectedDateCalender
+import com.cmc.curtaincall.common.design.component.custom.PreviousDateCalendar
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.cmc.curtaincall.feature.performance.lostitem.LostItemType
@@ -278,7 +278,7 @@ private fun PerformanceLostItemCreateContent(
             placeholder = stringResource(R.string.performance_find_lost_item_create_acquistion_date_placeholder),
             value = lostItemCreateUiState.foundDate
         ) {
-            SelectedDateCalender(
+            PreviousDateCalendar(
                 modifier = Modifier.padding(top = 10.dp),
                 onDateClick = {
                     performanceLostItemCreateViewModel.setFoundDate(
@@ -392,12 +392,11 @@ private fun LostItemAttachmentDropDown(
         }
     }
 
-    var attachmentFile by remember { mutableStateOf<Bitmap?>(null) }
+    val attachmentFile by performanceLostItemCreateViewModel.attachImage.collectAsStateWithLifecycle()
     val takePhotoFromAlbum = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         uri?.let { uri ->
-            attachmentFile = uri.parseBitmap(context)
             context.contentResolver.openInputStream(uri)?.let { inputStream ->
-                performanceLostItemCreateViewModel.uploadImage(inputStream)
+                performanceLostItemCreateViewModel.uploadImage(inputStream, uri.parseBitmap(context))
             }
             onSelectChange(true)
         }
@@ -407,8 +406,7 @@ private fun LostItemAttachmentDropDown(
             val bytes = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
             val inputStream = ByteArrayInputStream(bytes.toByteArray())
-            performanceLostItemCreateViewModel.uploadImage(inputStream)
-            attachmentFile = bitmap
+            performanceLostItemCreateViewModel.uploadImage(inputStream, bitmap)
             onSelectChange(true)
         }
     }
@@ -447,6 +445,7 @@ private fun LostItemAttachmentDropDown(
                                 .size(22.dp)
                                 .clickable {
                                     performanceLostItemCreateViewModel.setImageId(Int.MIN_VALUE)
+                                    performanceLostItemCreateViewModel.setAttachImage(null)
                                     onSelectChange(false)
                                 },
                             tint = Color.Unspecified
