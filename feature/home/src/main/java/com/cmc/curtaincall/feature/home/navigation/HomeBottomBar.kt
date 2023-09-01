@@ -47,8 +47,7 @@ fun HomeBottomBar(navHostController: NavHostController) {
     if (hasBottomNavigation) {
         NavigationBar(
             containerColor = if (currentDestination?.route == LiveTalkDestination.LiveTalk.route) Cetacean_Blue else White,
-            modifier = Modifier.height(80.dp),
-            tonalElevation = 15.dp
+            modifier = Modifier.height(80.dp)
         ) {
             bottomDestinations.forEach { bottomDestination ->
                 if (bottomDestination.route == LiveTalkDestination.LiveTalk.route) {
@@ -76,7 +75,11 @@ fun RowScope.HomeBottomBarItem(
     val selected = bottomDestination.route == currentDestination?.route
     NavigationBarItem(
         selected = selected,
-        onClick = { navHostController.navigate(bottomDestination.route) },
+        onClick = {
+            navHostController.navigate(bottomDestination.route) {
+                launchSingleTop = true
+            }
+        },
         icon = {
             Icon(
                 painter = painterResource(

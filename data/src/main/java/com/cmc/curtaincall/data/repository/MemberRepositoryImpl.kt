@@ -58,11 +58,14 @@ class MemberRepositoryImpl @Inject constructor(
     override fun requestMemberInfo(memberId: Int): Flow<MemberInfoModel> =
         memberRemoteSource.requestMemberInfo(memberId)
 
+    override fun updateMember(nickname: String, imageId: Int?): Flow<Boolean> =
+        memberRemoteSource.updateMember(nickname, imageId)
+
     override fun requestMyRecruitments(
         memberId: Int,
         page: Int,
         size: Int,
-        category: String
+        category: String?
     ): Flow<List<MyRecruitmentModel>> =
         memberRemoteSource.requestMyRecruitments(
             memberId = memberId,
@@ -75,7 +78,7 @@ class MemberRepositoryImpl @Inject constructor(
         memberId: Int,
         page: Int,
         size: Int,
-        category: String
+        category: String?
     ): Flow<List<MyParticipationModel>> =
         memberRemoteSource.requestMyParticipations(
             memberId = memberId,
@@ -83,6 +86,9 @@ class MemberRepositoryImpl @Inject constructor(
             size = size,
             category = category
         )
+
+    override fun deleteMember(authorization: String, reason: String, content: String): Flow<Boolean> =
+        memberRemoteSource.deleteMember(authorization, reason, content)
 
     override suspend fun saveMemberId(id: Int) =
         memberLocalSource.saveMemberId(id)

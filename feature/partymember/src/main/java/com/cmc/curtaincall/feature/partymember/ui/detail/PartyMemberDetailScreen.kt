@@ -27,8 +27,8 @@ import com.cmc.curtaincall.common.design.component.basic.DottedLine
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithDelete
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithReportAction
 import com.cmc.curtaincall.common.design.component.content.card.PartyType
-import com.cmc.curtaincall.common.design.component.custom.EditBottomSheet
 import com.cmc.curtaincall.common.design.component.dialog.CurtainCallBasicDialog
+import com.cmc.curtaincall.common.design.component.dialog.CurtainCallConfirmDialog
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.cmc.curtaincall.common.utility.extensions.toChangeDate
@@ -42,6 +42,7 @@ import kotlinx.coroutines.flow.collectLatest
 fun PartyMemberDetailScreen(
     partyMemberDetailViewModel: PartyMemberDetailViewModel = hiltViewModel(),
     partyId: Int,
+    isParticipation: Boolean = false,
     myWriting: Boolean = false,
     fromRecruitment: Boolean = false,
     fromParticipation: Boolean = false,
@@ -54,8 +55,7 @@ fun PartyMemberDetailScreen(
 
     var isShowDialog by remember { mutableStateOf(false) }
     var isShowRemoveDialog by remember { mutableStateOf(false) }
-    var isShowBottomSheeet by remember { mutableStateOf(false) }
-    var joinState by remember { mutableStateOf(false) }
+    var isParticipationState by remember { mutableStateOf(isParticipation) }
 
     if (isShowDialog) {
         CurtainCallBasicDialog(
@@ -64,41 +64,24 @@ fun PartyMemberDetailScreen(
             dismissText = stringResource(R.string.dialog_partymember_participate_dismiss),
             positiveText = stringResource(R.string.dialog_partymember_participate_positive),
             onDismiss = {
-                joinState = false
                 isShowDialog = false
             },
             onPositive = {
-                joinState = true
+                partyMemberDetailViewModel.participateParty(partyId)
                 isShowDialog = false
             }
         )
     }
 
     if (isShowRemoveDialog) {
-        CurtainCallBasicDialog(
+        CurtainCallConfirmDialog(
             title = stringResource(R.string.dialog_performance_review_remove_title),
-            dismissText = stringResource(R.string.dialog_performance_review_remove_dismiss),
-            positiveText = stringResource(R.string.dialog_performance_review_remove_positive),
+            description = stringResource(R.string.dialog_partymember_detail_remove_description),
+            positiveText = stringResource(R.string.dialog_partymember_detail_remove_positive_text),
             onDismiss = { isShowRemoveDialog = false },
             onPositive = {
                 partyMemberDetailViewModel.deleteParty(partyId)
                 isShowRemoveDialog = false
-            }
-        )
-    }
-
-    if (isShowBottomSheeet) {
-        EditBottomSheet(
-            onEdit = {
-                onNavigateEdit(partyType)
-                isShowBottomSheeet = false
-            },
-            onDelete = {
-                isShowRemoveDialog = true
-                isShowBottomSheeet = false
-            },
-            onDismissRequest = {
-                isShowBottomSheeet = false
             }
         )
     }
@@ -109,6 +92,10 @@ fun PartyMemberDetailScreen(
             when (it) {
                 PartyMemberDetailSideEffect.SuccessDelete -> {
                     onBack()
+                }
+
+                PartyMemberDetailSideEffect.SuccessParticipation -> {
+                    isParticipationState = true
                 }
             }
         }
@@ -166,16 +153,16 @@ fun PartyMemberDetailScreen(
                     .padding(horizontal = 20.dp)
                     .height(52.dp),
                 title = stringResource(
-                    if (joinState) {
+                    if (isParticipationState) {
                         R.string.partymember_detail_joined
                     } else {
                         R.string.partymember_detail_join
                     }
                 ),
                 fontSize = 16.dp.toSp(),
-                enabled = joinState.not(),
-                containerColor = if (joinState) Bright_Gray else Me_Pink,
-                contentColor = if (joinState) Silver_Sand else White
+                enabled = isParticipationState.not(),
+                containerColor = if (isParticipationState) Bright_Gray else Me_Pink,
+                contentColor = if (isParticipationState) Silver_Sand else White
             )
         },
         floatingActionButtonPosition = FabPosition.Center
@@ -223,11 +210,11 @@ private fun PartyMemberDetailContent(
                 .fillMaxWidth()
                 .padding(top = 24.dp)
                 .padding(horizontal = 20.dp),
-            showName = partyMemberDetailUiState.partyDetailModel.showName,
+            showName = partyMemberDetailUiState.partyDetailModel.showName ?: "",
             curMemberNum = partyMemberDetailUiState.partyDetailModel.curMemberNum,
             maxMemberNum = partyMemberDetailUiState.partyDetailModel.maxMemberNum,
-            showAt = partyMemberDetailUiState.partyDetailModel.showAt,
-            facilityName = partyMemberDetailUiState.partyDetailModel.facilityName
+            showAt = partyMemberDetailUiState.partyDetailModel.showAt ?: "",
+            facilityName = partyMemberDetailUiState.partyDetailModel.facilityName ?: ""
         )
     }
 }

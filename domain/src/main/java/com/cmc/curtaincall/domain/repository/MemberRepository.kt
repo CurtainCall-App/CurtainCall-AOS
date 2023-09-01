@@ -14,11 +14,16 @@ interface MemberRepository {
 
     fun requestMemberInfo(memberId: Int): Flow<MemberInfoModel>
 
+    fun updateMember(
+        nickname: String,
+        imageId: Int?
+    ): Flow<Boolean>
+
     fun requestMyRecruitments(
         memberId: Int,
         page: Int,
         size: Int,
-        category: String
+        category: String?
     ): Flow<List<MyRecruitmentModel>>
 
     fun fetchMyRecruitments(
@@ -30,13 +35,19 @@ interface MemberRepository {
         memberId: Int,
         page: Int,
         size: Int,
-        category: String
+        category: String?
     ): Flow<List<MyParticipationModel>>
 
     fun fetchMyParticipations(
         memberId: Int,
         category: String
     ): Flow<PagingData<MyParticipationModel>>
+
+    fun deleteMember(
+        authorization: String,
+        reason: String,
+        content: String
+    ): Flow<Boolean>
 
     suspend fun saveMemberId(id: Int)
 

@@ -1,6 +1,5 @@
 package com.cmc.curtaincall.feature.mypage
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -22,6 +21,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,6 +33,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarOnlySetting
 import com.cmc.curtaincall.common.design.extensions.toSp
@@ -49,21 +51,19 @@ import com.cmc.curtaincall.common.design.theme.Silver_Sand
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MyPageScreen(
     myPageViewModel: MyPageViewModel = hiltViewModel(),
     onNavigateSetting: () -> Unit,
-    onNavigateProfileEdit: () -> Unit,
+    onNavigateProfileEdit: (String?) -> Unit,
     onNavigateRecruitment: () -> Unit,
     onNavigateParticipation: () -> Unit,
     onNavigateSavedPerformance: () -> Unit,
     onNavigateWrite: () -> Unit,
     onNavigateAnnouncement: () -> Unit
 ) {
-    Timber.d("MyPageScreen ${myPageViewModel.hashCode()}")
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(White)
 
@@ -77,6 +77,7 @@ fun MyPageScreen(
         }
     ) { paddingValues ->
         MyPageContent(
+            myPageViewModel = myPageViewModel,
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
@@ -93,8 +94,9 @@ fun MyPageScreen(
 
 @Composable
 private fun MyPageContent(
+    myPageViewModel: MyPageViewModel,
     modifier: Modifier = Modifier,
-    onNavigateProfileEdit: () -> Unit,
+    onNavigateProfileEdit: (String?) -> Unit,
     onNavigateRecruitment: () -> Unit,
     onNavigateParticipation: () -> Unit,
     onNavigateSavedPerformance: () -> Unit,
@@ -102,12 +104,17 @@ private fun MyPageContent(
     onNavigateAnnouncement: () -> Unit
 ) {
     val verticalScrollState = rememberScrollState()
+    val myPageUiState by myPageViewModel.uiState.collectAsStateWithLifecycle()
     Column(modifier.verticalScroll(verticalScrollState)) {
         MyPageProfile(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
                 .padding(top = 6.dp),
+            profileUrl = myPageUiState.memberInfoModel.imageUrl,
+            nickname = myPageUiState.memberInfoModel.nickname,
+            recruitingNum = myPageUiState.memberInfoModel.recruitingNum,
+            participationNum = myPageUiState.memberInfoModel.participationNum,
             onNavigateProfileEdit = onNavigateProfileEdit,
             onNavigateRecruitment = onNavigateRecruitment,
             onNavigateParticipation = onNavigateParticipation
@@ -124,7 +131,7 @@ private fun MyPageContent(
                     .padding(vertical = 24.dp),
                 icon = painterResource(R.drawable.ic_edit_square),
                 title = stringResource(R.string.mypage_my_writing),
-                onClick = onNavigateWrite
+                onClick = {}
             )
             Spacer(
                 modifier = Modifier
@@ -138,7 +145,7 @@ private fun MyPageContent(
                     .padding(vertical = 24.dp),
                 icon = painterResource(R.drawable.ic_border_all),
                 title = stringResource(R.string.mypage_saved_performance_list),
-                onClick = onNavigateSavedPerformance
+                onClick = { }
             )
         }
         Spacer(
@@ -157,7 +164,9 @@ private fun MyPageContent(
             MyPageInfoItem(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(R.string.mypage_announcement),
-                onClick = { onNavigateAnnouncement() }
+                onClick = {
+                    // onNavigateAnnouncement()
+                }
             )
             MyPageInfoItem(
                 modifier = Modifier
@@ -281,7 +290,11 @@ private fun MyPageContentItem(
 @Composable
 private fun MyPageProfile(
     modifier: Modifier = Modifier,
-    onNavigateProfileEdit: () -> Unit,
+    profileUrl: String? = null,
+    nickname: String,
+    recruitingNum: Int,
+    participationNum: Int,
+    onNavigateProfileEdit: (String?) -> Unit,
     onNavigateRecruitment: () -> Unit,
     onNavigateParticipation: () -> Unit
 ) {
@@ -299,20 +312,21 @@ private fun MyPageProfile(
                 .padding(vertical = 40.dp),
             contentAlignment = Alignment.Center
         ) {
-            Column {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Box(Modifier.size(92.dp)) {
-                    Image(
-                        painter = painterResource(R.drawable.img_example_detail),
+                    AsyncImage(
+                        model = profileUrl,
+                        error = painterResource(R.drawable.ic_default_profile),
                         contentDescription = null,
                         modifier = Modifier
                             .align(Alignment.TopStart)
                             .size(80.dp)
                             .clip(RoundedCornerShape(26.dp))
-                            .clickable { onNavigateProfileEdit() },
+                            .clickable { onNavigateProfileEdit(profileUrl) },
                         contentScale = ContentScale.FillBounds
                     )
                     IconButton(
-                        onClick = { onNavigateProfileEdit() },
+                        onClick = { onNavigateProfileEdit(profileUrl) },
                         modifier = Modifier
                             .align(Alignment.BottomEnd)
                             .background(Cetacean_Blue, CircleShape)
@@ -327,7 +341,7 @@ private fun MyPageProfile(
                     }
                 }
                 Text(
-                    text = "고라파덕님",
+                    text = "${nickname}님",
                     modifier = Modifier.padding(top = 10.dp),
                     color = Black,
                     fontSize = 18.dp.toSp(),
@@ -357,7 +371,7 @@ private fun MyPageProfile(
                     fontFamily = spoqahansanseeo
                 )
                 Text(
-                    text = "2",
+                    text = recruitingNum.toString(),
                     modifier = Modifier.padding(top = 8.dp),
                     color = Me_Pink,
                     fontSize = 22.dp.toSp(),
@@ -385,7 +399,7 @@ private fun MyPageProfile(
                     fontFamily = spoqahansanseeo
                 )
                 Text(
-                    text = "2",
+                    text = participationNum.toString(),
                     modifier = Modifier.padding(top = 8.dp),
                     color = Me_Pink,
                     fontSize = 24.dp.toSp(),

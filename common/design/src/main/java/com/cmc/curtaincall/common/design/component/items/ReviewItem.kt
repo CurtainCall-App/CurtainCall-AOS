@@ -102,13 +102,15 @@ fun ReviewDetailItem(
     date: String,
     comment: String,
     numberOfLike: Int,
+    isFavorite: Boolean = false,
+    isClickMoreVert: Boolean = false,
+    onClickMoreVert: (Boolean) -> Unit,
+    onFavoriteChange: (Boolean) -> Unit,
     isMyWriting: Boolean = false,
-    onClickLike: (Boolean) -> Unit = {},
     onChangeWriting: () -> Unit = {},
     onRemoveWriting: () -> Unit = {}
 ) {
-    var isCheckLike by remember { mutableStateOf(false) }
-    var isClickMoreVert by remember { mutableStateOf(false) }
+    var isFavoriteState by remember { mutableStateOf(isFavorite) }
     var isTouchChangeButton by remember { mutableStateOf(false) }
     var isTouchRemoveButton by remember { mutableStateOf(false) }
     Box(modifier) {
@@ -172,7 +174,7 @@ fun ReviewDetailItem(
                     contentDescription = null,
                     modifier = Modifier
                         .size(24.dp)
-                        .clickable { isClickMoreVert = isClickMoreVert.not() },
+                        .clickable { onClickMoreVert(isClickMoreVert.not()) },
                     tint = Eerie_Black
                 )
                 if (isClickMoreVert) {
@@ -201,7 +203,7 @@ fun ReviewDetailItem(
                                         MotionEvent.ACTION_MOVE,
                                         MotionEvent.ACTION_UP -> {
                                             isTouchChangeButton = false
-                                            isClickMoreVert = false
+                                            onClickMoreVert(false)
                                             onChangeWriting()
                                         }
 
@@ -236,7 +238,7 @@ fun ReviewDetailItem(
                                         MotionEvent.ACTION_MOVE,
                                         MotionEvent.ACTION_UP -> {
                                             isTouchRemoveButton = false
-                                            isClickMoreVert = false
+                                            onClickMoreVert(false)
                                             onRemoveWriting()
                                         }
 
@@ -272,12 +274,12 @@ fun ReviewDetailItem(
             modifier = Modifier
                 .padding(top = 95.dp)
                 .background(
-                    if (isCheckLike) Me_Pink else Ghost_White,
+                    if (isFavoriteState) Me_Pink else Ghost_White,
                     RoundedCornerShape(6.dp)
                 )
                 .clickable {
-                    isCheckLike = isCheckLike.not()
-                    onClickLike(isCheckLike)
+                    isFavoriteState = isFavoriteState.not()
+                    onFavoriteChange(isFavoriteState)
                 }
                 .padding(vertical = 4.dp, horizontal = 6.dp),
             contentAlignment = Alignment.Center
@@ -285,16 +287,16 @@ fun ReviewDetailItem(
             Row {
                 Icon(
                     painter = painterResource(
-                        if (isCheckLike) R.drawable.ic_thumb_up_sel else R.drawable.ic_thumb_up
+                        if (isFavoriteState) R.drawable.ic_thumb_up_sel else R.drawable.ic_thumb_up
                     ),
                     contentDescription = null,
                     modifier = Modifier.size(14.dp),
                     tint = Color.Unspecified
                 )
                 Text(
-                    text = numberOfLike.toString(),
+                    text = if (isFavorite.not() && isFavoriteState) (numberOfLike + 1).toString() else numberOfLike.toString(),
                     modifier = Modifier.padding(start = 4.dp),
-                    color = if (isCheckLike) White else Cadet_Grey,
+                    color = if (isFavoriteState) White else Cadet_Grey,
                     fontSize = 11.dp.toSp(),
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo

@@ -35,6 +35,7 @@ internal fun PerformanceReviewScreen(
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(White)
+
     Scaffold(
         topBar = {
             TopAppBarWithBack(
@@ -84,8 +85,8 @@ internal fun PerformanceReviewScreen(
 
 @Composable
 private fun PerformanceReviewContent(
-    performanceDetailViewModel: PerformanceDetailViewModel,
     performanceReviewViewModel: PerformanceReviewViewModel = hiltViewModel(),
+    performanceDetailViewModel: PerformanceDetailViewModel,
     modifier: Modifier = Modifier,
     showId: String,
     onNavigateReviewCreate: (String?, String, String, Boolean, Int) -> Unit
@@ -93,6 +94,7 @@ private fun PerformanceReviewContent(
     val reviewItems = performanceDetailViewModel.reviewItems.collectAsLazyPagingItems()
     var isShowRemoveDialog by remember { mutableStateOf(false) }
     var removeReviewId by remember { mutableIntStateOf(0) }
+    var clickIndex by remember { mutableIntStateOf(-1) }
     if (isShowRemoveDialog) {
         CurtainCallBasicDialog(
             title = stringResource(R.string.dialog_performance_review_remove_title),
@@ -102,6 +104,7 @@ private fun PerformanceReviewContent(
             onDismiss = { isShowRemoveDialog = false },
             onPositive = {
                 performanceReviewViewModel.deleteShowReview(removeReviewId)
+                performanceDetailViewModel.requestShowReviewList(showId)
                 isShowRemoveDialog = false
             }
         )
@@ -132,7 +135,19 @@ private fun PerformanceReviewContent(
                         name = reviewItem.creatorNickname,
                         date = reviewItem.createdAt.toChangeFullDate(),
                         comment = reviewItem.content,
-                        numberOfLike = 37,
+                        numberOfLike = reviewItem.likeCount,
+                        isFavorite = reviewItem.isFavortie,
+                        isClickMoreVert = clickIndex == index,
+                        onClickMoreVert = { check ->
+                            clickIndex = if (check) index else -1
+                        },
+                        onFavoriteChange = { check ->
+                            if (check) {
+                                performanceReviewViewModel.requestLikeReview(reviewItem.id)
+                            } else {
+                                performanceReviewViewModel.requestDislikeReview(reviewItem.id)
+                            }
+                        },
                         isMyWriting = performanceDetailViewModel.uiState.value.memberId == reviewItem.creatorId,
                         onChangeWriting = {
                             onNavigateReviewCreate(

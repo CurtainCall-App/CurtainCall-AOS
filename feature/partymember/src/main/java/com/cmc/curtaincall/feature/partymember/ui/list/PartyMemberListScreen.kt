@@ -1,10 +1,13 @@
 package com.cmc.curtaincall.feature.partymember.ui.list
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -13,18 +16,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
+import androidx.paging.compose.itemsIndexed
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.SearchAppBar
 import com.cmc.curtaincall.common.design.component.basic.SearchTopAppBarWithBack
-import com.cmc.curtaincall.common.design.component.content.card.PartyMemberContentCard
+import com.cmc.curtaincall.common.design.component.content.card.PartyMemberEtcItemCard
+import com.cmc.curtaincall.common.design.component.content.card.PartyMemberItemCard
 import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.cmc.curtaincall.common.design.component.items.EmptyItem
+import com.cmc.curtaincall.common.design.component.items.SearchItem
+import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
 import com.cmc.curtaincall.common.utility.extensions.toDateWithDay
 import com.cmc.curtaincall.common.utility.extensions.toTime
+import com.cmc.curtaincall.feature.partymember.ui.PartyMemberUiState
 import com.cmc.curtaincall.feature.partymember.ui.PartyMemberViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -33,25 +42,45 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 internal fun PartyMemberListScreen(
     partyMemberViewModel: PartyMemberViewModel = hiltViewModel(),
     partyType: PartyType,
-    onNavigateDetail: (PartyType, Int, Boolean) -> Unit,
+    onNavigateDetail: (PartyType, Boolean, Int, Boolean) -> Unit,
     onNavigateCreate: (PartyType) -> Unit,
     onBack: () -> Unit
 ) {
-    val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(Cultured)
+    val partyMemberUiState by partyMemberViewModel.uiState.collectAsStateWithLifecycle()
 
-    var isActiveSearchState by remember { mutableStateOf(false) }
-    var queryState by remember { mutableStateOf("") }
+    val systemUiController = rememberSystemUiController()
+    systemUiController.setStatusBarColor(
+        if (partyMemberUiState.isActiveSearch) White else Cultured
+    )
+
+    LaunchedEffect(partyMemberViewModel) {
+        partyMemberViewModel.changePartType(partyType)
+    }
+
     Scaffold(
         topBar = {
-            if (isActiveSearchState) {
+            if (partyMemberUiState.isActiveSearch) {
                 SearchAppBar(
-                    value = queryState,
-                    onValueChange = { queryState = it },
+                    value = partyMemberUiState.queryString,
+                    onValueChange = {
+                        partyMemberViewModel.setQueryString(it)
+                        partyMemberViewModel.changeDoneSearch(false)
+                    },
                     containerColor = White,
                     contentColor = Nero,
                     placeholder = stringResource(R.string.search_performance_title),
-                    onClick = { isActiveSearchState = false }
+                    onDone = {
+                        if (partyMemberUiState.queryString.isNotEmpty()) {
+                            partyMemberViewModel.searchPartyList(partyMemberUiState.queryString)
+                            partyMemberViewModel.insertPartySearchWord()
+                        }
+                        partyMemberViewModel.changeDoneSearch(true)
+                    },
+                    onClick = {
+                        partyMemberViewModel.changeActiveSearch(false)
+                        partyMemberViewModel.setQueryString("")
+                    },
+                    onAction = { partyMemberViewModel.setQueryString("") }
                 )
             } else {
                 SearchTopAppBarWithBack(
@@ -66,27 +95,47 @@ internal fun PartyMemberListScreen(
                     contentColor = Nero,
                     tint = Roman_Silver,
                     onBack = onBack,
-                    onClick = { isActiveSearchState = true }
+                    onClick = { partyMemberViewModel.changeActiveSearch(true) }
                 )
             }
         },
         floatingActionButton = {
-            IconButton(
+            FloatingActionButton(
                 onClick = { onNavigateCreate(partyType) },
-                modifier = Modifier.size(85.dp)
+                modifier = Modifier
+                    .padding(bottom = 40.dp)
+                    .size(58.dp),
+                shape = CircleShape,
+                containerColor = Cetacean_Blue
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.ic_fab_write),
+                    painter = painterResource(R.drawable.ic_pen),
                     contentDescription = null,
+                    modifier = Modifier.size(29.dp),
                     tint = Color.Unspecified
                 )
             }
         }
     ) { paddingValues ->
-        if (isActiveSearchState) {
-            // TODO
+        if (partyMemberUiState.isActiveSearch) {
+            PartyMemberListSearchContent(
+                partyMemberViewModel = partyMemberViewModel,
+                partyType = partyType,
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
+                    .background(White),
+                onSearchClick = {
+                    partyMemberViewModel.setQueryString(it)
+                    partyMemberViewModel.searchPartyList(it)
+                    partyMemberViewModel.insertPartySearchWord()
+                    partyMemberViewModel.changeDoneSearch(true)
+                },
+                onNavigateDetail = onNavigateDetail
+            )
         } else {
             PartyMemberListContent(
+                partyMemberUiState = partyMemberUiState,
                 partyMemberViewModel = partyMemberViewModel,
                 partyType = partyType,
                 modifier = Modifier
@@ -100,34 +149,154 @@ internal fun PartyMemberListScreen(
 }
 
 @Composable
-private fun PartyMemberListContent(
+private fun PartyMemberListSearchContent(
     partyMemberViewModel: PartyMemberViewModel,
     partyType: PartyType,
     modifier: Modifier = Modifier,
-    onNavigateDetail: (PartyType, Int, Boolean) -> Unit
+    onSearchClick: (String) -> Unit,
+    onNavigateDetail: (PartyType, Boolean, Int, Boolean) -> Unit,
+) {
+    val searchWords by partyMemberViewModel.searchWords.collectAsStateWithLifecycle()
+    val partyMemberUiState by partyMemberViewModel.uiState.collectAsStateWithLifecycle()
+    val partySearchItems = partyMemberUiState.partySearchItems.collectAsLazyPagingItems()
+
+    LazyColumn(modifier) {
+        item {
+            Spacer(
+                modifier = Modifier
+                    .padding(vertical = 20.dp)
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(Cultured)
+            )
+        }
+
+        if (partyMemberUiState.queryString.isEmpty()) {
+            if (searchWords.isEmpty()) {
+                item {
+                    EmptyItem(
+                        modifier = Modifier
+                            .padding(top = 232.dp)
+                            .fillMaxWidth(),
+                        alert = stringResource(R.string.search_empty_recently_word)
+                    )
+                }
+            } else {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp)
+                            .padding(bottom = 20.dp)
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 10.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = stringResource(R.string.search_recently_word),
+                                modifier = Modifier.weight(1f),
+                                color = Chinese_Black,
+                                fontSize = 16.dp.toSp(),
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = spoqahansanseeo
+                            )
+                            Text(
+                                text = stringResource(R.string.search_delete_recentyl_word),
+                                modifier = Modifier.clickable { partyMemberViewModel.deletePartySearchWordList() },
+                                color = Roman_Silver,
+                                fontSize = 14.dp.toSp(),
+                                fontWeight = FontWeight.Medium,
+                                fontFamily = spoqahansanseeo
+                            )
+                        }
+                        searchWords.forEach { searchWord ->
+                            SearchItem(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 10.dp),
+                                word = searchWord.word,
+                                onClick = { onSearchClick(searchWord.word) },
+                                onDelete = { partyMemberViewModel.deletePartySearchWord(searchWord) }
+                            )
+                        }
+                    }
+                }
+            }
+        } else {
+            if (partyMemberUiState.isDoneSearch) {
+                itemsIndexed(partySearchItems) { index, partyModel ->
+                    partyModel?.let { partyModel ->
+                        PartyMemberItemCard(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 20.dp)
+                                .wrapContentHeight()
+                                .padding(bottom = 20.dp),
+                            title = partyModel.showName,
+                            nickname = partyModel.creatorNickname,
+                            createAtDate = partyModel.createdAt.toChangeFullDate(),
+                            createAtTime = partyModel.createdAt.toTime(),
+                            numberOfMember = partyModel.curMemberNum,
+                            numberOfTotal = partyModel.maxMemberNum,
+                            description = partyModel.title,
+                            posterUrl = partyModel.showPoster,
+                            date = partyModel.showAt?.toDateWithDay(),
+                            time = partyModel.showAt?.toTime(),
+                            location = partyModel.facilityName,
+                            onClick = {
+                                onNavigateDetail(
+                                    partyType,
+                                    if (partyModel.creatorId == partyMemberViewModel.memberId.value) true else partyModel.isParticipation,
+                                    partyModel.id,
+                                    partyModel.creatorId == partyMemberViewModel.memberId.value
+                                )
+                            }
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun PartyMemberListContent(
+    partyMemberUiState: PartyMemberUiState,
+    partyMemberViewModel: PartyMemberViewModel,
+    partyType: PartyType,
+    modifier: Modifier = Modifier,
+    onNavigateDetail: (PartyType, Boolean, Int, Boolean) -> Unit
 ) {
     val pagingItems = when (partyType) {
         PartyType.PERFORMANCE -> {
-            partyMemberViewModel.watchingItems.collectAsLazyPagingItems()
+            partyMemberUiState.watchingItems.collectAsLazyPagingItems()
         }
 
         PartyType.MEAL -> {
-            partyMemberViewModel.foodCafeItems.collectAsLazyPagingItems()
+            partyMemberUiState.foodCafeItems.collectAsLazyPagingItems()
         }
 
         PartyType.ETC -> {
-            partyMemberViewModel.etcItems.collectAsLazyPagingItems()
+            partyMemberUiState.etcItems.collectAsLazyPagingItems()
         }
     }
 
     Column(modifier = modifier.background(Cultured)) {
         if (pagingItems.itemCount == 0) {
-            EmptyItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 252.dp),
-                alert = stringResource(R.string.partymember_empty_text)
-            )
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(Modifier.weight(252f))
+                EmptyItem(
+                    alert = stringResource(R.string.partymember_empty_text),
+                    painter = painterResource(R.drawable.ic_dark_empty_item)
+                )
+                Spacer(Modifier.weight(327f))
+            }
         } else {
             LazyColumn(
                 modifier = Modifier
@@ -146,31 +315,57 @@ private fun PartyMemberListContent(
                 }
                 items(pagingItems) { partyModel ->
                     partyModel?.let { partyModel ->
-                        PartyMemberContentCard(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentHeight()
-                                .padding(bottom = 20.dp),
-                            partyType = partyType,
-                            title = partyModel.showName,
-                            nickname = partyModel.creatorNickname,
-                            createAtDate = partyModel.createdAt.toChangeFullDate(),
-                            createAtTime = partyModel.createdAt.toTime(),
-                            numberOfMember = partyModel.curMemberNum,
-                            numberOfTotal = partyModel.maxMemberNum,
-                            description = partyModel.title,
-                            posterUrl = partyModel.showPoster,
-                            date = partyModel.showAt.toDateWithDay(),
-                            time = partyModel.showAt.toTime(),
-                            location = partyModel.facilityName,
-                            onClick = {
-                                onNavigateDetail(
-                                    partyType,
-                                    partyModel.id,
-                                    partyModel.creatorId == partyMemberViewModel.memberId.value
-                                )
-                            }
-                        )
+                        if (partyType == PartyType.ETC) {
+                            PartyMemberEtcItemCard(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentHeight()
+                                    .padding(bottom = 16.dp),
+                                profileImageUrl = partyModel.creatorImageUrl,
+                                nickname = partyModel.creatorNickname,
+                                createAtDate = partyModel.createdAt.toChangeFullDate(),
+                                createAtTime = partyModel.createdAt.toTime(),
+                                description = partyModel.title,
+                                date = partyModel.showAt?.toDateWithDay(),
+                                numberOfMember = partyModel.curMemberNum,
+                                numberOfTotal = partyModel.maxMemberNum,
+                                onClick = {
+                                    onNavigateDetail(
+                                        partyType,
+                                        if (partyModel.creatorId == partyMemberViewModel.memberId.value) true else partyModel.isParticipation,
+                                        partyModel.id,
+                                        partyModel.creatorId == partyMemberViewModel.memberId.value
+                                    )
+                                }
+                            )
+                        } else {
+                            PartyMemberItemCard(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentHeight()
+                                    .padding(bottom = 20.dp),
+                                title = partyModel.showName,
+                                profileImageUrl = partyModel.creatorImageUrl,
+                                nickname = partyModel.creatorNickname,
+                                createAtDate = partyModel.createdAt.toChangeFullDate(),
+                                createAtTime = partyModel.createdAt.toTime(),
+                                numberOfMember = partyModel.curMemberNum,
+                                numberOfTotal = partyModel.maxMemberNum,
+                                description = partyModel.title,
+                                posterUrl = partyModel.showPoster,
+                                date = partyModel.showAt?.toDateWithDay(),
+                                time = partyModel.showAt?.toTime(),
+                                location = partyModel.facilityName,
+                                onClick = {
+                                    onNavigateDetail(
+                                        partyType,
+                                        if (partyModel.creatorId == partyMemberViewModel.memberId.value) true else partyModel.isParticipation,
+                                        partyModel.id,
+                                        partyModel.creatorId == partyMemberViewModel.memberId.value
+                                    )
+                                }
+                            )
+                        }
                     }
                 }
             }

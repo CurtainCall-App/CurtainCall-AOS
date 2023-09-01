@@ -1,7 +1,9 @@
 package com.cmc.curtaincall.data.source.remote
 
 import com.cmc.curtaincall.core.network.service.member.MemberService
+import com.cmc.curtaincall.core.network.service.member.request.DeleteMemberRequest
 import com.cmc.curtaincall.core.network.service.member.request.MemberCreateRequest
+import com.cmc.curtaincall.core.network.service.member.request.UpdateMemberRequest
 import com.cmc.curtaincall.domain.model.home.MemberInfoModel
 import com.cmc.curtaincall.domain.model.home.MyParticipationModel
 import com.cmc.curtaincall.domain.model.home.MyRecruitmentModel
@@ -24,11 +26,25 @@ class MemberRemoteSource @Inject constructor(
         emit(memberService.requestMemberInfo(memberId).toModel())
     }
 
+    fun updateMember(
+        nickname: String,
+        imageId: Int?
+    ): Flow<Boolean> = flow {
+        emit(
+            memberService.updateMember(
+                updateMemberRequest = UpdateMemberRequest(
+                    nickname = nickname,
+                    imageId = imageId
+                )
+            ).isSuccessful
+        )
+    }
+
     fun requestMyRecruitments(
         memberId: Int,
         page: Int,
         size: Int,
-        category: String
+        category: String?
     ): Flow<List<MyRecruitmentModel>> = flow {
         emit(
             memberService.requestMyRecruitments(
@@ -44,7 +60,7 @@ class MemberRemoteSource @Inject constructor(
         memberId: Int,
         page: Int,
         size: Int,
-        category: String
+        category: String?
     ): Flow<List<MyParticipationModel>> = flow {
         emit(
             memberService.requestMyParticipations(
@@ -53,6 +69,22 @@ class MemberRemoteSource @Inject constructor(
                 size = size,
                 category = category
             ).participations.map { it.toModel() }
+        )
+    }
+
+    fun deleteMember(
+        authorization: String,
+        reason: String,
+        content: String
+    ): Flow<Boolean> = flow {
+        emit(
+            memberService.deleteMember(
+                authorization = "Bearer $authorization",
+                deleteMemberRequest = DeleteMemberRequest(
+                    reason = reason,
+                    content = content
+                )
+            ).isSuccessful
         )
     }
 }

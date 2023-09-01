@@ -68,9 +68,11 @@ fun PerformanceDetailCard(
     date: String,
     location: String,
     onClick: () -> Unit = {},
-    onSave: (Boolean) -> Unit = {}
+    isFavorite: Boolean = false,
+    onFavorite: () -> Unit = {},
+    onDisFavorite: () -> Unit = {}
 ) {
-    var savePerformance by remember { mutableStateOf(false) }
+    var favoriteState by remember { mutableStateOf(isFavorite) }
     Row(modifier.clickable { onClick() }) {
         AsyncImage(
             model = imageUrl,
@@ -128,19 +130,19 @@ fun PerformanceDetailCard(
                 }
                 IconButton(
                     onClick = {
-                        savePerformance = savePerformance.not()
-                        onSave(savePerformance)
+                        favoriteState = favoriteState.not()
+                        if (favoriteState) onFavorite() else onDisFavorite()
                     },
                     modifier = Modifier
                         .padding(start = 3.dp)
                         .clip(CircleShape)
                         .size(26.dp),
                     colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = if (savePerformance) Cetacean_Blue else Bright_Gray
+                        containerColor = if (favoriteState) Cetacean_Blue else Bright_Gray
                     )
                 ) {
                     Icon(
-                        painter = painterResource(if (savePerformance) R.drawable.ic_bookmark_sel else R.drawable.ic_bookmark),
+                        painter = painterResource(if (favoriteState) R.drawable.ic_bookmark_sel else R.drawable.ic_bookmark),
                         contentDescription = null,
                         tint = Color.Unspecified
                     )
@@ -225,7 +227,9 @@ fun PerformanceDetailCard(
                     color = Nero,
                     fontSize = 14.dp.toSp(),
                     fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo
+                    fontFamily = spoqahansanseeo,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }
@@ -241,10 +245,13 @@ fun PerformanceCard(
     rate: Float,
     numberOfTotal: Int,
     isShowMetadata: Boolean = false,
-    meta: String = ""
+    meta: String = "",
+    onClick: () -> Unit = {}
 ) {
     Card(
-        modifier = modifier.aspectRatio(120 / 218f),
+        modifier = modifier
+            .aspectRatio(120 / 218f)
+            .clickable { onClick() },
         shape = RoundedCornerShape(10.dp),
         colors = CardDefaults.cardColors(
             containerColor = White,
@@ -271,13 +278,13 @@ fun PerformanceCard(
                 Box(
                     modifier = Modifier
                         .background(Coal.copy(0.7f), RoundedCornerShape(topStart = 10.dp, bottomEnd = 10.dp))
-                        .padding(horizontal = 10.dp, vertical = 7.dp),
+                        .padding(horizontal = 10.dp, vertical = 4.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = meta,
                         color = White,
-                        fontSize = 18.dp.toSp(),
+                        fontSize = 14.dp.toSp(),
                         fontWeight = FontWeight.Bold,
                         fontFamily = spoqahansanseeo
                     )

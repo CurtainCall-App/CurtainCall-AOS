@@ -18,6 +18,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":core:network"))
     implementation(project(":core:local"))
+    implementation(project(":common:utility"))
 
     implementation(libs.bundles.retrofit)
     implementation(libs.hilt.android)

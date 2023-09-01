@@ -29,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.LazyPagingItems
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallBorderText
@@ -38,7 +39,6 @@ import com.cmc.curtaincall.common.design.component.content.card.PerformanceSimpl
 import com.cmc.curtaincall.common.design.component.content.row.SortTypeRow
 import com.cmc.curtaincall.common.design.component.custom.SelectSortTypeBottomSheet
 import com.cmc.curtaincall.common.design.component.custom.SelectedDateCalender
-import com.cmc.curtaincall.common.design.component.custom.SortType
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.Arsenic
 import com.cmc.curtaincall.common.design.theme.Black_Pearl
@@ -63,14 +63,15 @@ fun LazyGridScope.showPerformanceFirstStep(
     onChangeSelect: (Int) -> Unit
 ) {
     item(span = { GridItemSpan(3) }) {
-        var sortType by remember { mutableStateOf(SortType.STAR) }
+        val partyMemberCreateUiState by partyMemberCreateViewModel.uiState.collectAsStateWithLifecycle()
         var showDialog by remember { mutableStateOf(false) }
 
         if (showDialog) {
             SelectSortTypeBottomSheet(
-                sortType = sortType,
+                sortType = partyMemberCreateUiState.sortType,
                 onSelectSortType = {
-                    sortType = it
+                    partyMemberCreateViewModel.setSortType(it)
+                    onChangeSelect(-1)
                     showDialog = false
                 },
                 onDismissRequest = { showDialog = false }
@@ -134,7 +135,7 @@ fun LazyGridScope.showPerformanceFirstStep(
                 ) {
                     SortTypeRow(
                         modifier = Modifier.weight(1f),
-                        sortType = sortType,
+                        sortType = partyMemberCreateUiState.sortType,
                         onClick = { showDialog = true }
                     )
                     Text(

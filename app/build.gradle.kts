@@ -42,6 +42,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":feature:auth"))
     implementation(project(":feature:home"))
+    implementation(project(":feature:mypage"))
 
     // androidx
     implementation(libs.androidx.core.ktx)
@@ -54,6 +55,7 @@ dependencies {
     implementation(libs.bundles.accompanist.compose)
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pager.indicators)
+    implementation(libs.androidx.lifecycle.compose)
 
     // logging
     implementation(libs.timber)
@@ -64,6 +66,7 @@ dependencies {
     // hilt
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
+    implementation(libs.hilt.navigation.compose)
 
     // test
     testImplementation(libs.junit)

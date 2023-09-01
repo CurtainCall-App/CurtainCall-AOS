@@ -57,7 +57,11 @@ sealed interface HomeDestination : CurtainCallDestination {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeNavHost(navHostController: NavHostController = rememberNavController()) {
+fun HomeNavHost(
+    navHostController: NavHostController = rememberNavController(),
+    onLogout: () -> Unit = {},
+    onDeleteMember: () -> Unit = {}
+) {
     Scaffold(
         bottomBar = { HomeBottomBar(navHostController) },
         floatingActionButton = { HomeFloatingButton(navHostController) },
@@ -76,8 +80,8 @@ fun HomeNavHost(navHostController: NavHostController = rememberNavController()) 
                     onNavigateGuide = {
                         navHostController.navigate("${HomeDestination.Guide.route}/$it")
                     },
-                    onNavigatePerformance = {
-                        navHostController.navigate(PerformanceDestination.Performance.route)
+                    onNavigatePerformanceDetail = {
+                        navHostController.navigate("${PerformanceDestination.Detail.route}/$it")
                     },
                     onNavigateLiveTalk = {
                         navHostController.navigate(LiveTalkDestination.LiveTalk.route)
@@ -126,7 +130,11 @@ fun HomeNavHost(navHostController: NavHostController = rememberNavController()) 
                     }
                 }
             )
-            mypageNavGraph(navHostController)
+            mypageNavGraph(
+                navHostController = navHostController,
+                onLogout = onLogout,
+                onDeleteMember = onDeleteMember
+            )
         }
     }
 }

@@ -26,12 +26,14 @@ import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.component.custom.RatingBar
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.feature.performance.detail.PerformanceDetailViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PerformanceReviewCreateScreen(
+    performanceDetailViewModel: PerformanceDetailViewModel = hiltViewModel(),
     performanceReviewViewModel: PerformanceReviewViewModel = hiltViewModel(),
     showId: String,
     fromMypage: Boolean = false,
@@ -62,7 +64,10 @@ internal fun PerformanceReviewCreateScreen(
             showId = showId,
             fromMypage = fromMypage,
             reviewId = reviewId,
-            onBack = onBack
+            onBack = {
+                performanceDetailViewModel.requestShowReviewList(showId)
+                onBack()
+            }
         )
     }
 }
@@ -156,14 +161,8 @@ private fun PerformanceReviewCreateBody(
     LaunchedEffect(performanceReviewViewModel) {
         performanceReviewViewModel.effect.collectLatest {
             when (it) {
-                PerformanceReviewSideEffect.CreateSuccess -> {
-                    onBack()
-                }
-
-                PerformanceReviewSideEffect.UpdateSuccess -> {
-                    onBack()
-                }
-
+                PerformanceReviewSideEffect.CreateSuccess,
+                PerformanceReviewSideEffect.UpdateSuccess,
                 PerformanceReviewSideEffect.DeleteSuccess -> {
                     onBack()
                 }
@@ -199,6 +198,7 @@ private fun PerformanceReviewCreateBody(
                 .height(52.dp),
             title = stringResource(R.string.performance_review_create_write_complete),
             fontSize = 16.dp.toSp(),
+            enabled = review.isNotEmpty(),
             containerColor = Me_Pink,
             contentColor = White
         )
@@ -250,7 +250,7 @@ private fun ReviewCreateBody(
         )
         CurtainCallMultiLineTextField(
             value = review,
-            onValueChange = { if (it.length < 20) onReviewChange(it) },
+            onValueChange = { if (it.length <= 20) onReviewChange(it) },
             modifier = Modifier
                 .padding(top = 12.dp)
                 .fillMaxWidth()

@@ -19,6 +19,8 @@ class PartyMemberDetailViewModel @Inject constructor(
             is PartyMemberDetailEvent.RequestPartyDetail -> {
                 currentState.copy(partyDetailModel = event.partyDetailModel)
             }
+
+            else -> currentState
         }
 
     fun requestPartyDetail(partyId: Int) {
@@ -30,6 +32,12 @@ class PartyMemberDetailViewModel @Inject constructor(
     fun deleteParty(partyId: Int) {
         partyRepository.deleteParty(partyId)
             .onEach { sendSideEffect(PartyMemberDetailSideEffect.SuccessDelete) }
+            .launchIn(viewModelScope)
+    }
+
+    fun participateParty(partyId: Int) {
+        partyRepository.participateParty(partyId)
+            .onEach { sendSideEffect(PartyMemberDetailSideEffect.SuccessParticipation) }
             .launchIn(viewModelScope)
     }
 }

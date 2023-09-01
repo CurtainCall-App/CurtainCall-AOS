@@ -36,13 +36,22 @@ internal fun AppNavHost(navHostController: NavHostController = rememberNavContro
         route = ROOT_GRAPH
     ) {
         composable(route = Splash.route) {
-            SplashScreen {
-                navHostController.navigate(OnBoarding.route) {
-                    popUpTo(Splash.route) {
-                        inclusive = true
+            SplashScreen(
+                onNavigateOnBoarding = {
+                    navHostController.navigate(OnBoarding.route) {
+                        popUpTo(Splash.route) {
+                            inclusive = true
+                        }
+                    }
+                },
+                onNavigateOnHome = {
+                    navHostController.navigate(HomeDestination.Home.route) {
+                        popUpTo(Splash.route) {
+                            inclusive = true
+                        }
                     }
                 }
-            }
+            )
         }
 
         composable(route = OnBoarding.route) {
@@ -65,7 +74,22 @@ internal fun AppNavHost(navHostController: NavHostController = rememberNavContro
         }
 
         composable(route = HomeDestination.Home.route) {
-            HomeNavHost()
+            HomeNavHost(
+                onLogout = {
+                    navHostController.navigate(AuthDestination.Login.route) {
+                        popUpTo(AuthDestination.Login.route) {
+                            inclusive = true
+                        }
+                    }
+                },
+                onDeleteMember = {
+                    navHostController.navigate(AuthDestination.Login.route) {
+                        popUpTo(AuthDestination.Login.route) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
 
         authNavGraph(navHostController)

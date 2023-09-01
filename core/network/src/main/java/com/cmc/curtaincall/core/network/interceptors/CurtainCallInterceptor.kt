@@ -47,17 +47,19 @@ class CurtainCallInterceptor @Inject constructor(
         if (tokenInfo.accessTokenExpiresAt < today) {
             Timber.d("refreshToken start")
             try {
-                tokenInfo = runBlocking {
-                    val result = authRepository.requestReissue(tokenInfo.refreshToken).first()
-                    tokenRepository.saveToken(result)
-                    TokenInfo(
-                        accessToken = result.accessToken,
-                        accessTokenExpiresAt = result.accessTokenExpiresAt,
-                        refreshToken = result.refreshToken,
-                        refreshTokenExpiresAt = result.refreshTokenExpiresAt
-                    )
+                if (tokenInfo.refreshTokenExpiresAt > today) {
+                    tokenInfo = runBlocking {
+                        val result = authRepository.requestReissue(tokenInfo.refreshToken).first()
+                        tokenRepository.saveToken(result)
+                        TokenInfo(
+                            accessToken = result.accessToken,
+                            accessTokenExpiresAt = result.accessTokenExpiresAt,
+                            refreshToken = result.refreshToken,
+                            refreshTokenExpiresAt = result.refreshTokenExpiresAt
+                        )
+                    }
+                    Timber.d("refreshToken end accessToken: ${tokenInfo.accessToken} accessTokenExpiresAt: ${tokenInfo.accessTokenExpiresAt}")
                 }
-                Timber.d("refreshToken end accessToken: ${tokenInfo.accessToken} accessTokenExpiresAt: ${tokenInfo.accessTokenExpiresAt}")
             } catch (e: Exception) {
                 return chain.proceed(chain.request())
             }

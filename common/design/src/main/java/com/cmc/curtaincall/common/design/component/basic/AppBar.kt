@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -105,7 +106,9 @@ fun SearchAppBar(
     containerColor: Color,
     contentColor: Color,
     placeholder: String = "",
-    onClick: () -> Unit = {}
+    onDone: () -> Unit = {},
+    onClick: () -> Unit = {},
+    onAction: () -> Unit = {}
 ) {
     TopAppBar(
         title = {
@@ -139,6 +142,9 @@ fun SearchAppBar(
                     ),
                     singleLine = true,
                     maxLines = 1,
+                    keyboardActions = KeyboardActions(
+                        onDone = { onDone() }
+                    ),
                     decorationBox = { innerTextField ->
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             Box(
@@ -156,7 +162,7 @@ fun SearchAppBar(
                                     )
                                 }
                             }
-                            IconButton(onClick = { onValueChange("") }) {
+                            IconButton(onClick = { onAction() }) {
                                 Icon(
                                     painter = painterResource(R.drawable.ic_close),
                                     contentDescription = null,

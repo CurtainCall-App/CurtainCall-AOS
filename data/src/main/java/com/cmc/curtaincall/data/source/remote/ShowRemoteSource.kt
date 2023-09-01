@@ -5,6 +5,7 @@ import com.cmc.curtaincall.core.network.service.show.response.FacilityDetailResp
 import com.cmc.curtaincall.core.network.service.show.response.ShowDetailResponse
 import com.cmc.curtaincall.core.network.service.show.response.ShowInfoResponse
 import com.cmc.curtaincall.core.network.service.show.response.ShowRankResponse
+import com.cmc.curtaincall.core.network.service.show.response.SimilarShowInfoResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -15,13 +16,15 @@ class ShowRemoteSource @Inject constructor(
     fun requestShowList(
         page: Int,
         size: Int,
-        genre: String
+        genre: String,
+        sort: String?
     ): Flow<List<ShowInfoResponse>> = flow {
         emit(
             showService.requestShowList(
                 page = page,
                 size = size,
-                genre = genre
+                genre = genre,
+                sort = sort
             ).showInfos
         )
     }
@@ -54,6 +57,22 @@ class ShowRemoteSource @Inject constructor(
         )
     }
 
+    fun requestEndShowList(
+        page: Int,
+        size: Int,
+        endDate: String,
+        genre: String?
+    ): Flow<List<ShowInfoResponse>> = flow {
+        emit(
+            showService.requestEndShowList(
+                page = page,
+                size = size,
+                endDate = endDate,
+                genre = genre
+            ).showInfos
+        )
+    }
+
     fun requestShowDetail(
         showId: String
     ): Flow<ShowDetailResponse> = flow {
@@ -64,7 +83,7 @@ class ShowRemoteSource @Inject constructor(
 
     fun requestPopularShowList(
         type: String,
-        genre: String,
+        genre: String?,
         baseDate: String
     ): Flow<List<ShowRankResponse>> = flow {
         emit(
@@ -81,6 +100,22 @@ class ShowRemoteSource @Inject constructor(
     ): Flow<FacilityDetailResponse> = flow {
         emit(
             showService.requestFacilityDetail(facilityId)
+        )
+    }
+
+    fun requestSimilarShowList(
+        facilityId: String,
+        page: Int,
+        size: Int?,
+        genre: String?
+    ): Flow<List<SimilarShowInfoResponse>> = flow {
+        emit(
+            showService.requestSimilarShowList(
+                facilityId = facilityId,
+                page = page,
+                size = size,
+                genre = genre
+            ).similarShowInfos
         )
     }
 }

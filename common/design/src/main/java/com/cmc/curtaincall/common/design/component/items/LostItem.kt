@@ -1,7 +1,6 @@
 package com.cmc.curtaincall.common.design.component.items
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,12 +14,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.Black_Coral
@@ -33,14 +32,14 @@ import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 @Composable
 fun GridLostItem(
     modifier: Modifier = Modifier,
-    painter: Painter,
+    imageUrl: String?,
     title: String,
     location: String,
     date: String
 ) {
     Column(modifier) {
-        Image(
-            painter = painter,
+        AsyncImage(
+            model = imageUrl,
             contentDescription = null,
             modifier = Modifier
                 .aspectRatio(1f)
@@ -87,7 +86,7 @@ fun GridLostItem(
 @Composable
 fun LostItem(
     modifier: Modifier = Modifier,
-    painter: Painter,
+    imageUrl: String?,
     title: String,
     date: String,
     getLocation: String,
@@ -99,8 +98,8 @@ fun LostItem(
             .padding(10.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painter = painter,
+        AsyncImage(
+            model = imageUrl,
             contentDescription = null,
             modifier = Modifier
                 .size(63.dp)

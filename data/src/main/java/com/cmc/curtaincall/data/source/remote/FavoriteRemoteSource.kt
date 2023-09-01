@@ -35,7 +35,7 @@ class FavoriteRemoteSource @Inject constructor(
     }
 
     fun requestFavoriteShows(
-        memberId: String
+        memberId: Int
     ): Flow<List<FavoriteShowResponse>> = flow {
         emit(
             favoriteService.requestFavoriteShows(memberId).favoriteShows

@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -23,9 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -53,7 +49,8 @@ import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
 import com.cmc.curtaincall.common.utility.extensions.toRunningTime
-import com.cmc.curtaincall.feature.performance.lostitem.PerformanceLostItemTabScreen
+import com.cmc.curtaincall.feature.performance.PerformanceViewModel
+import com.cmc.curtaincall.feature.performance.lostitem.screen.PerformanceLostItemTabScreen
 import com.cmc.curtaincall.feature.performance.review.PerformanceReviewTabScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -63,6 +60,7 @@ enum class TabType(val label: String) {
 
 @Composable
 internal fun PerformanceDetailScreen(
+    performanceViewModel: PerformanceViewModel = hiltViewModel(),
     performanceDetailViewModel: PerformanceDetailViewModel = hiltViewModel(),
     showId: String,
     onNavigateReview: (String) -> Unit,
@@ -74,6 +72,7 @@ internal fun PerformanceDetailScreen(
 
     LaunchedEffect(Unit) {
         performanceDetailViewModel.requestShowDetail(showId)
+        performanceDetailViewModel.checkFavoriteShows(showId)
         performanceDetailViewModel.requestShowReviewList(showId)
     }
 
@@ -87,9 +86,11 @@ internal fun PerformanceDetailScreen(
         contentAlignment = Alignment.TopCenter
     ) {
         PerformanceDetailContent(
+            performanceViewModel = performanceViewModel,
+            performanceDetailViewModel = performanceDetailViewModel,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(666.dp)
+                .height((666 + if (ticketPrices.size > 2) (22 * (ticketPrices.size - 2)) else 0).dp)
                 .background(Cetacean_Blue.copy(0.8f)),
             posterUrl = performanceDetailUiState.showDetailModel.poster,
             title = performanceDetailUiState.showDetailModel.name,
@@ -105,8 +106,7 @@ internal fun PerformanceDetailScreen(
         )
         Column(
             modifier = Modifier
-                .offset(y = (-1 * (2 - ticketPrices.size) * 22).dp)
-                .padding(top = 644.dp)
+                .padding(top = (644 + (-1 * (2 - ticketPrices.size) * 22)).dp)
                 .fillMaxSize()
                 .background(White, RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
         ) {
@@ -130,7 +130,6 @@ private fun PerformanceDetailTab(
     onNavigateLostItem: (String) -> Unit
 ) {
     val performanceDetailUiState by performanceDetailViewModel.uiState.collectAsStateWithLifecycle()
-    var tabType by remember { mutableStateOf(TabType.DETAIL) }
     Column(modifier) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -138,17 +137,17 @@ private fun PerformanceDetailTab(
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 IconButton(
-                    onClick = { tabType = TabType.DETAIL },
+                    onClick = { performanceDetailViewModel.changeTabType(TabType.DETAIL) },
                     modifier = Modifier
                         .size(58.dp)
                         .clip(CircleShape),
                     colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = if (tabType == TabType.DETAIL) Cetacean_Blue else Bright_Gray
+                        containerColor = if (performanceDetailUiState.tabType == TabType.DETAIL) Cetacean_Blue else Bright_Gray
                     )
                 ) {
                     Icon(
                         painter = painterResource(
-                            if (tabType == TabType.DETAIL) {
+                            if (performanceDetailUiState.tabType == TabType.DETAIL) {
                                 R.drawable.ic_detail_home_sel
                             } else {
                                 R.drawable.ic_detail_home
@@ -161,7 +160,7 @@ private fun PerformanceDetailTab(
                 Text(
                     text = TabType.DETAIL.label,
                     modifier = Modifier.padding(top = 10.dp),
-                    color = if (tabType == TabType.DETAIL) Cetacean_Blue else Bright_Gray,
+                    color = if (performanceDetailUiState.tabType == TabType.DETAIL) Cetacean_Blue else Bright_Gray,
                     fontSize = 15.dp.toSp(),
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo
@@ -169,17 +168,17 @@ private fun PerformanceDetailTab(
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 IconButton(
-                    onClick = { tabType = TabType.REVIEW },
+                    onClick = { performanceDetailViewModel.changeTabType(TabType.REVIEW) },
                     modifier = Modifier
                         .size(58.dp)
                         .clip(CircleShape),
                     colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = if (tabType == TabType.REVIEW) Cetacean_Blue else Bright_Gray
+                        containerColor = if (performanceDetailUiState.tabType == TabType.REVIEW) Cetacean_Blue else Bright_Gray
                     )
                 ) {
                     Icon(
                         painter = painterResource(
-                            if (tabType == TabType.REVIEW) R.drawable.ic_review_sel else R.drawable.ic_review
+                            if (performanceDetailUiState.tabType == TabType.REVIEW) R.drawable.ic_review_sel else R.drawable.ic_review
                         ),
                         contentDescription = null,
                         tint = Color.Unspecified
@@ -188,7 +187,7 @@ private fun PerformanceDetailTab(
                 Text(
                     text = TabType.REVIEW.label,
                     modifier = Modifier.padding(top = 10.dp),
-                    color = if (tabType == TabType.REVIEW) Cetacean_Blue else Bright_Gray,
+                    color = if (performanceDetailUiState.tabType == TabType.REVIEW) Cetacean_Blue else Bright_Gray,
                     fontSize = 15.dp.toSp(),
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo
@@ -196,17 +195,17 @@ private fun PerformanceDetailTab(
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 IconButton(
-                    onClick = { tabType = TabType.LOST_ITEM },
+                    onClick = { performanceDetailViewModel.changeTabType(TabType.LOST_ITEM) },
                     modifier = Modifier
                         .size(58.dp)
                         .clip(CircleShape),
                     colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = if (tabType == TabType.LOST_ITEM) Cetacean_Blue else Bright_Gray
+                        containerColor = if (performanceDetailUiState.tabType == TabType.LOST_ITEM) Cetacean_Blue else Bright_Gray
                     )
                 ) {
                     Icon(
                         painter = painterResource(
-                            if (tabType == TabType.LOST_ITEM) R.drawable.ic_lost_item_sel else R.drawable.ic_lost_item
+                            if (performanceDetailUiState.tabType == TabType.LOST_ITEM) R.drawable.ic_lost_item_sel else R.drawable.ic_lost_item
                         ),
                         contentDescription = null,
                         tint = Color.Unspecified
@@ -215,7 +214,7 @@ private fun PerformanceDetailTab(
                 Text(
                     text = TabType.LOST_ITEM.label,
                     modifier = Modifier.padding(top = 10.dp),
-                    color = if (tabType == TabType.LOST_ITEM) Cetacean_Blue else Bright_Gray,
+                    color = if (performanceDetailUiState.tabType == TabType.LOST_ITEM) Cetacean_Blue else Bright_Gray,
                     fontSize = 15.dp.toSp(),
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo
@@ -223,13 +222,15 @@ private fun PerformanceDetailTab(
             }
         }
 
-        when (tabType) {
+        when (performanceDetailUiState.tabType) {
             TabType.DETAIL -> {
                 PerformanceDetailTabScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 50.dp),
                     introductionImage = performanceDetailUiState.showDetailModel.introductionImages.firstOrNull(),
+                    showTimes = performanceDetailUiState.showDetailModel.showTimes,
+                    similarShows = performanceDetailUiState.similiarShows,
                     facilityDetailModel = performanceDetailUiState.facilityDetailModel
                 )
             }
@@ -252,6 +253,7 @@ private fun PerformanceDetailTab(
                         .fillMaxWidth()
                         .padding(top = 50.dp),
                     facilityName = performanceDetailUiState.showDetailModel.facilityName,
+                    lostItems = performanceDetailUiState.lostItems,
                     onNavigateLostItem = onNavigateLostItem
                 )
             }
@@ -261,6 +263,8 @@ private fun PerformanceDetailTab(
 
 @Composable
 private fun PerformanceDetailContent(
+    performanceViewModel: PerformanceViewModel,
+    performanceDetailViewModel: PerformanceDetailViewModel,
     modifier: Modifier = Modifier,
     posterUrl: String? = null,
     genre: String,
@@ -277,6 +281,7 @@ private fun PerformanceDetailContent(
     Box(modifier) {
         AsyncImage(
             model = posterUrl,
+            error = painterResource(R.drawable.ic_error_poster),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxSize()
@@ -289,9 +294,14 @@ private fun PerformanceDetailContent(
             containerColor = Color.Transparent,
             contentColor = White,
             textModifier = Modifier.width(160.dp),
-            onClick = onBack
+            onClick = {
+                performanceViewModel.loadPlayItems()
+                performanceViewModel.loadMusicalItems()
+                onBack()
+            }
         )
         PerformanceDetailInfoContent(
+            performanceDetailViewModel = performanceDetailViewModel,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = 54.dp),
@@ -311,6 +321,7 @@ private fun PerformanceDetailContent(
 
 @Composable
 private fun PerformanceDetailInfoContent(
+    performanceDetailViewModel: PerformanceDetailViewModel,
     modifier: Modifier = Modifier,
     posterUrl: String? = null,
     genre: String,
@@ -329,6 +340,7 @@ private fun PerformanceDetailInfoContent(
     ) {
         AsyncImage(
             model = posterUrl,
+            error = painterResource(R.drawable.ic_error_poster),
             contentDescription = null,
             modifier = Modifier
                 .padding(top = 43.dp)
@@ -343,6 +355,7 @@ private fun PerformanceDetailInfoContent(
                 .padding(top = 30.dp)
         ) {
             PerformanceDetailHeader(
+                performanceDetailViewModel = performanceDetailViewModel,
                 modifier = Modifier.fillMaxWidth(),
                 genre = genre,
                 title = title,
@@ -464,13 +477,14 @@ private fun PerformanceDetailBody(
 
 @Composable
 private fun PerformanceDetailHeader(
+    performanceDetailViewModel: PerformanceDetailViewModel,
     modifier: Modifier = Modifier,
     genre: String,
     title: String,
     reviewCount: Int,
     reviewGradeSum: Int
 ) {
-    var isSelectBookmark by remember { mutableStateOf(false) }
+    val performanceDetailUiState by performanceDetailViewModel.uiState.collectAsStateWithLifecycle()
     Column(modifier) {
         Box(
             modifier = Modifier
@@ -526,17 +540,23 @@ private fun PerformanceDetailHeader(
                 }
             }
             IconButton(
-                onClick = { isSelectBookmark = isSelectBookmark.not() },
+                onClick = {
+                    if (performanceDetailUiState.isFavorite) {
+                        performanceDetailViewModel.deleteFavoriteShow(performanceDetailUiState.showDetailModel.id)
+                    } else {
+                        performanceDetailViewModel.requestFavoriteShow(performanceDetailUiState.showDetailModel.id)
+                    }
+                },
                 modifier = Modifier
                     .clip(CircleShape)
                     .padding(start = 6.dp)
                     .size(30.dp),
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = if (isSelectBookmark) Cetacean_Blue else Bright_Gray
+                    containerColor = if (performanceDetailUiState.isFavorite) Cetacean_Blue else Bright_Gray
                 )
             ) {
                 Icon(
-                    painter = painterResource(if (isSelectBookmark) R.drawable.ic_bookmark_sel else R.drawable.ic_bookmark),
+                    painter = painterResource(if (performanceDetailUiState.isFavorite) R.drawable.ic_bookmark_sel else R.drawable.ic_bookmark),
                     contentDescription = null,
                     tint = Color.Unspecified
                 )

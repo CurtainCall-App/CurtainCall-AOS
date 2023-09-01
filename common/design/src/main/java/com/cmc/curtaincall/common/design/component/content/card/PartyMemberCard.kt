@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,19 +24,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallIconText
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallRoundedTextButton
+import com.cmc.curtaincall.common.design.component.basic.DottedLine
 import com.cmc.curtaincall.common.design.extensions.toSp
+import com.cmc.curtaincall.common.design.theme.Bright_Gray
 import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
+import com.cmc.curtaincall.common.design.theme.Chinese_Black
 import com.cmc.curtaincall.common.design.theme.Cultured
 import com.cmc.curtaincall.common.design.theme.Me_Pink
 import com.cmc.curtaincall.common.design.theme.Nero
@@ -92,6 +99,288 @@ fun PartyMemberCard(
             )
         }
         content()
+    }
+}
+
+@Composable
+fun PartyMemberEtcItemCard(
+    modifier: Modifier = Modifier,
+    profileImageUrl: String? = null,
+    nickname: String,
+    createAtDate: String,
+    createAtTime: String,
+    description: String,
+    date: String?,
+    numberOfMember: Int,
+    numberOfTotal: Int,
+    onClick: () -> Unit = {}
+) {
+    Box(
+        modifier = modifier
+            .clickable { onClick() }
+            .padding(bottom = 10.dp)
+    ) {
+        Card(
+            modifier = Modifier.fillMaxSize(),
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = Color.Transparent,
+                contentColor = Color.Transparent
+            ),
+            elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(155.dp)
+                    .background(White, RoundedCornerShape(12.dp))
+                    .padding(top = 15.dp, bottom = 20.dp)
+                    .padding(horizontal = 20.dp)
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    AsyncImage(
+                        model = profileImageUrl,
+                        error = painterResource(R.drawable.ic_default_profile),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.FillBounds
+                    )
+                    Column(Modifier.padding(start = 10.dp)) {
+                        Text(
+                            text = nickname,
+                            color = Nero,
+                            fontSize = 14.dp.toSp(),
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = spoqahansanseeo
+                        )
+                        Text(
+                            text = "$createAtDate $createAtTime",
+                            color = Silver_Sand,
+                            fontSize = 12.dp.toSp(),
+                            fontWeight = FontWeight.Medium,
+                            fontFamily = spoqahansanseeo
+                        )
+                    }
+                }
+                Text(
+                    text = description,
+                    modifier = Modifier.padding(top = 18.dp),
+                    color = Nero,
+                    fontSize = 14.dp.toSp(),
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = spoqahansanseeo,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    CurtainCallIconText(
+                        modifier = Modifier.wrapContentHeight(),
+                        painter = painterResource(R.drawable.ic_calendar),
+                        text = date ?: "날짜 미정",
+                        containerColor = Cultured,
+                        contentColor = Nero,
+                        fontSize = 12.dp.toSp(),
+                        iconModifier = Modifier.size(16.dp)
+                    )
+                    Text(
+                        text = "$numberOfMember/$numberOfTotal",
+                        modifier = Modifier.fillMaxWidth(),
+                        color = Nero,
+                        fontSize = 13.dp.toSp(),
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = spoqahansanseeo,
+                        textAlign = TextAlign.End
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun PartyMemberItemCard(
+    modifier: Modifier = Modifier,
+    title: String? = null,
+    profileImageUrl: String? = null,
+    nickname: String,
+    createAtDate: String,
+    createAtTime: String,
+    description: String,
+    posterUrl: String? = null,
+    date: String?,
+    time: String?,
+    location: String?,
+    numberOfMember: Int,
+    numberOfTotal: Int,
+    onClick: () -> Unit = {},
+) {
+    Box(
+        modifier = modifier
+            .clickable { onClick() }
+            .padding(bottom = 10.dp)
+    ) {
+        Card(
+            modifier = Modifier.fillMaxSize(),
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = Color.Transparent,
+                contentColor = Color.Transparent
+            ),
+            elevation = CardDefaults.cardElevation(defaultElevation = 10.dp)
+        ) {
+            Column(Modifier.fillMaxWidth()) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                        .background(White, RoundedCornerShape(12.dp)),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    if (title != null) {
+                        Text(
+                            text = title,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 18.dp, vertical = 16.dp),
+                            color = Chinese_Black,
+                            fontSize = 16.dp.toSp(),
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = spoqahansanseeo,
+                            textAlign = TextAlign.Center,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+                }
+                DottedLine(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 11.dp),
+                    strokeWidth = 10.dp.value,
+                    strokeColor = Bright_Gray,
+                    intervals = floatArrayOf(10.dp.value, 15.dp.value),
+                    phase = 15.dp.value
+                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(219.dp)
+                        .background(White, RoundedCornerShape(12.dp))
+                        .padding(top = 15.dp, start = 18.dp, end = 20.dp, bottom = 20.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        AsyncImage(
+                            model = profileImageUrl,
+                            error = painterResource(R.drawable.ic_default_profile),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(32.dp)
+                                .clip(CircleShape),
+                            contentScale = ContentScale.FillBounds
+                        )
+                        Column(Modifier.padding(start = 10.dp)) {
+                            Text(
+                                text = nickname,
+                                color = Nero,
+                                fontSize = 14.dp.toSp(),
+                                fontWeight = FontWeight.Bold,
+                                fontFamily = spoqahansanseeo
+                            )
+                            Text(
+                                text = "$createAtDate $createAtTime",
+                                color = Silver_Sand,
+                                fontSize = 12.dp.toSp(),
+                                fontWeight = FontWeight.Medium,
+                                fontFamily = spoqahansanseeo
+                            )
+                        }
+                    }
+                    Text(
+                        text = description,
+                        modifier = Modifier.padding(top = 18.dp),
+                        color = Nero,
+                        fontSize = 14.dp.toSp(),
+                        fontWeight = FontWeight.Medium,
+                        fontFamily = spoqahansanseeo,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 20.dp)
+                    ) {
+                        AsyncImage(
+                            model = posterUrl,
+                            error = painterResource(R.drawable.ic_error_poster),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(66.dp, 87.dp)
+                                .clip(RoundedCornerShape(6.dp)),
+                            contentScale = ContentScale.FillBounds
+                        )
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(horizontal = 10.dp)
+                                .fillMaxHeight(),
+                            verticalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            if (date != null) {
+                                CurtainCallIconText(
+                                    modifier = Modifier.wrapContentHeight(),
+                                    painter = painterResource(R.drawable.ic_calendar),
+                                    text = date,
+                                    containerColor = Cultured,
+                                    contentColor = Nero,
+                                    fontSize = 12.dp.toSp(),
+                                    iconModifier = Modifier.size(16.dp)
+                                )
+                            }
+                            if (time != null) {
+                                CurtainCallIconText(
+                                    modifier = Modifier.wrapContentHeight(),
+                                    painter = painterResource(R.drawable.ic_clock),
+                                    text = time,
+                                    containerColor = Cultured,
+                                    contentColor = Nero,
+                                    fontSize = 12.dp.toSp(),
+                                    iconModifier = Modifier.size(16.dp)
+                                )
+                            }
+                            if (location != null) {
+                                CurtainCallIconText(
+                                    modifier = Modifier.wrapContentHeight(),
+                                    painter = painterResource(R.drawable.ic_location),
+                                    text = location,
+                                    containerColor = Cultured,
+                                    contentColor = Nero,
+                                    fontSize = 12.dp.toSp(),
+                                    iconModifier = Modifier.size(16.dp)
+                                )
+                            }
+                        }
+                        Column {
+                            Spacer(Modifier.weight(1f))
+                            Text(
+                                text = "$numberOfMember/$numberOfTotal",
+                                color = Nero,
+                                fontSize = 13.dp.toSp(),
+                                fontWeight = FontWeight.Medium,
+                                fontFamily = spoqahansanseeo
+                            )
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
