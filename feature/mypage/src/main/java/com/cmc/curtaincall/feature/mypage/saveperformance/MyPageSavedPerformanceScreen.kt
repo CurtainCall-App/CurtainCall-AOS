@@ -22,6 +22,8 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -33,10 +35,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
+import com.cmc.curtaincall.common.design.component.content.card.PerformanceDetailCard
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.Arsenic
 import com.cmc.curtaincall.common.design.theme.Black_Coral
@@ -47,14 +49,22 @@ import com.cmc.curtaincall.common.design.theme.Nero
 import com.cmc.curtaincall.common.design.theme.Roman_Silver
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
+import com.cmc.curtaincall.common.utility.extensions.ShowDay
+import com.cmc.curtaincall.common.utility.extensions.toChangeDate
+import com.cmc.curtaincall.common.utility.extensions.toRunningTime
 import com.cmc.curtaincall.feature.mypage.MyPageViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MyPageSavedPerformanceScreen(
     myPageViewModel: MyPageViewModel = hiltViewModel(),
+    onNavigateShowDetail: (String) -> Unit,
     onBack: () -> Unit
 ) {
+    LaunchedEffect(Unit) {
+        myPageViewModel.requestFavoriteShows()
+    }
+
     Scaffold(
         topBar = {
             TopAppBarWithBack(
@@ -73,7 +83,8 @@ internal fun MyPageSavedPerformanceScreen(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
-                .background(White)
+                .background(White),
+            onNavigateShowDetail = onNavigateShowDetail
         )
     }
 }
@@ -81,41 +92,52 @@ internal fun MyPageSavedPerformanceScreen(
 @Composable
 private fun MyPageSavedPerformanceContent(
     myPageViewModel: MyPageViewModel,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onNavigateShowDetail: (String) -> Unit
 ) {
-    val myFavoriteItems = myPageViewModel.favoriteShowItems.collectAsLazyPagingItems()
+    val myFavoriteItems by myPageViewModel.favoriteShowList.collectAsStateWithLifecycle()
     LazyColumn(
         modifier = modifier
-            .padding(top = 2.dp)
+            .padding(top = 2.dp, bottom = 16.dp)
             .padding(horizontal = 20.dp)
     ) {
-        items(myFavoriteItems) { favoriteShowModel ->
-            favoriteShowModel?.let { favoriteShowModel ->
-//                PerformanceDetailCard(
-//                    modifier = Modifier
-//                        .fillMaxWidth()
-//                        .padding(vertical = 28.dp),
-//                    imageUrl = favoriteShowModel.poster,
-//                    painter = painterResource(R.drawable.ic_error_poster),
-//                    title = favoriteShowModel.name,
-//                    rate = favoriteShowModel.reviewGradeSum
-//                )
-            }
-        }
-        itemsIndexed(List(10) {}) { index, item ->
-            SavedPerformanceItem(
+        itemsIndexed(myFavoriteItems) { index, myFavoriteItem ->
+            PerformanceDetailCard(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 20.dp)
-                    .height(148.dp),
-                title = "드림하이",
-                rate = 4.8f,
-                numberOfRate = 324,
-                description = "지도를 가져오라. 짐은 이 왕국을 셋으로 나누었다” 브리튼의 늙은 왕 리어는 세 딸의 효심 크기에 따라 왕국을 나눠 주기로 한다. 영토를 많이 받기 위해 첫째 고너릴과 둘째 리건은 과장된 말로"
+                    .padding(vertical = 12.dp),
+                imageUrl = myFavoriteItem.poster,
+                painter = painterResource(R.drawable.ic_error_poster),
+                title = myFavoriteItem.name,
+                rate = if (myFavoriteItem.reviewCount == 0) 0.0f else (myFavoriteItem.reviewGradeSum / myFavoriteItem.reviewCount.toFloat()),
+                numberOfTotal = myFavoriteItem.reviewCount,
+                period = "${myFavoriteItem.startDate.toChangeDate()}-${myFavoriteItem.endDate.toChangeDate()}",
+                runningTime = if (myFavoriteItem.runtime.isEmpty()) "해당 정보 없음" else "${myFavoriteItem.runtime.toRunningTime()}분",
+                date = myFavoriteItem.showTimes.map {
+                    when (it.dayOfWeek) {
+                        ShowDay.Monday.dayOfWeek -> ShowDay.Monday
+                        ShowDay.Tuesday.dayOfWeek -> ShowDay.Tuesday
+                        ShowDay.Wednesday.dayOfWeek -> ShowDay.Wednesday
+                        ShowDay.Thursday.dayOfWeek -> ShowDay.Thursday
+                        ShowDay.Friday.dayOfWeek -> ShowDay.Friday
+                        ShowDay.Saturday.dayOfWeek -> ShowDay.Saturday
+                        else -> ShowDay.Sunday
+                    }
+                }.sortedBy { it.id }.toSet().joinToString(", ") { it.label },
+                location = myFavoriteItem.facilityName,
+                onClick = { onNavigateShowDetail(myFavoriteItem.id) },
+                isFavorite = myFavoriteItem.favorite,
+                onFavorite = {
+                    myPageViewModel.requestFavoriteShow(myFavoriteItem.id)
+                },
+                onDisFavorite = {
+                    myPageViewModel.deleteFavoriteShow(myFavoriteItem.id)
+                }
             )
-            if (index < 9) {
+            if (index != myFavoriteItems.lastIndex) {
                 Spacer(
                     modifier = Modifier
+                        .padding(vertical = 16.dp)
                         .fillMaxWidth()
                         .height(1.dp)
                         .background(Cultured)

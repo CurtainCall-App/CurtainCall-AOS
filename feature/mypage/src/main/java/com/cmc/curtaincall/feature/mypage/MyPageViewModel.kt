@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.cmc.curtaincall.core.base.BaseViewModel
+import com.cmc.curtaincall.domain.model.favorite.FavoriteShowModel
 import com.cmc.curtaincall.domain.repository.FavoriteRepository
 import com.cmc.curtaincall.domain.repository.MemberRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,6 +32,9 @@ class MyPageViewModel @Inject constructor(
 
     private var _myParticipationPartyType = MutableStateFlow(PartyType.PERFORMANCE)
     val myParticipationPartyType: StateFlow<PartyType> = _myParticipationPartyType.asStateFlow()
+
+    private var _favoriteShowList = MutableStateFlow<List<FavoriteShowModel>>(listOf())
+    val favoriteShowList = _favoriteShowList.asStateFlow()
 
     var watchingRecruitmentItems = memberRepository.fetchMyRecruitments(
         memberId = memberId.value,
@@ -60,10 +64,6 @@ class MyPageViewModel @Inject constructor(
     var etcParticipationItems = memberRepository.fetchMyParticipations(
         memberId = memberId.value,
         category = PartyType.ETC.category
-    ).cachedIn(viewModelScope)
-
-    var favoriteShowItems = favoriteRepository.fetchFavoriteShows(
-        memberId = memberId.value
     ).cachedIn(viewModelScope)
 
     init {
@@ -116,5 +116,51 @@ class MyPageViewModel @Inject constructor(
 
     fun setParticipationPartyType(partyType: PartyType) {
         _myParticipationPartyType.value = partyType
+    }
+
+    fun requestFavoriteShows() {
+        favoriteRepository.requestFavoriteShows(
+            memberId = _memberId.value
+        ).onEach {
+            _favoriteShowList.value = it
+        }.flatMapLatest {
+            favoriteRepository.checkFavoriteShows(it.map { it.id })
+        }.onEach { favoriteShows ->
+            _favoriteShowList.value = _favoriteShowList.value.map { favoriteShow ->
+                favoriteShow.copy(
+                    favorite = favoriteShows.find { favoriteShow.id == it.showId }?.favorite ?: false
+                )
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    fun requestFavoriteShow(showId: String) {
+        favoriteRepository.requestFavoriteShow(showId)
+            .onEach { check ->
+                if (check) {
+                    _favoriteShowList.value = _favoriteShowList.value.map { favoriteShow ->
+                        if (favoriteShow.id == showId) {
+                            favoriteShow.copy(favorite = true)
+                        } else {
+                            favoriteShow
+                        }
+                    }
+                }
+            }.launchIn(viewModelScope)
+    }
+
+    fun deleteFavoriteShow(showId: String) {
+        favoriteRepository.deleteFavoriteShow(showId)
+            .onEach { check ->
+                if (check) {
+                    _favoriteShowList.value = _favoriteShowList.value.map { favoriteShow ->
+                        if (favoriteShow.id == showId) {
+                            favoriteShow.copy(favorite = false)
+                        } else {
+                            favoriteShow
+                        }
+                    }
+                }
+            }.launchIn(viewModelScope)
     }
 }

@@ -153,6 +153,9 @@ fun NavGraphBuilder.mypageNavGraph(
             val parentEntry = remember(entry) { navHostController.getBackStackEntry(MyPageDestination.MyPage.route) }
             MyPageSavedPerformanceScreen(
                 myPageViewModel = hiltViewModel(parentEntry),
+                onNavigateShowDetail = {
+                    navHostController.navigate("${PerformanceDestination.Detail.route}/$it")
+                },
                 onBack = { navHostController.popBackStack() }
             )
         }

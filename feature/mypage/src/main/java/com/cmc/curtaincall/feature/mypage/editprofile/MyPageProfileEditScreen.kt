@@ -59,7 +59,7 @@ import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 import kotlinx.coroutines.flow.collectLatest
 
 private const val INPUT_REGEX = "^[ㄱ-ㅎ가-힣a-zA-Z0-9]{0,10}$"
-private const val INPUT_CHECK_REGEX = "^[ㄱ-ㅎ가-힣a-zA-Z0-9]{6,10}$"
+private const val INPUT_CHECK_REGEX = "^[ㄱ-ㅎ가-힣a-zA-Z0-9]{2,10}$"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
