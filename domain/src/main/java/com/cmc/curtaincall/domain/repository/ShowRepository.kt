@@ -6,6 +6,7 @@ import com.cmc.curtaincall.domain.model.show.ShowDetailModel
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import com.cmc.curtaincall.domain.model.show.ShowRankModel
 import com.cmc.curtaincall.domain.model.show.ShowSearchWordModel
+import com.cmc.curtaincall.domain.model.show.SimilarShowInfoModel
 import kotlinx.coroutines.flow.Flow
 
 interface ShowRepository {
@@ -66,4 +67,11 @@ interface ShowRepository {
     fun requestFacilityDetail(
         facilityId: String
     ): Flow<FacilityDetailModel>
+
+    fun requestSimilarShowList(
+        facilityId: String,
+        page: Int,
+        size: Int?,
+        genre: String?
+    ): Flow<List<SimilarShowInfoModel>>
 }

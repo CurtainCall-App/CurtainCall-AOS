@@ -2,6 +2,7 @@ package com.cmc.curtaincall.feature.mypage.party.participation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,24 +13,22 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
-import com.cmc.curtaincall.common.design.component.content.card.PartyMemberContentCard
+import com.cmc.curtaincall.common.design.component.content.card.PartyMemberEtcItemCard
+import com.cmc.curtaincall.common.design.component.content.card.PartyMemberItemCard
 import com.cmc.curtaincall.common.design.component.content.card.PartyType
-import com.cmc.curtaincall.common.design.component.items.EmptyItem
-import com.cmc.curtaincall.common.design.theme.Bright_Gray
-import com.cmc.curtaincall.common.design.theme.Me_Pink
+import com.cmc.curtaincall.common.design.component.items.EmptyMyParty
+import com.cmc.curtaincall.common.design.theme.Cultured
 import com.cmc.curtaincall.common.design.theme.Nero
-import com.cmc.curtaincall.common.utility.extensions.toChangeDate
+import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
 import com.cmc.curtaincall.common.utility.extensions.toDateWithDay
 import com.cmc.curtaincall.common.utility.extensions.toTime
 import com.cmc.curtaincall.feature.mypage.MyPageViewModel
@@ -40,11 +39,12 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @Composable
 fun MyPageParticipationScreen(
     myPageViewModel: MyPageViewModel = hiltViewModel(),
-    onNavigateParticipationDetail: (PartyType) -> Unit,
+    onNavigateParticipationDetail: (PartyType, Int) -> Unit,
+    onNavigatePartyMember: (PartyType) -> Unit,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(Bright_Gray)
+    systemUiController.setStatusBarColor(Cultured)
 
     Scaffold(
         topBar = {
@@ -53,31 +53,33 @@ fun MyPageParticipationScreen(
                     .fillMaxWidth()
                     .height(54.dp),
                 title = stringResource(R.string.mypage_my_participation_tab),
-                containerColor = Bright_Gray,
+                containerColor = Cultured,
                 contentColor = Nero,
                 onClick = onBack
             )
         }
     ) { paddingValues ->
-        MyPageRecruitmentContent(
+        MyPageParticipationContent(
             myPageViewModel = myPageViewModel,
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
-                .background(Bright_Gray),
-            onNavigateParticipationDetail = onNavigateParticipationDetail
+                .background(Cultured),
+            onNavigateParticipationDetail = onNavigateParticipationDetail,
+            onNavigatePartyMember = onNavigatePartyMember
         )
     }
 }
 
 @Composable
-private fun MyPageRecruitmentContent(
+private fun MyPageParticipationContent(
     myPageViewModel: MyPageViewModel,
     modifier: Modifier = Modifier,
-    onNavigateParticipationDetail: (PartyType) -> Unit
+    onNavigateParticipationDetail: (PartyType, Int) -> Unit,
+    onNavigatePartyMember: (PartyType) -> Unit,
 ) {
-    var partyTypeState by remember { mutableStateOf(PartyType.PERFORMANCE) }
-    val participationItems = when (partyTypeState) {
+    val myParticipationPartyType by myPageViewModel.myParticipationPartyType.collectAsStateWithLifecycle()
+    val participationItems = when (myParticipationPartyType) {
         PartyType.PERFORMANCE -> {
             myPageViewModel.watchingParticipationItems.collectAsLazyPagingItems()
         }
@@ -95,48 +97,77 @@ private fun MyPageRecruitmentContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 20.dp, top = 30.dp),
-            partyType = partyTypeState,
-            onChangePartType = { partyTypeState = it }
+            partyType = myParticipationPartyType,
+            onChangePartType = { myPageViewModel.setParticipationPartyType(it) }
         )
 
         if (participationItems.itemCount == 0) {
-            EmptyItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 238.dp),
-                alert = "아직 참여 중인 파티원이 없어요",
-                iconColor = Me_Pink,
-                contentColor = Nero
-            )
+            Column {
+                Spacer(Modifier.weight(150f))
+                EmptyMyParty(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(R.string.mypage_setting_empty_partmember_title),
+                    subTitle = stringResource(R.string.mypage_setting_empty_partymember_subtitle),
+                    onClick = { onNavigatePartyMember(myParticipationPartyType) }
+                )
+                Spacer(Modifier.weight(239f))
+            }
         } else {
             LazyColumn(
                 modifier = Modifier
-                    .padding(top = 11.dp)
+                    .padding(top = 26.dp)
                     .fillMaxSize()
                     .padding(horizontal = 20.dp)
             ) {
                 items(participationItems) { participationModel ->
-                    participationModel?.let { participation ->
-                        PartyMemberContentCard(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentHeight()
-                                .padding(bottom = 20.dp),
-                            partyType = partyTypeState,
-                            title = participation.showName,
-                            nickname = participation.creatorNickname,
-                            createAtDate = participation.createdAt.toChangeDate(),
-                            createAtTime = participation.createdAt.toTime(),
-                            numberOfMember = participation.curMemberNum,
-                            numberOfTotal = participation.maxMemberNum,
-                            description = participation.title,
-                            posterUrl = participation.showPoster,
-                            date = participation.showAt.toDateWithDay(),
-                            time = participation.showAt.toTime(),
-                            location = participation.facilityName,
-                            hasLiveTalk = false,
-                            onClick = { onNavigateParticipationDetail(partyTypeState) }
-                        )
+                    participationModel?.let { participationModel ->
+                        if (myParticipationPartyType == PartyType.ETC) {
+                            PartyMemberEtcItemCard(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentHeight()
+                                    .padding(bottom = 20.dp),
+                                profileImageUrl = participationModel.creatorImageUrl,
+                                nickname = participationModel.creatorNickname,
+                                createAtDate = participationModel.createdAt.toChangeFullDate(),
+                                createAtTime = participationModel.createdAt.toTime(),
+                                description = participationModel.title,
+                                date = participationModel.showAt?.toDateWithDay(),
+                                numberOfMember = participationModel.curMemberNum,
+                                numberOfTotal = participationModel.maxMemberNum,
+                                onClick = {
+                                    onNavigateParticipationDetail(
+                                        myParticipationPartyType,
+                                        participationModel.id
+                                    )
+                                }
+                            )
+                        } else {
+                            PartyMemberItemCard(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentHeight()
+                                    .padding(bottom = 20.dp),
+                                title = participationModel.showName,
+                                profileImageUrl = participationModel.creatorImageUrl,
+                                nickname = participationModel.creatorNickname,
+                                createAtDate = participationModel.createdAt.toChangeFullDate(),
+                                createAtTime = participationModel.createdAt.toTime(),
+                                numberOfMember = participationModel.curMemberNum,
+                                numberOfTotal = participationModel.maxMemberNum,
+                                description = participationModel.title,
+                                posterUrl = participationModel.showPoster,
+                                date = participationModel.showAt.toDateWithDay(),
+                                time = participationModel.showAt.toTime(),
+                                location = participationModel.facilityName,
+                                onClick = {
+                                    onNavigateParticipationDetail(
+                                        myParticipationPartyType,
+                                        participationModel.id
+                                    )
+                                }
+                            )
+                        }
                     }
                 }
             }

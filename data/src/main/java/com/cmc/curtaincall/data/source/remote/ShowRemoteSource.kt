@@ -5,6 +5,7 @@ import com.cmc.curtaincall.core.network.service.show.response.FacilityDetailResp
 import com.cmc.curtaincall.core.network.service.show.response.ShowDetailResponse
 import com.cmc.curtaincall.core.network.service.show.response.ShowInfoResponse
 import com.cmc.curtaincall.core.network.service.show.response.ShowRankResponse
+import com.cmc.curtaincall.core.network.service.show.response.SimilarShowInfoResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -99,6 +100,22 @@ class ShowRemoteSource @Inject constructor(
     ): Flow<FacilityDetailResponse> = flow {
         emit(
             showService.requestFacilityDetail(facilityId)
+        )
+    }
+
+    fun requestSimilarShowList(
+        facilityId: String,
+        page: Int,
+        size: Int?,
+        genre: String?
+    ): Flow<List<SimilarShowInfoResponse>> = flow {
+        emit(
+            showService.requestSimilarShowList(
+                facilityId = facilityId,
+                page = page,
+                size = size,
+                genre = genre
+            ).similarShowInfos
         )
     }
 }

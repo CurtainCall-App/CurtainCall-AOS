@@ -2,6 +2,7 @@ package com.cmc.curtaincall.feature.mypage.party.recruitment
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -11,42 +12,44 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
-import com.cmc.curtaincall.common.design.component.content.card.PartyMemberContentCard
+import com.cmc.curtaincall.common.design.component.content.card.PartyMemberEtcItemCard
+import com.cmc.curtaincall.common.design.component.content.card.PartyMemberItemCard
 import com.cmc.curtaincall.common.design.component.content.card.PartyType
-import com.cmc.curtaincall.common.design.component.items.EmptyItem
-import com.cmc.curtaincall.common.design.theme.Bright_Gray
-import com.cmc.curtaincall.common.design.theme.Me_Pink
+import com.cmc.curtaincall.common.design.component.items.EmptyMyParty
+import com.cmc.curtaincall.common.design.theme.Cultured
 import com.cmc.curtaincall.common.design.theme.Nero
-import com.cmc.curtaincall.common.utility.extensions.toChangeDate
+import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
 import com.cmc.curtaincall.common.utility.extensions.toDateWithDay
 import com.cmc.curtaincall.common.utility.extensions.toTime
 import com.cmc.curtaincall.feature.mypage.MyPageViewModel
 import com.cmc.curtaincall.feature.mypage.party.MyPagePartyMenuTab
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MyPageRecruitmentScreen(
     myPageViewModel: MyPageViewModel = hiltViewModel(),
-    onNavigateRecruitmentDetail: (PartyType) -> Unit,
+    onNavigateRecruitmentDetail: (PartyType, Int) -> Unit,
+    onNavigatePartyMember: (PartyType) -> Unit,
     onBack: () -> Unit
 ) {
-    Timber.d("MyPageRecruitmentScreen ${myPageViewModel.hashCode()}")
     val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(Bright_Gray)
+    systemUiController.setStatusBarColor(Cultured)
+
+    LaunchedEffect(Unit) {
+        myPageViewModel.getMemberId()
+    }
 
     Scaffold(
         topBar = {
@@ -55,7 +58,7 @@ internal fun MyPageRecruitmentScreen(
                     .fillMaxWidth()
                     .height(54.dp),
                 title = stringResource(R.string.mypage_my_gathering_tab),
-                containerColor = Bright_Gray,
+                containerColor = Cultured,
                 contentColor = Nero,
                 onClick = onBack
             )
@@ -66,8 +69,9 @@ internal fun MyPageRecruitmentScreen(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
-                .background(Bright_Gray),
-            onNavigateRecruitmentDetail = onNavigateRecruitmentDetail
+                .background(Cultured),
+            onNavigateRecruitmentDetail = onNavigateRecruitmentDetail,
+            onNavigatePartyMember = onNavigatePartyMember
         )
     }
 }
@@ -76,10 +80,11 @@ internal fun MyPageRecruitmentScreen(
 private fun MyPageRecruitmentContent(
     myPageViewModel: MyPageViewModel,
     modifier: Modifier = Modifier,
-    onNavigateRecruitmentDetail: (PartyType) -> Unit
+    onNavigateRecruitmentDetail: (PartyType, Int) -> Unit,
+    onNavigatePartyMember: (PartyType) -> Unit
 ) {
-    var partyTypeState by remember { mutableStateOf(PartyType.PERFORMANCE) }
-    val recruitmentItems = when (partyTypeState) {
+    val myRecruitmentPartTye by myPageViewModel.myRecruitmentPartType.collectAsStateWithLifecycle()
+    val recruitmentItems = when (myRecruitmentPartTye) {
         PartyType.PERFORMANCE -> {
             myPageViewModel.watchingRecruitmentItems.collectAsLazyPagingItems()
         }
@@ -92,56 +97,82 @@ private fun MyPageRecruitmentContent(
             myPageViewModel.etcRecruitmentItems.collectAsLazyPagingItems()
         }
     }
-
     Column(modifier) {
         MyPagePartyMenuTab(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 20.dp, top = 30.dp),
-            partyType = partyTypeState,
-            onChangePartType = { partyTypeState = it }
+            partyType = myRecruitmentPartTye,
+            onChangePartType = { myPageViewModel.setRecruitmentPartyType(it) }
         )
 
         if (recruitmentItems.itemCount == 0) {
-            EmptyItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 238.dp),
-                alert = "아직 참여 중인 파티원이 없어요",
-                iconColor = Me_Pink,
-                contentColor = Nero
-            )
+            Column {
+                Spacer(Modifier.weight(150f))
+                EmptyMyParty(
+                    modifier = Modifier.fillMaxWidth(),
+                    title = stringResource(R.string.mypage_setting_empty_partmember_title),
+                    subTitle = stringResource(R.string.mypage_setting_empty_partymember_subtitle),
+                    onClick = { onNavigatePartyMember(myRecruitmentPartTye) }
+                )
+                Spacer(Modifier.weight(239f))
+            }
         } else {
             LazyColumn(
                 modifier = Modifier
-                    .padding(top = 11.dp)
+                    .padding(top = 26.dp)
                     .fillMaxSize()
                     .padding(horizontal = 20.dp)
             ) {
                 items(recruitmentItems) { recruitmentModel ->
-                    recruitmentModel?.let { recruit ->
-                        PartyMemberContentCard(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .wrapContentHeight()
-                                .padding(bottom = 20.dp),
-                            partyType = partyTypeState,
-                            title = recruit.showName ?: "",
-                            nickname = recruit.creatorNickname,
-                            createAtDate = recruit.createdAt.toChangeDate(),
-                            createAtTime = recruit.createdAt.toTime(),
-                            numberOfMember = recruit.curMemberNum,
-                            numberOfTotal = recruit.maxMemberNum,
-                            description = recruit.title,
-                            posterUrl = recruit.showPoster,
-                            date = recruit.showAt?.toDateWithDay() ?: "",
-                            time = recruit.showAt?.toTime() ?: "",
-                            location = recruit.facilityName ?: "",
-                            hasLiveTalk = false,
-                            onClick = {
-                                // onNavigateRecruitmentDetail(partyTypeState)
-                            }
-                        )
+                    recruitmentModel?.let { recruitmentModel ->
+                        if (myRecruitmentPartTye == PartyType.ETC) {
+                            PartyMemberEtcItemCard(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentHeight()
+                                    .padding(bottom = 20.dp),
+                                profileImageUrl = recruitmentModel.creatorImageUrl,
+                                nickname = recruitmentModel.creatorNickname,
+                                createAtDate = recruitmentModel.createdAt.toChangeFullDate(),
+                                createAtTime = recruitmentModel.createdAt.toTime(),
+                                description = recruitmentModel.title,
+                                date = recruitmentModel.showAt?.toDateWithDay(),
+                                numberOfMember = recruitmentModel.curMemberNum,
+                                numberOfTotal = recruitmentModel.maxMemberNum,
+                                onClick = {
+                                    onNavigateRecruitmentDetail(
+                                        myRecruitmentPartTye,
+                                        recruitmentModel.id
+                                    )
+                                }
+                            )
+                        } else {
+                            PartyMemberItemCard(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .wrapContentHeight()
+                                    .padding(bottom = 20.dp),
+                                title = recruitmentModel.showName,
+                                profileImageUrl = recruitmentModel.creatorImageUrl,
+                                nickname = recruitmentModel.creatorNickname,
+                                createAtDate = recruitmentModel.createdAt.toChangeFullDate(),
+                                createAtTime = recruitmentModel.createdAt.toTime(),
+                                numberOfMember = recruitmentModel.curMemberNum,
+                                numberOfTotal = recruitmentModel.maxMemberNum,
+                                description = recruitmentModel.title,
+                                posterUrl = recruitmentModel.showPoster,
+                                date = recruitmentModel.showAt?.toDateWithDay(),
+                                time = recruitmentModel.showAt?.toTime(),
+                                location = recruitmentModel.facilityName,
+                                onClick = {
+                                    onNavigateRecruitmentDetail(
+                                        myRecruitmentPartTye,
+                                        recruitmentModel.id
+                                    )
+                                }
+                            )
+                        }
                     }
                 }
             }

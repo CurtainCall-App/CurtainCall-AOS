@@ -14,6 +14,11 @@ interface MemberRepository {
 
     fun requestMemberInfo(memberId: Int): Flow<MemberInfoModel>
 
+    fun updateMember(
+        nickname: String,
+        imageId: Int?
+    ): Flow<Boolean>
+
     fun requestMyRecruitments(
         memberId: Int,
         page: Int,
@@ -39,6 +44,7 @@ interface MemberRepository {
     ): Flow<PagingData<MyParticipationModel>>
 
     fun deleteMember(
+        authorization: String,
         reason: String,
         content: String
     ): Flow<Boolean>

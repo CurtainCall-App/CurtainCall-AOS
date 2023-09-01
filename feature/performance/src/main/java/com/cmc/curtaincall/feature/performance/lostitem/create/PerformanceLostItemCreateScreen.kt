@@ -136,8 +136,7 @@ private fun PerformanceLostItemCreateContent(
             listOf(
                 lostItemCreateUiState.title,
                 lostItemCreateUiState.type,
-                lostItemCreateUiState.foundDate,
-                lostItemCreateUiState.particulars
+                lostItemCreateUiState.foundDate
             ).all { it.isNotEmpty() } && lostItemCreateUiState.imageId != Int.MIN_VALUE
         )
     }
@@ -333,9 +332,10 @@ private fun PerformanceLostItemCreateContent(
                 .padding(top = 366.dp),
             title = stringResource(R.string.performance_find_lost_item_create_significant),
             placeholder = stringResource(R.string.performance_find_lost_item_create_significant_placeholder),
+            isEssential = false,
             value = lostItemCreateUiState.particulars,
             onValueChange = {
-                if (it.length < 100) performanceLostItemCreateViewModel.setParticulars(it)
+                if (it.length <= 100) performanceLostItemCreateViewModel.setParticulars(it)
             },
             onFocused = {
                 isClickLostItemType = false

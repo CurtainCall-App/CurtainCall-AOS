@@ -5,6 +5,7 @@ import com.cmc.curtaincall.domain.model.lostItem.LostItemModel
 import com.cmc.curtaincall.domain.model.review.ShowReviewModel
 import com.cmc.curtaincall.domain.model.show.FacilityDetailModel
 import com.cmc.curtaincall.domain.model.show.ShowDetailModel
+import com.cmc.curtaincall.domain.model.show.SimilarShowInfoModel
 
 data class PerformanceDetailState(
     val memberId: Int = -1,
@@ -13,5 +14,6 @@ data class PerformanceDetailState(
     val facilityDetailModel: FacilityDetailModel = FacilityDetailModel(),
     val showReviews: List<ShowReviewModel> = listOf(),
     val lostItems: List<LostItemModel> = listOf(),
+    val similiarShows: List<SimilarShowInfoModel> = listOf(),
     val isFavorite: Boolean = false
 ) : BaseState

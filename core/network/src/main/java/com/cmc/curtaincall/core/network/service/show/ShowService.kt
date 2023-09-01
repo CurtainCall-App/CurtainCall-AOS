@@ -4,6 +4,7 @@ import com.cmc.curtaincall.core.network.service.show.response.FacilityDetailResp
 import com.cmc.curtaincall.core.network.service.show.response.ShowDetailResponse
 import com.cmc.curtaincall.core.network.service.show.response.ShowInfosResponse
 import com.cmc.curtaincall.core.network.service.show.response.ShowRanksResponse
+import com.cmc.curtaincall.core.network.service.show.response.SimilarShowInfosResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -56,4 +57,12 @@ interface ShowService {
     suspend fun requestFacilityDetail(
         @Path("facilityId") facilityId: String
     ): FacilityDetailResponse
+
+    @GET("facilities/{facilityId}")
+    suspend fun requestSimilarShowList(
+        @Path("facilityId") facilityId: String,
+        @Query("page") page: Int,
+        @Query("size") size: Int?,
+        @Query("genre") genre: String?
+    ): SimilarShowInfosResponse
 }

@@ -230,6 +230,7 @@ private fun PerformanceDetailTab(
                         .padding(top = 50.dp),
                     introductionImage = performanceDetailUiState.showDetailModel.introductionImages.firstOrNull(),
                     showTimes = performanceDetailUiState.showDetailModel.showTimes,
+                    similarShows = performanceDetailUiState.similiarShows,
                     facilityDetailModel = performanceDetailUiState.facilityDetailModel
                 )
             }
