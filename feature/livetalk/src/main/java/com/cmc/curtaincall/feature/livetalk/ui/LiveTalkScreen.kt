@@ -116,12 +116,14 @@ private fun LiveTalkContent(
                     onClick = { liveTalkState = LiveTalkState.Finish }
                 )
             }
-            EmptyLiveTalk(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 151.dp),
-                alert = stringResource(R.string.livetalk_empty_contents)
-            )
+            Column(Modifier.fillMaxSize()) {
+                Spacer(Modifier.weight(151f))
+                EmptyLiveTalk(
+                    modifier = Modifier.fillMaxWidth(),
+                    alert = stringResource(R.string.livetalk_empty_contents)
+                )
+                Spacer(Modifier.weight(241f))
+            }
         }
     }
 }

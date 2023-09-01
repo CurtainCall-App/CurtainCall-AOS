@@ -202,6 +202,7 @@ fun NavGraphBuilder.partymemberNavGraph(
             } else {
                 PartyMemberDetailScreen(
                     partyId = partyId,
+                    isParticipation = isParticipation,
                     myWriting = myWriting,
                     fromRecruitment = fromRecruitment,
                     fromParticipation = fromParticipation,

@@ -98,7 +98,9 @@ private fun MyPageSettingContent(
 
     LaunchedEffect(myPageSettingViewModel) {
         myPageSettingViewModel.isLogout.collectLatest { isLogout ->
-            if (isLogout) onLogout()
+            if (isLogout) {
+                onLogout()
+            }
         }
     }
 

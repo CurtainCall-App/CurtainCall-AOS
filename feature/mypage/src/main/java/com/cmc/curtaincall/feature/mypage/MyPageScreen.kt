@@ -21,7 +21,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -67,10 +66,6 @@ fun MyPageScreen(
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(White)
-
-    LaunchedEffect(Unit) {
-        myPageViewModel.getMemberId()
-    }
 
     Scaffold(
         topBar = {
@@ -136,7 +131,7 @@ private fun MyPageContent(
                     .padding(vertical = 24.dp),
                 icon = painterResource(R.drawable.ic_edit_square),
                 title = stringResource(R.string.mypage_my_writing),
-                onClick = onNavigateWrite
+                onClick = {}
             )
             Spacer(
                 modifier = Modifier
@@ -150,7 +145,7 @@ private fun MyPageContent(
                     .padding(vertical = 24.dp),
                 icon = painterResource(R.drawable.ic_border_all),
                 title = stringResource(R.string.mypage_saved_performance_list),
-                onClick = onNavigateSavedPerformance
+                onClick = { }
             )
         }
         Spacer(
@@ -169,7 +164,9 @@ private fun MyPageContent(
             MyPageInfoItem(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(R.string.mypage_announcement),
-                onClick = { onNavigateAnnouncement() }
+                onClick = {
+                    // onNavigateAnnouncement()
+                }
             )
             MyPageInfoItem(
                 modifier = Modifier

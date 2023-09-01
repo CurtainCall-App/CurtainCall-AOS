@@ -31,14 +31,81 @@ import java.time.YearMonth
 private val UNSELECTED_CALENDARDAY = CalendarDay(LocalDate.MIN, DayPosition.InDate)
 
 @Composable
+fun PreviousDateCalendar(
+    modifier: Modifier = Modifier,
+    onDateClick: (CalendarDay) -> Unit = {}
+) {
+    var currentMonth = remember { YearMonth.now() }
+    val startMonth = remember { currentMonth.minusMonths(3) }
+    val endMonth = remember { currentMonth.plusMonths(3) }
+    val firstDayOfWeek = remember { firstDayOfWeekFromLocale() }
+
+    val coroutineScope = rememberCoroutineScope()
+    val calendarState = rememberCalendarState(
+        startMonth = startMonth,
+        endMonth = endMonth,
+        firstVisibleMonth = currentMonth,
+        firstDayOfWeek = firstDayOfWeek
+    )
+    var selectedCalendarDay by remember { mutableStateOf(UNSELECTED_CALENDARDAY) }
+
+    Card(
+        modifier = modifier.padding(bottom = 10.dp),
+        shape = RoundedCornerShape(10.dp),
+        colors = CardDefaults.cardColors(containerColor = White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        HorizontalCalendar(
+            modifier = Modifier.padding(bottom = 13.dp),
+            state = calendarState,
+            dayContent = { day ->
+                Box(
+                    modifier = Modifier.aspectRatio(1.2f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Day(
+                        day = day,
+                        selectedCalendarDay = selectedCalendarDay,
+                        currentCalendarDay = CalendarDay(LocalDate.now(), DayPosition.MonthDate),
+                        onDateClick = { selectedCalendarDay = it }
+                    )
+                }
+            },
+            monthHeader = { calendarMonth ->
+                MonthHeader(
+                    calendarMonth = calendarMonth,
+                    inDateClick = {
+                        coroutineScope.launch {
+                            currentMonth = currentMonth.minusMonths(1)
+                            calendarState.animateScrollToMonth(currentMonth)
+                        }
+                    },
+                    outDateClick = {
+                        coroutineScope.launch {
+                            currentMonth = currentMonth.plusMonths(1)
+                            calendarState.animateScrollToMonth(currentMonth)
+                        }
+                    },
+                    onClick = {
+                        if (selectedCalendarDay != UNSELECTED_CALENDARDAY) {
+                            onDateClick(selectedCalendarDay)
+                        }
+                    }
+                )
+            }
+        )
+    }
+}
+
+@Composable
 fun SelectedDateCalender(
     modifier: Modifier = Modifier,
     calendarDays: List<CalendarDay> = listOf(),
     onDateClick: (CalendarDay) -> Unit = { }
 ) {
     var currentMonth = remember { YearMonth.now() }
-    val startMonth = remember { currentMonth.minusMonths(100) }
-    val endMonth = remember { currentMonth.plusMonths(100) }
+    val startMonth = remember { currentMonth.minusMonths(3) }
+    val endMonth = remember { currentMonth.plusMonths(3) }
     val firstDayOfWeek = remember { firstDayOfWeekFromLocale() }
 
     val coroutineScope = rememberCoroutineScope()
@@ -183,6 +250,46 @@ private fun MonthHeader(
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun Day(
+    day: CalendarDay,
+    selectedCalendarDay: CalendarDay,
+    currentCalendarDay: CalendarDay,
+    onDateClick: (CalendarDay) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .background(
+                color = if ((day.date <= currentCalendarDay.date) && (day == selectedCalendarDay)) Me_Pink else Color.Transparent,
+                shape = RoundedCornerShape(12.dp)
+            )
+            .clickable {
+                if (day.position == DayPosition.MonthDate) {
+                    if (day.date <= currentCalendarDay.date) {
+                        onDateClick(if (day == selectedCalendarDay) UNSELECTED_CALENDARDAY else day)
+                    }
+                }
+            }
+            .aspectRatio(1f),
+        contentAlignment = Alignment.Center
+    ) {
+        if (day.position == DayPosition.MonthDate) {
+            Text(
+                text = day.date.dayOfMonth.toString(),
+                modifier = Modifier.align(Alignment.Center),
+                color = getDayColor(
+                    enabled = day.date <= currentCalendarDay.date,
+                    isSelected = selectedCalendarDay == day,
+                    dayOfWeek = day.date.dayOfWeek
+                ),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium,
+                fontFamily = spoqahansanseeo
+            )
         }
     }
 }

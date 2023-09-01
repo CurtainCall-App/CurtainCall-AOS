@@ -186,9 +186,8 @@ private fun PerformanceSearchContent(
                         PerformanceDetailCard(
                             modifier = Modifier
                                 .padding(horizontal = 20.dp)
-                                .padding(bottom = 20.dp)
                                 .fillMaxWidth()
-                                .padding(vertical = 12.dp, horizontal = 20.dp),
+                                .padding(vertical = 12.dp),
                             imageUrl = showInfoModel.poster,
                             painter = painterResource(R.drawable.ic_error_poster),
                             title = showInfoModel.name,

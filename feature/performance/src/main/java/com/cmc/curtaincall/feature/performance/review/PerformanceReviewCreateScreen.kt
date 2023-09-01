@@ -161,14 +161,8 @@ private fun PerformanceReviewCreateBody(
     LaunchedEffect(performanceReviewViewModel) {
         performanceReviewViewModel.effect.collectLatest {
             when (it) {
-                PerformanceReviewSideEffect.CreateSuccess -> {
-                    onBack()
-                }
-
-                PerformanceReviewSideEffect.UpdateSuccess -> {
-                    onBack()
-                }
-
+                PerformanceReviewSideEffect.CreateSuccess,
+                PerformanceReviewSideEffect.UpdateSuccess,
                 PerformanceReviewSideEffect.DeleteSuccess -> {
                     onBack()
                 }
@@ -204,6 +198,7 @@ private fun PerformanceReviewCreateBody(
                 .height(52.dp),
             title = stringResource(R.string.performance_review_create_write_complete),
             fontSize = 16.dp.toSp(),
+            enabled = review.isNotEmpty(),
             containerColor = Me_Pink,
             contentColor = White
         )

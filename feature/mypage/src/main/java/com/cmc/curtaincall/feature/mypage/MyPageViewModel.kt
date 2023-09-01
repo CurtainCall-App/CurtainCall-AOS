@@ -66,6 +66,10 @@ class MyPageViewModel @Inject constructor(
         memberId = memberId.value
     ).cachedIn(viewModelScope)
 
+    init {
+        getMemberId()
+    }
+
     override fun reduceState(currentState: MyPageUiState, event: MyPageEvent): MyPageUiState =
         when (event) {
             is MyPageEvent.LoadMemberInfo -> {

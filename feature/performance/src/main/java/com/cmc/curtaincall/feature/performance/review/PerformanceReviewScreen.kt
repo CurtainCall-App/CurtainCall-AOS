@@ -35,6 +35,7 @@ internal fun PerformanceReviewScreen(
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(White)
+
     Scaffold(
         topBar = {
             TopAppBarWithBack(
@@ -93,6 +94,7 @@ private fun PerformanceReviewContent(
     val reviewItems = performanceDetailViewModel.reviewItems.collectAsLazyPagingItems()
     var isShowRemoveDialog by remember { mutableStateOf(false) }
     var removeReviewId by remember { mutableIntStateOf(0) }
+    var clickIndex by remember { mutableIntStateOf(-1) }
     if (isShowRemoveDialog) {
         CurtainCallBasicDialog(
             title = stringResource(R.string.dialog_performance_review_remove_title),
@@ -135,6 +137,10 @@ private fun PerformanceReviewContent(
                         comment = reviewItem.content,
                         numberOfLike = reviewItem.likeCount,
                         isFavorite = reviewItem.isFavortie,
+                        isClickMoreVert = clickIndex == index,
+                        onClickMoreVert = { check ->
+                            clickIndex = if (check) index else -1
+                        },
                         onFavoriteChange = { check ->
                             if (check) {
                                 performanceReviewViewModel.requestLikeReview(reviewItem.id)
