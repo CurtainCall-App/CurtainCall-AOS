@@ -13,6 +13,10 @@ android {
     namespace = "com.cmc.curtaincall"
 
     defaultConfig {
+        applicationId = "com.cmc.curtaincall"
+        versionCode = 5
+        versionName = "1.0"
+
         buildConfigField("String", "KAKAO_APP_KEY", gradleLocalProperties(rootDir).getProperty("KAKAO_APP_KEY"))
         resValue("string", "NAVER_API_MAP_KEY", gradleLocalProperties(rootDir).getProperty("NAVER_API_MAP_KEY"))
         vectorDrawables {

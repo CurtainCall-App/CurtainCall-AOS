@@ -8,13 +8,6 @@ if (hasLibraryPlugin || hasApplicationPlugin) {
         defaultConfig{
             minSdk = 26
             targetSdk = 33
-
-            if(hasApplicationPlugin){
-                applicationId = "com.cmc.curtaincall"
-                versionCode = 5
-                versionName = "1.0"
-            }
-
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
 

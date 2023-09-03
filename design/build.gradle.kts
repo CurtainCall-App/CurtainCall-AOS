@@ -10,8 +10,6 @@ android {
 
     defaultConfig {
         applicationId = "com.cmc.curtaincall.design"
-        minSdk = 26
-        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
