@@ -145,7 +145,7 @@ private fun MyPageContent(
                     .padding(vertical = 24.dp),
                 icon = painterResource(R.drawable.ic_border_all),
                 title = stringResource(R.string.mypage_saved_performance_list),
-                onClick = { }
+                onClick = onNavigateSavedPerformance
             )
         }
         Spacer(

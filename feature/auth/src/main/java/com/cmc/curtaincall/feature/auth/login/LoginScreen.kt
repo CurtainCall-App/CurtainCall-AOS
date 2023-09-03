@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -117,10 +116,10 @@ fun LoginScreen(
                 onNavigateSignUpTerms = onNavigateSignUpTerms,
                 onNavigateHome = onNavigateHome
             )
-            Spacer(Modifier.width(16.dp))
-            LoginGoogle(onNavigateSignUpTerms, onNavigateHome)
-            Spacer(Modifier.width(16.dp))
-            LoginFacebook(onNavigateSignUpTerms, onNavigateHome)
+            // Spacer(Modifier.width(16.dp))
+            // LoginGoogle(onNavigateSignUpTerms, onNavigateHome)
+            // Spacer(Modifier.width(16.dp))
+            // LoginFacebook(onNavigateSignUpTerms, onNavigateHome)
         }
         Spacer(Modifier.weight(65f))
         Text(

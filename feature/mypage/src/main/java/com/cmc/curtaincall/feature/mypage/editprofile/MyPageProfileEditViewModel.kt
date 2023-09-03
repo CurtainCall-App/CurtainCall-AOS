@@ -62,6 +62,9 @@ class MyPageProfileEditViewModel @Inject constructor(
             imageId = imageIdState.value
         ).onEach { check ->
             _completeUpdate.value = check
+            if (check) {
+                memberRepository.saveMemberNickname(nicknameState.value)
+            }
         }.launchIn(viewModelScope)
     }
 }

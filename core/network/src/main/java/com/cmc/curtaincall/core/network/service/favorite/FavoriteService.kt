@@ -26,7 +26,7 @@ interface FavoriteService {
         @Query("showIds") showIds: List<String>
     ): CheckFavoriteShowsResponse
 
-    @GET("member/{memberId}/favorite")
+    @GET("members/{memberId}/favorite")
     suspend fun requestFavoriteShows(
         @Path("memberId") memberId: Int
     ): FavoriteShowsResponse
