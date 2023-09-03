@@ -1,6 +1,5 @@
 package com.cmc.curtaincall.data.repository
 
-import com.cmc.curtaincall.core.network.service.favorite.FavoriteService
 import com.cmc.curtaincall.data.source.remote.FavoriteRemoteSource
 import com.cmc.curtaincall.domain.model.favorite.CheckFavoriteShowModel
 import com.cmc.curtaincall.domain.model.favorite.FavoriteShowModel
@@ -10,8 +9,7 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class FavoriteRepositoryImpl @Inject constructor(
-    private val favoriteRemoteSource: FavoriteRemoteSource,
-    private val favoriteService: FavoriteService
+    private val favoriteRemoteSource: FavoriteRemoteSource
 ) : FavoriteRepository {
     override fun requestFavoriteShow(showId: String): Flow<Boolean> =
         favoriteRemoteSource.requestFavoriteShow(showId)

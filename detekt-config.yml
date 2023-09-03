@@ -23,6 +23,8 @@ style:
     active: false
   UnusedPrivateMember:
     active: false
+  UnusedPrivateProperty:
+    active: false
 
 naming:
   TopLevelPropertyNaming:
@@ -36,6 +38,8 @@ empty-blocks:
   EmptyClassBlock:
     active: false
   EmptyKtFile:
+    active: false
+  EmptyFunctionBlock:
     active: false
 
 exceptions:
