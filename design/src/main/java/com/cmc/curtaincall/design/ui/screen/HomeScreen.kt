@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,6 +30,7 @@ internal fun HomeScreen(
     onNavigateColor: () -> Unit,
     onNavigateIcons: () -> Unit,
     onNavigateTypography: () -> Unit,
+    onNavigateIllustration: () -> Unit,
     onNavigateButton: () -> Unit,
     onNavigateCard: () -> Unit,
     onNavigateTextField: () -> Unit,
@@ -49,6 +49,7 @@ internal fun HomeScreen(
             onNavigateColor = onNavigateColor,
             onNavigateIcons = onNavigateIcons,
             onNavigateTypography = onNavigateTypography,
+            onNavigateIllustration = onNavigateIllustration,
             onNavigateButton = onNavigateButton,
             onNavigateTextField = onNavigateTextField,
             onNavigateAppbar = onNavigateAppbar,
@@ -67,6 +68,7 @@ private fun HomeContent(
     onNavigateColor: () -> Unit,
     onNavigateIcons: () -> Unit,
     onNavigateTypography: () -> Unit,
+    onNavigateIllustration: () -> Unit,
     onNavigateButton: () -> Unit,
     onNavigateCard: () -> Unit,
     onNavigateTextField: () -> Unit,
@@ -161,11 +163,23 @@ private fun HomeContent(
                     fontFamily = spoqahansanseeo
                 )
             }
-            Spacer(
+            Box(
                 modifier = Modifier
-                    .padding(start = 12.dp)
                     .weight(1f)
-            )
+                    .padding(start = 12.dp)
+                    .clickable { onNavigateIllustration() }
+                    .background(White, RoundedCornerShape(6.dp))
+                    .padding(horizontal = 12.dp, vertical = 8.dp)
+            ) {
+                Text(
+                    text = "Illustrations",
+                    modifier = Modifier.fillMaxSize(),
+                    color = Cetacean_Blue,
+                    fontSize = 14.dp.toSp(),
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = spoqahansanseeo
+                )
+            }
         }
         Text(
             text = "Controls",

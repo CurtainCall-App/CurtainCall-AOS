@@ -16,6 +16,7 @@ import com.cmc.curtaincall.design.ui.screen.ColorScreen
 import com.cmc.curtaincall.design.ui.screen.DialogScreen
 import com.cmc.curtaincall.design.ui.screen.HomeScreen
 import com.cmc.curtaincall.design.ui.screen.IconScreen
+import com.cmc.curtaincall.design.ui.screen.IllustrationScreen
 import com.cmc.curtaincall.design.ui.screen.TextFieldScreen
 import com.cmc.curtaincall.design.ui.screen.TimePickerScreen
 import com.cmc.curtaincall.design.ui.screen.TypoGraphyScreen
@@ -25,6 +26,7 @@ private const val HOME = "home"
 private const val COLOR = "color"
 private const val ICONS = "icons"
 private const val TYPOGRAPHY = "typography"
+private const val ILLUSTRATION = "illustration"
 private const val ALERT = "alert"
 private const val BUTTON = "button"
 private const val TEXT = "text"
@@ -55,6 +57,10 @@ object Icons : DesignSystemDestination {
 
 object Typography : DesignSystemDestination {
     override val route = TYPOGRAPHY
+}
+
+object Illustration : DesignSystemDestination {
+    override val route = ILLUSTRATION
 }
 
 object Button : DesignSystemDestination {
@@ -104,6 +110,7 @@ internal fun AppNavHost(
                 onNavigateColor = { navHostController.navigate(Color.route) },
                 onNavigateIcons = { navHostController.navigate(Icons.route) },
                 onNavigateTypography = { navHostController.navigate(Typography.route) },
+                onNavigateIllustration = { navHostController.navigate(Illustration.route) },
                 onNavigateButton = { navHostController.navigate(Button.route) },
                 onNavigateTextField = { navHostController.navigate(TextField.route) },
                 onNavigateAppbar = { navHostController.navigate(Appbar.route) },
@@ -125,6 +132,10 @@ internal fun AppNavHost(
 
         composable(route = Typography.route) {
             TypoGraphyScreen { navHostController.popBackStack() }
+        }
+
+        composable(route = Illustration.route) {
+            IllustrationScreen { navHostController.popBackStack() }
         }
 
         composable(route = Button.route) {
