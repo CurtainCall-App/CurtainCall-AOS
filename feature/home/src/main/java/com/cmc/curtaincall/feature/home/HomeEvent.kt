@@ -1,8 +1,8 @@
 package com.cmc.curtaincall.feature.home
 
 import com.cmc.curtaincall.core.base.BaseEvent
-import com.cmc.curtaincall.domain.model.home.MyParticipationModel
-import com.cmc.curtaincall.domain.model.home.MyRecruitmentModel
+import com.cmc.curtaincall.domain.model.member.MyParticipationModel
+import com.cmc.curtaincall.domain.model.member.MyRecruitmentModel
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import com.cmc.curtaincall.domain.model.show.ShowRankModel
 import com.cmc.curtaincall.domain.model.show.ShowSearchWordModel

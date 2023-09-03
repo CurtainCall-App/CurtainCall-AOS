@@ -33,7 +33,7 @@ import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 
 enum class WriteType(val value: String) {
-    TOTAL("전체"), REVIEW("한 줄 리뷰"), LOST_ITEM("분실물")
+    REVIEW("한 줄 리뷰"), LOST_ITEM("분실물")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -73,7 +73,7 @@ private fun MyPageWriteContent(
     onNavigateLostItemEdit: () -> Unit,
     onNavigateReviewEdit: () -> Unit
 ) {
-    var writeTypeState by remember { mutableStateOf(WriteType.TOTAL) }
+    var writeTypeState by remember { mutableStateOf(WriteType.REVIEW) }
     Column(modifier) {
         Column(Modifier.padding(horizontal = 20.dp)) {
             MyPageWriteMenuTab(
@@ -83,183 +83,8 @@ private fun MyPageWriteContent(
                 writeType = writeTypeState,
                 onChangeWriteType = { writeTypeState = it }
             )
-//            LazyColumn(Modifier.padding(top = 26.dp)) {
-//                items(
-//                    if (writeTypeState == WriteType.TOTAL) {
-//                        writeModels
-//                    } else {
-//                        writeModels.filter { it.writeType == writeTypeState }
-//                    }
-//                ) {
-//                    MyPageWriteItem(
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .padding(bottom = 16.dp),
-//                        writeModel = it,
-//                        onNavigateLostItemEdit = onNavigateLostItemEdit,
-//                        onNavigateReviewEdit = onNavigateReviewEdit
-//                    )
-//                }
-//            }
         }
     }
-}
-
-@Composable
-private fun MyPageWriteItem(
-    modifier: Modifier = Modifier,
-    // writeModel: MyWriteModel,
-    onNavigateLostItemEdit: () -> Unit,
-    onNavigateReviewEdit: () -> Unit
-) {
-//    var isClickMoreTab by remember { mutableStateOf(false) }
-//    Box(
-//        modifier = modifier
-//            .background(Cultured, RoundedCornerShape(15.dp))
-//            .padding(vertical = 12.dp, horizontal = 18.dp)
-//    ) {
-//        Row(
-//            modifier = Modifier.align(Alignment.TopStart),
-//            verticalAlignment = Alignment.CenterVertically
-//        ) {
-//            Box(
-//                modifier = Modifier
-//                    .background(Me_Pink, RoundedCornerShape(17.dp))
-//                    .padding(vertical = 6.dp, horizontal = 10.dp),
-//                contentAlignment = Alignment.Center
-//            ) {
-//                Text(
-//                    text = writeModel.writeType.value,
-//                    color = White,
-//                    fontSize = 13.dp.toSp(),
-//                    fontWeight = FontWeight.Medium,
-//                    fontFamily = spoqahansanseeo
-//                )
-//            }
-//            Text(
-//                text = writeModel.date,
-//                modifier = Modifier.padding(start = 8.dp),
-//                color = Roman_Silver,
-//                fontSize = 10.dp.toSp(),
-//                fontWeight = FontWeight.Normal,
-//                fontFamily = spoqahansanseeo
-//            )
-//        }
-//        Column(
-//            modifier = Modifier
-//                .zIndex(if (isClickMoreTab) 1f else 0f)
-//                .align(Alignment.TopEnd)
-//        ) {
-//            Icon(
-//                painter = painterResource(R.drawable.ic_more_vert),
-//                contentDescription = null,
-//                modifier = Modifier
-//                    .align(Alignment.End)
-//                    .size(24.dp)
-//                    .clickable { isClickMoreTab = isClickMoreTab.not() },
-//                tint = Color.Unspecified
-//            )
-//            if (isClickMoreTab) {
-//                Column(
-//                    modifier = Modifier
-//                        .padding(top = 9.dp)
-//                        .background(White, RoundedCornerShape(8.dp))
-//                ) {
-//                    Box(
-//                        modifier = Modifier
-//                            .background(Me_Pink.copy(0.15f), RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp))
-//                            .padding(horizontal = 24.dp, vertical = 12.dp)
-//                            .clickable {
-//                                if (writeModel.writeType == WriteType.LOST_ITEM) {
-//                                    onNavigateLostItemEdit()
-//                                } else {
-//                                    onNavigateReviewEdit()
-//                                }
-//                            },
-//                        contentAlignment = Alignment.Center
-//                    ) {
-//                        Text(
-//                            text = stringResource(R.string.mypage_writing_edit),
-//                            color = Black_Pearl,
-//                            fontSize = 14.dp.toSp(),
-//                            fontWeight = FontWeight.Medium,
-//                            fontFamily = spoqahansanseeo
-//                        )
-//                    }
-//                    Box(
-//                        modifier = Modifier.padding(horizontal = 24.dp, vertical = 12.dp),
-//                        contentAlignment = Alignment.Center
-//                    ) {
-//                        Text(
-//                            text = stringResource(R.string.mypage_writing_remove),
-//                            color = Black_Pearl,
-//                            fontSize = 14.dp.toSp(),
-//                            fontWeight = FontWeight.Medium,
-//                            fontFamily = spoqahansanseeo
-//                        )
-//                    }
-//                }
-//            }
-//        }
-//
-//        when (writeModel.writeType) {
-//            WriteType.LOST_ITEM -> {
-//                Column(Modifier.padding(top = 44.dp)) {
-//                    Text(
-//                        text = writeModel.title,
-//                        color = Nero,
-//                        fontSize = 16.dp.toSp(),
-//                        fontWeight = FontWeight.Bold,
-//                        fontFamily = spoqahansanseeo
-//                    )
-//                    Text(
-//                        text = String.format(
-//                            stringResource(R.string.mypage_writing_lost_item_find_location_format),
-//                            writeModel.findLocation
-//                        ),
-//                        modifier = Modifier.padding(top = 9.dp),
-//                        color = Black_Coral,
-//                        fontSize = 13.dp.toSp(),
-//                        fontWeight = FontWeight.Medium,
-//                        fontFamily = spoqahansanseeo
-//                    )
-//                    Text(
-//                        text = String.format(
-//                            stringResource(R.string.mypage_writing_lost_item_find_date_format),
-//                            writeModel.findDate
-//                        ),
-//                        modifier = Modifier.padding(top = 6.dp),
-//                        color = Black_Coral,
-//                        fontSize = 13.dp.toSp(),
-//                        fontWeight = FontWeight.Medium,
-//                        fontFamily = spoqahansanseeo
-//                    )
-//                }
-//                Image(
-//                    painter = painterResource(R.drawable.img_poster),
-//                    contentDescription = null,
-//                    modifier = Modifier
-//                        .align(Alignment.BottomEnd)
-//                        .size(67.dp)
-//                        .clip(RoundedCornerShape(10.dp)),
-//                    contentScale = ContentScale.FillBounds
-//                )
-//            }
-//
-//            WriteType.REVIEW -> {
-//                Text(
-//                    text = writeModel.description,
-//                    modifier = Modifier.padding(top = 44.dp),
-//                    color = Nero,
-//                    fontSize = 13.dp.toSp(),
-//                    fontWeight = FontWeight.Medium,
-//                    fontFamily = spoqahansanseeo
-//                )
-//            }
-//
-//            else -> Unit
-//        }
-//    }
 }
 
 @Composable
@@ -271,25 +96,6 @@ private fun MyPageWriteMenuTab(
     Row(modifier) {
         Box(
             modifier = Modifier
-                .background(
-                    if (writeType == WriteType.TOTAL) Cetacean_Blue else Cultured,
-                    RoundedCornerShape(20.dp)
-                )
-                .padding(vertical = 8.dp, horizontal = 14.dp)
-                .clickable { onChangeWriteType(WriteType.TOTAL) },
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = WriteType.TOTAL.value,
-                color = if (writeType == WriteType.TOTAL) White else Cetacean_Blue,
-                fontSize = 16.dp.toSp(),
-                fontWeight = FontWeight.Medium,
-                fontFamily = spoqahansanseeo
-            )
-        }
-        Box(
-            modifier = Modifier
-                .padding(start = 8.dp)
                 .background(
                     if (writeType == WriteType.REVIEW) Cetacean_Blue else Cultured,
                     RoundedCornerShape(20.dp)

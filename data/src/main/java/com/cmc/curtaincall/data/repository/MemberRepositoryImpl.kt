@@ -11,9 +11,9 @@ import com.cmc.curtaincall.data.source.paging.MyRecruitmentPagingSource
 import com.cmc.curtaincall.data.source.paging.PARTICIPATION_PAGE_SIZE
 import com.cmc.curtaincall.data.source.paging.RECRUITMENT_PAGE_SIZE
 import com.cmc.curtaincall.data.source.remote.MemberRemoteSource
-import com.cmc.curtaincall.domain.model.home.MemberInfoModel
-import com.cmc.curtaincall.domain.model.home.MyParticipationModel
-import com.cmc.curtaincall.domain.model.home.MyRecruitmentModel
+import com.cmc.curtaincall.domain.model.member.MemberInfoModel
+import com.cmc.curtaincall.domain.model.member.MyParticipationModel
+import com.cmc.curtaincall.domain.model.member.MyRecruitmentModel
 import com.cmc.curtaincall.domain.repository.MemberRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

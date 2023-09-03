@@ -131,7 +131,7 @@ private fun MyPageContent(
                     .padding(vertical = 24.dp),
                 icon = painterResource(R.drawable.ic_edit_square),
                 title = stringResource(R.string.mypage_my_writing),
-                onClick = {}
+                onClick = { onNavigateWrite() }
             )
             Spacer(
                 modifier = Modifier

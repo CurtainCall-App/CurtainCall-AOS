@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.domain.model.home
+package com.cmc.curtaincall.domain.model.member
 
 data class MemberInfoModel(
     val id: Int = Int.MIN_VALUE,

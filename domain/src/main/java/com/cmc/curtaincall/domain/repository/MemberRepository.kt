@@ -1,9 +1,9 @@
 package com.cmc.curtaincall.domain.repository
 
 import androidx.paging.PagingData
-import com.cmc.curtaincall.domain.model.home.MemberInfoModel
-import com.cmc.curtaincall.domain.model.home.MyParticipationModel
-import com.cmc.curtaincall.domain.model.home.MyRecruitmentModel
+import com.cmc.curtaincall.domain.model.member.MemberInfoModel
+import com.cmc.curtaincall.domain.model.member.MyParticipationModel
+import com.cmc.curtaincall.domain.model.member.MyRecruitmentModel
 import kotlinx.coroutines.flow.Flow
 
 interface MemberRepository {

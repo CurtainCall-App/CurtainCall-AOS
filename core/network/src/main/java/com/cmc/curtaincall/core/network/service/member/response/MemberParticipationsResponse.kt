@@ -1,6 +1,6 @@
 package com.cmc.curtaincall.core.network.service.member.response
 
-import com.cmc.curtaincall.domain.model.home.MyParticipationModel
+import com.cmc.curtaincall.domain.model.member.MyParticipationModel
 import com.google.gson.annotations.SerializedName
 
 data class MemberParticipationsResponse(
