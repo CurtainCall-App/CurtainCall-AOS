@@ -76,6 +76,7 @@ fun PerformanceDetailCard(
     Row(modifier.clickable { onClick() }) {
         AsyncImage(
             model = imageUrl,
+            placeholder = painterResource(R.drawable.ic_error_poster),
             error = painter,
             contentDescription = null,
             modifier = Modifier

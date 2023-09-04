@@ -11,10 +11,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.component.items.NoticeItem
@@ -24,12 +27,19 @@ import com.cmc.curtaincall.common.design.theme.Cultured
 import com.cmc.curtaincall.common.design.theme.Nero
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
+import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MyPageNoticeDetailScreen(
+    myPageNoticeViewModel: MyPageNoticeViewModel,
+    noticeId: Int,
     onBack: () -> Unit
 ) {
+    LaunchedEffect(Unit) {
+        myPageNoticeViewModel.requestNoticeDetail(noticeId)
+    }
+
     Scaffold(
         topBar = {
             TopAppBarWithBack(
@@ -41,6 +51,7 @@ internal fun MyPageNoticeDetailScreen(
         }
     ) { paddingValues ->
         MyPageNoticeDetailContent(
+            myPageNoticeViewModel = myPageNoticeViewModel,
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
@@ -51,8 +62,10 @@ internal fun MyPageNoticeDetailScreen(
 
 @Composable
 private fun MyPageNoticeDetailContent(
+    myPageNoticeViewModel: MyPageNoticeViewModel,
     modifier: Modifier = Modifier
 ) {
+    val myPageNoticeDetailUiState by myPageNoticeViewModel.noticeDetailState.collectAsStateWithLifecycle()
     Column(modifier) {
         Column(
             modifier = Modifier
@@ -61,9 +74,8 @@ private fun MyPageNoticeDetailContent(
         ) {
             NoticeItem(
                 modifier = Modifier.fillMaxWidth(),
-                title = "커튼콜 서비스 개편 안내",
-                date = "2023.6.17",
-                isNew = true
+                title = myPageNoticeDetailUiState.title,
+                date = myPageNoticeDetailUiState.createdAt.toChangeFullDate()
             )
             Spacer(
                 modifier = Modifier
@@ -73,14 +85,7 @@ private fun MyPageNoticeDetailContent(
                     .background(Cultured)
             )
             Text(
-                text = "안녕하세요, 고객님\n" +
-                    "연극과 뮤지컬 이ㅏㄹ니ㅏㅇㄹ하는 커튼콜입니다.\n" +
-                    "문의해 주신 내용에 대해서 현재니아ㅓ리나\n" +
-                    "아울러, 니ㅏ어리ㅏ넝ㄹㄴㅇㄹ 안내해 드릴 수 있도록\n" +
-                    "하겠습니다.\n" +
-                    "추후 이용 중 다른 문의 사항이 발생한다면 고객센터로 말씀 주시기 바랍니다.\n" +
-                    "감사합니다.\n" +
-                    "커튼콜팀 드림",
+                text = myPageNoticeDetailUiState.content,
                 modifier = Modifier
                     .padding(top = 30.dp)
                     .padding(horizontal = 20.dp),

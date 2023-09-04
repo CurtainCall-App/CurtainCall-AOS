@@ -15,17 +15,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemsIndexed
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.component.items.NoticeItem
 import com.cmc.curtaincall.common.design.theme.Cultured
 import com.cmc.curtaincall.common.design.theme.Nero
 import com.cmc.curtaincall.common.design.theme.White
+import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MyPageNoticeScreen(
-    onNavigateNoticeDetail: () -> Unit,
+    myPageNoticeViewModel: MyPageNoticeViewModel = hiltViewModel(),
+    onNavigateNoticeDetail: (Int) -> Unit,
     onBack: () -> Unit
 ) {
     Scaffold(
@@ -39,6 +44,7 @@ internal fun MyPageNoticeScreen(
         }
     ) { paddingValues ->
         MyPageNoticeContent(
+            myPageNoticeViewModel = myPageNoticeViewModel,
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
@@ -50,32 +56,33 @@ internal fun MyPageNoticeScreen(
 
 @Composable
 private fun MyPageNoticeContent(
+    myPageNoticeViewModel: MyPageNoticeViewModel,
     modifier: Modifier = Modifier,
-    onNavigateNoticeDetail: () -> Unit
+    onNavigateNoticeDetail: (Int) -> Unit
 ) {
-    val news = listOf(true, true, false, false)
+    val noticeItems = myPageNoticeViewModel.noticeItems.collectAsLazyPagingItems()
     Column(modifier) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 12.dp)
         ) {
-            itemsIndexed(news) { index, item ->
-                NoticeItem(
-                    modifier = Modifier.fillMaxWidth(),
-                    title = "커튼콜 서비스 개편 안내",
-                    date = "2023.6.17",
-                    isNew = news[index],
-                    notRead = news[index],
-                    onClick = onNavigateNoticeDetail
-                )
-                Spacer(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = if (news[index]) 0.dp else 20.dp)
-                        .height(1.dp)
-                        .background(Cultured)
-                )
+            itemsIndexed(noticeItems) { index, noticeItem ->
+                noticeItem?.let { notice ->
+                    NoticeItem(
+                        modifier = Modifier.fillMaxWidth(),
+                        title = notice.title,
+                        date = notice.createdAt.toChangeFullDate(),
+                        onClick = { onNavigateNoticeDetail(notice.id) }
+                    )
+                    Spacer(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp)
+                            .height(1.dp)
+                            .background(Cultured)
+                    )
+                }
             }
         }
     }

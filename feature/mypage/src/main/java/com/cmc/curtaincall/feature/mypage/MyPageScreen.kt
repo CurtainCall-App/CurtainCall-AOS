@@ -164,9 +164,7 @@ private fun MyPageContent(
             MyPageInfoItem(
                 modifier = Modifier.fillMaxWidth(),
                 title = stringResource(R.string.mypage_announcement),
-                onClick = {
-                    // onNavigateAnnouncement()
-                }
+                onClick = { onNavigateAnnouncement() }
             )
             MyPageInfoItem(
                 modifier = Modifier
