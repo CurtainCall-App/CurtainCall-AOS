@@ -7,8 +7,10 @@ import com.cmc.curtaincall.core.network.service.member.request.UpdateMemberReque
 import com.cmc.curtaincall.core.network.service.member.response.MemberCreateResponse
 import com.cmc.curtaincall.core.network.service.member.response.MemberDuplicateNickNameResponse
 import com.cmc.curtaincall.core.network.service.member.response.MemberInfoResponse
+import com.cmc.curtaincall.core.network.service.member.response.MemberLostItemsResponse
 import com.cmc.curtaincall.core.network.service.member.response.MemberParticipationsResponse
 import com.cmc.curtaincall.core.network.service.member.response.MemberRecruitmentsResponse
+import com.cmc.curtaincall.core.network.service.member.response.MemberReviewsResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -56,6 +58,18 @@ interface MemberService {
         @Query("size") size: Int,
         @Query("category") category: String?
     ): MemberParticipationsResponse
+
+    @GET("member/reviews")
+    suspend fun requestMyReviews(
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): MemberReviewsResponse
+
+    @GET("member/lostItems")
+    suspend fun requestMyLostItems(
+        @Query("page") page: Int,
+        @Query("size") size: Int
+    ): MemberLostItemsResponse
 
     @HTTP(method = "DELETE", path = "${BuildConfig.CURTAIN_CALL_BASE_URL}/member", hasBody = true)
     suspend fun deleteMember(

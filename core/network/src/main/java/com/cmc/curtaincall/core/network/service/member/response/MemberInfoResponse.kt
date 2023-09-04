@@ -1,6 +1,6 @@
 package com.cmc.curtaincall.core.network.service.member.response
 
-import com.cmc.curtaincall.domain.model.home.MemberInfoModel
+import com.cmc.curtaincall.domain.model.member.MemberInfoModel
 
 data class MemberInfoResponse(
     val id: Int,

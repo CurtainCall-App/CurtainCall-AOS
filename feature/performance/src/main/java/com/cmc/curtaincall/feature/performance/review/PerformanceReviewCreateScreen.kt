@@ -18,6 +18,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallMultiLineTextField
@@ -46,6 +47,11 @@ internal fun PerformanceReviewCreateScreen(
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(Black)
 
+    LaunchedEffect(Unit) {
+        if (fromMypage) performanceDetailViewModel.requestShowDetail(showId)
+    }
+
+    val performanceDetailUiState by performanceDetailViewModel.uiState.collectAsStateWithLifecycle()
     Column(Modifier.fillMaxSize()) {
         PerformanceReviewCreateHeader(
             modifier = Modifier
@@ -53,9 +59,9 @@ internal fun PerformanceReviewCreateScreen(
                 .height(331.dp)
                 .background(Cetacean_Blue.copy(0.8f)),
             fromMypage = fromMypage,
-            posterUrl = posterUrl,
-            genre = genre,
-            title = title,
+            posterUrl = if (fromMypage) performanceDetailUiState.showDetailModel.poster else posterUrl,
+            genre = if (fromMypage) performanceDetailUiState.showDetailModel.genre else genre,
+            title = if (fromMypage) performanceDetailUiState.showDetailModel.name else title,
             onBack = onBack
         )
         PerformanceReviewCreateBody(

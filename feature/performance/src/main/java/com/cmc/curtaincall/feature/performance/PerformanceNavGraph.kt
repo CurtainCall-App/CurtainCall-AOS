@@ -85,12 +85,15 @@ sealed interface PerformanceDestination : CurtainCallDestination {
             },
             navArgument(posterUrlArg) {
                 type = NavType.StringType
+                defaultValue = ""
             },
             navArgument(genreArg) {
                 type = NavType.StringType
+                defaultValue = ""
             },
             navArgument(titleArg) {
                 type = NavType.StringType
+                defaultValue = ""
             },
             navArgument(reviewIdArg) {
                 type = NavType.IntType
@@ -124,11 +127,19 @@ sealed interface PerformanceDestination : CurtainCallDestination {
 
     object LostItemCreate : PerformanceDestination {
         override val route = PERFORMANCE_LOST_ITEM_CREATE
+        const val lostItemIdArg = "lostItemId"
         const val facilityIdArg = "facilityId"
         const val facilityNameArg = "facilityName"
-        val routeWithArg = "$route/{$facilityIdArg}/{$facilityNameArg}"
+        val routeWithArg = "$route?" +
+            "${LostItemCreate.lostItemIdArg}={${LostItemCreate.lostItemIdArg}}&" +
+            "${LostItemCreate.facilityIdArg}={${LostItemCreate.facilityIdArg}}&" +
+            "${LostItemCreate.facilityNameArg}={${LostItemCreate.facilityNameArg}}"
 
         val arguments = listOf(
+            navArgument(lostItemIdArg) {
+                type = NavType.IntType
+                defaultValue = 0
+            },
             navArgument(facilityIdArg) {
                 type = NavType.StringType
             },
@@ -217,7 +228,6 @@ fun NavGraphBuilder.performanceNavGraph(
             route = PerformanceDestination.ReviewCreate.routeWithArgs,
             arguments = PerformanceDestination.ReviewCreate.arguments
         ) { entry ->
-            val parentEntry = remember(entry) { navHostController.getBackStackEntry(PerformanceDestination.Detail.routeWithArgs) }
             val showId = entry.arguments?.getString(PerformanceDestination.ReviewCreate.showIdArgs) ?: ""
             val fromMypage = entry.arguments?.getBoolean(PerformanceDestination.ReviewCreate.fromMypageArg) ?: false
             val posterUrl = entry.arguments?.getString(PerformanceDestination.ReviewCreate.posterUrlArg)
@@ -225,16 +235,29 @@ fun NavGraphBuilder.performanceNavGraph(
             val title = entry.arguments?.getString(PerformanceDestination.ReviewCreate.titleArg) ?: ""
             val reviewId = entry.arguments?.getInt(PerformanceDestination.ReviewCreate.reviewIdArg) ?: Int.MIN_VALUE
 
-            PerformanceReviewCreateScreen(
-                performanceDetailViewModel = hiltViewModel(parentEntry),
-                showId = showId,
-                fromMypage = fromMypage,
-                posterUrl = posterUrl,
-                genre = genre,
-                title = title,
-                reviewId = reviewId,
-                onBack = { navHostController.popBackStack() }
-            )
+            if (fromMypage) {
+                PerformanceReviewCreateScreen(
+                    showId = showId,
+                    fromMypage = fromMypage,
+                    posterUrl = posterUrl,
+                    genre = genre,
+                    title = title,
+                    reviewId = reviewId,
+                    onBack = { navHostController.popBackStack() }
+                )
+            } else {
+                val parentEntry = remember(entry) { navHostController.getBackStackEntry(PerformanceDestination.Detail.routeWithArgs) }
+                PerformanceReviewCreateScreen(
+                    performanceDetailViewModel = hiltViewModel(parentEntry),
+                    showId = showId,
+                    fromMypage = fromMypage,
+                    posterUrl = posterUrl,
+                    genre = genre,
+                    title = title,
+                    reviewId = reviewId,
+                    onBack = { navHostController.popBackStack() }
+                )
+            }
         }
         composable(
             route = PerformanceDestination.LostItem.routeWithArgs,
@@ -250,7 +273,9 @@ fun NavGraphBuilder.performanceNavGraph(
                 },
                 onNavigateLostItemCreate = { facilityId, facilityName ->
                     navHostController.navigate(
-                        "${PerformanceDestination.LostItemCreate.route}/$facilityId/$facilityName"
+                        PerformanceDestination.LostItemCreate.route + "?" +
+                            "${PerformanceDestination.LostItemCreate.facilityIdArg}=$facilityId" + "&" +
+                            "${PerformanceDestination.LostItemCreate.facilityNameArg}=$facilityName"
                     )
                 },
                 onBack = {
@@ -274,10 +299,12 @@ fun NavGraphBuilder.performanceNavGraph(
             route = PerformanceDestination.LostItemCreate.routeWithArg,
             arguments = PerformanceDestination.LostItemCreate.arguments
         ) { entry ->
+            val lostItemId = entry.arguments?.getInt(PerformanceDestination.LostItemCreate.lostItemIdArg) ?: Int.MIN_VALUE
             val facilityId = entry.arguments?.getString(PerformanceDestination.LostItemCreate.facilityIdArg) ?: ""
             val facilityName = entry.arguments?.getString(PerformanceDestination.LostItemCreate.facilityNameArg) ?: ""
             PerformanceLostItemCreateScreen(
-                fromMyPage = navHostController.previousBackStackEntry?.destination?.route != PerformanceDestination.LostItem.route,
+                fromMyPage = navHostController.previousBackStackEntry?.destination?.route != PerformanceDestination.LostItem.routeWithArgs,
+                lostItemId = lostItemId,
                 facilityId = facilityId,
                 facilityName = facilityName,
                 onNavigateUpload = {

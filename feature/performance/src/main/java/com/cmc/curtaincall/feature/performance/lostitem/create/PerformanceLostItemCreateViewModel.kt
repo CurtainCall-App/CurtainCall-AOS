@@ -98,7 +98,23 @@ class PerformanceLostItemCreateViewModel @Inject constructor(
             foundTime = lostCreateInfo.value.foundTime,
             particulars = lostCreateInfo.value.particulars,
             imageId = lostCreateInfo.value.imageId
-        ).onEach { _completeEffect.emit(true) }
-            .launchIn(viewModelScope)
+        ).onEach {
+            _completeEffect.emit(true)
+        }.launchIn(viewModelScope)
+    }
+
+    fun updateLostItem(lostItemId: Int) {
+        lostItemRepository.updateLostItem(
+            lostItemId = lostItemId,
+            title = lostCreateInfo.value.title,
+            type = lostCreateInfo.value.type,
+            foundPlaceDetail = lostCreateInfo.value.foundPlaceDetail,
+            foundDate = lostCreateInfo.value.foundDate,
+            foundTime = lostCreateInfo.value.foundTime,
+            particulars = lostCreateInfo.value.particulars,
+            imageId = lostCreateInfo.value.imageId
+        ).onEach {
+            _completeEffect.emit(true)
+        }.launchIn(viewModelScope)
     }
 }
