@@ -12,6 +12,7 @@ import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.feature.mypage.editprofile.MyPageProfileEditScreen
+import com.cmc.curtaincall.feature.mypage.main.MyPageScreen
 import com.cmc.curtaincall.feature.mypage.notice.MyPageNoticeDetailScreen
 import com.cmc.curtaincall.feature.mypage.notice.MyPageNoticeScreen
 import com.cmc.curtaincall.feature.mypage.party.participation.MyPageParticipationScreen
@@ -39,6 +40,7 @@ private const val MYPAGE_RECRUITMENT = "mypage_recruitment"
 private const val MYPAGE_PARTICIPATION = "mypage_participantion"
 private const val MYPAGE_PRIVACY_TERMS = "mypage_privacy_terms"
 private const val MYPAGE_SERVICE_TERMS = "mypage_service_terms"
+private const val MYPAGE_QUESTIONS = "mypage_questions"
 
 sealed interface MyPageDestination : CurtainCallDestination {
     object MyPage : MyPageDestination, BottomDestination {
@@ -105,6 +107,10 @@ sealed interface MyPageDestination : CurtainCallDestination {
 
     object ServiceTerms : MyPageDestination {
         override val route = MYPAGE_SERVICE_TERMS
+    }
+
+    object Questions : MyPageDestination {
+        override val route = MYPAGE_QUESTIONS
     }
 }
 
