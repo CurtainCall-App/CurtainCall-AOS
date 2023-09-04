@@ -166,6 +166,7 @@ fun NavGraphBuilder.mypageNavGraph(
                     navHostController.navigate(
                         PerformanceDestination.ReviewCreate.route + "?" +
                             "${PerformanceDestination.ReviewCreate.showIdArgs}=$showId" + "&" +
+                            "${PerformanceDestination.ReviewCreate.fromMypageArg}=true" + "&" +
                             "${PerformanceDestination.ReviewCreate.reviewIdArg}=$reviewId"
                     )
                 },

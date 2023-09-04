@@ -85,12 +85,15 @@ sealed interface PerformanceDestination : CurtainCallDestination {
             },
             navArgument(posterUrlArg) {
                 type = NavType.StringType
+                defaultValue = ""
             },
             navArgument(genreArg) {
                 type = NavType.StringType
+                defaultValue = ""
             },
             navArgument(titleArg) {
                 type = NavType.StringType
+                defaultValue = ""
             },
             navArgument(reviewIdArg) {
                 type = NavType.IntType
@@ -225,7 +228,6 @@ fun NavGraphBuilder.performanceNavGraph(
             route = PerformanceDestination.ReviewCreate.routeWithArgs,
             arguments = PerformanceDestination.ReviewCreate.arguments
         ) { entry ->
-            val parentEntry = remember(entry) { navHostController.getBackStackEntry(PerformanceDestination.Detail.routeWithArgs) }
             val showId = entry.arguments?.getString(PerformanceDestination.ReviewCreate.showIdArgs) ?: ""
             val fromMypage = entry.arguments?.getBoolean(PerformanceDestination.ReviewCreate.fromMypageArg) ?: false
             val posterUrl = entry.arguments?.getString(PerformanceDestination.ReviewCreate.posterUrlArg)
@@ -233,16 +235,29 @@ fun NavGraphBuilder.performanceNavGraph(
             val title = entry.arguments?.getString(PerformanceDestination.ReviewCreate.titleArg) ?: ""
             val reviewId = entry.arguments?.getInt(PerformanceDestination.ReviewCreate.reviewIdArg) ?: Int.MIN_VALUE
 
-            PerformanceReviewCreateScreen(
-                performanceDetailViewModel = hiltViewModel(parentEntry),
-                showId = showId,
-                fromMypage = fromMypage,
-                posterUrl = posterUrl,
-                genre = genre,
-                title = title,
-                reviewId = reviewId,
-                onBack = { navHostController.popBackStack() }
-            )
+            if (fromMypage) {
+                PerformanceReviewCreateScreen(
+                    showId = showId,
+                    fromMypage = fromMypage,
+                    posterUrl = posterUrl,
+                    genre = genre,
+                    title = title,
+                    reviewId = reviewId,
+                    onBack = { navHostController.popBackStack() }
+                )
+            } else {
+                val parentEntry = remember(entry) { navHostController.getBackStackEntry(PerformanceDestination.Detail.routeWithArgs) }
+                PerformanceReviewCreateScreen(
+                    performanceDetailViewModel = hiltViewModel(parentEntry),
+                    showId = showId,
+                    fromMypage = fromMypage,
+                    posterUrl = posterUrl,
+                    genre = genre,
+                    title = title,
+                    reviewId = reviewId,
+                    onBack = { navHostController.popBackStack() }
+                )
+            }
         }
         composable(
             route = PerformanceDestination.LostItem.routeWithArgs,
