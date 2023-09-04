@@ -2,6 +2,8 @@ package com.cmc.curtaincall.domain.repository
 
 import androidx.paging.PagingData
 import com.cmc.curtaincall.domain.model.member.MemberInfoModel
+import com.cmc.curtaincall.domain.model.member.MemberLostItemModel
+import com.cmc.curtaincall.domain.model.member.MemberReviewModel
 import com.cmc.curtaincall.domain.model.member.MyParticipationModel
 import com.cmc.curtaincall.domain.model.member.MyRecruitmentModel
 import kotlinx.coroutines.flow.Flow
@@ -42,6 +44,10 @@ interface MemberRepository {
         memberId: Int,
         category: String
     ): Flow<PagingData<MyParticipationModel>>
+
+    fun fetchMyReview(): Flow<PagingData<MemberReviewModel>>
+
+    fun fetchMyLostItems(): Flow<PagingData<MemberLostItemModel>>
 
     fun deleteMember(
         authorization: String,

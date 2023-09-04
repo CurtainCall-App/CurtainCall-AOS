@@ -64,6 +64,7 @@ import java.io.ByteArrayOutputStream
 internal fun PerformanceLostItemCreateScreen(
     performanceLostItemCreateViewModel: PerformanceLostItemCreateViewModel = hiltViewModel(),
     fromMyPage: Boolean = false,
+    lostItemId: Int = 0,
     facilityId: String,
     facilityName: String,
     onNavigateUpload: () -> Unit,
@@ -93,7 +94,13 @@ internal fun PerformanceLostItemCreateScreen(
         },
         floatingActionButton = {
             CurtainCallRoundedTextButton(
-                onClick = { performanceLostItemCreateViewModel.createLostItem(facilityId) },
+                onClick = {
+                    if (fromMyPage) {
+                        performanceLostItemCreateViewModel.updateLostItem(lostItemId)
+                    } else {
+                        performanceLostItemCreateViewModel.createLostItem(facilityId)
+                    }
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)

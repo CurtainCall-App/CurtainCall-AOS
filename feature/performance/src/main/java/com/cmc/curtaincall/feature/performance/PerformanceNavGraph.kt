@@ -124,11 +124,19 @@ sealed interface PerformanceDestination : CurtainCallDestination {
 
     object LostItemCreate : PerformanceDestination {
         override val route = PERFORMANCE_LOST_ITEM_CREATE
+        const val lostItemIdArg = "lostItemId"
         const val facilityIdArg = "facilityId"
         const val facilityNameArg = "facilityName"
-        val routeWithArg = "$route/{$facilityIdArg}/{$facilityNameArg}"
+        val routeWithArg = "$route?" +
+            "${LostItemCreate.lostItemIdArg}={${LostItemCreate.lostItemIdArg}}&" +
+            "${LostItemCreate.facilityIdArg}={${LostItemCreate.facilityIdArg}}&" +
+            "${LostItemCreate.facilityNameArg}={${LostItemCreate.facilityNameArg}}"
 
         val arguments = listOf(
+            navArgument(lostItemIdArg) {
+                type = NavType.IntType
+                defaultValue = 0
+            },
             navArgument(facilityIdArg) {
                 type = NavType.StringType
             },
@@ -250,7 +258,9 @@ fun NavGraphBuilder.performanceNavGraph(
                 },
                 onNavigateLostItemCreate = { facilityId, facilityName ->
                     navHostController.navigate(
-                        "${PerformanceDestination.LostItemCreate.route}/$facilityId/$facilityName"
+                        PerformanceDestination.LostItemCreate.route + "?" +
+                            "${PerformanceDestination.LostItemCreate.facilityIdArg}=$facilityId" + "&" +
+                            "${PerformanceDestination.LostItemCreate.facilityNameArg}=$facilityName"
                     )
                 },
                 onBack = {
@@ -274,10 +284,12 @@ fun NavGraphBuilder.performanceNavGraph(
             route = PerformanceDestination.LostItemCreate.routeWithArg,
             arguments = PerformanceDestination.LostItemCreate.arguments
         ) { entry ->
+            val lostItemId = entry.arguments?.getInt(PerformanceDestination.LostItemCreate.lostItemIdArg) ?: Int.MIN_VALUE
             val facilityId = entry.arguments?.getString(PerformanceDestination.LostItemCreate.facilityIdArg) ?: ""
             val facilityName = entry.arguments?.getString(PerformanceDestination.LostItemCreate.facilityNameArg) ?: ""
             PerformanceLostItemCreateScreen(
-                fromMyPage = navHostController.previousBackStackEntry?.destination?.route != PerformanceDestination.LostItem.route,
+                fromMyPage = navHostController.previousBackStackEntry?.destination?.route != PerformanceDestination.LostItem.routeWithArgs,
+                lostItemId = lostItemId,
                 facilityId = facilityId,
                 facilityName = facilityName,
                 onNavigateUpload = {

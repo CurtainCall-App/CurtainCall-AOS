@@ -160,13 +160,22 @@ fun NavGraphBuilder.mypageNavGraph(
             )
         }
 
-        composable(MyPageDestination.Write.route) {
+        composable(MyPageDestination.Write.route) { entry ->
             MyPageWriteScreen(
-                onNavigateLostItemEdit = {
-                    navHostController.navigate(PerformanceDestination.LostItemCreate.route)
+                onNavigateReviewEdit = { showId, reviewId ->
+                    navHostController.navigate(
+                        PerformanceDestination.ReviewCreate.route + "?" +
+                            "${PerformanceDestination.ReviewCreate.showIdArgs}=$showId" + "&" +
+                            "${PerformanceDestination.ReviewCreate.reviewIdArg}=$reviewId"
+                    )
                 },
-                onNavigateReviewEdit = {
-                    navHostController.navigate(PerformanceDestination.ReviewCreate.route)
+                onNavigateLostItemEdit = { lostItemId, facilityId, facilityName ->
+                    navHostController.navigate(
+                        PerformanceDestination.LostItemCreate.route + "?" +
+                            "${PerformanceDestination.LostItemCreate.lostItemIdArg}=$lostItemId" + "&" +
+                            "${PerformanceDestination.LostItemCreate.facilityIdArg}=$facilityId" + "&" +
+                            "${PerformanceDestination.LostItemCreate.facilityNameArg}=$facilityName"
+                    )
                 },
                 onBack = {
                     navHostController.popBackStack()

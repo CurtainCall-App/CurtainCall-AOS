@@ -6,12 +6,18 @@ import androidx.paging.PagingData
 import androidx.paging.map
 import com.cmc.curtaincall.core.network.service.member.MemberService
 import com.cmc.curtaincall.data.source.local.MemberLocalSource
+import com.cmc.curtaincall.data.source.paging.MY_LOSTITEM_PAGE_SIZE
+import com.cmc.curtaincall.data.source.paging.MY_REVIEW_PAGE_SIZE
+import com.cmc.curtaincall.data.source.paging.MyLostItemPagingSource
 import com.cmc.curtaincall.data.source.paging.MyParticipationPagingSource
 import com.cmc.curtaincall.data.source.paging.MyRecruitmentPagingSource
+import com.cmc.curtaincall.data.source.paging.MyReviewPagingSource
 import com.cmc.curtaincall.data.source.paging.PARTICIPATION_PAGE_SIZE
 import com.cmc.curtaincall.data.source.paging.RECRUITMENT_PAGE_SIZE
 import com.cmc.curtaincall.data.source.remote.MemberRemoteSource
 import com.cmc.curtaincall.domain.model.member.MemberInfoModel
+import com.cmc.curtaincall.domain.model.member.MemberLostItemModel
+import com.cmc.curtaincall.domain.model.member.MemberReviewModel
 import com.cmc.curtaincall.domain.model.member.MyParticipationModel
 import com.cmc.curtaincall.domain.model.member.MyRecruitmentModel
 import com.cmc.curtaincall.domain.repository.MemberRepository
@@ -86,6 +92,30 @@ class MemberRepositoryImpl @Inject constructor(
             size = size,
             category = category
         )
+
+    override fun fetchMyReview(): Flow<PagingData<MemberReviewModel>> {
+        return Pager(
+            config = PagingConfig(pageSize = MY_REVIEW_PAGE_SIZE),
+            pagingSourceFactory = { MyReviewPagingSource(memberService) }
+        ).flow
+            .map { pagingData ->
+                pagingData.map {
+                    it.toModel()
+                }
+            }
+    }
+
+    override fun fetchMyLostItems(): Flow<PagingData<MemberLostItemModel>> {
+        return Pager(
+            config = PagingConfig(pageSize = MY_LOSTITEM_PAGE_SIZE),
+            pagingSourceFactory = { MyLostItemPagingSource(memberService) }
+        ).flow
+            .map { pagingData ->
+                pagingData.map { response ->
+                    response.toModel()
+                }
+            }
+    }
 
     override fun deleteMember(authorization: String, reason: String, content: String): Flow<Boolean> =
         memberRemoteSource.deleteMember(authorization, reason, content)
