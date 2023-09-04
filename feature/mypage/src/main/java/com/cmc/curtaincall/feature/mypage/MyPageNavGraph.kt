@@ -82,6 +82,13 @@ sealed interface MyPageDestination : CurtainCallDestination {
 
     object NoticeDetail : MyPageDestination {
         override val route = MYPAGE_NOTICE_DETAIL
+        const val noticeIdArg = "noticeId"
+        val routeWithArgs = "$route/{$noticeIdArg}"
+        val arguments = listOf(
+            navArgument(noticeIdArg) {
+                type = NavType.IntType
+            }
+        )
     }
 
     object Recruitment : MyPageDestination {
@@ -211,15 +218,24 @@ fun NavGraphBuilder.mypageNavGraph(
 
         composable(MyPageDestination.Notice.route) {
             MyPageNoticeScreen(
-                onNavigateNoticeDetail = { navHostController.navigate(MyPageDestination.NoticeDetail.route) },
+                onNavigateNoticeDetail = {
+                    navHostController.navigate("${MyPageDestination.NoticeDetail.route}/$it")
+                },
                 onBack = { navHostController.popBackStack() }
             )
         }
 
-        composable(MyPageDestination.NoticeDetail.route) {
-            MyPageNoticeDetailScreen {
-                navHostController.popBackStack()
-            }
+        composable(
+            route = MyPageDestination.NoticeDetail.routeWithArgs,
+            arguments = MyPageDestination.NoticeDetail.arguments
+        ) { entry ->
+            val parentEntry = remember(entry) { navHostController.getBackStackEntry(MyPageDestination.Notice.route) }
+            val noticeId = entry.arguments?.getInt(MyPageDestination.NoticeDetail.noticeIdArg) ?: 0
+            MyPageNoticeDetailScreen(
+                myPageNoticeViewModel = hiltViewModel(parentEntry),
+                noticeId = noticeId,
+                onBack = { navHostController.popBackStack() }
+            )
         }
 
         composable(MyPageDestination.Recruitment.route) { entry ->
