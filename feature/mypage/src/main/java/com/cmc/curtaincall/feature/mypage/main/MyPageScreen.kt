@@ -62,7 +62,8 @@ fun MyPageScreen(
     onNavigateParticipation: () -> Unit,
     onNavigateSavedPerformance: () -> Unit,
     onNavigateWrite: () -> Unit,
-    onNavigateAnnouncement: () -> Unit
+    onNavigateAnnouncement: () -> Unit,
+    onNavigateQuestion: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(White)
@@ -87,7 +88,8 @@ fun MyPageScreen(
             onNavigateParticipation = onNavigateParticipation,
             onNavigateSavedPerformance = onNavigateSavedPerformance,
             onNavigateWrite = onNavigateWrite,
-            onNavigateAnnouncement = onNavigateAnnouncement
+            onNavigateAnnouncement = onNavigateAnnouncement,
+            onNavigateQuestion = onNavigateQuestion
         )
     }
 }
@@ -101,7 +103,8 @@ private fun MyPageContent(
     onNavigateParticipation: () -> Unit,
     onNavigateSavedPerformance: () -> Unit,
     onNavigateWrite: () -> Unit,
-    onNavigateAnnouncement: () -> Unit
+    onNavigateAnnouncement: () -> Unit,
+    onNavigateQuestion: () -> Unit
 ) {
     val verticalScrollState = rememberScrollState()
     val myPageUiState by myPageViewModel.uiState.collectAsStateWithLifecycle()
@@ -170,7 +173,8 @@ private fun MyPageContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 22.dp),
-                title = stringResource(R.string.mypage_the_most_frequently_question)
+                title = stringResource(R.string.mypage_the_most_frequently_question),
+                onClick = { onNavigateQuestion() }
             )
             Spacer(Modifier.height(60.dp))
         }
