@@ -75,8 +75,8 @@ class PerformanceDetailViewModel @Inject constructor(
                 currentState.copy(tabType = event.tabType)
             }
 
-            is PerformanceDetailEvent.SimiliarShowList -> {
-                currentState.copy(similiarShows = event.similarShows)
+            is PerformanceDetailEvent.SimilarShowList -> {
+                currentState.copy(similarShows = event.similarShows)
             }
 
             else -> currentState
@@ -87,7 +87,7 @@ class PerformanceDetailViewModel @Inject constructor(
         showRepository.requestShowDetail(showId)
             .onEach { sendAction(PerformanceDetailEvent.ShowDetail(it)) }
             .flatMapConcat {
-                // requestSimilarShowList(it.facilityId)
+                requestSimilarShowList(it.facilityId)
                 showRepository.requestFacilityDetail(it.facilityId)
             }
             .onEach { sendAction(PerformanceDetailEvent.FacilityDetail(it)) }
@@ -101,14 +101,18 @@ class PerformanceDetailViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    fun requestSimilarShowList(facilityId: String) {
+    private fun requestSimilarShowList(facilityId: String) {
         showRepository.requestSimilarShowList(
             facilityId = facilityId,
             page = 0,
             size = 10,
-            genre = "ALL"
-        ).onEach {
-            sendAction(PerformanceDetailEvent.SimiliarShowList(it))
+            genre = null
+        ).onEach { similars ->
+            sendAction(
+                PerformanceDetailEvent.SimilarShowList(
+                    similars.filter { it.id != uiState.value.showDetailModel.id }
+                )
+            )
         }.launchIn(viewModelScope)
     }
 

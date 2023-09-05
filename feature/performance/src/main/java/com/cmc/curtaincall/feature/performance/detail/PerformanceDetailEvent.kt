@@ -33,7 +33,7 @@ sealed class PerformanceDetailEvent : BaseEvent {
         val tabType: TabType
     ) : PerformanceDetailEvent()
 
-    data class SimiliarShowList(
+    data class SimilarShowList(
         val similarShows: List<SimilarShowInfoModel>
     ) : PerformanceDetailEvent()
 

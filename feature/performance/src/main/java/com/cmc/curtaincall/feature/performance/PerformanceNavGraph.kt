@@ -169,7 +169,10 @@ fun NavGraphBuilder.performanceNavGraph(
             arguments = PerformanceDestination.Detail.arguments
         ) { entry ->
             val showIdType = entry.arguments?.getString(PerformanceDestination.Detail.showIdArg) ?: ""
-            if (navHostController.previousBackStackEntry?.destination?.route == PerformanceDestination.Performance.route) {
+            if (
+                (navHostController.previousBackStackEntry?.destination?.route == PerformanceDestination.Performance.route) ||
+                (navHostController.previousBackStackEntry?.destination?.route == PerformanceDestination.Detail.routeWithArgs)
+            ) {
                 val parentEntry = remember(entry) { navHostController.getBackStackEntry(PerformanceDestination.Performance.route) }
                 PerformanceDetailScreen(
                     performanceViewModel = hiltViewModel(parentEntry),
@@ -179,6 +182,9 @@ fun NavGraphBuilder.performanceNavGraph(
                     },
                     onNavigateLostItem = {
                         navHostController.navigate("${PerformanceDestination.LostItem.route}/$it")
+                    },
+                    onNavigateDetail = {
+                        navHostController.navigate("${PerformanceDestination.Detail.route}/$it")
                     },
                     onBack = {
                         navHostController.popBackStack()
@@ -192,6 +198,8 @@ fun NavGraphBuilder.performanceNavGraph(
                     },
                     onNavigateLostItem = {
                         navHostController.navigate("${PerformanceDestination.LostItem.route}/$it")
+                    },
+                    onNavigateDetail = {
                     },
                     onBack = {
                         navHostController.popBackStack()

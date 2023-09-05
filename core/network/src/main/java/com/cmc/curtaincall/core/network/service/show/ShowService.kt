@@ -58,7 +58,7 @@ interface ShowService {
         @Path("facilityId") facilityId: String
     ): FacilityDetailResponse
 
-    @GET("facilities/{facilityId}")
+    @GET("facilities/{facilityId}/shows")
     suspend fun requestSimilarShowList(
         @Path("facilityId") facilityId: String,
         @Query("page") page: Int,
