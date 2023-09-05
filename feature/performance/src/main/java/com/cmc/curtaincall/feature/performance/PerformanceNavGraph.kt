@@ -200,6 +200,7 @@ fun NavGraphBuilder.performanceNavGraph(
                         navHostController.navigate("${PerformanceDestination.LostItem.route}/$it")
                     },
                     onNavigateDetail = {
+                        navHostController.navigate("${PerformanceDestination.Detail.route}/$it")
                     },
                     onBack = {
                         navHostController.popBackStack()
@@ -310,18 +311,37 @@ fun NavGraphBuilder.performanceNavGraph(
             val lostItemId = entry.arguments?.getInt(PerformanceDestination.LostItemCreate.lostItemIdArg) ?: Int.MIN_VALUE
             val facilityId = entry.arguments?.getString(PerformanceDestination.LostItemCreate.facilityIdArg) ?: ""
             val facilityName = entry.arguments?.getString(PerformanceDestination.LostItemCreate.facilityNameArg) ?: ""
-            PerformanceLostItemCreateScreen(
-                fromMyPage = navHostController.previousBackStackEntry?.destination?.route != PerformanceDestination.LostItem.routeWithArgs,
-                lostItemId = lostItemId,
-                facilityId = facilityId,
-                facilityName = facilityName,
-                onNavigateUpload = {
-                    navHostController.navigate(PerformanceDestination.Upload.route)
-                },
-                onBack = {
-                    navHostController.popBackStack()
-                }
-            )
+            val fromMyPage = navHostController.previousBackStackEntry?.destination?.route != PerformanceDestination.LostItem.routeWithArgs
+
+            if (fromMyPage) {
+                PerformanceLostItemCreateScreen(
+                    fromMyPage = true,
+                    lostItemId = lostItemId,
+                    facilityId = facilityId,
+                    facilityName = facilityName,
+                    onNavigateUpload = {
+                        navHostController.navigate(PerformanceDestination.Upload.route)
+                    },
+                    onBack = {
+                        navHostController.popBackStack()
+                    }
+                )
+            } else {
+                val parentEntry = remember(entry) { navHostController.getBackStackEntry(PerformanceDestination.LostItem.routeWithArgs) }
+                PerformanceLostItemCreateScreen(
+                    performanceLostItemViewModel = hiltViewModel(parentEntry),
+                    fromMyPage = false,
+                    lostItemId = lostItemId,
+                    facilityId = facilityId,
+                    facilityName = facilityName,
+                    onNavigateUpload = {
+                        navHostController.navigate(PerformanceDestination.Upload.route)
+                    },
+                    onBack = {
+                        navHostController.popBackStack()
+                    }
+                )
+            }
         }
         composable(route = PerformanceDestination.Upload.route) {
             PerformanceUploadScreen(

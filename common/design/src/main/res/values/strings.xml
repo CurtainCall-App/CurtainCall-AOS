@@ -271,4 +271,7 @@
     <string name="dialog_logout_title">로그아웃 할까요?</string>
     <string name="dialog_logout_dismiss">아니요</string>
     <string name="dialog_logout_positive">로그아웃</string>
+
+    <!-- snakbac -->
+    <string name="snackbar_upload_lostitem_complete">분실물 신고가 접수되었어요</string>
 </resources>

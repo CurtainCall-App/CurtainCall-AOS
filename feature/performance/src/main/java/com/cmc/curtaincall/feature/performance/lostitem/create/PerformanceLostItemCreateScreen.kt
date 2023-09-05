@@ -54,6 +54,7 @@ import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.cmc.curtaincall.feature.performance.lostitem.LostItemType
 import com.cmc.curtaincall.feature.performance.lostitem.LostItemTypeGrid
+import com.cmc.curtaincall.feature.performance.lostitem.PerformanceLostItemViewModel
 import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
 import java.io.ByteArrayInputStream
@@ -62,6 +63,7 @@ import java.io.ByteArrayOutputStream
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PerformanceLostItemCreateScreen(
+    performanceLostItemViewModel: PerformanceLostItemViewModel = hiltViewModel(),
     performanceLostItemCreateViewModel: PerformanceLostItemCreateViewModel = hiltViewModel(),
     fromMyPage: Boolean = false,
     lostItemId: Int = 0,
@@ -70,10 +72,12 @@ internal fun PerformanceLostItemCreateScreen(
     onNavigateUpload: () -> Unit,
     onBack: () -> Unit
 ) {
+    Timber.d("PerformanceLostItemCreateScreen $fromMyPage $lostItemId ")
     LaunchedEffect(performanceLostItemCreateViewModel) {
         performanceLostItemCreateViewModel.completeEffect.collectLatest { isComplete ->
             if (isComplete) {
                 onBack()
+                performanceLostItemViewModel.completeEdit()
             }
         }
     }

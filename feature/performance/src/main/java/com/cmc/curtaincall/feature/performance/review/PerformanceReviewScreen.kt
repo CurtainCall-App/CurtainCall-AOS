@@ -154,7 +154,7 @@ private fun PerformanceReviewContent(
                                 performanceDetailViewModel.uiState.value.showDetailModel.poster,
                                 performanceDetailViewModel.uiState.value.showDetailModel.genre,
                                 performanceDetailViewModel.uiState.value.showDetailModel.name,
-                                true,
+                                false,
                                 reviewItem.id
                             )
                         },

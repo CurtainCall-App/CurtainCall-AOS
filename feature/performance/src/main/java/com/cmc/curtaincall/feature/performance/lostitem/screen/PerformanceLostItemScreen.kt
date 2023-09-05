@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -23,6 +24,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallDropDownButton
+import com.cmc.curtaincall.common.design.component.basic.CurtainCallSnackbar
+import com.cmc.curtaincall.common.design.component.basic.CurtainCallSnackbarHost
 import com.cmc.curtaincall.common.design.component.basic.SearchAppBar
 import com.cmc.curtaincall.common.design.component.basic.SearchTopAppBarWithBack
 import com.cmc.curtaincall.common.design.component.custom.SelectedDateCalender
@@ -35,6 +38,8 @@ import com.cmc.curtaincall.feature.performance.detail.PerformanceDetailViewModel
 import com.cmc.curtaincall.feature.performance.lostitem.LostItemTypeGrid
 import com.cmc.curtaincall.feature.performance.lostitem.PerformanceLostItemViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -49,8 +54,28 @@ internal fun PerformanceLostItemScreen(
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(White)
 
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+    LaunchedEffect(Unit) {
+        performanceLostItemViewModel.completeEffects.collectLatest { check ->
+            if (check) {
+                coroutineScope.launch {
+                    snackbarHostState.showSnackbar(
+                        context.getString(R.string.snackbar_upload_lostitem_complete)
+                    )
+                }
+            }
+        }
+    }
+
     val performanceLostItemUiState by performanceLostItemViewModel.uiState.collectAsStateWithLifecycle()
     Scaffold(
+        snackbarHost = {
+            CurtainCallSnackbarHost(snackbarHostState = snackbarHostState) { snackbarData ->
+                CurtainCallSnackbar(snackbarData = snackbarData)
+            }
+        },
         topBar = {
             if (performanceLostItemUiState.isActiveSearch) {
                 SearchAppBar(
