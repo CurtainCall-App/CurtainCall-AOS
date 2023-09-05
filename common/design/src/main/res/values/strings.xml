@@ -250,6 +250,12 @@
     <string name="mypage_livetalk_entrance">TALK 입장</string>
     <string name="mypage_privacy_terms_appbar_title" tools:ignore="ExtraTranslation">개인정보 처리방침</string>
     <string name="mypage_service_terms_appbar_title">서비스 이용약관</string>
+    <string name="mypage_frequentyl_asked_question">자주 묻는 질문</string>
+    <string name="mypage_question_performnace_search">작품 탐색</string>
+    <string name="mypage_question_partymember">파티원</string>
+    <string name="mypage_question_livetalk">라이브톡</string>
+    <string name="mypage_question_usage_inquiry">이용 문의</string>
+    <string name="mypage_question_etc">기타</string>
 
     <!-- dialog -->
     <string name="dialog_performance_review_remove_title">해당 글을 삭제할까요?</string>

@@ -52,7 +52,7 @@ import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 import com.cmc.curtaincall.common.utility.extensions.ShowDay
 import com.cmc.curtaincall.common.utility.extensions.toChangeDate
 import com.cmc.curtaincall.common.utility.extensions.toRunningTime
-import com.cmc.curtaincall.feature.mypage.MyPageViewModel
+import com.cmc.curtaincall.feature.mypage.main.MyPageViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

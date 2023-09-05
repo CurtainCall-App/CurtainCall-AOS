@@ -12,10 +12,12 @@ import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.core.base.BottomDestination
 import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.feature.mypage.editprofile.MyPageProfileEditScreen
+import com.cmc.curtaincall.feature.mypage.main.MyPageScreen
 import com.cmc.curtaincall.feature.mypage.notice.MyPageNoticeDetailScreen
 import com.cmc.curtaincall.feature.mypage.notice.MyPageNoticeScreen
 import com.cmc.curtaincall.feature.mypage.party.participation.MyPageParticipationScreen
 import com.cmc.curtaincall.feature.mypage.party.recruitment.MyPageRecruitmentScreen
+import com.cmc.curtaincall.feature.mypage.question.MyPageQuestionScreen
 import com.cmc.curtaincall.feature.mypage.saveperformance.MyPageSavedPerformanceScreen
 import com.cmc.curtaincall.feature.mypage.setting.MyPageDeleteMemberScreen
 import com.cmc.curtaincall.feature.mypage.setting.MyPageSettingScreen
@@ -39,6 +41,7 @@ private const val MYPAGE_RECRUITMENT = "mypage_recruitment"
 private const val MYPAGE_PARTICIPATION = "mypage_participantion"
 private const val MYPAGE_PRIVACY_TERMS = "mypage_privacy_terms"
 private const val MYPAGE_SERVICE_TERMS = "mypage_service_terms"
+private const val MYPAGE_QUESTIONS = "mypage_questions"
 
 sealed interface MyPageDestination : CurtainCallDestination {
     object MyPage : MyPageDestination, BottomDestination {
@@ -106,6 +109,10 @@ sealed interface MyPageDestination : CurtainCallDestination {
     object ServiceTerms : MyPageDestination {
         override val route = MYPAGE_SERVICE_TERMS
     }
+
+    object Questions : MyPageDestination {
+        override val route = MYPAGE_QUESTIONS
+    }
 }
 
 fun NavGraphBuilder.mypageNavGraph(
@@ -139,6 +146,9 @@ fun NavGraphBuilder.mypageNavGraph(
                 },
                 onNavigateAnnouncement = {
                     navHostController.navigate(MyPageDestination.Notice.route)
+                },
+                onNavigateQuestion = {
+                    navHostController.navigate(MyPageDestination.Questions.route)
                 }
             )
         }
@@ -291,6 +301,10 @@ fun NavGraphBuilder.mypageNavGraph(
 
         composable(MyPageDestination.ServiceTerms.route) {
             MyPageServiceTermsScreen { navHostController.popBackStack() }
+        }
+
+        composable(MyPageDestination.Questions.route) {
+            MyPageQuestionScreen { navHostController.popBackStack() }
         }
     }
 }
