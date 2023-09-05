@@ -11,9 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,12 +30,7 @@ import com.cmc.curtaincall.feature.home.guide.GuideConstants.before_ticketing_wo
 
 @Composable
 internal fun GuideBeforeTicketingContent() {
-    val verticalScrollState = rememberScrollState()
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(verticalScrollState)
-    ) {
+    Column(Modifier.fillMaxSize()) {
         before_ticketing_words.keys.toList().forEachIndexed { index, key ->
             GuideTicketing(
                 modifier = Modifier.fillMaxWidth(),
@@ -60,12 +53,7 @@ internal fun GuideBeforeTicketingContent() {
 
 @Composable
 internal fun GuideAfterTicketingContent() {
-    val verticalScrollState = rememberScrollState()
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(verticalScrollState)
-    ) {
+    Column(Modifier.fillMaxSize()) {
         after_ticketing_words.keys.toList().forEachIndexed { index, key ->
             GuideTicketing(
                 modifier = Modifier.fillMaxWidth(),
