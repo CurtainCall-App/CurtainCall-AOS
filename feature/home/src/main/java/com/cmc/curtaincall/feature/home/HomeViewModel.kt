@@ -117,7 +117,7 @@ class HomeViewModel @Inject constructor(
         val today = SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().time)
         showRepository.requestOpenShowList(page = 0, size = 10, startDate = today)
             .onEach {
-                sendAction(HomeEvent.RequestOpenShowList(it.sortedByDescending { it.startDate.toDday() }.take(10)))
+                sendAction(HomeEvent.RequestOpenShowList(it.shuffled().take(10).sortedByDescending { it.startDate.toDday() }))
             }
             .launchIn(viewModelScope)
     }
@@ -126,7 +126,7 @@ class HomeViewModel @Inject constructor(
         val today = SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().time)
         showRepository.requestEndShowList(page = 0, size = 10, endDate = today, genre = null)
             .onEach {
-                sendAction(HomeEvent.RequestEndShowList(it.sortedByDescending { it.endDate.toDday() }.take(10)))
+                sendAction(HomeEvent.RequestEndShowList(it.shuffled().take(10).sortedByDescending { it.endDate.toDday() }))
             }
             .launchIn(viewModelScope)
     }
