@@ -9,7 +9,7 @@ fun String.toRunningTime(): Int {
     var time = 0
     if (contains("시간")) {
         val hourIdx = indexOf("시간")
-        time += substring(0, hourIdx).toInt()
+        time += (substring(0, hourIdx).toInt() * 60)
         if (contains("분")) {
             var minuteIdx = indexOf("분")
             time += substring(hourIdx + 3, minuteIdx).toInt()

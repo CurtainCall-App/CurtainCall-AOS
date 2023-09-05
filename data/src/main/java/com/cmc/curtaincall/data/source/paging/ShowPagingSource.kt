@@ -8,7 +8,7 @@ import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import javax.inject.Inject
 
 private const val SHOW_STARTING_KEY = 0
-const val SHOW_PAGE_SIZE = 10
+const val SHOW_PAGE_SIZE = 20
 
 class ShowPagingSource @Inject constructor(
     private val showService: ShowService,
