@@ -18,13 +18,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.Bright_Grey
-import com.cmc.curtaincall.common.design.theme.Green
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 
@@ -36,7 +36,10 @@ fun CurtainCallSnackbarHost(
     SnackbarHost(
         hostState = snackbarHostState
     ) { snackbarData ->
-        Box(Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.BottomCenter
+        ) {
             content(snackbarData)
         }
     }
@@ -49,30 +52,29 @@ fun BoxScope.CurtainCallSnackbar(
 ) {
     Box(
         modifier = modifier
-            .align(Alignment.BottomCenter)
             .padding(bottom = 19.dp)
             .fillMaxWidth()
             .height(60.dp)
             .padding(horizontal = 20.dp)
             .background(Bright_Grey.copy(0.9f), RoundedCornerShape(12.dp))
             .padding(horizontal = 18.dp),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.CenterStart
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
-                painter = painterResource(R.drawable.ic_complete),
+                painter = painterResource(R.drawable.ic_complete_green),
                 contentDescription = null,
                 modifier = Modifier.size(24.dp),
-                tint = Green
+                tint = Color.Unspecified
+            )
+            Text(
+                text = snackbarData.visuals.message,
+                modifier = Modifier.padding(start = 10.dp),
+                color = White,
+                fontSize = 14.dp.toSp(),
+                fontWeight = FontWeight.Normal,
+                fontFamily = spoqahansanseeo,
             )
         }
-        Text(
-            text = snackbarData.visuals.message,
-            modifier = Modifier.padding(start = 10.dp),
-            color = White,
-            fontSize = 14.dp.toSp(),
-            fontWeight = FontWeight.Normal,
-            fontFamily = spoqahansanseeo,
-        )
     }
 }

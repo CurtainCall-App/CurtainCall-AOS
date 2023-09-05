@@ -6,9 +6,7 @@ import com.cmc.curtaincall.core.base.BaseViewModel
 import com.cmc.curtaincall.domain.model.lostItem.LostItemSearchWordModel
 import com.cmc.curtaincall.domain.repository.LostItemRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -24,8 +22,8 @@ class PerformanceLostItemViewModel @Inject constructor(
     private var _searchWords = MutableStateFlow<List<LostItemSearchWordModel>>(listOf())
     val searchWords = _searchWords.asStateFlow()
 
-    private var _completeEffects = MutableSharedFlow<Boolean>()
-    val completeEffects = _completeEffects.asSharedFlow()
+    private var _completeEffects = MutableStateFlow<Boolean>(false)
+    val completeEffects = _completeEffects.asStateFlow()
 
     init {
         requestLostItemSearchWords()
@@ -157,9 +155,7 @@ class PerformanceLostItemViewModel @Inject constructor(
         }
     }
 
-    fun completeEdit() {
-        viewModelScope.launch {
-            _completeEffects.emit(true)
-        }
+    fun completeEdit(isClear: Boolean = false) {
+        _completeEffects.value = isClear.not()
     }
 }

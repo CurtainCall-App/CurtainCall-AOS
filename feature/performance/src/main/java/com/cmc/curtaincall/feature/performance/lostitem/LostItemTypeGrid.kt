@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.extensions.toSp
@@ -35,7 +36,7 @@ enum class LostItemType(
     MONEY("현금", R.drawable.ic_money, "CASH"),
     CARD("카드", R.drawable.ic_card, "CARD"),
     JEWELRY("귀금속", R.drawable.ic_jewelry, "JEWELRY"),
-    ELECTRONICS("전자기기", R.drawable.ic_electronics, "ELECTROCNIC_EQUIPMENT"),
+    ELECTRONICS("전자기기", R.drawable.ic_electronics, "ELECTRONIC_EQUIPMENT"),
     BOOKS("도서", R.drawable.ic_books, "BOOK"),
     CLOTHES("의류", R.drawable.ic_clothes, "CLOTHING"),
     ETC("기타", R.drawable.ic_etc, "ETC"),
@@ -46,6 +47,7 @@ enum class LostItemType(
 fun LostItemTypeGrid(
     modifier: Modifier = Modifier,
     itemModifier: Modifier = Modifier,
+    fontSize: TextUnit = 14.dp.toSp(),
     onTypeChange: (LostItemType) -> Unit = {}
 ) {
     Card(
@@ -65,17 +67,20 @@ fun LostItemTypeGrid(
                 LostItemTypeCard(
                     modifier = itemModifier.clickable { onTypeChange(LostItemType.BAG) },
                     name = LostItemType.BAG.label,
-                    icon = painterResource(LostItemType.BAG.drawableRes)
+                    icon = painterResource(LostItemType.BAG.drawableRes),
+                    fontSize = fontSize
                 )
                 LostItemTypeCard(
                     modifier = itemModifier.clickable { onTypeChange(LostItemType.WALLET) },
                     name = LostItemType.WALLET.label,
-                    icon = painterResource(LostItemType.WALLET.drawableRes)
+                    icon = painterResource(LostItemType.WALLET.drawableRes),
+                    fontSize = fontSize
                 )
                 LostItemTypeCard(
                     modifier = itemModifier.clickable { onTypeChange(LostItemType.MONEY) },
                     name = LostItemType.MONEY.label,
-                    icon = painterResource(LostItemType.MONEY.drawableRes)
+                    icon = painterResource(LostItemType.MONEY.drawableRes),
+                    fontSize = fontSize
                 )
             }
             Row(
@@ -85,17 +90,20 @@ fun LostItemTypeGrid(
                 LostItemTypeCard(
                     modifier = itemModifier.clickable { onTypeChange(LostItemType.CARD) },
                     name = LostItemType.CARD.label,
-                    icon = painterResource(LostItemType.CARD.drawableRes)
+                    icon = painterResource(LostItemType.CARD.drawableRes),
+                    fontSize = fontSize
                 )
                 LostItemTypeCard(
                     modifier = itemModifier.clickable { onTypeChange(LostItemType.JEWELRY) },
                     name = LostItemType.JEWELRY.label,
-                    icon = painterResource(LostItemType.JEWELRY.drawableRes)
+                    icon = painterResource(LostItemType.JEWELRY.drawableRes),
+                    fontSize = fontSize
                 )
                 LostItemTypeCard(
                     modifier = itemModifier.clickable { onTypeChange(LostItemType.ELECTRONICS) },
                     name = LostItemType.ELECTRONICS.label,
-                    icon = painterResource(LostItemType.ELECTRONICS.drawableRes)
+                    icon = painterResource(LostItemType.ELECTRONICS.drawableRes),
+                    fontSize = fontSize
                 )
             }
             Row(
@@ -105,17 +113,20 @@ fun LostItemTypeGrid(
                 LostItemTypeCard(
                     modifier = itemModifier.clickable { onTypeChange(LostItemType.BOOKS) },
                     name = LostItemType.BOOKS.label,
-                    icon = painterResource(LostItemType.BOOKS.drawableRes)
+                    icon = painterResource(LostItemType.BOOKS.drawableRes),
+                    fontSize = fontSize
                 )
                 LostItemTypeCard(
                     modifier = itemModifier.clickable { onTypeChange(LostItemType.CLOTHES) },
                     name = LostItemType.CLOTHES.label,
-                    icon = painterResource(LostItemType.CLOTHES.drawableRes)
+                    icon = painterResource(LostItemType.CLOTHES.drawableRes),
+                    fontSize = fontSize
                 )
                 LostItemTypeCard(
                     modifier = itemModifier.clickable { onTypeChange(LostItemType.ETC) },
                     name = LostItemType.ETC.label,
-                    icon = painterResource(LostItemType.ETC.drawableRes)
+                    icon = painterResource(LostItemType.ETC.drawableRes),
+                    fontSize = fontSize
                 )
             }
         }
@@ -126,7 +137,8 @@ fun LostItemTypeGrid(
 fun LostItemTypeCard(
     modifier: Modifier = Modifier,
     name: String,
-    icon: Painter
+    icon: Painter,
+    fontSize: TextUnit
 ) {
     Column(
         modifier = modifier,
@@ -149,7 +161,7 @@ fun LostItemTypeCard(
         Text(
             text = name,
             color = Black_Pearl,
-            fontSize = 14.dp.toSp(),
+            fontSize = fontSize,
             fontWeight = FontWeight.Medium,
             fontFamily = spoqahansanseeo
         )
