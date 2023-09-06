@@ -44,6 +44,7 @@ import kotlinx.coroutines.launch
 internal fun PerformanceLostItemDetailScreen(
     performanceLostItemViewModel: PerformanceLostItemViewModel = hiltViewModel(),
     lostItem: Int,
+    onNavigateReport: (Int, String) -> Unit,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -78,7 +79,13 @@ internal fun PerformanceLostItemDetailScreen(
                 title = stringResource(R.string.performance_find_lost_item),
                 containerColor = Cultured,
                 contentColor = Nero,
-                onBack = onBack
+                onBack = onBack,
+                onAction = {
+                    onNavigateReport(
+                        lostItem,
+                        "LOST_ITEM"
+                    )
+                }
             )
         }
     ) { paddingValues ->

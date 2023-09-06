@@ -108,7 +108,8 @@ fun ReviewDetailItem(
     onFavoriteChange: (Boolean) -> Unit,
     isMyWriting: Boolean = false,
     onChangeWriting: () -> Unit = {},
-    onRemoveWriting: () -> Unit = {}
+    onRemoveWriting: () -> Unit = {},
+    onReport: () -> Unit = {}
 ) {
     var isFavoriteState by remember { mutableStateOf(isFavorite) }
     var isTouchChangeButton by remember { mutableStateOf(false) }
@@ -147,6 +148,7 @@ fun ReviewDetailItem(
                 if (isMyWriting.not()) {
                     Box(
                         modifier = Modifier
+                            .clickable { onReport() }
                             .border(BorderStroke(1.dp, Silver_Sand), RoundedCornerShape(20.dp))
                             .padding(horizontal = 8.dp, vertical = 4.dp),
                         contentAlignment = Alignment.Center

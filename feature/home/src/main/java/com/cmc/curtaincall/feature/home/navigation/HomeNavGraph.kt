@@ -147,13 +147,8 @@ fun HomeNavHost(
 
             performanceNavGraph(
                 navHostController = navHostController,
-                onNavigateHome = {
-                    navHostController.navigate(HomeDestination.Home.route) {
-                        popUpTo(HomeDestination.Home.route) {
-                            inclusive = false
-                        }
-                        launchSingleTop = true
-                    }
+                onNavigateReport = { id, type ->
+                    navHostController.navigate("${HomeDestination.Report.route}/$id/$type")
                 }
             )
             livetalkNavGraph(navHostController)

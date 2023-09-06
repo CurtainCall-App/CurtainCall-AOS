@@ -150,7 +150,7 @@ sealed interface PerformanceDestination : CurtainCallDestination {
 
 fun NavGraphBuilder.performanceNavGraph(
     navHostController: NavHostController,
-    onNavigateHome: () -> Unit
+    onNavigateReport: (Int, String) -> Unit
 ) {
     navigation(startDestination = PerformanceDestination.Performance.route, route = PERFORMANCE_GRAPH) {
         composable(route = PerformanceDestination.Performance.route) {
@@ -222,6 +222,7 @@ fun NavGraphBuilder.performanceNavGraph(
                             "${PerformanceDestination.ReviewCreate.reviewIdArg}=$reviewId"
                     )
                 },
+                onNavigateReport = onNavigateReport,
                 onBack = {
                     navHostController.popBackStack()
                 }
@@ -295,6 +296,7 @@ fun NavGraphBuilder.performanceNavGraph(
             PerformanceLostItemDetailScreen(
                 performanceLostItemViewModel = hiltViewModel(parentEntry),
                 lostItem = lostItemId,
+                onNavigateReport = onNavigateReport,
                 onBack = { navHostController.popBackStack() }
             )
         }
