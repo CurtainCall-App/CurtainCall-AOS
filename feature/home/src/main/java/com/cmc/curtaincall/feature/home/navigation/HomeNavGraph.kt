@@ -21,6 +21,7 @@ import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.feature.home.HomeScreen
 import com.cmc.curtaincall.feature.home.guide.GuideScreen
 import com.cmc.curtaincall.feature.home.guide.GuideType
+import com.cmc.curtaincall.feature.home.report.HomeReportScreen
 import com.cmc.curtaincall.feature.livetalk.LiveTalkDestination
 import com.cmc.curtaincall.feature.livetalk.livetalkNavGraph
 import com.cmc.curtaincall.feature.mypage.MyPageDestination
@@ -34,6 +35,7 @@ private const val HOME_GRAPH = "home_graph"
 private const val HOME = "home"
 private const val HOME_LABEL = "홈"
 private const val HOME_GUIDE = "home_guide"
+private const val HOME_REPORT = "home_report"
 
 sealed interface HomeDestination : CurtainCallDestination {
     object Home : HomeDestination, BottomDestination {
@@ -50,6 +52,21 @@ sealed interface HomeDestination : CurtainCallDestination {
         val arguments = listOf(
             navArgument(typeArg) {
                 type = NavType.EnumType(GuideType::class.java)
+            }
+        )
+    }
+
+    object Report : HomeDestination {
+        override val route = HOME_REPORT
+        const val reportIdArg = "reportId"
+        const val typeArg = "type"
+        val routeWithArgs = "$route/{$reportIdArg}/{$typeArg}"
+        val arguments = listOf(
+            navArgument(reportIdArg) {
+                type = NavType.IntType
+            },
+            navArgument(typeArg) {
+                type = NavType.StringType
             }
         )
     }
@@ -107,6 +124,27 @@ fun HomeNavHost(
                 }
             }
 
+            composable(
+                route = HomeDestination.Report.routeWithArgs,
+                arguments = HomeDestination.Report.arguments
+            ) { entry ->
+                val reportId = entry.arguments?.getInt(HomeDestination.Report.reportIdArg) ?: 0
+                val reportType = entry.arguments?.getString(HomeDestination.Report.typeArg) ?: ""
+                HomeReportScreen(
+                    reportId = reportId,
+                    reportType = reportType,
+                    onNavigateHome = {
+                        navHostController.navigate(HomeDestination.Home.route) {
+                            popUpTo(HomeDestination.Home.route) {
+                                inclusive = false
+                            }
+                            launchSingleTop = true
+                        }
+                    },
+                    onBack = { navHostController.popBackStack() }
+                )
+            }
+
             performanceNavGraph(
                 navHostController = navHostController,
                 onNavigateHome = {
@@ -121,13 +159,8 @@ fun HomeNavHost(
             livetalkNavGraph(navHostController)
             partymemberNavGraph(
                 navHostController = navHostController,
-                onNavigateHome = {
-                    navHostController.navigate(HomeDestination.Home.route) {
-                        popUpTo(HomeDestination.Home.route) {
-                            inclusive = false
-                        }
-                        launchSingleTop = true
-                    }
+                onNavigateReport = { id, type ->
+                    navHostController.navigate("${HomeDestination.Report.route}/$id/$type")
                 }
             )
             mypageNavGraph(

@@ -47,7 +47,7 @@ fun PartyMemberDetailScreen(
     fromRecruitment: Boolean = false,
     fromParticipation: Boolean = false,
     partyType: PartyType,
-    onNavigateEdit: (PartyType) -> Unit,
+    onNavigateReport: (Int, String) -> Unit,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -141,7 +141,13 @@ fun PartyMemberDetailScreen(
                     ),
                     containerColor = White,
                     contentColor = Nero,
-                    onBack = onBack
+                    onBack = onBack,
+                    onAction = {
+                        onNavigateReport(
+                            partyId,
+                            "PARTY"
+                        )
+                    }
                 )
             }
         },
@@ -310,7 +316,7 @@ fun PartyMemberDetailBody(
                 modifier = Modifier.padding(top = 20.dp),
                 icon = painterResource(R.drawable.ic_calendar),
                 category = stringResource(R.string.partymember_detail_date),
-                description = "2023.06.24"
+                description = showAt.ifEmpty { "날짜미정" }
             )
             DottedLine(
                 modifier = Modifier
@@ -320,7 +326,7 @@ fun PartyMemberDetailBody(
             PartyMemberDetailInfo(
                 icon = painterResource(R.drawable.ic_party_state),
                 category = stringResource(R.string.partymember_detail_join_state),
-                description = "2/5"
+                description = "$curMemberNum/$maxMemberNum"
             )
         } else {
             PartyMemberDetailInfo(
