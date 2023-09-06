@@ -274,4 +274,5 @@
 
     <!-- snakbac -->
     <string name="snackbar_upload_lostitem_complete">분실물 신고가 접수되었어요</string>
+    <string name="snackbar_upload_partymember_complete">파티원 모집글이 게시되었어요.</string>
 </resources>

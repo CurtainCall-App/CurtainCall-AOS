@@ -136,7 +136,8 @@ class PartyMemberCreateViewModel @Inject constructor(
             content = uiState.value.content,
             maxMemberNum = uiState.value.maxMemberNum,
             category = uiState.value.category
-        ).onEach { sendSideEffect(PartyMemberCreateSideEffect.SuccessUpload) }
-            .launchIn(viewModelScope)
+        ).onEach {
+            sendSideEffect(PartyMemberCreateSideEffect.SuccessUpload)
+        }.launchIn(viewModelScope)
     }
 }

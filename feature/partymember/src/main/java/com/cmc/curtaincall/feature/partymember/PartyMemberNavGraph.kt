@@ -228,7 +228,6 @@ fun NavGraphBuilder.partymemberNavGraph(
             if (partyType != null) {
                 PartyMemberCreateScreen(
                     partyType = partyType,
-                    onNavigateUpload = { navHostController.navigate("${PartyMemberDestination.Upload.route}/$it") },
                     onBack = { navHostController.popBackStack() }
                 )
             }
