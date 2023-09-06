@@ -16,6 +16,7 @@ import com.cmc.curtaincall.feature.partymember.ui.PartyMemberScreen
 import com.cmc.curtaincall.feature.partymember.ui.create.screen.PartyMemberCreateScreen
 import com.cmc.curtaincall.feature.partymember.ui.detail.PartyMemberDetailScreen
 import com.cmc.curtaincall.feature.partymember.ui.list.PartyMemberListScreen
+import com.cmc.curtaincall.feature.partymember.ui.livetalk.PartyMemberLiveTalkScreen
 
 private const val PARTYMEMBER_GRAPH = "partymember_graph"
 const val PARTYMEMBER = "partymember"
@@ -23,6 +24,7 @@ private const val PARTYMEMBER_LABEL = "파티원"
 private const val PARTYMEMBER_LIST = "partymember_list"
 private const val PARTYMEMBER_DETAIL = "partymember_detail"
 private const val PARTYMEMBER_CREATE = "partymember_create"
+private const val PARTYMEMBER_LIVETALK = "partymember_livetalk"
 
 sealed interface PartyMemberDestination : CurtainCallDestination {
     object PartyMember : PartyMemberDestination, BottomDestination {
@@ -94,6 +96,10 @@ sealed interface PartyMemberDestination : CurtainCallDestination {
             }
         )
     }
+
+    object LiveTalk : PartyMemberDestination {
+        override val route = PARTYMEMBER_LIVETALK
+    }
 }
 
 fun NavGraphBuilder.partymemberNavGraph(
@@ -149,6 +155,7 @@ fun NavGraphBuilder.partymemberNavGraph(
                     fromParticipation = fromParticipation,
                     partyType = partyType,
                     onNavigateReport = onNavigateReport,
+                    onNavigateLiveTalk = { navHostController.navigate(PartyMemberDestination.LiveTalk.route) },
                     onBack = { navHostController.popBackStack() }
                 )
             } else {
@@ -160,6 +167,7 @@ fun NavGraphBuilder.partymemberNavGraph(
                     fromParticipation = fromParticipation,
                     partyType = PartyType.PERFORMANCE,
                     onNavigateReport = onNavigateReport,
+                    onNavigateLiveTalk = { navHostController.navigate(PartyMemberDestination.LiveTalk.route) },
                     onBack = { navHostController.popBackStack() }
                 )
             }
@@ -175,6 +183,12 @@ fun NavGraphBuilder.partymemberNavGraph(
                     partyType = partyType,
                     onBack = { navHostController.popBackStack() }
                 )
+            }
+        }
+
+        composable(route = PartyMemberDestination.LiveTalk.route) {
+            PartyMemberLiveTalkScreen {
+                navHostController.popBackStack()
             }
         }
     }

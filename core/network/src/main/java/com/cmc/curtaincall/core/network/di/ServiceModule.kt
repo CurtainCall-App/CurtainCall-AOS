@@ -3,6 +3,7 @@ package com.cmc.curtaincall.core.network.di
 import com.cmc.curtaincall.core.network.qualifiers.LoggingRetrofit
 import com.cmc.curtaincall.core.network.qualifiers.RefreshTokenRetrofit
 import com.cmc.curtaincall.core.network.service.auth.AuthService
+import com.cmc.curtaincall.core.network.service.chatting.ChattingService
 import com.cmc.curtaincall.core.network.service.favorite.FavoriteService
 import com.cmc.curtaincall.core.network.service.image.ImageService
 import com.cmc.curtaincall.core.network.service.lostitem.LostItemService
@@ -83,4 +84,10 @@ object ServiceModule {
     fun provideImageService(
         @RefreshTokenRetrofit retrofit: Retrofit
     ): ImageService = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun provideChattingService(
+        @RefreshTokenRetrofit retrofit: Retrofit
+    ): ChattingService = retrofit.create()
 }

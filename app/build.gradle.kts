@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pager.indicators)
     implementation(libs.androidx.lifecycle.compose)
+    implementation(libs.getstream.chat.android.compose)
 
     // logging
     implementation(libs.timber)

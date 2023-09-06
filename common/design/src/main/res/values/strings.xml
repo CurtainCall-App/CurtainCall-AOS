@@ -60,6 +60,8 @@
     <string name="partymember_detail">상세 정보</string>
     <string name="partymember_detail_join">참여하기</string>
     <string name="partymember_detail_joined">참여 완료</string>
+    <string name="partymember_detail_cant_join">참여 불가</string>
+    <string name="partymember_detail_enter_livetalk">TALK 입장</string>
     <string name="partymember_detail_performance_title">작품명</string>
     <string name="partymember_detail_join_state">참여 상태</string>
     <string name="partymember_detail_performance_date">공연 일자</string>

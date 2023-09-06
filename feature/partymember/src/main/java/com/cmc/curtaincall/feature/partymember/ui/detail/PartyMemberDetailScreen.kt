@@ -48,6 +48,7 @@ fun PartyMemberDetailScreen(
     fromParticipation: Boolean = false,
     partyType: PartyType,
     onNavigateReport: (Int, String) -> Unit,
+    onNavigateLiveTalk: () -> Unit,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -56,6 +57,7 @@ fun PartyMemberDetailScreen(
     var isShowDialog by remember { mutableStateOf(false) }
     var isShowRemoveDialog by remember { mutableStateOf(false) }
     var isParticipationState by remember { mutableStateOf(isParticipation) }
+    val partyMemberDetailState by partyMemberDetailViewModel.uiState.collectAsStateWithLifecycle()
 
     if (isShowDialog) {
         CurtainCallBasicDialog(
@@ -152,24 +154,45 @@ fun PartyMemberDetailScreen(
             }
         },
         floatingActionButton = {
-            CurtainCallRoundedTextButton(
-                onClick = { isShowDialog = true },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .height(52.dp),
-                title = stringResource(
-                    if (isParticipationState) {
-                        R.string.partymember_detail_joined
-                    } else {
-                        R.string.partymember_detail_join
-                    }
-                ),
-                fontSize = 16.dp.toSp(),
-                enabled = isParticipationState.not(),
-                containerColor = if (isParticipationState) Bright_Gray else Me_Pink,
-                contentColor = if (isParticipationState) Silver_Sand else White
-            )
+            if (isParticipationState) {
+                CurtainCallRoundedTextButton(
+                    onClick = onNavigateLiveTalk,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .height(52.dp),
+                    title = stringResource(
+                        if (partyMemberDetailState.partyDetailModel.curMemberNum == partyMemberDetailState.partyDetailModel.maxMemberNum) {
+                            R.string.partymember_detail_enter_livetalk
+                        } else {
+                            R.string.partymember_detail_joined
+                        }
+                    ),
+                    fontSize = 16.dp.toSp(),
+                    enabled = partyMemberDetailState.partyDetailModel.curMemberNum == partyMemberDetailState.partyDetailModel.maxMemberNum,
+                    containerColor = if (partyMemberDetailState.partyDetailModel.curMemberNum == partyMemberDetailState.partyDetailModel.maxMemberNum) Me_Pink else Bright_Gray,
+                    contentColor = if (partyMemberDetailState.partyDetailModel.curMemberNum == partyMemberDetailState.partyDetailModel.maxMemberNum) White else Silver_Sand
+                )
+            } else {
+                CurtainCallRoundedTextButton(
+                    onClick = { isShowDialog = true },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .height(52.dp),
+                    title = stringResource(
+                        if (partyMemberDetailState.partyDetailModel.curMemberNum == partyMemberDetailState.partyDetailModel.maxMemberNum) {
+                            R.string.partymember_detail_cant_join
+                        } else {
+                            R.string.partymember_detail_join
+                        }
+                    ),
+                    fontSize = 16.dp.toSp(),
+                    enabled = partyMemberDetailState.partyDetailModel.curMemberNum < partyMemberDetailState.partyDetailModel.maxMemberNum,
+                    containerColor = if (partyMemberDetailState.partyDetailModel.curMemberNum < partyMemberDetailState.partyDetailModel.maxMemberNum) Me_Pink else Bright_Gray,
+                    contentColor = if (partyMemberDetailState.partyDetailModel.curMemberNum < partyMemberDetailState.partyDetailModel.maxMemberNum) White else Silver_Sand
+                )
+            }
         },
         floatingActionButtonPosition = FabPosition.Center
     ) { paddingValues ->
