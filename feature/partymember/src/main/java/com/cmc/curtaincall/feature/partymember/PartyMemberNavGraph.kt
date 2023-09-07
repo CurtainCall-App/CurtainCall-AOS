@@ -2,6 +2,8 @@ package com.cmc.curtaincall.feature.partymember
 
 import android.os.Build
 import android.os.Bundle
+import androidx.compose.runtime.remember
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -100,13 +102,6 @@ sealed interface PartyMemberDestination : CurtainCallDestination {
 
     object LiveTalk : PartyMemberDestination {
         override val route = PARTYMEMBER_LIVETALK
-        const val partyIdArg = "partyId"
-        val routeWithArgs = "$route/{$partyIdArg}"
-        val arguments = listOf(
-            navArgument(partyIdArg) {
-                type = NavType.IntType
-            }
-        )
     }
 }
 
@@ -164,7 +159,7 @@ fun NavGraphBuilder.partymemberNavGraph(
                     fromParticipation = fromParticipation,
                     partyType = partyType,
                     onNavigateReport = onNavigateReport,
-                    onNavigateLiveTalk = { navHostController.navigate("${PartyMemberDestination.LiveTalk.route}/$it") },
+                    onNavigateLiveTalk = { navHostController.navigate(PartyMemberDestination.LiveTalk.route) },
                     onBack = { navHostController.popBackStack() }
                 )
             } else {
@@ -195,15 +190,11 @@ fun NavGraphBuilder.partymemberNavGraph(
             }
         }
 
-        composable(
-            route = PartyMemberDestination.LiveTalk.routeWithArgs,
-            arguments = PartyMemberDestination.LiveTalk.arguments
-        ) { entry ->
-            val partyId = entry.arguments?.getInt(PartyMemberDestination.LiveTalk.partyIdArg) ?: 0
-
+        composable(route = PartyMemberDestination.LiveTalk.route) { entry ->
+            val parentEntry = remember(entry) { navHostController.getBackStackEntry(PartyMemberDestination.Detail.routeWithArgs) }
             PartyMemberLiveTalkScreen(
+                partyMemberDetailViewModel = hiltViewModel(parentEntry),
                 chatClient = chatClient,
-                partyId = partyId,
                 onBack = { navHostController.popBackStack() }
             )
         }

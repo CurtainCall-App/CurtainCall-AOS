@@ -9,6 +9,12 @@ fun String.toDateWithDay(): String {
     return SimpleDateFormat("yyyy.MM.dd(E)").format(date)
 }
 
+fun String.toDateInKorea(): String {
+    if (isEmpty()) return ""
+    val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(this)
+    return SimpleDateFormat("yyyy.MM.dd(E) a hh:mm").format(date)
+}
+
 fun String.toSimpleDate(): String {
     if (isEmpty()) return ""
     val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(this)

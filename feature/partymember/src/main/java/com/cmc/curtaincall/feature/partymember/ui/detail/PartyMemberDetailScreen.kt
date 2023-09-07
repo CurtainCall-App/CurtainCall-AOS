@@ -1,12 +1,30 @@
 package com.cmc.curtaincall.feature.partymember.ui.detail
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,14 +48,23 @@ import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.cmc.curtaincall.common.design.component.dialog.CurtainCallBasicDialog
 import com.cmc.curtaincall.common.design.component.dialog.CurtainCallConfirmDialog
 import com.cmc.curtaincall.common.design.extensions.toSp
-import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.common.design.theme.Black_Coral
+import com.cmc.curtaincall.common.design.theme.Bright_Gray
+import com.cmc.curtaincall.common.design.theme.Chinese_Black
+import com.cmc.curtaincall.common.design.theme.Cultured
+import com.cmc.curtaincall.common.design.theme.Gunmetal
+import com.cmc.curtaincall.common.design.theme.Me_Pink
+import com.cmc.curtaincall.common.design.theme.Nero
+import com.cmc.curtaincall.common.design.theme.Silver_Sand
+import com.cmc.curtaincall.common.design.theme.White
+import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 import com.cmc.curtaincall.common.utility.extensions.toChangeDate
 import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
 import com.cmc.curtaincall.common.utility.extensions.toTime
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import io.getstream.chat.android.client.ChatClient
 import kotlinx.coroutines.flow.collectLatest
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PartyMemberDetailScreen(
     partyMemberDetailViewModel: PartyMemberDetailViewModel = hiltViewModel(),
@@ -48,7 +75,7 @@ fun PartyMemberDetailScreen(
     fromParticipation: Boolean = false,
     partyType: PartyType,
     onNavigateReport: (Int, String) -> Unit,
-    onNavigateLiveTalk: (Int) -> Unit,
+    onNavigateLiveTalk: () -> Unit,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -58,6 +85,12 @@ fun PartyMemberDetailScreen(
     var isShowRemoveDialog by remember { mutableStateOf(false) }
     var isParticipationState by remember { mutableStateOf(isParticipation) }
     val partyMemberDetailState by partyMemberDetailViewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        if (isParticipationState) {
+            partyMemberDetailViewModel.connectChattingClient()
+        }
+    }
 
     if (isShowDialog) {
         CurtainCallBasicDialog(
@@ -97,6 +130,7 @@ fun PartyMemberDetailScreen(
                 }
 
                 PartyMemberDetailSideEffect.SuccessParticipation -> {
+                    partyMemberDetailViewModel.requestPartyDetail(partyId)
                     isParticipationState = true
                 }
             }
@@ -156,7 +190,7 @@ fun PartyMemberDetailScreen(
         floatingActionButton = {
             if (isParticipationState) {
                 CurtainCallRoundedTextButton(
-                    onClick = { onNavigateLiveTalk(partyId) },
+                    onClick = onNavigateLiveTalk,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp)

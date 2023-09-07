@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -15,17 +14,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,13 +49,12 @@ import com.cmc.curtaincall.common.design.theme.Nero
 import com.cmc.curtaincall.common.design.theme.Roman_Silver
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
-import com.cmc.curtaincall.feature.partymember.BuildConfig
+import com.cmc.curtaincall.common.utility.extensions.toDateInKorea
+import com.cmc.curtaincall.feature.partymember.ui.detail.PartyMemberDetailViewModel
 import io.getstream.chat.android.client.ChatClient
-import io.getstream.chat.android.client.logger.ChatLogLevel
 import io.getstream.chat.android.client.models.Channel
 import io.getstream.chat.android.client.models.User
 import io.getstream.chat.android.compose.state.messages.list.MessageItemState
-import io.getstream.chat.android.compose.ui.components.composer.MessageInput
 import io.getstream.chat.android.compose.ui.messages.composer.MessageComposer
 import io.getstream.chat.android.compose.ui.messages.header.MessageListHeader
 import io.getstream.chat.android.compose.ui.messages.list.MessageList
@@ -69,30 +63,20 @@ import io.getstream.chat.android.compose.ui.theme.StreamColors
 import io.getstream.chat.android.compose.viewmodel.messages.MessageComposerViewModel
 import io.getstream.chat.android.compose.viewmodel.messages.MessageListViewModel
 import io.getstream.chat.android.compose.viewmodel.messages.MessagesViewModelFactory
-import io.getstream.chat.android.offline.model.message.attachments.UploadAttachmentsNetworkType
-import io.getstream.chat.android.offline.plugin.configuration.Config
-import io.getstream.chat.android.offline.plugin.factory.StreamOfflinePluginFactory
-import kotlinx.coroutines.flow.collectLatest
-import timber.log.Timber
 
 @Composable
 fun PartyMemberLiveTalkScreen(
-    partyMemberLiveTalkViewModel: PartyMemberLiveTalkViewModel = hiltViewModel(),
+    partyMemberDetailViewModel: PartyMemberDetailViewModel = hiltViewModel(),
     chatClient: ChatClient,
-    partyId: Int,
     onBack: () -> Unit
 ) {
-    val user by partyMemberLiveTalkViewModel.userState.collectAsStateWithLifecycle()
-    LaunchedEffect(Unit) {
-        partyMemberLiveTalkViewModel.tokenState.collectLatest {
-            if(it.isNotEmpty()){
-                chatClient.connectUser(
-                    user = user,
-                    token = it
-                ).enqueue()
-            }
-        }
-    }
+    val partyMemberDetailState by partyMemberDetailViewModel.uiState.collectAsStateWithLifecycle()
+
+    chatClient.connectUser(
+        user = partyMemberDetailState.user,
+        token = partyMemberDetailState.token
+    ).enqueue()
+
     ChatTheme(
         isInDarkMode = false,
         colors = StreamColors.defaultColors().copy(
@@ -103,10 +87,15 @@ fun PartyMemberLiveTalkScreen(
         )
     ) {
         PartyMemberLiveTalkContent(
-            partyId = partyId,
-            user = user,
+            partyId = partyMemberDetailState.partyDetailModel.id,
+            showName = partyMemberDetailState.partyDetailModel.showName ?: "",
+            showAt = partyMemberDetailState.partyDetailModel.showAt ?: "",
+            user = partyMemberDetailState.user,
             chatClient = chatClient,
-            onBack = onBack
+            onBack = {
+                chatClient.disconnect(false).enqueue()
+                onBack()
+            }
         )
     }
 }
@@ -114,6 +103,8 @@ fun PartyMemberLiveTalkScreen(
 @Composable
 private fun PartyMemberLiveTalkContent(
     partyId: Int,
+    showName: String,
+    showAt: String,
     user: User,
     chatClient: ChatClient,
     onBack: () -> Unit
@@ -188,6 +179,8 @@ private fun PartyMemberLiveTalkContent(
                 .fillMaxSize(),
             messageListViewModel = messageListViewModel,
             partyId = partyId,
+            showName = showName,
+            showAt = showAt,
             user = user,
             onBack = onBack
         )
@@ -199,6 +192,8 @@ private fun PartyMemberLiveTalkMessageList(
     modifier: Modifier = Modifier,
     messageListViewModel: MessageListViewModel,
     partyId: Int,
+    showName: String,
+    showAt: String,
     user: User,
     onBack: () -> Unit
 ) {
@@ -231,7 +226,7 @@ private fun PartyMemberLiveTalkMessageList(
                             modifier = Modifier.padding(start = 6.dp, top = 1.dp)
                         ) {
                             Text(
-                                text = "리어왕 밥메이트",
+                                text = showName,
                                 modifier = Modifier.padding(start = 6.dp),
                                 color = Chinese_Black,
                                 fontSize = 17.dp.toSp(),
@@ -239,7 +234,7 @@ private fun PartyMemberLiveTalkMessageList(
                                 fontFamily = spoqahansanseeo
                             )
                             Text(
-                                text = "일시 | 2023.06.24(수) 오후 7:30",
+                                text = "일시 | ${showAt.toDateInKorea()}",
                                 color = Roman_Silver,
                                 fontSize = 14.dp.toSp(),
                                 fontWeight = FontWeight.Medium,
