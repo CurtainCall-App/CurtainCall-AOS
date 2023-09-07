@@ -12,8 +12,4 @@ sealed class PartyMemberDetailEvent : BaseEvent {
     data class GetMemberInfo(
         val user: User
     ) : PartyMemberDetailEvent()
-
-    data class GetMemberToken(
-        val token: String
-    ) : PartyMemberDetailEvent()
 }

@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
         )
         val chatClient = ChatClient.Builder(BuildConfig.GET_STREAM_API_KEY, this)
             .withPlugin(offlinePluginFactory)
-            .logLevel(ChatLogLevel.ALL)
+            .logLevel(if (BuildConfig.DEBUG) ChatLogLevel.DEBUG else ChatLogLevel.ERROR)
             .build()
 
         installSplashScreen()

@@ -1,6 +1,5 @@
 package com.cmc.curtaincall.feature.partymember.ui.livetalk
 
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,7 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,11 +29,10 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
@@ -50,6 +48,7 @@ import com.cmc.curtaincall.common.design.theme.Roman_Silver
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 import com.cmc.curtaincall.common.utility.extensions.toDateInKorea
+import com.cmc.curtaincall.common.utility.extensions.toTimePM
 import com.cmc.curtaincall.feature.partymember.ui.detail.PartyMemberDetailViewModel
 import io.getstream.chat.android.client.ChatClient
 import io.getstream.chat.android.client.models.Channel
@@ -63,6 +62,7 @@ import io.getstream.chat.android.compose.ui.theme.StreamColors
 import io.getstream.chat.android.compose.viewmodel.messages.MessageComposerViewModel
 import io.getstream.chat.android.compose.viewmodel.messages.MessageListViewModel
 import io.getstream.chat.android.compose.viewmodel.messages.MessagesViewModelFactory
+import timber.log.Timber
 
 @Composable
 fun PartyMemberLiveTalkScreen(
@@ -71,12 +71,6 @@ fun PartyMemberLiveTalkScreen(
     onBack: () -> Unit
 ) {
     val partyMemberDetailState by partyMemberDetailViewModel.uiState.collectAsStateWithLifecycle()
-
-    chatClient.connectUser(
-        user = partyMemberDetailState.user,
-        token = partyMemberDetailState.token
-    ).enqueue()
-
     ChatTheme(
         isInDarkMode = false,
         colors = StreamColors.defaultColors().copy(
@@ -92,10 +86,7 @@ fun PartyMemberLiveTalkScreen(
             showAt = partyMemberDetailState.partyDetailModel.showAt ?: "",
             user = partyMemberDetailState.user,
             chatClient = chatClient,
-            onBack = {
-                chatClient.disconnect(false).enqueue()
-                onBack()
-            }
+            onBack = onBack
         )
     }
 }
@@ -113,12 +104,16 @@ private fun PartyMemberLiveTalkContent(
     val messageFactory by lazy {
         MessagesViewModelFactory(
             context = context,
-            channelId = "messaging:party-$partyId",
+            channelId = "messaging:PARTY-$partyId",
             chatClient = chatClient
         )
     }
-    val messageListViewModel = composableViewModel<MessageListViewModel>(factory = messageFactory)
-    val messageComposerViewModel = composableViewModel<MessageComposerViewModel>(factory = messageFactory)
+
+    val messageListViewModel = viewModel(MessageListViewModel::class.java, factory = messageFactory)
+    val messageComposerViewModel = viewModel(MessageComposerViewModel::class.java, factory = messageFactory)
+
+    val messageComposerState by messageComposerViewModel.messageComposerState.collectAsStateWithLifecycle()
+    Timber.d("messageComposerState message ${messageComposerState.inputValue}")
 
     Scaffold(
         modifier = Modifier
@@ -138,34 +133,45 @@ private fun PartyMemberLiveTalkContent(
                 input = { inputState ->
                     Row(
                         modifier = Modifier
+                            .padding(top = 10.dp, bottom = 28.dp)
                             .padding(horizontal = 20.dp)
                             .fillMaxWidth()
                     ) {
                         CurtainCallMultiLineTextField(
-                            value = inputState.inputValue,
+                            value = messageComposerState.inputValue,
                             onValueChange = { messageComposerViewModel.setMessageInput(it) },
-                            modifier = Modifier.weight(1f),
+                            modifier = Modifier
+                                .weight(1f)
+                                .height(36.dp),
                             fontSize = 14.dp.toSp(),
                             shape = RoundedCornerShape(20.dp),
                             containerColor = White,
                             contentColor = Cetacean_Blue,
-                            contentModifier = Modifier.padding(horizontal = 18.dp, vertical = 7.dp),
+                            contentModifier = Modifier
+                                .padding(top = 7.dp)
+                                .padding(horizontal = 18.dp),
                             placeholder = "메세지 입력..."
                         )
-                        IconButton(
-                            onClick = {
-                                messageComposerViewModel.sendMessage(
-                                    messageComposerViewModel.buildNewMessage(
-                                        messageComposerViewModel.messageComposerState.value.inputValue
-                                    )
-                                )
-                            },
+                        Box(
                             modifier = Modifier
                                 .padding(start = 8.dp)
                                 .size(36.dp)
                                 .background(White, CircleShape)
+                                .clickable {
+                                    messageComposerViewModel.sendMessage(
+                                        messageComposerViewModel.buildNewMessage(
+                                            messageComposerState.inputValue
+                                        )
+                                    )
+                                },
+                            contentAlignment = Alignment.Center
                         ) {
-                            Icon(imageVector = Icons.Filled.Send, contentDescription = null)
+                            Icon(
+                                imageVector = Icons.Filled.Send,
+                                contentDescription = null,
+                                modifier = Modifier.size(20.dp),
+                                tint = Cetacean_Blue
+                            )
                         }
                     }
                 },
@@ -200,8 +206,8 @@ private fun PartyMemberLiveTalkMessageList(
     Column(modifier) {
         MessageListHeader(
             channel = Channel(
-                cid = "messaging:party-$partyId",
-                id = "party-$partyId"
+                cid = "messaging:PARTY-$partyId",
+                id = "PARTY-$partyId"
             ),
             currentUser = user,
             modifier = Modifier.fillMaxWidth(),
@@ -218,23 +224,25 @@ private fun PartyMemberLiveTalkMessageList(
                             painter = painterResource(R.drawable.ic_arrow_back),
                             contentDescription = null,
                             modifier = Modifier
-                                .size(24.dp)
+                                .size(18.dp)
                                 .clickable { onBack() },
                             tint = Nero
                         )
                         Column(
-                            modifier = Modifier.padding(start = 6.dp, top = 1.dp)
+                            modifier = Modifier.padding(start = 6.dp)
                         ) {
                             Text(
                                 text = showName,
-                                modifier = Modifier.padding(start = 6.dp),
                                 color = Chinese_Black,
                                 fontSize = 17.dp.toSp(),
                                 fontWeight = FontWeight.Bold,
-                                fontFamily = spoqahansanseeo
+                                fontFamily = spoqahansanseeo,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
                             )
                             Text(
                                 text = "일시 | ${showAt.toDateInKorea()}",
+                                modifier = Modifier.padding(top = 4.dp),
                                 color = Roman_Silver,
                                 fontSize = 14.dp.toSp(),
                                 fontWeight = FontWeight.Medium,
@@ -256,23 +264,23 @@ private fun PartyMemberLiveTalkMessageList(
         ) {
             if (it is MessageItemState) {
                 val message = it.message
-                if (message.user.name == user.name) {
+                if (message.user.id == user.id) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 12.dp)
-                            .padding(end = 20.dp),
+                            .padding(vertical = 12.dp, horizontal = 20.dp),
                         horizontalArrangement = Arrangement.End
                     ) {
                         Row(verticalAlignment = Alignment.Bottom) {
                             Text(
-                                text = message.createdAt.toString(),
+                                text = message.createdAt?.toString()?.toTimePM() ?: "",
+                                modifier = Modifier.padding(end = 8.dp),
                                 color = Roman_Silver,
                                 fontSize = 10.dp.toSp()
                             )
                             Box(
                                 modifier = Modifier
-                                    .background(Me_Pink, RoundedCornerShape(6.dp))
+                                    .background(Me_Pink, RoundedCornerShape(topStart = 10.dp, bottomStart = 10.dp, bottomEnd = 10.dp))
                                     .padding(horizontal = 12.dp, vertical = 6.dp),
                                 contentAlignment = Alignment.CenterStart
                             ) {
@@ -290,8 +298,7 @@ private fun PartyMemberLiveTalkMessageList(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 12.dp)
-                            .padding(start = 20.dp),
+                            .padding(vertical = 12.dp, horizontal = 20.dp),
                         horizontalArrangement = Arrangement.Start
                     ) {
                         AsyncImage(
@@ -316,7 +323,7 @@ private fun PartyMemberLiveTalkMessageList(
                             ) {
                                 Box(
                                     modifier = Modifier
-                                        .background(Cultured, RoundedCornerShape(6.dp))
+                                        .background(Cultured, RoundedCornerShape(topEnd = 10.dp, bottomStart = 10.dp, bottomEnd = 10.dp))
                                         .padding(horizontal = 12.dp, vertical = 6.dp),
                                     contentAlignment = Alignment.CenterStart
                                 ) {
@@ -327,7 +334,7 @@ private fun PartyMemberLiveTalkMessageList(
                                     )
                                 }
                                 Text(
-                                    text = message.createdAt.toString(),
+                                    text = message.createdAt?.toString()?.toTimePM() ?: "",
                                     modifier = Modifier.padding(start = 8.dp),
                                     color = Roman_Silver,
                                     fontSize = 10.sp
@@ -340,14 +347,3 @@ private fun PartyMemberLiveTalkMessageList(
         }
     }
 }
-
-@Composable
-inline fun <reified VM : ViewModel> composableViewModel(
-    key: String? = null,
-    factory: ViewModelProvider.Factory? = null
-): VM = viewModel(
-    VM::class.java,
-    LocalContext.current as ComponentActivity,
-    key,
-    factory
-)

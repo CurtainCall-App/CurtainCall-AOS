@@ -57,12 +57,12 @@ sealed interface PartyMemberDestination : CurtainCallDestination {
         const val fromRecruitmentArg = "fromRecruitment"
         const val fromParticipationArg = "fromParticipation"
         val routeWithArgs = "$route?" +
-                "$partyIdArg={$partyIdArg}&" +
-                "$isParticipationArg={$isParticipationArg}&" +
-                "$myWritingArg={$myWritingArg}&" +
-                "$typeArg={$typeArg}&" +
-                "$fromRecruitmentArg={$fromRecruitmentArg}&" +
-                "$fromParticipationArg={$fromParticipationArg}"
+            "$partyIdArg={$partyIdArg}&" +
+            "$isParticipationArg={$isParticipationArg}&" +
+            "$myWritingArg={$myWritingArg}&" +
+            "$typeArg={$typeArg}&" +
+            "$fromRecruitmentArg={$fromRecruitmentArg}&" +
+            "$fromParticipationArg={$fromParticipationArg}"
 
         val arguments = listOf(
             navArgument(partyIdArg) {
@@ -126,12 +126,12 @@ fun NavGraphBuilder.partymemberNavGraph(
                     onNavigateDetail = { partyType, isParticipation, partyId, myWriting ->
                         navHostController.navigate(
                             PartyMemberDestination.Detail.route + "?" +
-                                    "${PartyMemberDestination.Detail.isParticipationArg}=$isParticipation" + "&" +
-                                    "${PartyMemberDestination.Detail.partyIdArg}=$partyId" + "&" +
-                                    "${PartyMemberDestination.Detail.typeArg}=$partyType" + "&" +
-                                    "${PartyMemberDestination.Detail.myWritingArg}=$myWriting" + "&" +
-                                    "${PartyMemberDestination.Detail.fromRecruitmentArg}=false" + "&" +
-                                    "${PartyMemberDestination.Detail.fromParticipationArg}=false"
+                                "${PartyMemberDestination.Detail.isParticipationArg}=$isParticipation" + "&" +
+                                "${PartyMemberDestination.Detail.partyIdArg}=$partyId" + "&" +
+                                "${PartyMemberDestination.Detail.typeArg}=$partyType" + "&" +
+                                "${PartyMemberDestination.Detail.myWritingArg}=$myWriting" + "&" +
+                                "${PartyMemberDestination.Detail.fromRecruitmentArg}=false" + "&" +
+                                "${PartyMemberDestination.Detail.fromParticipationArg}=false"
                         )
                     },
                     onNavigateCreate = { navHostController.navigate("${PartyMemberDestination.Create.route}/$it") },

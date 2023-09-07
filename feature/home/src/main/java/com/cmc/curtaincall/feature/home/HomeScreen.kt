@@ -11,7 +11,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,11 +34,13 @@ import com.cmc.curtaincall.common.utility.extensions.toTime
 import com.cmc.curtaincall.feature.home.guide.GuideType
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import io.getstream.chat.android.client.ChatClient
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     homeViewModel: HomeViewModel = hiltViewModel(),
+    chatClient: ChatClient,
     onNavigateGuide: (GuideType) -> Unit,
     onNavigatePerformanceDetail: (String) -> Unit,
     onNavigateLiveTalk: () -> Unit,
@@ -48,6 +49,10 @@ fun HomeScreen(
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(Cetacean_Blue)
+
+    LaunchedEffect(Unit) {
+        homeViewModel.connectChattingClient(chatClient)
+    }
 
     Scaffold(topBar = {
         TopAppBar(

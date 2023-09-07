@@ -283,6 +283,10 @@
     <string name="dialog_logout_dismiss">아니요</string>
     <string name="dialog_logout_positive">로그아웃</string>
 
+    <!-- livetalk -->
+    <string name="livetalk_app_bar_title">라이브톡</string>
+    <string name="livetalk_app_bar_description">공연 시간 기준 2시간 전후에만 채팅이 가능해요!</string>
+
     <!-- snakbac -->
     <string name="snackbar_upload_lostitem_complete">분실물 신고가 접수되었어요</string>
     <string name="snackbar_upload_partymember_complete">파티원 모집글이 게시되었어요.</string>

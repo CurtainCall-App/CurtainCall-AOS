@@ -6,6 +6,5 @@ import io.getstream.chat.android.client.models.User
 
 data class PartyMemberDetailState(
     val partyDetailModel: PartyDetailModel = PartyDetailModel(),
-    val user: User = User(),
-    val token: String = ""
+    val user: User = User()
 ) : BaseState

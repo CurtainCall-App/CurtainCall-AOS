@@ -62,7 +62,6 @@ import com.cmc.curtaincall.common.utility.extensions.toChangeDate
 import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
 import com.cmc.curtaincall.common.utility.extensions.toTime
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import io.getstream.chat.android.client.ChatClient
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -85,12 +84,6 @@ fun PartyMemberDetailScreen(
     var isShowRemoveDialog by remember { mutableStateOf(false) }
     var isParticipationState by remember { mutableStateOf(isParticipation) }
     val partyMemberDetailState by partyMemberDetailViewModel.uiState.collectAsStateWithLifecycle()
-
-    LaunchedEffect(Unit) {
-        if (isParticipationState) {
-            partyMemberDetailViewModel.connectChattingClient()
-        }
-    }
 
     if (isShowDialog) {
         CurtainCallBasicDialog(
@@ -195,13 +188,7 @@ fun PartyMemberDetailScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp)
                         .height(52.dp),
-                    title = stringResource(
-                        if (partyMemberDetailState.partyDetailModel.curMemberNum == partyMemberDetailState.partyDetailModel.maxMemberNum) {
-                            R.string.partymember_detail_enter_livetalk
-                        } else {
-                            R.string.partymember_detail_joined
-                        }
-                    ),
+                    title = stringResource(R.string.partymember_detail_enter_livetalk),
                     fontSize = 16.dp.toSp(),
                     enabled = partyMemberDetailState.partyDetailModel.curMemberNum == partyMemberDetailState.partyDetailModel.maxMemberNum,
                     containerColor = if (partyMemberDetailState.partyDetailModel.curMemberNum == partyMemberDetailState.partyDetailModel.maxMemberNum) Me_Pink else Bright_Gray,

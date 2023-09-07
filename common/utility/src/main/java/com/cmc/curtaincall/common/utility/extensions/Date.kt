@@ -2,6 +2,8 @@ package com.cmc.curtaincall.common.utility.extensions
 
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
+import java.util.TimeZone
 
 fun String.toDateWithDay(): String {
     if (isEmpty()) return ""
@@ -13,6 +15,15 @@ fun String.toDateInKorea(): String {
     if (isEmpty()) return ""
     val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(this)
     return SimpleDateFormat("yyyy.MM.dd(E) a hh:mm").format(date)
+}
+
+fun String?.toTimePM(): String {
+    if (this == null) return ""
+    if (isEmpty()) return ""
+    val date = SimpleDateFormat("EEE MMM dd HH:mm:ss 'GMT'Z yyyy", Locale.US).apply {
+        setTimeZone(TimeZone.getTimeZone("GMT"))
+    }.parse(this)
+    return SimpleDateFormat("a h:mm", Locale.KOREA).format(date)
 }
 
 fun String.toSimpleDate(): String {

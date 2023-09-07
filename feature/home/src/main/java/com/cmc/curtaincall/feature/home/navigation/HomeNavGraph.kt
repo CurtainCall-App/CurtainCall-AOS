@@ -96,6 +96,7 @@ fun HomeNavHost(
         ) {
             composable(route = HomeDestination.Home.route) {
                 HomeScreen(
+                    chatClient = chatClient,
                     onNavigateGuide = {
                         navHostController.navigate("${HomeDestination.Guide.route}/$it")
                     },
@@ -153,7 +154,10 @@ fun HomeNavHost(
                     navHostController.navigate("${HomeDestination.Report.route}/$id/$type")
                 }
             )
-            livetalkNavGraph(navHostController)
+            livetalkNavGraph(
+                navHostController = navHostController,
+                chatClient = chatClient
+            )
             partymemberNavGraph(
                 navHostController = navHostController,
                 chatClient = chatClient,
