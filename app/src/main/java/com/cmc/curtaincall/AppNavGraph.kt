@@ -14,6 +14,7 @@ import com.cmc.curtaincall.feature.home.navigation.HomeDestination
 import com.cmc.curtaincall.feature.home.navigation.HomeNavHost
 import com.cmc.curtaincall.ui.OnBoardingScreen
 import com.cmc.curtaincall.ui.SplashScreen
+import io.getstream.chat.android.client.ChatClient
 
 private const val ROOT_GRAPH = "root_graph"
 private const val SPLASH = "splash"
@@ -28,7 +29,10 @@ object OnBoarding : CurtainCallDestination {
 }
 
 @Composable
-internal fun AppNavHost(navHostController: NavHostController = rememberNavController()) {
+internal fun AppNavHost(
+    navHostController: NavHostController = rememberNavController(),
+    chatClient: ChatClient
+) {
     NavHost(
         navController = navHostController,
         startDestination = Splash.route,
@@ -75,6 +79,7 @@ internal fun AppNavHost(navHostController: NavHostController = rememberNavContro
 
         composable(route = HomeDestination.Home.route) {
             HomeNavHost(
+                chatClient = chatClient,
                 onLogout = {
                     navHostController.navigate(AuthDestination.Login.route) {
                         popUpTo(AuthDestination.Login.route) {

@@ -48,7 +48,7 @@ fun PartyMemberDetailScreen(
     fromParticipation: Boolean = false,
     partyType: PartyType,
     onNavigateReport: (Int, String) -> Unit,
-    onNavigateLiveTalk: () -> Unit,
+    onNavigateLiveTalk: (Int) -> Unit,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -156,7 +156,7 @@ fun PartyMemberDetailScreen(
         floatingActionButton = {
             if (isParticipationState) {
                 CurtainCallRoundedTextButton(
-                    onClick = onNavigateLiveTalk,
+                    onClick = { onNavigateLiveTalk(partyId) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp)

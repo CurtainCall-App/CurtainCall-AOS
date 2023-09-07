@@ -17,6 +17,7 @@ import com.cmc.curtaincall.feature.partymember.ui.create.screen.PartyMemberCreat
 import com.cmc.curtaincall.feature.partymember.ui.detail.PartyMemberDetailScreen
 import com.cmc.curtaincall.feature.partymember.ui.list.PartyMemberListScreen
 import com.cmc.curtaincall.feature.partymember.ui.livetalk.PartyMemberLiveTalkScreen
+import io.getstream.chat.android.client.ChatClient
 
 private const val PARTYMEMBER_GRAPH = "partymember_graph"
 const val PARTYMEMBER = "partymember"
@@ -54,12 +55,12 @@ sealed interface PartyMemberDestination : CurtainCallDestination {
         const val fromRecruitmentArg = "fromRecruitment"
         const val fromParticipationArg = "fromParticipation"
         val routeWithArgs = "$route?" +
-            "$partyIdArg={$partyIdArg}&" +
-            "$isParticipationArg={$isParticipationArg}&" +
-            "$myWritingArg={$myWritingArg}&" +
-            "$typeArg={$typeArg}&" +
-            "$fromRecruitmentArg={$fromRecruitmentArg}&" +
-            "$fromParticipationArg={$fromParticipationArg}"
+                "$partyIdArg={$partyIdArg}&" +
+                "$isParticipationArg={$isParticipationArg}&" +
+                "$myWritingArg={$myWritingArg}&" +
+                "$typeArg={$typeArg}&" +
+                "$fromRecruitmentArg={$fromRecruitmentArg}&" +
+                "$fromParticipationArg={$fromParticipationArg}"
 
         val arguments = listOf(
             navArgument(partyIdArg) {
@@ -99,11 +100,19 @@ sealed interface PartyMemberDestination : CurtainCallDestination {
 
     object LiveTalk : PartyMemberDestination {
         override val route = PARTYMEMBER_LIVETALK
+        const val partyIdArg = "partyId"
+        val routeWithArgs = "$route/{$partyIdArg}"
+        val arguments = listOf(
+            navArgument(partyIdArg) {
+                type = NavType.IntType
+            }
+        )
     }
 }
 
 fun NavGraphBuilder.partymemberNavGraph(
     navHostController: NavHostController,
+    chatClient: ChatClient,
     onNavigateReport: (Int, String) -> Unit
 ) {
     navigation(startDestination = PartyMemberDestination.PartyMember.route, route = PARTYMEMBER_GRAPH) {
@@ -122,12 +131,12 @@ fun NavGraphBuilder.partymemberNavGraph(
                     onNavigateDetail = { partyType, isParticipation, partyId, myWriting ->
                         navHostController.navigate(
                             PartyMemberDestination.Detail.route + "?" +
-                                "${PartyMemberDestination.Detail.isParticipationArg}=$isParticipation" + "&" +
-                                "${PartyMemberDestination.Detail.partyIdArg}=$partyId" + "&" +
-                                "${PartyMemberDestination.Detail.typeArg}=$partyType" + "&" +
-                                "${PartyMemberDestination.Detail.myWritingArg}=$myWriting" + "&" +
-                                "${PartyMemberDestination.Detail.fromRecruitmentArg}=false" + "&" +
-                                "${PartyMemberDestination.Detail.fromParticipationArg}=false"
+                                    "${PartyMemberDestination.Detail.isParticipationArg}=$isParticipation" + "&" +
+                                    "${PartyMemberDestination.Detail.partyIdArg}=$partyId" + "&" +
+                                    "${PartyMemberDestination.Detail.typeArg}=$partyType" + "&" +
+                                    "${PartyMemberDestination.Detail.myWritingArg}=$myWriting" + "&" +
+                                    "${PartyMemberDestination.Detail.fromRecruitmentArg}=false" + "&" +
+                                    "${PartyMemberDestination.Detail.fromParticipationArg}=false"
                         )
                     },
                     onNavigateCreate = { navHostController.navigate("${PartyMemberDestination.Create.route}/$it") },
@@ -155,7 +164,7 @@ fun NavGraphBuilder.partymemberNavGraph(
                     fromParticipation = fromParticipation,
                     partyType = partyType,
                     onNavigateReport = onNavigateReport,
-                    onNavigateLiveTalk = { navHostController.navigate(PartyMemberDestination.LiveTalk.route) },
+                    onNavigateLiveTalk = { navHostController.navigate("${PartyMemberDestination.LiveTalk.route}/$it") },
                     onBack = { navHostController.popBackStack() }
                 )
             } else {
@@ -186,10 +195,17 @@ fun NavGraphBuilder.partymemberNavGraph(
             }
         }
 
-        composable(route = PartyMemberDestination.LiveTalk.route) {
-            PartyMemberLiveTalkScreen {
-                navHostController.popBackStack()
-            }
+        composable(
+            route = PartyMemberDestination.LiveTalk.routeWithArgs,
+            arguments = PartyMemberDestination.LiveTalk.arguments
+        ) { entry ->
+            val partyId = entry.arguments?.getInt(PartyMemberDestination.LiveTalk.partyIdArg) ?: 0
+
+            PartyMemberLiveTalkScreen(
+                chatClient = chatClient,
+                partyId = partyId,
+                onBack = { navHostController.popBackStack() }
+            )
         }
     }
 }

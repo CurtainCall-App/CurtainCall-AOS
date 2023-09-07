@@ -30,6 +30,7 @@ import com.cmc.curtaincall.feature.partymember.PartyMemberDestination
 import com.cmc.curtaincall.feature.partymember.partymemberNavGraph
 import com.cmc.curtaincall.feature.performance.PerformanceDestination
 import com.cmc.curtaincall.feature.performance.performanceNavGraph
+import io.getstream.chat.android.client.ChatClient
 
 private const val HOME_GRAPH = "home_graph"
 private const val HOME = "home"
@@ -76,6 +77,7 @@ sealed interface HomeDestination : CurtainCallDestination {
 @Composable
 fun HomeNavHost(
     navHostController: NavHostController = rememberNavController(),
+    chatClient: ChatClient,
     onLogout: () -> Unit = {},
     onDeleteMember: () -> Unit = {}
 ) {
@@ -154,6 +156,7 @@ fun HomeNavHost(
             livetalkNavGraph(navHostController)
             partymemberNavGraph(
                 navHostController = navHostController,
+                chatClient = chatClient,
                 onNavigateReport = { id, type ->
                     navHostController.navigate("${HomeDestination.Report.route}/$id/$type")
                 }
