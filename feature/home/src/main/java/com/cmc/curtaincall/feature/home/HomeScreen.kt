@@ -125,6 +125,7 @@ private fun HomeContent(
     val homeUiState by homeViewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(homeViewModel) {
+        homeViewModel.requestLiveTalks()
         homeViewModel.requestMyRecruitments()
         homeViewModel.requestMyParticipations()
         homeViewModel.requestPopularShowList()
@@ -163,7 +164,7 @@ private fun HomeContent(
                             title = myRecruitment.title,
                             numberOfPartyMember = myRecruitment.curMemberNum,
                             numberOfTotalMember = myRecruitment.maxMemberNum,
-                            description = myRecruitment.title,
+                            description = myRecruitment.content,
                             date = myRecruitment.showAt?.toDateWithDay(),
                             imageUrl = myRecruitment.showPoster,
                             showName = myRecruitment.showName ?: "",
@@ -190,7 +191,7 @@ private fun HomeContent(
                             title = myParticipation.title,
                             numberOfPartyMember = myParticipation.curMemberNum,
                             numberOfTotalMember = myParticipation.maxMemberNum,
-                            description = myParticipation.title,
+                            description = myParticipation.content,
                             date = myParticipation.showAt.toDateWithDay(),
                             imageUrl = myParticipation.showPoster,
                             showName = myParticipation.showName ?: "",
@@ -200,31 +201,48 @@ private fun HomeContent(
                 }
             }
             if (homeUiState.liveTalks.isNotEmpty()) {
-                HomeContentRow(
+                Box(
                     modifier = Modifier
-                        .padding(top = 40.dp)
-                        .fillMaxWidth()
+                        .padding(
+                            top = if (homeUiState.myRecruitments.isEmpty() && homeUiState.myParticipations.isEmpty()) {
+                                0.dp
+                            } else {
+                                40.dp
+                            },
+                        )
                         .background(Cultured)
-                        .padding(vertical = 20.dp),
-                    titleModifier = Modifier.padding(start = 20.dp),
-                    painter = painterResource(R.drawable.ic_chatting),
-                    title = stringResource(R.string.home_coming_livetalk)
                 ) {
-                    LazyRow(
+                    HomeContentRow(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(top = 12.dp)
+                            .padding(
+                                top = if (homeUiState.myRecruitments.isEmpty() && homeUiState.myParticipations.isEmpty()) {
+                                    40.dp
+                                } else {
+                                    20.dp
+                                },
+                                bottom = 20.dp
+                            ),
+                        painter = painterResource(R.drawable.ic_chatting),
+                        titleModifier = Modifier.padding(start = 20.dp),
+                        title = stringResource(R.string.home_coming_livetalk)
                     ) {
-                        itemsIndexed(List(10) {}) { index, item ->
-                            if (index == 0) Spacer(Modifier.size(20.dp))
-                            Row {
-                                LiveTalkContentCard(
-                                    modifier = Modifier.width(72.dp),
-                                    title = "비스타",
-                                    painter = painterResource(R.drawable.img_poster),
-                                    time = "19:30"
-                                )
-                                Spacer(Modifier.size(9.dp))
+                        LazyRow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(top = 12.dp)
+                        ) {
+                            itemsIndexed(homeUiState.liveTalks) { index, liveTalk ->
+                                if (index == 0) Spacer(Modifier.size(20.dp))
+                                Row {
+                                    LiveTalkContentCard(
+                                        modifier = Modifier.width(72.dp),
+                                        title = liveTalk.name,
+                                        posterUrl = liveTalk.poster,
+                                        time = liveTalk.showAt.toTime()
+                                    )
+                                    Spacer(Modifier.size(12.dp))
+                                }
                             }
                         }
                     }

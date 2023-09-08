@@ -23,6 +23,7 @@ import androidx.paging.compose.itemsIndexed
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.SearchAppBar
 import com.cmc.curtaincall.common.design.component.basic.SearchTopAppBarWithBack
+import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.component.content.card.PartyMemberEtcItemCard
 import com.cmc.curtaincall.common.design.component.content.card.PartyMemberItemCard
 import com.cmc.curtaincall.common.design.component.content.card.PartyType
@@ -42,7 +43,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 internal fun PartyMemberListScreen(
     partyMemberViewModel: PartyMemberViewModel = hiltViewModel(),
     partyType: PartyType,
-    onNavigateDetail: (PartyType, Boolean, Int, Boolean) -> Unit,
+    onNavigateDetail: (PartyType, Int, Boolean) -> Unit,
     onNavigateCreate: (PartyType) -> Unit,
     onBack: () -> Unit
 ) {
@@ -59,31 +60,8 @@ internal fun PartyMemberListScreen(
 
     Scaffold(
         topBar = {
-            if (partyMemberUiState.isActiveSearch) {
-                SearchAppBar(
-                    value = partyMemberUiState.queryString,
-                    onValueChange = {
-                        partyMemberViewModel.setQueryString(it)
-                        partyMemberViewModel.changeDoneSearch(false)
-                    },
-                    containerColor = White,
-                    contentColor = Nero,
-                    placeholder = stringResource(R.string.search_performance_title),
-                    onDone = {
-                        if (partyMemberUiState.queryString.isNotEmpty()) {
-                            partyMemberViewModel.searchPartyList(partyMemberUiState.queryString)
-                            partyMemberViewModel.insertPartySearchWord()
-                        }
-                        partyMemberViewModel.changeDoneSearch(true)
-                    },
-                    onClick = {
-                        partyMemberViewModel.changeActiveSearch(false)
-                        partyMemberViewModel.setQueryString("")
-                    },
-                    onAction = { partyMemberViewModel.setQueryString("") }
-                )
-            } else {
-                SearchTopAppBarWithBack(
+            if (partyType == PartyType.ETC) {
+                TopAppBarWithBack(
                     title = stringResource(
                         when (partyType) {
                             PartyType.PERFORMANCE -> R.string.partymember_performance_title
@@ -93,10 +71,48 @@ internal fun PartyMemberListScreen(
                     ),
                     containerColor = Cultured,
                     contentColor = Nero,
-                    tint = Roman_Silver,
-                    onBack = onBack,
-                    onClick = { partyMemberViewModel.changeActiveSearch(true) }
+                    onClick = onBack
                 )
+            } else {
+                if (partyMemberUiState.isActiveSearch) {
+                    SearchAppBar(
+                        value = partyMemberUiState.queryString,
+                        onValueChange = {
+                            partyMemberViewModel.setQueryString(it)
+                            partyMemberViewModel.changeDoneSearch(false)
+                        },
+                        containerColor = White,
+                        contentColor = Nero,
+                        placeholder = stringResource(R.string.search_performance_title),
+                        onDone = {
+                            if (partyMemberUiState.queryString.isNotEmpty()) {
+                                partyMemberViewModel.searchPartyList(partyMemberUiState.queryString)
+                                partyMemberViewModel.insertPartySearchWord()
+                            }
+                            partyMemberViewModel.changeDoneSearch(true)
+                        },
+                        onClick = {
+                            partyMemberViewModel.changeActiveSearch(false)
+                            partyMemberViewModel.setQueryString("")
+                        },
+                        onAction = { partyMemberViewModel.setQueryString("") }
+                    )
+                } else {
+                    SearchTopAppBarWithBack(
+                        title = stringResource(
+                            when (partyType) {
+                                PartyType.PERFORMANCE -> R.string.partymember_performance_title
+                                PartyType.MEAL -> R.string.partymember_restaurant_title
+                                PartyType.ETC -> R.string.partymember_etc_title
+                            }
+                        ),
+                        containerColor = Cultured,
+                        contentColor = Nero,
+                        tint = Roman_Silver,
+                        onBack = onBack,
+                        onClick = { partyMemberViewModel.changeActiveSearch(true) }
+                    )
+                }
             }
         },
         floatingActionButton = {
@@ -154,7 +170,7 @@ private fun PartyMemberListSearchContent(
     partyType: PartyType,
     modifier: Modifier = Modifier,
     onSearchClick: (String) -> Unit,
-    onNavigateDetail: (PartyType, Boolean, Int, Boolean) -> Unit,
+    onNavigateDetail: (PartyType, Int, Boolean) -> Unit,
 ) {
     val searchWords by partyMemberViewModel.searchWords.collectAsStateWithLifecycle()
     val partyMemberUiState by partyMemberViewModel.uiState.collectAsStateWithLifecycle()
@@ -249,7 +265,6 @@ private fun PartyMemberListSearchContent(
                             onClick = {
                                 onNavigateDetail(
                                     partyType,
-                                    if (partyModel.creatorId == partyMemberViewModel.memberId.value) true else partyModel.isParticipation,
                                     partyModel.id,
                                     partyModel.creatorId == partyMemberViewModel.memberId.value
                                 )
@@ -268,7 +283,7 @@ private fun PartyMemberListContent(
     partyMemberViewModel: PartyMemberViewModel,
     partyType: PartyType,
     modifier: Modifier = Modifier,
-    onNavigateDetail: (PartyType, Boolean, Int, Boolean) -> Unit
+    onNavigateDetail: (PartyType, Int, Boolean) -> Unit
 ) {
     val pagingItems = when (partyType) {
         PartyType.PERFORMANCE -> {
@@ -332,7 +347,6 @@ private fun PartyMemberListContent(
                                 onClick = {
                                     onNavigateDetail(
                                         partyType,
-                                        if (partyModel.creatorId == partyMemberViewModel.memberId.value) true else partyModel.isParticipation,
                                         partyModel.id,
                                         partyModel.creatorId == partyMemberViewModel.memberId.value
                                     )
@@ -359,7 +373,6 @@ private fun PartyMemberListContent(
                                 onClick = {
                                     onNavigateDetail(
                                         partyType,
-                                        if (partyModel.creatorId == partyMemberViewModel.memberId.value) true else partyModel.isParticipation,
                                         partyModel.id,
                                         partyModel.creatorId == partyMemberViewModel.memberId.value
                                     )

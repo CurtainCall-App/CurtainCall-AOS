@@ -67,12 +67,26 @@ class HomeViewModel @Inject constructor(
                 currentState.copy(searchWords = event.searchWords)
             }
 
+            is HomeEvent.RequestLiveTalk -> {
+                currentState.copy(liveTalks = event.liveTalks)
+            }
+
             else -> currentState
         }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     private fun getMemberNickname() {
-        memberRepository.getMemberNickname()
-            .onEach { sendAction(HomeEvent.GetNickname(it)) }
+        memberRepository.getMemberId()
+            .flatMapLatest {
+                memberRepository.requestMemberInfo(it)
+            }.onEach {
+                sendAction(HomeEvent.GetNickname(it.nickname))
+            }.launchIn(viewModelScope)
+    }
+
+    fun requestLiveTalks() {
+        showRepository.requestLiveTalkShowList(null, null, SimpleDateFormat("yyyy-MM-dd'T'HH:mm").format(Calendar.getInstance().time))
+            .onEach { sendAction(HomeEvent.RequestLiveTalk(it)) }
             .launchIn(viewModelScope)
     }
 

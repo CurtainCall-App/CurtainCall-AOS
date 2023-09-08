@@ -69,7 +69,7 @@ interface ShowService {
 
     @GET("livetalk-show-times")
     suspend fun requestLiveTalkShowList(
-        @Query("page") page: Int,
+        @Query("page") page: Int?,
         @Query("size") size: Int?,
         @Query("baseDateTime") baseDateTime: String
     ): LiveTalkShowsResponse

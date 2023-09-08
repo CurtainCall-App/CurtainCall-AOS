@@ -3,6 +3,7 @@ package com.cmc.curtaincall.feature.home
 import com.cmc.curtaincall.core.base.BaseEvent
 import com.cmc.curtaincall.domain.model.member.MyParticipationModel
 import com.cmc.curtaincall.domain.model.member.MyRecruitmentModel
+import com.cmc.curtaincall.domain.model.show.LiveTalkShowModel
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import com.cmc.curtaincall.domain.model.show.ShowRankModel
 import com.cmc.curtaincall.domain.model.show.ShowSearchWordModel
@@ -10,6 +11,10 @@ import com.cmc.curtaincall.domain.model.show.ShowSearchWordModel
 sealed class HomeEvent : BaseEvent {
     data class GetNickname(
         val nickname: String
+    ) : HomeEvent()
+
+    data class RequestLiveTalk(
+        val liveTalks: List<LiveTalkShowModel>
     ) : HomeEvent()
 
     data class RequestMyRecruitment(

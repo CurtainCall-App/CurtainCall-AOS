@@ -10,6 +10,7 @@ import com.cmc.curtaincall.data.source.paging.PARTY_SEARCH_PAGE_SIZE
 import com.cmc.curtaincall.data.source.paging.PartyPagingSource
 import com.cmc.curtaincall.data.source.paging.PartySearchPagingSource
 import com.cmc.curtaincall.data.source.remote.PartyRemoteSource
+import com.cmc.curtaincall.domain.model.party.CheckPartyModel
 import com.cmc.curtaincall.domain.model.party.CreatePartyModel
 import com.cmc.curtaincall.domain.model.party.PartyDetailModel
 import com.cmc.curtaincall.domain.model.party.PartyModel
@@ -94,4 +95,7 @@ class PartyRepositoryImpl @Inject constructor(
 
     override fun participateParty(partyId: Int): Flow<Boolean> =
         partyRemoteSource.participateParty(partyId)
+
+    override fun checkParty(partyId: Int): Flow<CheckPartyModel> =
+        partyRemoteSource.checkParty(partyId).map { it.toModel() }
 }

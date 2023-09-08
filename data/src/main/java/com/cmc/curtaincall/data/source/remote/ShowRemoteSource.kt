@@ -2,6 +2,7 @@ package com.cmc.curtaincall.data.source.remote
 
 import com.cmc.curtaincall.core.network.service.show.ShowService
 import com.cmc.curtaincall.core.network.service.show.response.FacilityDetailResponse
+import com.cmc.curtaincall.core.network.service.show.response.LiveTalkShowResponse
 import com.cmc.curtaincall.core.network.service.show.response.ShowDetailResponse
 import com.cmc.curtaincall.core.network.service.show.response.ShowInfoResponse
 import com.cmc.curtaincall.core.network.service.show.response.ShowRankResponse
@@ -116,6 +117,20 @@ class ShowRemoteSource @Inject constructor(
                 size = size,
                 genre = genre
             ).similarShowInfos
+        )
+    }
+
+    fun requestLiveTalkShowList(
+        page: Int?,
+        size: Int?,
+        baseDateTime: String
+    ): Flow<List<LiveTalkShowResponse>> = flow {
+        emit(
+            showService.requestLiveTalkShowList(
+                page = page,
+                size = size,
+                baseDateTime = baseDateTime
+            ).liveTalks
         )
     }
 }

@@ -38,6 +38,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallMultiLineTextField
+import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
 import com.cmc.curtaincall.common.design.theme.Chinese_Black
@@ -62,7 +63,6 @@ import io.getstream.chat.android.compose.ui.theme.StreamColors
 import io.getstream.chat.android.compose.viewmodel.messages.MessageComposerViewModel
 import io.getstream.chat.android.compose.viewmodel.messages.MessageListViewModel
 import io.getstream.chat.android.compose.viewmodel.messages.MessagesViewModelFactory
-import timber.log.Timber
 
 @Composable
 fun PartyMemberLiveTalkScreen(
@@ -82,8 +82,16 @@ fun PartyMemberLiveTalkScreen(
     ) {
         PartyMemberLiveTalkContent(
             partyId = partyMemberDetailState.partyDetailModel.id,
-            showName = partyMemberDetailState.partyDetailModel.showName ?: "",
-            showAt = partyMemberDetailState.partyDetailModel.showAt ?: "",
+            showName = if (partyMemberDetailState.partyDetailModel.category == PartyType.ETC.category) {
+                partyMemberDetailState.partyDetailModel.title
+            } else {
+                partyMemberDetailState.partyDetailModel.showName ?: ""
+            },
+            showAt = if (partyMemberDetailState.partyDetailModel.category == PartyType.ETC.category) {
+                partyMemberDetailState.partyDetailModel.createdAt
+            } else {
+                partyMemberDetailState.partyDetailModel.showAt ?: ""
+            },
             user = partyMemberDetailState.user,
             chatClient = chatClient,
             onBack = onBack
@@ -111,14 +119,64 @@ private fun PartyMemberLiveTalkContent(
 
     val messageListViewModel = viewModel(MessageListViewModel::class.java, factory = messageFactory)
     val messageComposerViewModel = viewModel(MessageComposerViewModel::class.java, factory = messageFactory)
-
     val messageComposerState by messageComposerViewModel.messageComposerState.collectAsStateWithLifecycle()
-    Timber.d("messageComposerState message ${messageComposerState.inputValue}")
 
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
             .background(Cultured),
+        topBar = {
+            MessageListHeader(
+                channel = Channel(
+                    cid = "messaging:PARTY-$partyId",
+                    id = "PARTY-$partyId"
+                ),
+                currentUser = user,
+                modifier = Modifier.fillMaxWidth(),
+                color = Cultured,
+                leadingContent = {},
+                centerContent = {
+                    Column(Modifier.fillMaxWidth()) {
+                        Row(
+                            modifier = Modifier
+                                .padding(top = 20.dp, bottom = 18.dp)
+                                .padding(horizontal = 10.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_arrow_back),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(18.dp)
+                                    .clickable { onBack() },
+                                tint = Nero
+                            )
+                            Column(
+                                modifier = Modifier.padding(start = 6.dp)
+                            ) {
+                                Text(
+                                    text = showName,
+                                    color = Chinese_Black,
+                                    fontSize = 17.dp.toSp(),
+                                    fontWeight = FontWeight.Bold,
+                                    fontFamily = spoqahansanseeo,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                                Text(
+                                    text = "일시 | ${showAt.toDateInKorea()}",
+                                    modifier = Modifier.padding(top = 4.dp),
+                                    color = Roman_Silver,
+                                    fontSize = 14.dp.toSp(),
+                                    fontWeight = FontWeight.Medium,
+                                    fontFamily = spoqahansanseeo
+                                )
+                            }
+                        }
+                    }
+                },
+                trailingContent = {}
+            )
+        },
         bottomBar = {
             MessageComposer(
                 modifier = Modifier
@@ -203,47 +261,39 @@ private fun PartyMemberLiveTalkMessageList(
     user: User,
     onBack: () -> Unit
 ) {
-    Column(modifier) {
-        MessageListHeader(
-            channel = Channel(
-                cid = "messaging:PARTY-$partyId",
-                id = "PARTY-$partyId"
-            ),
-            currentUser = user,
-            modifier = Modifier.fillMaxWidth(),
-            color = Cultured,
-            leadingContent = {},
-            centerContent = {
-                Column(Modifier.fillMaxWidth()) {
-                    Row(
-                        modifier = Modifier
-                            .padding(top = 20.dp, bottom = 18.dp)
-                            .padding(horizontal = 10.dp)
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_arrow_back),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(18.dp)
-                                .clickable { onBack() },
-                            tint = Nero
+    MessageList(
+        viewModel = messageListViewModel,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(White),
+        emptyContent = {},
+        loadingContent = {}
+    ) {
+        if (it is MessageItemState) {
+            val message = it.message
+            if (message.user.id == user.id) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 12.dp, horizontal = 20.dp),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Row(verticalAlignment = Alignment.Bottom) {
+                        Text(
+                            text = message.createdAt?.toString()?.toTimePM() ?: "",
+                            modifier = Modifier.padding(end = 8.dp),
+                            color = Roman_Silver,
+                            fontSize = 10.dp.toSp()
                         )
-                        Column(
-                            modifier = Modifier.padding(start = 6.dp)
+                        Box(
+                            modifier = Modifier
+                                .background(Me_Pink, RoundedCornerShape(topStart = 10.dp, bottomStart = 10.dp, bottomEnd = 10.dp))
+                                .padding(horizontal = 12.dp, vertical = 6.dp),
+                            contentAlignment = Alignment.CenterStart
                         ) {
                             Text(
-                                text = showName,
-                                color = Chinese_Black,
-                                fontSize = 17.dp.toSp(),
-                                fontWeight = FontWeight.Bold,
-                                fontFamily = spoqahansanseeo,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                            Text(
-                                text = "일시 | ${showAt.toDateInKorea()}",
-                                modifier = Modifier.padding(top = 4.dp),
-                                color = Roman_Silver,
+                                text = message.text,
+                                color = White,
                                 fontSize = 14.dp.toSp(),
                                 fontWeight = FontWeight.Medium,
                                 fontFamily = spoqahansanseeo
@@ -251,95 +301,51 @@ private fun PartyMemberLiveTalkMessageList(
                         }
                     }
                 }
-            },
-            trailingContent = {}
-        )
-        MessageList(
-            viewModel = messageListViewModel,
-            modifier = Modifier
-                .fillMaxSize()
-                .background(White),
-            emptyContent = {},
-            loadingContent = {}
-        ) {
-            if (it is MessageItemState) {
-                val message = it.message
-                if (message.user.id == user.id) {
-                    Row(
+            } else {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 12.dp, horizontal = 20.dp),
+                    horizontalArrangement = Arrangement.Start
+                ) {
+                    AsyncImage(
+                        model = message.user.image,
+                        contentDescription = null,
+                        error = painterResource(R.drawable.ic_default_profile),
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 12.dp, horizontal = 20.dp),
-                        horizontalArrangement = Arrangement.End
-                    ) {
-                        Row(verticalAlignment = Alignment.Bottom) {
-                            Text(
-                                text = message.createdAt?.toString()?.toTimePM() ?: "",
-                                modifier = Modifier.padding(end = 8.dp),
-                                color = Roman_Silver,
-                                fontSize = 10.dp.toSp()
-                            )
+                            .size(42.dp)
+                            .clip(CircleShape),
+                        contentScale = ContentScale.Crop
+                    )
+                    Column(Modifier.padding(start = 12.dp)) {
+                        Text(
+                            text = message.user.name,
+                            modifier = Modifier.padding(top = 5.dp),
+                            color = Chinese_Black,
+                            fontSize = 13.dp.toSp()
+                        )
+                        Row(
+                            modifier = Modifier.padding(top = 4.dp),
+                            verticalAlignment = Alignment.Bottom
+                        ) {
                             Box(
                                 modifier = Modifier
-                                    .background(Me_Pink, RoundedCornerShape(topStart = 10.dp, bottomStart = 10.dp, bottomEnd = 10.dp))
+                                    .background(Cultured, RoundedCornerShape(topEnd = 10.dp, bottomStart = 10.dp, bottomEnd = 10.dp))
                                     .padding(horizontal = 12.dp, vertical = 6.dp),
                                 contentAlignment = Alignment.CenterStart
                             ) {
                                 Text(
                                     text = message.text,
-                                    color = White,
-                                    fontSize = 14.dp.toSp(),
-                                    fontWeight = FontWeight.Medium,
-                                    fontFamily = spoqahansanseeo
+                                    color = Nero,
+                                    fontSize = 14.dp.toSp()
                                 )
                             }
-                        }
-                    }
-                } else {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 12.dp, horizontal = 20.dp),
-                        horizontalArrangement = Arrangement.Start
-                    ) {
-                        AsyncImage(
-                            model = message.user.image,
-                            contentDescription = null,
-                            error = painterResource(R.drawable.ic_default_profile),
-                            modifier = Modifier
-                                .size(42.dp)
-                                .clip(CircleShape),
-                            contentScale = ContentScale.Crop
-                        )
-                        Column(Modifier.padding(start = 12.dp)) {
                             Text(
-                                text = message.user.name,
-                                modifier = Modifier.padding(top = 5.dp),
-                                color = Chinese_Black,
-                                fontSize = 13.dp.toSp()
+                                text = message.createdAt?.toString()?.toTimePM() ?: "",
+                                modifier = Modifier.padding(start = 8.dp),
+                                color = Roman_Silver,
+                                fontSize = 10.sp
                             )
-                            Row(
-                                modifier = Modifier.padding(top = 4.dp),
-                                verticalAlignment = Alignment.Bottom
-                            ) {
-                                Box(
-                                    modifier = Modifier
-                                        .background(Cultured, RoundedCornerShape(topEnd = 10.dp, bottomStart = 10.dp, bottomEnd = 10.dp))
-                                        .padding(horizontal = 12.dp, vertical = 6.dp),
-                                    contentAlignment = Alignment.CenterStart
-                                ) {
-                                    Text(
-                                        text = message.text,
-                                        color = Nero,
-                                        fontSize = 14.dp.toSp()
-                                    )
-                                }
-                                Text(
-                                    text = message.createdAt?.toString()?.toTimePM() ?: "",
-                                    modifier = Modifier.padding(start = 8.dp),
-                                    color = Roman_Silver,
-                                    fontSize = 10.sp
-                                )
-                            }
                         }
                     }
                 }

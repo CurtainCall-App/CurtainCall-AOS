@@ -12,4 +12,8 @@ sealed class PartyMemberDetailEvent : BaseEvent {
     data class GetMemberInfo(
         val user: User
     ) : PartyMemberDetailEvent()
+
+    data class ChangeParticipation(
+        val isParticipation: Boolean
+    ) : PartyMemberDetailEvent()
 }

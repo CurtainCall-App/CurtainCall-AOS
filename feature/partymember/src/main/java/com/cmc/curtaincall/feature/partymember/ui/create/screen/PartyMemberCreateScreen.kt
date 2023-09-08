@@ -9,7 +9,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -19,8 +18,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallRoundedText
-import com.cmc.curtaincall.common.design.component.basic.CurtainCallSnackbar
-import com.cmc.curtaincall.common.design.component.basic.CurtainCallSnackbarHost
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.cmc.curtaincall.common.design.extensions.toSp
@@ -29,10 +26,9 @@ import com.cmc.curtaincall.feature.partymember.ui.create.PartyMemberCreateSideEf
 import com.cmc.curtaincall.feature.partymember.ui.create.PartyMemberCreateViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 private const val UNSELECTED_INDEX = -1
-const val DEFAULT_PERSONNEL_COUNT = 0
+const val DEFAULT_PERSONNEL_COUNT = 1
 
 enum class STEP(val prevStep: STEP) {
     PHASE1(PHASE1), PHASE2(PHASE1), PHASE3(PHASE2), PHASE1_1(PHASE1_1), PHASE1_2(PHASE1_1)
@@ -45,9 +41,9 @@ internal fun PartyMemberCreateScreen(
     partyType: PartyType,
     onBack: () -> Unit
 ) {
-    val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
-    val snackbarHostState = remember { SnackbarHostState() }
+//    val context = LocalContext.current
+//    val coroutineScope = rememberCoroutineScope()
+//    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
         partyMemberCreateViewModel.setPartyCategory(partyType)
@@ -57,13 +53,7 @@ internal fun PartyMemberCreateScreen(
         partyMemberCreateViewModel.effects.collectLatest { effect ->
             when (effect) {
                 PartyMemberCreateSideEffect.SuccessUpload -> {
-                    coroutineScope.launch {
-                        snackbarHostState.showSnackbar(
-                            context.getString(R.string.snackbar_upload_partymember_complete),
-                            duration = SnackbarDuration.Short
-                        )
-                        onBack()
-                    }
+                    onBack()
                 }
             }
         }
@@ -73,14 +63,14 @@ internal fun PartyMemberCreateScreen(
     systemUiController.setStatusBarColor(White)
     var currentStep by remember { mutableStateOf(if (partyType == PartyType.ETC) STEP.PHASE1_1 else STEP.PHASE1) }
     Scaffold(
-        snackbarHost = {
-            CurtainCallSnackbarHost(snackbarHostState = snackbarHostState) { snackbarData ->
-                CurtainCallSnackbar(
-                    modifier = Modifier.fillMaxWidth(),
-                    snackbarData = snackbarData
-                )
-            }
-        },
+//        snackbarHost = {
+//            CurtainCallSnackbarHost(snackbarHostState = snackbarHostState) { snackbarData ->
+//                CurtainCallSnackbar(
+//                    modifier = Modifier.fillMaxWidth(),
+//                    snackbarData = snackbarData
+//                )
+//            }
+//        },
         topBar = {
             TopAppBarWithBack(
                 title = stringResource(R.string.partymember_create_appbar),
@@ -262,10 +252,10 @@ private fun PartyMemberCreateContent(
                         .padding(horizontal = 20.dp)
                         .padding(bottom = 19.dp)
                         .height(52.dp),
-                    enabled = selectedDateState.isNotEmpty() and selectedTimeState.isNotEmpty() and (personnelCountState > 0),
+                    enabled = selectedDateState.isNotEmpty() and selectedTimeState.isNotEmpty() and (personnelCountState > 1),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if (selectedDateState.isNotEmpty() and selectedTimeState.isNotEmpty() and (personnelCountState > 0)) {
+                        containerColor = if (selectedDateState.isNotEmpty() and selectedTimeState.isNotEmpty() and (personnelCountState > 1)) {
                             Me_Pink
                         } else {
                             Bright_Gray
@@ -275,7 +265,7 @@ private fun PartyMemberCreateContent(
                 ) {
                     Text(
                         text = stringResource(R.string.partymember_create_next),
-                        color = if (selectedDateState.isNotEmpty() and selectedTimeState.isNotEmpty()) White else Silver_Sand,
+                        color = if (selectedDateState.isNotEmpty() and selectedTimeState.isNotEmpty() and (personnelCountState > 1)) White else Silver_Sand,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Medium,
                         fontFamily = spoqahansanseeo

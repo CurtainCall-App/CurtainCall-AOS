@@ -163,7 +163,7 @@ private fun DropDownTime(
                 .heightIn(max = 232.dp)
                 .verticalScroll(scrollState)
         ) {
-            times.forEach { time ->
+            times.sorted().forEach { time ->
                 Text(
                     text = time,
                     modifier = Modifier

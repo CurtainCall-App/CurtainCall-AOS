@@ -22,7 +22,8 @@ data class MemberRecruitmentResponse(
     val showId: String?,
     val showName: String?,
     val showPoster: String?,
-    val title: String
+    val title: String,
+    val content: String
 ) {
     fun toModel() = MyRecruitmentModel(
         id = id,
@@ -39,6 +40,7 @@ data class MemberRecruitmentResponse(
         showName = showName,
         showPoster = showPoster,
         facilityId = facilityId,
-        facilityName = facilityName
+        facilityName = facilityName,
+        content = content
     )
 }
