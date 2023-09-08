@@ -14,6 +14,6 @@ data class PerformanceDetailState(
     val facilityDetailModel: FacilityDetailModel = FacilityDetailModel(),
     val showReviews: List<ShowReviewModel> = listOf(),
     val lostItems: List<LostItemModel> = listOf(),
-    val similiarShows: List<SimilarShowInfoModel> = listOf(),
+    val similarShows: List<SimilarShowInfoModel> = listOf(),
     val isFavorite: Boolean = false
 ) : BaseState

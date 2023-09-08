@@ -10,14 +10,16 @@ class ReportRemoteSource @Inject constructor(
     private val reportService: ReportService
 ) {
     fun requestReport(
-        partyId: Int,
+        reportId: Int,
+        type: String,
         reason: String,
         content: String
     ): Flow<Boolean> = flow {
         emit(
             reportService.requestReport(
                 reportRequest = ReportRequest(
-                    partyId = partyId,
+                    idToReport = reportId,
+                    type = type,
                     reason = reason,
                     content = content
                 )

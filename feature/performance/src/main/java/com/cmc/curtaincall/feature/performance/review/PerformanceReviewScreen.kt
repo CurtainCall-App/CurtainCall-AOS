@@ -31,6 +31,7 @@ internal fun PerformanceReviewScreen(
     performanceDetailViewModel: PerformanceDetailViewModel = hiltViewModel(),
     showId: String,
     onNavigateReviewCreate: (String?, String, String, Boolean, Int) -> Unit,
+    onNavigateReport: (Int, String) -> Unit,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -78,7 +79,8 @@ internal fun PerformanceReviewScreen(
                 .fillMaxSize()
                 .background(White),
             showId = showId,
-            onNavigateReviewCreate = onNavigateReviewCreate
+            onNavigateReviewCreate = onNavigateReviewCreate,
+            onNavigateReport = onNavigateReport
         )
     }
 }
@@ -89,7 +91,8 @@ private fun PerformanceReviewContent(
     performanceDetailViewModel: PerformanceDetailViewModel,
     modifier: Modifier = Modifier,
     showId: String,
-    onNavigateReviewCreate: (String?, String, String, Boolean, Int) -> Unit
+    onNavigateReviewCreate: (String?, String, String, Boolean, Int) -> Unit,
+    onNavigateReport: (Int, String) -> Unit
 ) {
     val reviewItems = performanceDetailViewModel.reviewItems.collectAsLazyPagingItems()
     var isShowRemoveDialog by remember { mutableStateOf(false) }
@@ -154,13 +157,19 @@ private fun PerformanceReviewContent(
                                 performanceDetailViewModel.uiState.value.showDetailModel.poster,
                                 performanceDetailViewModel.uiState.value.showDetailModel.genre,
                                 performanceDetailViewModel.uiState.value.showDetailModel.name,
-                                true,
+                                false,
                                 reviewItem.id
                             )
                         },
                         onRemoveWriting = {
                             removeReviewId = reviewItem.id
                             isShowRemoveDialog = true
+                        },
+                        onReport = {
+                            onNavigateReport(
+                                reviewItem.id,
+                                "SHOW_REVIEW"
+                            )
                         }
                     )
                     if (index < reviewItems.itemCount - 1) {

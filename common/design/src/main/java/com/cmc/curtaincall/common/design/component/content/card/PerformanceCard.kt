@@ -269,6 +269,7 @@ fun PerformanceCard(
             AsyncImage(
                 model = imageUrl,
                 error = painter,
+                placeholder = painterResource(R.drawable.ic_error_poster),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxSize()

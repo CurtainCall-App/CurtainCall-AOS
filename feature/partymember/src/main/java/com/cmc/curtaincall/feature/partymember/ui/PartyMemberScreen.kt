@@ -50,7 +50,7 @@ fun PartyMemberScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 18.dp)
+                .padding(top = 18.dp, bottom = 41.dp)
         ) {
             PartyMemberCard(
                 modifier = Modifier

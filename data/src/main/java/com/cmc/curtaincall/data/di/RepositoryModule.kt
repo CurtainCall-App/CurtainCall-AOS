@@ -1,6 +1,7 @@
 package com.cmc.curtaincall.data.di
 
 import com.cmc.curtaincall.data.repository.AuthRepositoryImpl
+import com.cmc.curtaincall.data.repository.ChattingRepositoryImpl
 import com.cmc.curtaincall.data.repository.FavoriteRepositoryImpl
 import com.cmc.curtaincall.data.repository.ImageRepositoryImpl
 import com.cmc.curtaincall.data.repository.LostItemRepositoryImpl
@@ -12,6 +13,7 @@ import com.cmc.curtaincall.data.repository.ReviewRepositoryImpl
 import com.cmc.curtaincall.data.repository.ShowRepositoryImpl
 import com.cmc.curtaincall.data.repository.TokenRepositoryImpl
 import com.cmc.curtaincall.domain.repository.AuthRepository
+import com.cmc.curtaincall.domain.repository.ChattingRepository
 import com.cmc.curtaincall.domain.repository.FavoriteRepository
 import com.cmc.curtaincall.domain.repository.ImageRepository
 import com.cmc.curtaincall.domain.repository.LostItemRepository
@@ -96,4 +98,10 @@ interface RepositoryModule {
     fun bindImageRepository(
         imageRepositoryImpl: ImageRepositoryImpl
     ): ImageRepository
+
+    @Binds
+    @Singleton
+    fun bindChattingRepository(
+        chattingRepositoryImpl: ChattingRepositoryImpl
+    ): ChattingRepository
 }

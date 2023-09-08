@@ -67,13 +67,13 @@ internal fun PerformanceLostItemCreateScreen(
     lostItemId: Int = 0,
     facilityId: String,
     facilityName: String,
-    onNavigateUpload: () -> Unit,
+    onNavigateDetail: (Int) -> Unit,
     onBack: () -> Unit
 ) {
-    LaunchedEffect(performanceLostItemCreateViewModel) {
+    LaunchedEffect(Unit) {
         performanceLostItemCreateViewModel.completeEffect.collectLatest { isComplete ->
-            if (isComplete) {
-                onBack()
+            if (isComplete && fromMyPage.not()) {
+                onNavigateDetail(performanceLostItemCreateViewModel.lostItemId.value)
             }
         }
     }
@@ -121,8 +121,7 @@ internal fun PerformanceLostItemCreateScreen(
                 .fillMaxSize()
                 .background(White),
             facilityName = facilityName,
-            onCompleteChange = { completeState = it },
-            onNavigateUpload = onNavigateUpload
+            onCompleteChange = { completeState = it }
         )
     }
 }
@@ -132,8 +131,7 @@ private fun PerformanceLostItemCreateContent(
     performanceLostItemCreateViewModel: PerformanceLostItemCreateViewModel,
     modifier: Modifier = Modifier,
     facilityName: String,
-    onCompleteChange: (Boolean) -> Unit,
-    onNavigateUpload: () -> Unit
+    onCompleteChange: (Boolean) -> Unit
 ) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
@@ -242,8 +240,9 @@ private fun PerformanceLostItemCreateContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(328.dp)
-                    .padding(vertical = 24.dp, horizontal = 20.dp),
+                    .padding(20.dp),
                 itemModifier = Modifier.size(48.dp, 72.dp),
+                fontSize = 12.dp.toSp(),
                 onTypeChange = {
                     performanceLostItemCreateViewModel.setItemType(
                         type = it.code

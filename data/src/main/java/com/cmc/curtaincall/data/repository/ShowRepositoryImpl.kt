@@ -3,15 +3,19 @@ package com.cmc.curtaincall.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
+import androidx.paging.map
 import com.cmc.curtaincall.core.network.service.favorite.FavoriteService
 import com.cmc.curtaincall.core.network.service.show.ShowService
 import com.cmc.curtaincall.data.source.local.ShowLocalSource
+import com.cmc.curtaincall.data.source.paging.LIVETALK_SHOW_PAGE_SIZE
+import com.cmc.curtaincall.data.source.paging.LiveTalkShowPagingSource
 import com.cmc.curtaincall.data.source.paging.SHOW_PAGE_SIZE
 import com.cmc.curtaincall.data.source.paging.SHOW_SEARCH_PAGE_SIZE
 import com.cmc.curtaincall.data.source.paging.ShowPagingSource
 import com.cmc.curtaincall.data.source.paging.ShowSearchPagingSource
 import com.cmc.curtaincall.data.source.remote.ShowRemoteSource
 import com.cmc.curtaincall.domain.model.show.FacilityDetailModel
+import com.cmc.curtaincall.domain.model.show.LiveTalkShowModel
 import com.cmc.curtaincall.domain.model.show.ShowDetailModel
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import com.cmc.curtaincall.domain.model.show.ShowRankModel
@@ -100,4 +104,14 @@ class ShowRepositoryImpl @Inject constructor(
         ).map { similarShowInfo ->
             similarShowInfo.map { it.toModel() }
         }
+
+    override fun fetchLiveTalkShowList(baseDateTime: String): Flow<PagingData<LiveTalkShowModel>> {
+        return Pager(
+            config = PagingConfig(pageSize = LIVETALK_SHOW_PAGE_SIZE),
+            pagingSourceFactory = { LiveTalkShowPagingSource(showService, baseDateTime) }
+        ).flow
+            .map { pagingData ->
+                pagingData.map { it.toModel() }
+            }
+    }
 }

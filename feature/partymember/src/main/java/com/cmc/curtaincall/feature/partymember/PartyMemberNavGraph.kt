@@ -2,6 +2,8 @@ package com.cmc.curtaincall.feature.partymember
 
 import android.os.Build
 import android.os.Bundle
+import androidx.compose.runtime.remember
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -15,9 +17,9 @@ import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.feature.partymember.ui.PartyMemberScreen
 import com.cmc.curtaincall.feature.partymember.ui.create.screen.PartyMemberCreateScreen
 import com.cmc.curtaincall.feature.partymember.ui.detail.PartyMemberDetailScreen
-import com.cmc.curtaincall.feature.partymember.ui.edit.PartyMemberEditScreen
 import com.cmc.curtaincall.feature.partymember.ui.list.PartyMemberListScreen
-import com.cmc.curtaincall.feature.partymember.ui.upload.PartyMemberUploadScreen
+import com.cmc.curtaincall.feature.partymember.ui.livetalk.PartyMemberLiveTalkScreen
+import io.getstream.chat.android.client.ChatClient
 
 private const val PARTYMEMBER_GRAPH = "partymember_graph"
 const val PARTYMEMBER = "partymember"
@@ -25,8 +27,7 @@ private const val PARTYMEMBER_LABEL = "파티원"
 private const val PARTYMEMBER_LIST = "partymember_list"
 private const val PARTYMEMBER_DETAIL = "partymember_detail"
 private const val PARTYMEMBER_CREATE = "partymember_create"
-private const val PARTYMEMBER_UPLOAD = "partymember_upload"
-private const val PARTYMEMBER_EDIT = "partymember_edit"
+private const val PARTYMEMBER_LIVETALK = "partymember_livetalk"
 
 sealed interface PartyMemberDestination : CurtainCallDestination {
     object PartyMember : PartyMemberDestination, BottomDestination {
@@ -99,47 +100,15 @@ sealed interface PartyMemberDestination : CurtainCallDestination {
         )
     }
 
-    object Upload : PartyMemberDestination {
-        override val route = PARTYMEMBER_UPLOAD
-        const val typeArg = "type"
-        val routeWithArgs = "$route/{$typeArg}"
-        val arguments = listOf(
-            navArgument(typeArg) {
-                type = NavType.EnumType(PartyType::class.java)
-            }
-        )
-    }
-
-    object Edit : PartyMemberDestination {
-        override val route = PARTYMEMBER_EDIT
-        const val typeArg = "type"
-        const val fromRecruitmentArg = "fromRecruitment"
-        const val fromParticipationArg = "fromParticipation"
-        val routeWithArgs = "$route?" +
-            "$typeArg={$typeArg}&" +
-            "$fromRecruitmentArg={$fromRecruitmentArg}&" +
-            "$fromParticipationArg={$fromParticipationArg}"
-
-        val arguments = listOf(
-            navArgument(typeArg) {
-                type = NavType.EnumType(PartyType::class.java)
-                defaultValue = PartyType.PERFORMANCE
-            },
-            navArgument(fromRecruitmentArg) {
-                type = NavType.BoolType
-                defaultValue = false
-            },
-            navArgument(fromParticipationArg) {
-                type = NavType.BoolType
-                defaultValue = false
-            }
-        )
+    object LiveTalk : PartyMemberDestination {
+        override val route = PARTYMEMBER_LIVETALK
     }
 }
 
 fun NavGraphBuilder.partymemberNavGraph(
     navHostController: NavHostController,
-    onNavigateHome: () -> Unit
+    chatClient: ChatClient,
+    onNavigateReport: (Int, String) -> Unit
 ) {
     navigation(startDestination = PartyMemberDestination.PartyMember.route, route = PARTYMEMBER_GRAPH) {
         composable(route = PartyMemberDestination.PartyMember.route) {
@@ -189,14 +158,8 @@ fun NavGraphBuilder.partymemberNavGraph(
                     fromRecruitment = fromRecruitment,
                     fromParticipation = fromParticipation,
                     partyType = partyType,
-                    onNavigateEdit = {
-                        navHostController.navigate(
-                            PartyMemberDestination.Edit.route + "?" +
-                                "${PartyMemberDestination.Edit.typeArg}=$it" + "&" +
-                                "${PartyMemberDestination.Edit.fromRecruitmentArg}=$fromRecruitment" + "&" +
-                                "${PartyMemberDestination.Edit.fromParticipationArg}=$fromParticipation"
-                        )
-                    },
+                    onNavigateReport = onNavigateReport,
+                    onNavigateLiveTalk = { navHostController.navigate(PartyMemberDestination.LiveTalk.route) },
                     onBack = { navHostController.popBackStack() }
                 )
             } else {
@@ -207,14 +170,8 @@ fun NavGraphBuilder.partymemberNavGraph(
                     fromRecruitment = fromRecruitment,
                     fromParticipation = fromParticipation,
                     partyType = PartyType.PERFORMANCE,
-                    onNavigateEdit = {
-                        navHostController.navigate(
-                            PartyMemberDestination.Edit.route + "?" +
-                                "${PartyMemberDestination.Edit.typeArg}=$it" + "&" +
-                                "${PartyMemberDestination.Edit.fromRecruitmentArg}=$fromRecruitment" + "&" +
-                                "${PartyMemberDestination.Edit.fromParticipationArg}=$fromParticipation"
-                        )
-                    },
+                    onNavigateReport = onNavigateReport,
+                    onNavigateLiveTalk = { navHostController.navigate(PartyMemberDestination.LiveTalk.route) },
                     onBack = { navHostController.popBackStack() }
                 )
             }
@@ -228,48 +185,18 @@ fun NavGraphBuilder.partymemberNavGraph(
             if (partyType != null) {
                 PartyMemberCreateScreen(
                     partyType = partyType,
-                    onNavigateUpload = { navHostController.navigate("${PartyMemberDestination.Upload.route}/$it") },
                     onBack = { navHostController.popBackStack() }
                 )
             }
         }
 
-        composable(
-            route = PartyMemberDestination.Upload.routeWithArgs,
-            arguments = PartyMemberDestination.Upload.arguments
-        ) { entry ->
-            val partyType: PartyType? = getPartyType(entry.arguments)
-            if (partyType != null) {
-                PartyMemberUploadScreen(
-                    partyType = partyType,
-                    onNavigateList = {
-                        navHostController.navigate("${PartyMemberDestination.List.route}/$it") {
-                            popUpTo(PartyMemberDestination.List.routeWithArgs) {
-                                inclusive = false
-                            }
-                            launchSingleTop = true
-                        }
-                    },
-                    onNavigateHome = onNavigateHome
-                )
-            }
-        }
-
-        composable(
-            route = PartyMemberDestination.Edit.routeWithArgs,
-            arguments = PartyMemberDestination.Edit.arguments
-        ) { entry ->
-            val partyType: PartyType? = getPartyType(entry.arguments)
-            val fromRecruitment = entry.arguments?.getBoolean(PartyMemberDestination.Edit.fromRecruitmentArg) ?: false
-            val fromParticipation = entry.arguments?.getBoolean(PartyMemberDestination.Edit.fromParticipationArg) ?: false
-            if (partyType != null) {
-                PartyMemberEditScreen(
-                    fromRecruitment = fromRecruitment,
-                    fromParticipation = fromParticipation,
-                    partyType = partyType,
-                    onBack = { navHostController.popBackStack() }
-                )
-            }
+        composable(route = PartyMemberDestination.LiveTalk.route) { entry ->
+            val parentEntry = remember(entry) { navHostController.getBackStackEntry(PartyMemberDestination.Detail.routeWithArgs) }
+            PartyMemberLiveTalkScreen(
+                partyMemberDetailViewModel = hiltViewModel(parentEntry),
+                chatClient = chatClient,
+                onBack = { navHostController.popBackStack() }
+            )
         }
     }
 }

@@ -43,6 +43,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.androidx.lifecycle.compose)
     implementation(libs.androidx.paging.compose)
+    implementation(libs.getstream.chat.android.compose)
 
     implementation(libs.timber)
 

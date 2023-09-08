@@ -7,7 +7,7 @@ import retrofit2.http.POST
 interface ReportService {
 
     @POST("reports")
-    fun requestReport(
+    suspend fun requestReport(
         @Body reportRequest: ReportRequest
     ): Response<Unit>
 }

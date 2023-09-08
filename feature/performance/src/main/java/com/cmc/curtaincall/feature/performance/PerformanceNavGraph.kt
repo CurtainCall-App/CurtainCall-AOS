@@ -17,7 +17,6 @@ import com.cmc.curtaincall.feature.performance.lostitem.screen.PerformanceLostIt
 import com.cmc.curtaincall.feature.performance.lostitem.screen.PerformanceLostItemScreen
 import com.cmc.curtaincall.feature.performance.review.PerformanceReviewCreateScreen
 import com.cmc.curtaincall.feature.performance.review.PerformanceReviewScreen
-import com.cmc.curtaincall.feature.performance.upload.PerformanceUploadScreen
 
 private const val PERFORMANCE_GRAPH = "performance_graph"
 const val PERFORMANCE = "performance"
@@ -28,7 +27,6 @@ private const val PERFORMANCE_REVIEW_CREATE = "performance_review_create"
 private const val PERFORMANCE_LOST_ITEM = "performance_lost_item"
 private const val PERFORMANCE_LOST_ITEM_DETAIL = "performance_lost_item_detail"
 private const val PERFORMANCE_LOST_ITEM_CREATE = "performance_lost_item_create"
-private const val PERFORMANCE_UPLOAD = "performance_upload"
 
 sealed interface PerformanceDestination : CurtainCallDestination {
     object Performance : PerformanceDestination, BottomDestination {
@@ -148,15 +146,11 @@ sealed interface PerformanceDestination : CurtainCallDestination {
             }
         )
     }
-
-    object Upload : PerformanceDestination {
-        override val route = PERFORMANCE_UPLOAD
-    }
 }
 
 fun NavGraphBuilder.performanceNavGraph(
     navHostController: NavHostController,
-    onNavigateHome: () -> Unit
+    onNavigateReport: (Int, String) -> Unit
 ) {
     navigation(startDestination = PerformanceDestination.Performance.route, route = PERFORMANCE_GRAPH) {
         composable(route = PerformanceDestination.Performance.route) {
@@ -169,7 +163,10 @@ fun NavGraphBuilder.performanceNavGraph(
             arguments = PerformanceDestination.Detail.arguments
         ) { entry ->
             val showIdType = entry.arguments?.getString(PerformanceDestination.Detail.showIdArg) ?: ""
-            if (navHostController.previousBackStackEntry?.destination?.route == PerformanceDestination.Performance.route) {
+            if (
+                (navHostController.previousBackStackEntry?.destination?.route == PerformanceDestination.Performance.route) ||
+                (navHostController.previousBackStackEntry?.destination?.route == PerformanceDestination.Detail.routeWithArgs)
+            ) {
                 val parentEntry = remember(entry) { navHostController.getBackStackEntry(PerformanceDestination.Performance.route) }
                 PerformanceDetailScreen(
                     performanceViewModel = hiltViewModel(parentEntry),
@@ -179,6 +176,9 @@ fun NavGraphBuilder.performanceNavGraph(
                     },
                     onNavigateLostItem = {
                         navHostController.navigate("${PerformanceDestination.LostItem.route}/$it")
+                    },
+                    onNavigateDetail = {
+                        navHostController.navigate("${PerformanceDestination.Detail.route}/$it")
                     },
                     onBack = {
                         navHostController.popBackStack()
@@ -192,6 +192,9 @@ fun NavGraphBuilder.performanceNavGraph(
                     },
                     onNavigateLostItem = {
                         navHostController.navigate("${PerformanceDestination.LostItem.route}/$it")
+                    },
+                    onNavigateDetail = {
+                        navHostController.navigate("${PerformanceDestination.Detail.route}/$it")
                     },
                     onBack = {
                         navHostController.popBackStack()
@@ -219,6 +222,7 @@ fun NavGraphBuilder.performanceNavGraph(
                             "${PerformanceDestination.ReviewCreate.reviewIdArg}=$reviewId"
                     )
                 },
+                onNavigateReport = onNavigateReport,
                 onBack = {
                     navHostController.popBackStack()
                 }
@@ -292,6 +296,7 @@ fun NavGraphBuilder.performanceNavGraph(
             PerformanceLostItemDetailScreen(
                 performanceLostItemViewModel = hiltViewModel(parentEntry),
                 lostItem = lostItemId,
+                onNavigateReport = onNavigateReport,
                 onBack = { navHostController.popBackStack() }
             )
         }
@@ -302,30 +307,22 @@ fun NavGraphBuilder.performanceNavGraph(
             val lostItemId = entry.arguments?.getInt(PerformanceDestination.LostItemCreate.lostItemIdArg) ?: Int.MIN_VALUE
             val facilityId = entry.arguments?.getString(PerformanceDestination.LostItemCreate.facilityIdArg) ?: ""
             val facilityName = entry.arguments?.getString(PerformanceDestination.LostItemCreate.facilityNameArg) ?: ""
+            val fromMyPage = navHostController.previousBackStackEntry?.destination?.route != PerformanceDestination.LostItem.routeWithArgs
+
             PerformanceLostItemCreateScreen(
-                fromMyPage = navHostController.previousBackStackEntry?.destination?.route != PerformanceDestination.LostItem.routeWithArgs,
+                fromMyPage = fromMyPage,
                 lostItemId = lostItemId,
                 facilityId = facilityId,
                 facilityName = facilityName,
-                onNavigateUpload = {
-                    navHostController.navigate(PerformanceDestination.Upload.route)
-                },
-                onBack = {
-                    navHostController.popBackStack()
-                }
-            )
-        }
-        composable(route = PerformanceDestination.Upload.route) {
-            PerformanceUploadScreen(
-                onNavigateLostItem = {
-                    navHostController.navigate(PerformanceDestination.LostItem.route) {
-                        popUpTo(PerformanceDestination.LostItem.route) {
-                            inclusive = false
-                        }
-                        launchSingleTop = true
+                onNavigateDetail = {
+                    navHostController.navigate("${PerformanceDestination.LostItemDetail.route}/$it") {
+                        navHostController.popBackStack(
+                            route = PerformanceDestination.LostItemCreate.routeWithArg,
+                            inclusive = true
+                        )
                     }
                 },
-                onNavigateHome = onNavigateHome
+                onBack = { navHostController.popBackStack() }
             )
         }
     }

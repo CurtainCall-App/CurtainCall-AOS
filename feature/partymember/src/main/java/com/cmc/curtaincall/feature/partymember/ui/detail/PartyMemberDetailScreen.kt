@@ -1,12 +1,30 @@
 package com.cmc.curtaincall.feature.partymember.ui.detail
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,14 +48,22 @@ import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.cmc.curtaincall.common.design.component.dialog.CurtainCallBasicDialog
 import com.cmc.curtaincall.common.design.component.dialog.CurtainCallConfirmDialog
 import com.cmc.curtaincall.common.design.extensions.toSp
-import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.common.design.theme.Black_Coral
+import com.cmc.curtaincall.common.design.theme.Bright_Gray
+import com.cmc.curtaincall.common.design.theme.Chinese_Black
+import com.cmc.curtaincall.common.design.theme.Cultured
+import com.cmc.curtaincall.common.design.theme.Gunmetal
+import com.cmc.curtaincall.common.design.theme.Me_Pink
+import com.cmc.curtaincall.common.design.theme.Nero
+import com.cmc.curtaincall.common.design.theme.Silver_Sand
+import com.cmc.curtaincall.common.design.theme.White
+import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 import com.cmc.curtaincall.common.utility.extensions.toChangeDate
 import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
 import com.cmc.curtaincall.common.utility.extensions.toTime
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.flow.collectLatest
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PartyMemberDetailScreen(
     partyMemberDetailViewModel: PartyMemberDetailViewModel = hiltViewModel(),
@@ -47,7 +73,8 @@ fun PartyMemberDetailScreen(
     fromRecruitment: Boolean = false,
     fromParticipation: Boolean = false,
     partyType: PartyType,
-    onNavigateEdit: (PartyType) -> Unit,
+    onNavigateReport: (Int, String) -> Unit,
+    onNavigateLiveTalk: () -> Unit,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -56,6 +83,7 @@ fun PartyMemberDetailScreen(
     var isShowDialog by remember { mutableStateOf(false) }
     var isShowRemoveDialog by remember { mutableStateOf(false) }
     var isParticipationState by remember { mutableStateOf(isParticipation) }
+    val partyMemberDetailState by partyMemberDetailViewModel.uiState.collectAsStateWithLifecycle()
 
     if (isShowDialog) {
         CurtainCallBasicDialog(
@@ -95,6 +123,7 @@ fun PartyMemberDetailScreen(
                 }
 
                 PartyMemberDetailSideEffect.SuccessParticipation -> {
+                    partyMemberDetailViewModel.requestPartyDetail(partyId)
                     isParticipationState = true
                 }
             }
@@ -141,29 +170,49 @@ fun PartyMemberDetailScreen(
                     ),
                     containerColor = White,
                     contentColor = Nero,
-                    onBack = onBack
+                    onBack = onBack,
+                    onAction = {
+                        onNavigateReport(
+                            partyId,
+                            "PARTY"
+                        )
+                    }
                 )
             }
         },
         floatingActionButton = {
-            CurtainCallRoundedTextButton(
-                onClick = { isShowDialog = true },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .height(52.dp),
-                title = stringResource(
-                    if (isParticipationState) {
-                        R.string.partymember_detail_joined
-                    } else {
-                        R.string.partymember_detail_join
-                    }
-                ),
-                fontSize = 16.dp.toSp(),
-                enabled = isParticipationState.not(),
-                containerColor = if (isParticipationState) Bright_Gray else Me_Pink,
-                contentColor = if (isParticipationState) Silver_Sand else White
-            )
+            if (isParticipationState) {
+                CurtainCallRoundedTextButton(
+                    onClick = onNavigateLiveTalk,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .height(52.dp),
+                    title = stringResource(R.string.partymember_detail_enter_livetalk),
+                    fontSize = 16.dp.toSp(),
+                    containerColor = Me_Pink,
+                    contentColor = White
+                )
+            } else {
+                CurtainCallRoundedTextButton(
+                    onClick = { isShowDialog = true },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .height(52.dp),
+                    title = stringResource(
+                        if (partyMemberDetailState.partyDetailModel.curMemberNum == partyMemberDetailState.partyDetailModel.maxMemberNum) {
+                            R.string.partymember_detail_cant_join
+                        } else {
+                            R.string.partymember_detail_join
+                        }
+                    ),
+                    fontSize = 16.dp.toSp(),
+                    enabled = partyMemberDetailState.partyDetailModel.curMemberNum < partyMemberDetailState.partyDetailModel.maxMemberNum,
+                    containerColor = if (partyMemberDetailState.partyDetailModel.curMemberNum < partyMemberDetailState.partyDetailModel.maxMemberNum) Me_Pink else Bright_Gray,
+                    contentColor = if (partyMemberDetailState.partyDetailModel.curMemberNum < partyMemberDetailState.partyDetailModel.maxMemberNum) White else Silver_Sand
+                )
+            }
         },
         floatingActionButtonPosition = FabPosition.Center
     ) { paddingValues ->
@@ -310,7 +359,7 @@ fun PartyMemberDetailBody(
                 modifier = Modifier.padding(top = 20.dp),
                 icon = painterResource(R.drawable.ic_calendar),
                 category = stringResource(R.string.partymember_detail_date),
-                description = "2023.06.24"
+                description = showAt.ifEmpty { "날짜미정" }
             )
             DottedLine(
                 modifier = Modifier
@@ -320,7 +369,7 @@ fun PartyMemberDetailBody(
             PartyMemberDetailInfo(
                 icon = painterResource(R.drawable.ic_party_state),
                 category = stringResource(R.string.partymember_detail_join_state),
-                description = "2/5"
+                description = "$curMemberNum/$maxMemberNum"
             )
         } else {
             PartyMemberDetailInfo(

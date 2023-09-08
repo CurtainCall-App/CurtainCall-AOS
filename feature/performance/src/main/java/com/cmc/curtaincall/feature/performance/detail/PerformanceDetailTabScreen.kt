@@ -41,7 +41,8 @@ internal fun PerformanceDetailTabScreen(
     introductionImage: String? = null,
     showTimes: List<ShowTimeModel> = listOf(),
     similarShows: List<SimilarShowInfoModel> = listOf(),
-    facilityDetailModel: FacilityDetailModel
+    facilityDetailModel: FacilityDetailModel,
+    onNavigateDetail: (String) -> Unit = {}
 ) {
     Column(modifier) {
         if (introductionImage != null) {
@@ -85,7 +86,8 @@ internal fun PerformanceDetailTabScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 30.dp, bottom = 50.dp),
-                similarShows = similarShows
+                similarShows = similarShows,
+                onNavigateDetail = onNavigateDetail
             )
         }
     }
@@ -94,7 +96,8 @@ internal fun PerformanceDetailTabScreen(
 @Composable
 private fun PerformanceSimilarContent(
     modifier: Modifier = Modifier,
-    similarShows: List<SimilarShowInfoModel> = listOf()
+    similarShows: List<SimilarShowInfoModel> = listOf(),
+    onNavigateDetail: (String) -> Unit = {}
 ) {
     Column(modifier) {
         Text(
@@ -120,11 +123,7 @@ private fun PerformanceSimilarContent(
                         imageUrl = similarShow.poster,
                         rate = if (similarShow.reviewCount == 0) 0.0f else similarShow.reviewGradeSum / similarShow.reviewCount.toFloat(),
                         numberOfTotal = similarShow.reviewCount,
-                        isShowMetadata = true,
-                        meta = (index + 1).toString(),
-                        onClick = {
-                            // onNavigatePerformanceDetail(similarShow.id)
-                        }
+                        onClick = { onNavigateDetail(similarShow.id) }
                     )
                     Spacer(Modifier.size(12.dp))
                 }
@@ -244,22 +243,24 @@ private fun PerformancePlace(
                 fontFamily = spoqahansanseeo
             )
         }
-        Row(Modifier.padding(top = 6.dp)) {
-            Text(
-                text = stringResource(R.string.performance_detail_website),
-                modifier = Modifier.width(72.dp),
-                color = Black_Coral,
-                fontSize = 14.dp.toSp(),
-                fontWeight = FontWeight.Medium,
-                fontFamily = spoqahansanseeo
-            )
-            Text(
-                text = facilityDetailModel.homepage,
-                color = Nero,
-                fontSize = 14.dp.toSp(),
-                fontWeight = FontWeight.Normal,
-                fontFamily = spoqahansanseeo
-            )
+        if (facilityDetailModel.homepage.isNotEmpty()) {
+            Row(Modifier.padding(top = 6.dp)) {
+                Text(
+                    text = stringResource(R.string.performance_detail_website),
+                    modifier = Modifier.width(72.dp),
+                    color = Black_Coral,
+                    fontSize = 14.dp.toSp(),
+                    fontWeight = FontWeight.Medium,
+                    fontFamily = spoqahansanseeo
+                )
+                Text(
+                    text = facilityDetailModel.homepage,
+                    color = Nero,
+                    fontSize = 14.dp.toSp(),
+                    fontWeight = FontWeight.Normal,
+                    fontFamily = spoqahansanseeo
+                )
+            }
         }
         NaverMap(
             modifier = Modifier

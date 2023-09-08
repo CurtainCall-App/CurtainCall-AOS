@@ -2,6 +2,7 @@ package com.cmc.curtaincall.domain.repository
 
 import androidx.paging.PagingData
 import com.cmc.curtaincall.domain.model.show.FacilityDetailModel
+import com.cmc.curtaincall.domain.model.show.LiveTalkShowModel
 import com.cmc.curtaincall.domain.model.show.ShowDetailModel
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import com.cmc.curtaincall.domain.model.show.ShowRankModel
@@ -74,4 +75,8 @@ interface ShowRepository {
         size: Int?,
         genre: String?
     ): Flow<List<SimilarShowInfoModel>>
+
+    fun fetchLiveTalkShowList(
+        baseDateTime: String
+    ): Flow<PagingData<LiveTalkShowModel>>
 }

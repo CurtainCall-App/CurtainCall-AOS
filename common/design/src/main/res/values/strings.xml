@@ -21,7 +21,10 @@
     <string name="search_lostitem_title">분실물 입력</string>
     <string name="search_recently_word">최근 검색어</string>
     <string name="search_delete_recentyl_word">전체 삭제</string>
-    <string name="search_empty_recently_word">최근 검색 내역이 없습니다.</string>
+    <string name="search_empty_recently_word">최근 검색 내역이 없습니다.</string>기
+
+    <!-- appbar -->
+    <string name="appbar_report_title">신고하기</string>
 
     <!-- signup -->
     <string name="signup_terms">약관 동의</string>
@@ -57,6 +60,8 @@
     <string name="partymember_detail">상세 정보</string>
     <string name="partymember_detail_join">참여하기</string>
     <string name="partymember_detail_joined">참여 완료</string>
+    <string name="partymember_detail_cant_join">참여 불가</string>
+    <string name="partymember_detail_enter_livetalk">TALK 입장</string>
     <string name="partymember_detail_performance_title">작품명</string>
     <string name="partymember_detail_join_state">참여 상태</string>
     <string name="partymember_detail_performance_date">공연 일자</string>
@@ -201,6 +206,12 @@
     <string name="home_guide_etc_menu">기타</string>
     <string name="home_guide_before_ticketing">티켓팅 이전</string>
     <string name="home_guide_after_tickketing">티켓팅 이후</string>
+    <string name="home_report_reason_title">해당 게시물을 신고하는 이유를\n선택해주세요.</string>
+    <string name="home_report_reason_description_title">신고 내용을 상세하게 적어주세요.</string>
+    <string name="home_report_rule1">허위 신고 시 운영정책에 따라 조치될 수 있습니다.</string>
+    <string name="home_report_rule2">이 회원이 신고 대상에 해당하는지 다시 한번 확인하여 주시기 바랍니다.</string>
+    <string name="home_report_rule3">신고자 정보 및 신고 내용은 신고 대상에게 공개되지 않으나, 사실 관계 확인에 꼭 필요한 신고 내용의 일부는 언급될 수 있습니다.</string>
+    <string name="home_report_complete">신고가 접수되었어요</string>
 
     <!-- mypage -->
     <string name="mypage_title">MY"</string>
@@ -239,10 +250,10 @@
     <string name="mypage_setting_remove_member_reason_text_count">글자수 제한 (%d/%d)</string>
     <string name="mypage_setting_remove_member_confirm">확인해주세요</string>
     <string name="mypage_setting_remove_member_if">커튼콜 계정을 삭제하면,</string>
-    <string name="mypage_setting_remove_member_notice1">해당 계정으로 게시한 글과 저장 목록, 톡방 참여 내역 등 데이터가 모두 삭제됩니다.</string>
-    <string name="mypage_setting_remove_member_notice2">일부 라이브톡 내용, 파티원 톡방 내용은 탈퇴 후에도 유지될 수 있습니다.</string>
-    <string name="mypage_setting_remove_member_notice3">이후 계정을 복구하고 싶다면, 30일 내 접근 시 계정 복구가 가능합니다.</string>
-    <string name="mypage_setting_remove_member_notice4">계속할까요?</string>
+    <string name="mypage_setting_remove_member_notice1">작품 정보 저장, 한 줄 리뷰 작성, 분실물 작성, 파티원 모집 및 참여, 라이브톡 참여가 불가능합니다.</string>
+    <string name="mypage_setting_remove_member_notice2">해당 계정으로 게시한 글과 저장 목록, 톡방 참여 내역 등 데이터가 모두 삭제됩니다.</string>
+    <string name="mypage_setting_remove_member_notice3">일부 라이브톡 내용, 파티원 톡방 내용은 탈퇴 후에도 유지될 수 있습니다.</string>
+    <string name="mypage_setting_remove_member_notice4">한번 삭제된 정보는 다시 복구할 수 없으니 신중하게 결정해주세요. 계속할까요?</string>
     <string name="mypage_setting_remove_member_finish">계정 삭제가 완료되었어요.</string>
     <string name="mypage_setting_information">정보</string>
     <string name="mypage_setting_privacy_information_policy">개인정보 처리방침</string>
@@ -271,4 +282,12 @@
     <string name="dialog_logout_title">로그아웃 할까요?</string>
     <string name="dialog_logout_dismiss">아니요</string>
     <string name="dialog_logout_positive">로그아웃</string>
+
+    <!-- livetalk -->
+    <string name="livetalk_app_bar_title">라이브톡</string>
+    <string name="livetalk_app_bar_description">공연 시간 기준 2시간 전후에만 채팅이 가능해요!</string>
+
+    <!-- snakbac -->
+    <string name="snackbar_upload_lostitem_complete">분실물 신고가 접수되었어요</string>
+    <string name="snackbar_upload_partymember_complete">파티원 모집글이 게시되었어요.</string>
 </resources>

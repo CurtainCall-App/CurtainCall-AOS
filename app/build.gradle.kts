@@ -14,9 +14,10 @@ android {
 
     defaultConfig {
         applicationId = "com.cmc.curtaincall"
-        versionCode = 5
+        versionCode = 8
         versionName = "1.0"
 
+        buildConfigField("String", "GET_STREAM_API_KEY", gradleLocalProperties(rootDir).getProperty("GET_STREAM_API_KEY"))
         buildConfigField("String", "KAKAO_APP_KEY", gradleLocalProperties(rootDir).getProperty("KAKAO_APP_KEY"))
         resValue("string", "NAVER_API_MAP_KEY", gradleLocalProperties(rootDir).getProperty("NAVER_API_MAP_KEY"))
         vectorDrawables {
@@ -60,6 +61,7 @@ dependencies {
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pager.indicators)
     implementation(libs.androidx.lifecycle.compose)
+    implementation(libs.getstream.chat.android.compose)
 
     // logging
     implementation(libs.timber)

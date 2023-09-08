@@ -30,6 +30,9 @@ class PerformanceLostItemCreateViewModel @Inject constructor(
     private val _completeEffect = MutableSharedFlow<Boolean>()
     val completeEffect = _completeEffect.asSharedFlow()
 
+    private val _lostItemId = MutableStateFlow(Int.MIN_VALUE)
+    val lostItemId = _lostItemId.asStateFlow()
+
     private var _atttachImage = MutableStateFlow<Bitmap?>(null)
     val attachImage = _atttachImage.asStateFlow()
 
@@ -99,6 +102,7 @@ class PerformanceLostItemCreateViewModel @Inject constructor(
             particulars = lostCreateInfo.value.particulars,
             imageId = lostCreateInfo.value.imageId
         ).onEach {
+            _lostItemId.value = it.id
             _completeEffect.emit(true)
         }.launchIn(viewModelScope)
     }

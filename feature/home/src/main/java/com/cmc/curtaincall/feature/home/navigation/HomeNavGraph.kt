@@ -21,6 +21,7 @@ import com.cmc.curtaincall.core.base.CurtainCallDestination
 import com.cmc.curtaincall.feature.home.HomeScreen
 import com.cmc.curtaincall.feature.home.guide.GuideScreen
 import com.cmc.curtaincall.feature.home.guide.GuideType
+import com.cmc.curtaincall.feature.home.report.HomeReportScreen
 import com.cmc.curtaincall.feature.livetalk.LiveTalkDestination
 import com.cmc.curtaincall.feature.livetalk.livetalkNavGraph
 import com.cmc.curtaincall.feature.mypage.MyPageDestination
@@ -29,11 +30,13 @@ import com.cmc.curtaincall.feature.partymember.PartyMemberDestination
 import com.cmc.curtaincall.feature.partymember.partymemberNavGraph
 import com.cmc.curtaincall.feature.performance.PerformanceDestination
 import com.cmc.curtaincall.feature.performance.performanceNavGraph
+import io.getstream.chat.android.client.ChatClient
 
 private const val HOME_GRAPH = "home_graph"
 private const val HOME = "home"
 private const val HOME_LABEL = "홈"
 private const val HOME_GUIDE = "home_guide"
+private const val HOME_REPORT = "home_report"
 
 sealed interface HomeDestination : CurtainCallDestination {
     object Home : HomeDestination, BottomDestination {
@@ -53,12 +56,28 @@ sealed interface HomeDestination : CurtainCallDestination {
             }
         )
     }
+
+    object Report : HomeDestination {
+        override val route = HOME_REPORT
+        const val reportIdArg = "reportId"
+        const val typeArg = "type"
+        val routeWithArgs = "$route/{$reportIdArg}/{$typeArg}"
+        val arguments = listOf(
+            navArgument(reportIdArg) {
+                type = NavType.IntType
+            },
+            navArgument(typeArg) {
+                type = NavType.StringType
+            }
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeNavHost(
     navHostController: NavHostController = rememberNavController(),
+    chatClient: ChatClient,
     onLogout: () -> Unit = {},
     onDeleteMember: () -> Unit = {}
 ) {
@@ -77,6 +96,7 @@ fun HomeNavHost(
         ) {
             composable(route = HomeDestination.Home.route) {
                 HomeScreen(
+                    chatClient = chatClient,
                     onNavigateGuide = {
                         navHostController.navigate("${HomeDestination.Guide.route}/$it")
                     },
@@ -107,27 +127,42 @@ fun HomeNavHost(
                 }
             }
 
+            composable(
+                route = HomeDestination.Report.routeWithArgs,
+                arguments = HomeDestination.Report.arguments
+            ) { entry ->
+                val reportId = entry.arguments?.getInt(HomeDestination.Report.reportIdArg) ?: 0
+                val reportType = entry.arguments?.getString(HomeDestination.Report.typeArg) ?: ""
+                HomeReportScreen(
+                    reportId = reportId,
+                    reportType = reportType,
+                    onNavigateHome = {
+                        navHostController.navigate(HomeDestination.Home.route) {
+                            popUpTo(HomeDestination.Home.route) {
+                                inclusive = false
+                            }
+                            launchSingleTop = true
+                        }
+                    },
+                    onBack = { navHostController.popBackStack() }
+                )
+            }
+
             performanceNavGraph(
                 navHostController = navHostController,
-                onNavigateHome = {
-                    navHostController.navigate(HomeDestination.Home.route) {
-                        popUpTo(HomeDestination.Home.route) {
-                            inclusive = false
-                        }
-                        launchSingleTop = true
-                    }
+                onNavigateReport = { id, type ->
+                    navHostController.navigate("${HomeDestination.Report.route}/$id/$type")
                 }
             )
-            livetalkNavGraph(navHostController)
+            livetalkNavGraph(
+                navHostController = navHostController,
+                chatClient = chatClient
+            )
             partymemberNavGraph(
                 navHostController = navHostController,
-                onNavigateHome = {
-                    navHostController.navigate(HomeDestination.Home.route) {
-                        popUpTo(HomeDestination.Home.route) {
-                            inclusive = false
-                        }
-                        launchSingleTop = true
-                    }
+                chatClient = chatClient,
+                onNavigateReport = { id, type ->
+                    navHostController.navigate("${HomeDestination.Report.route}/$id/$type")
                 }
             )
             mypageNavGraph(

@@ -22,6 +22,9 @@ class PerformanceLostItemViewModel @Inject constructor(
     private var _searchWords = MutableStateFlow<List<LostItemSearchWordModel>>(listOf())
     val searchWords = _searchWords.asStateFlow()
 
+    private var _completeEffects = MutableStateFlow<Boolean>(false)
+    val completeEffects = _completeEffects.asStateFlow()
+
     init {
         requestLostItemSearchWords()
     }
@@ -150,5 +153,9 @@ class PerformanceLostItemViewModel @Inject constructor(
         viewModelScope.launch {
             lostItemRepository.deleteLostItemSearchWordList()
         }
+    }
+
+    fun completeEdit(isClear: Boolean = false) {
+        _completeEffects.value = isClear.not()
     }
 }

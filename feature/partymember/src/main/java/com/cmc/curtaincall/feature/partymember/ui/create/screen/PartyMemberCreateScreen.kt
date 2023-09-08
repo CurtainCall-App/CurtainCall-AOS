@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -18,6 +19,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallRoundedText
+import com.cmc.curtaincall.common.design.component.basic.CurtainCallSnackbar
+import com.cmc.curtaincall.common.design.component.basic.CurtainCallSnackbarHost
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.cmc.curtaincall.common.design.extensions.toSp
@@ -26,6 +29,7 @@ import com.cmc.curtaincall.feature.partymember.ui.create.PartyMemberCreateSideEf
 import com.cmc.curtaincall.feature.partymember.ui.create.PartyMemberCreateViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 private const val UNSELECTED_INDEX = -1
 const val DEFAULT_PERSONNEL_COUNT = 0
@@ -39,19 +43,44 @@ enum class STEP(val prevStep: STEP) {
 internal fun PartyMemberCreateScreen(
     partyMemberCreateViewModel: PartyMemberCreateViewModel = hiltViewModel(),
     partyType: PartyType,
-    onNavigateUpload: (PartyType) -> Unit,
     onBack: () -> Unit
 ) {
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+
     LaunchedEffect(Unit) {
         partyMemberCreateViewModel.setPartyCategory(partyType)
         partyMemberCreateViewModel.loadPlayItems()
         partyMemberCreateViewModel.loadMusicalItems()
+
+        partyMemberCreateViewModel.effects.collectLatest { effect ->
+            when (effect) {
+                PartyMemberCreateSideEffect.SuccessUpload -> {
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(
+                            context.getString(R.string.snackbar_upload_partymember_complete),
+                            duration = SnackbarDuration.Short
+                        )
+                        onBack()
+                    }
+                }
+            }
+        }
     }
 
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(White)
     var currentStep by remember { mutableStateOf(if (partyType == PartyType.ETC) STEP.PHASE1_1 else STEP.PHASE1) }
     Scaffold(
+        snackbarHost = {
+            CurtainCallSnackbarHost(snackbarHostState = snackbarHostState) { snackbarData ->
+                CurtainCallSnackbar(
+                    modifier = Modifier.fillMaxWidth(),
+                    snackbarData = snackbarData
+                )
+            }
+        },
         topBar = {
             TopAppBarWithBack(
                 title = stringResource(R.string.partymember_create_appbar),
@@ -75,8 +104,7 @@ internal fun PartyMemberCreateScreen(
                 .background(White),
             partyType = partyType,
             currentStep = currentStep,
-            onChangeStep = { currentStep = it },
-            onNavigateUpload = onNavigateUpload
+            onChangeStep = { currentStep = it }
         )
     }
 }
@@ -87,8 +115,7 @@ private fun PartyMemberCreateContent(
     modifier: Modifier = Modifier,
     partyType: PartyType,
     currentStep: STEP,
-    onChangeStep: (STEP) -> Unit,
-    onNavigateUpload: (PartyType) -> Unit
+    onChangeStep: (STEP) -> Unit
 ) {
     // 1 step
     var selectedPerformanceIndex by remember { mutableIntStateOf(UNSELECTED_INDEX) }
@@ -120,16 +147,6 @@ private fun PartyMemberCreateContent(
             contentTextState = ""
         } else {
             // TODO
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        partyMemberCreateViewModel.effects.collectLatest { effect ->
-            when (effect) {
-                PartyMemberCreateSideEffect.SuccessUpload -> {
-                    onNavigateUpload(partyType)
-                }
-            }
         }
     }
 

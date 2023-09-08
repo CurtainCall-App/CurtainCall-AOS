@@ -1,6 +1,7 @@
 package com.cmc.curtaincall.core.network.service.show
 
 import com.cmc.curtaincall.core.network.service.show.response.FacilityDetailResponse
+import com.cmc.curtaincall.core.network.service.show.response.LiveTalkShowsResponse
 import com.cmc.curtaincall.core.network.service.show.response.ShowDetailResponse
 import com.cmc.curtaincall.core.network.service.show.response.ShowInfosResponse
 import com.cmc.curtaincall.core.network.service.show.response.ShowRanksResponse
@@ -58,11 +59,18 @@ interface ShowService {
         @Path("facilityId") facilityId: String
     ): FacilityDetailResponse
 
-    @GET("facilities/{facilityId}")
+    @GET("facilities/{facilityId}/shows")
     suspend fun requestSimilarShowList(
         @Path("facilityId") facilityId: String,
         @Query("page") page: Int,
         @Query("size") size: Int?,
         @Query("genre") genre: String?
     ): SimilarShowInfosResponse
+
+    @GET("livetalk-show-times")
+    suspend fun requestLiveTalkShowList(
+        @Query("page") page: Int,
+        @Query("size") size: Int?,
+        @Query("baseDateTime") baseDateTime: String
+    ): LiveTalkShowsResponse
 }

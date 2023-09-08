@@ -6,14 +6,19 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -23,6 +28,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.design.R
+import com.cmc.curtaincall.common.design.component.basic.CurtainCallSnackbar
+import com.cmc.curtaincall.common.design.component.basic.CurtainCallSnackbarHost
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithReportAction
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
@@ -30,24 +37,55 @@ import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
 import com.cmc.curtaincall.feature.performance.lostitem.LostItemType
 import com.cmc.curtaincall.feature.performance.lostitem.PerformanceLostItemViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PerformanceLostItemDetailScreen(
     performanceLostItemViewModel: PerformanceLostItemViewModel = hiltViewModel(),
     lostItem: Int,
+    onNavigateReport: (Int, String) -> Unit,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(Cultured)
 
+    val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(Unit) {
+        if (lostItem != Int.MIN_VALUE) {
+            performanceLostItemViewModel.requestLostDetailItem(lostItem)
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar(
+                    context.getString(R.string.snackbar_upload_lostitem_complete)
+                )
+            }
+        }
+    }
+
     Scaffold(
+        snackbarHost = {
+            CurtainCallSnackbarHost(snackbarHostState = snackbarHostState) { snackbarData ->
+                CurtainCallSnackbar(
+                    modifier = Modifier.fillMaxWidth(),
+                    snackbarData = snackbarData
+                )
+            }
+        },
         topBar = {
             TopAppBarWithReportAction(
                 title = stringResource(R.string.performance_find_lost_item),
                 containerColor = Cultured,
                 contentColor = Nero,
-                onBack = onBack
+                onBack = onBack,
+                onAction = {
+                    onNavigateReport(
+                        lostItem,
+                        "LOST_ITEM"
+                    )
+                }
             )
         }
     ) { paddingValues ->

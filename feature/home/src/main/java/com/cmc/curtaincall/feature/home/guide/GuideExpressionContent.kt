@@ -11,9 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -35,12 +33,7 @@ import com.cmc.curtaincall.feature.home.guide.GuideConstants.ticketing_words
 
 @Composable
 internal fun GuideTotalExpressionContent() {
-    val verticalScrollState = rememberScrollState()
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(verticalScrollState)
-    ) {
+    Column(Modifier.fillMaxSize()) {
         val totalList = (ticketing_words + performance_words + theater_words + audience_words + etc_words)
         totalList.keys.toList().forEachIndexed { index, key ->
             GuidExpression(
@@ -64,12 +57,7 @@ internal fun GuideTotalExpressionContent() {
 
 @Composable
 internal fun GuideTicketingExpressionContent() {
-    val verticalScrollState = rememberScrollState()
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(verticalScrollState)
-    ) {
+    Column(Modifier.fillMaxSize()) {
         ticketing_words.keys.toList().forEachIndexed { index, key ->
             GuidExpression(
                 modifier = Modifier.fillMaxWidth(),
@@ -92,12 +80,7 @@ internal fun GuideTicketingExpressionContent() {
 
 @Composable
 internal fun GuidePerformanceExpressionContent() {
-    val verticalScrollState = rememberScrollState()
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(verticalScrollState)
-    ) {
+    Column(Modifier.fillMaxSize()) {
         performance_words.keys.toList().forEachIndexed { index, key ->
             GuidExpression(
                 modifier = Modifier.fillMaxWidth(),
@@ -120,12 +103,7 @@ internal fun GuidePerformanceExpressionContent() {
 
 @Composable
 internal fun GuideTheaterExpressionContent() {
-    val verticalScrollState = rememberScrollState()
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(verticalScrollState)
-    ) {
+    Column(Modifier.fillMaxSize()) {
         theater_words.keys.toList().forEachIndexed { index, key ->
             GuidExpression(
                 modifier = Modifier.fillMaxWidth(),
@@ -148,12 +126,7 @@ internal fun GuideTheaterExpressionContent() {
 
 @Composable
 internal fun GuideAudienceExpressionContent() {
-    val verticalScrollState = rememberScrollState()
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(verticalScrollState)
-    ) {
+    Column(Modifier.fillMaxSize()) {
         audience_words.keys.toList().forEachIndexed { index, key ->
             GuidExpression(
                 modifier = Modifier.fillMaxWidth(),
@@ -176,12 +149,7 @@ internal fun GuideAudienceExpressionContent() {
 
 @Composable
 internal fun GuideEtcExpressionContent() {
-    val verticalScrollState = rememberScrollState()
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(verticalScrollState)
-    ) {
+    Column(Modifier.fillMaxSize()) {
         etc_words.keys.toList().forEachIndexed { index, key ->
             GuidExpression(
                 modifier = Modifier.fillMaxWidth(),
