@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "com.cmc.curtaincall"
-        versionCode = 5
+        versionCode = 8
         versionName = "1.0"
 
         buildConfigField("String", "GET_STREAM_API_KEY", gradleLocalProperties(rootDir).getProperty("GET_STREAM_API_KEY"))

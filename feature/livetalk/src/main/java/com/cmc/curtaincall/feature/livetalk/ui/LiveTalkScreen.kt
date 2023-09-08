@@ -28,7 +28,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.items
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.SearchAppBar
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarOnlySearch
@@ -42,10 +41,13 @@ import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 import com.cmc.curtaincall.common.utility.extensions.toTime
 import com.cmc.curtaincall.feature.livetalk.LiveTalkViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import io.getstream.chat.android.client.ChatClient
+import timber.log.Timber
 
 @Composable
 fun LiveTalkScreen(
     liveTalkViewModel: LiveTalkViewModel = hiltViewModel(),
+    chatClient: ChatClient,
     onNavigateDetail: (String, String, String) -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -87,6 +89,7 @@ fun LiveTalkScreen(
                     .padding(paddingValues)
                     .fillMaxSize()
                     .background(Cetacean_Blue),
+                chatClient = chatClient,
                 onNavigateDetail = onNavigateDetail
             )
         }
@@ -97,6 +100,7 @@ fun LiveTalkScreen(
 private fun LiveTalkContent(
     liveTalkViewModel: LiveTalkViewModel,
     modifier: Modifier = Modifier,
+    chatClient: ChatClient,
     onNavigateDetail: (String, String, String) -> Unit
 ) {
     val liveTalkShowItems = liveTalkViewModel.liveTalkShowItems.collectAsLazyPagingItems()
@@ -166,6 +170,7 @@ private fun LiveTalkContent(
                             name = liveTalkShowItem.name,
                             facilityName = liveTalkShowItem.facilityName,
                             onClick = {
+                                Timber.d("LiveTalkScreen ${liveTalkShowItem.id} ${liveTalkShowItem.showAt}")
                                 onNavigateDetail(
                                     liveTalkShowItem.id,
                                     liveTalkShowItem.name,

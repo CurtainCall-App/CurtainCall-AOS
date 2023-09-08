@@ -16,6 +16,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import java.text.SimpleDateFormat
+import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,8 +27,7 @@ class LiveTalkViewModel @Inject constructor(
 ) : ViewModel() {
 
     var liveTalkShowItems: Flow<PagingData<LiveTalkShowModel>> = showRepository
-        // .fetchLiveTalkShowList(SimpleDateFormat("yyyy-MM-dd'T'HH:mm").format(Calendar.getInstance().time))
-        .fetchLiveTalkShowList("2023-09-07T14:00")
+        .fetchLiveTalkShowList(SimpleDateFormat("yyyy-MM-dd'T'HH:mm").format(Calendar.getInstance().time))
         .cachedIn(viewModelScope)
 
     init {

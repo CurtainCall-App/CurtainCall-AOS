@@ -111,7 +111,7 @@ private fun LiveTalkDetailContent(
     val messageFactory by lazy {
         MessagesViewModelFactory(
             context = context,
-            channelId = "messaging:$showId-$showAt",
+            channelId = "messaging:$showId-${showAt.take(13)}",
             chatClient = chatClient
         )
     }
@@ -126,6 +126,59 @@ private fun LiveTalkDetailContent(
         modifier = Modifier
             .fillMaxSize()
             .background(Cetacean_Blue),
+        topBar = {
+            MessageListHeader(
+                channel = Channel(
+                    cid = "messaging:$showId-${showAt.take(13)}",
+                    id = "$showId-${showAt.take(13)}"
+                ),
+                currentUser = user,
+                modifier = Modifier.fillMaxWidth(),
+                color = Electric_Indigo,
+                leadingContent = {},
+                centerContent = {
+                    Column(Modifier.fillMaxWidth()) {
+                        Row(
+                            modifier = Modifier
+                                .padding(top = 20.dp, bottom = 18.dp)
+                                .padding(horizontal = 10.dp),
+                            verticalAlignment = Alignment.Top
+                        ) {
+                            Icon(
+                                painter = painterResource(R.drawable.ic_arrow_back),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(18.dp)
+                                    .clickable { onBack() },
+                                tint = White
+                            )
+                            Column(
+                                modifier = Modifier.padding(start = 6.dp)
+                            ) {
+                                Text(
+                                    text = showName,
+                                    color = White,
+                                    fontSize = 17.dp.toSp(),
+                                    fontWeight = FontWeight.Bold,
+                                    fontFamily = spoqahansanseeo,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
+                                )
+                                Text(
+                                    text = "일시 | ${showAt.toDateInKorea()}",
+                                    modifier = Modifier.padding(top = 4.dp),
+                                    color = White,
+                                    fontSize = 14.dp.toSp(),
+                                    fontWeight = FontWeight.Medium,
+                                    fontFamily = spoqahansanseeo
+                                )
+                            }
+                        }
+                    }
+                },
+                trailingContent = {}
+            )
+        },
         bottomBar = {
             MessageComposer(
                 modifier = Modifier
@@ -211,63 +264,14 @@ private fun LiveTalkMessageList(
     onBack: () -> Unit
 ) {
     Column(modifier) {
-        MessageListHeader(
-            channel = Channel(
-                cid = "messaging:$showId-$showAt",
-                id = "$showId-$showAt"
-            ),
-            currentUser = user,
-            modifier = Modifier.fillMaxWidth(),
-            color = Electric_Indigo,
-            leadingContent = {},
-            centerContent = {
-                Column(Modifier.fillMaxWidth()) {
-                    Row(
-                        modifier = Modifier
-                            .padding(top = 20.dp, bottom = 18.dp)
-                            .padding(horizontal = 10.dp),
-                        verticalAlignment = Alignment.Top
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_arrow_back),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size(18.dp)
-                                .clickable { onBack() },
-                            tint = White
-                        )
-                        Column(
-                            modifier = Modifier.padding(start = 6.dp)
-                        ) {
-                            Text(
-                                text = showName,
-                                color = White,
-                                fontSize = 17.dp.toSp(),
-                                fontWeight = FontWeight.Bold,
-                                fontFamily = spoqahansanseeo,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                            Text(
-                                text = "일시 | ${showAt.toDateInKorea()}",
-                                modifier = Modifier.padding(top = 4.dp),
-                                color = White,
-                                fontSize = 14.dp.toSp(),
-                                fontWeight = FontWeight.Medium,
-                                fontFamily = spoqahansanseeo
-                            )
-                        }
-                    }
-                }
-            },
-            trailingContent = {}
-        )
         MessageList(
             viewModel = messageListViewModel,
             modifier = Modifier
                 .fillMaxSize()
                 .background(Cetacean_Blue),
-            emptyContent = {},
+            emptyContent = {
+                Box(Modifier.fillMaxSize().background(Cetacean_Blue))
+            },
             loadingContent = {}
         ) {
             if (it is MessageItemState) {

@@ -190,9 +190,8 @@ fun PartyMemberDetailScreen(
                         .height(52.dp),
                     title = stringResource(R.string.partymember_detail_enter_livetalk),
                     fontSize = 16.dp.toSp(),
-                    enabled = partyMemberDetailState.partyDetailModel.curMemberNum == partyMemberDetailState.partyDetailModel.maxMemberNum,
-                    containerColor = if (partyMemberDetailState.partyDetailModel.curMemberNum == partyMemberDetailState.partyDetailModel.maxMemberNum) Me_Pink else Bright_Gray,
-                    contentColor = if (partyMemberDetailState.partyDetailModel.curMemberNum == partyMemberDetailState.partyDetailModel.maxMemberNum) White else Silver_Sand
+                    containerColor = Me_Pink,
+                    contentColor = White
                 )
             } else {
                 CurtainCallRoundedTextButton(

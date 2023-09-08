@@ -53,9 +53,12 @@ fun NavGraphBuilder.livetalkNavGraph(
 ) {
     navigation(startDestination = LiveTalkDestination.LiveTalk.route, route = LIVETALK_GRAPH) {
         composable(route = LiveTalkDestination.LiveTalk.route) {
-            LiveTalkScreen { showId, showName, showAt ->
-                navHostController.navigate("${LiveTalkDestination.Detail.route}/$showId/$showName/$showAt")
-            }
+            LiveTalkScreen(
+                chatClient = chatClient,
+                onNavigateDetail = { showId, showName, showAt ->
+                    navHostController.navigate("${LiveTalkDestination.Detail.route}/$showId/$showName/$showAt")
+                }
+            )
         }
 
         composable(
