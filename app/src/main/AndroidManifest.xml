@@ -18,7 +18,7 @@
         android:enableOnBackInvokedCallback="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:windowSoftInputMode="adjustNothing"
+        android:windowSoftInputMode="adjustResize"
         android:theme="@style/Theme.CurtainCall"
         android:usesCleartextTraffic="true"
         tools:targetApi="tiramisu">
