@@ -73,7 +73,7 @@ fun BoxScope.CurtainCallSnackbar(
                 color = White,
                 fontSize = 14.dp.toSp(),
                 fontWeight = FontWeight.Normal,
-                fontFamily = spoqahansanseeo,
+                fontFamily = spoqahansanseeo
             )
         }
     }

@@ -30,7 +30,7 @@ class MainActivity : ComponentActivity() {
                 backgroundSyncEnabled = true,
                 userPresence = true,
                 persistenceEnabled = true,
-                uploadAttachmentsNetworkType = UploadAttachmentsNetworkType.NOT_ROAMING,
+                uploadAttachmentsNetworkType = UploadAttachmentsNetworkType.NOT_ROAMING
             ),
             appContext = this
 
