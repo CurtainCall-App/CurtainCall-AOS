@@ -186,7 +186,9 @@ private fun PerformanceLostItemCreateContent(
                     color = Me_Pink,
                     fontSize = 16.dp.toSp(),
                     fontWeight = FontWeight.Bold,
-                    fontFamily = spoqahansanseeo
+                    fontFamily = spoqahansanseeo,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
         }
