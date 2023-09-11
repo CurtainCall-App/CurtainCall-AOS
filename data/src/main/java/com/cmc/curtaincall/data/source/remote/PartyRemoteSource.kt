@@ -3,6 +3,7 @@ package com.cmc.curtaincall.data.source.remote
 import com.cmc.curtaincall.core.network.service.party.PartyService
 import com.cmc.curtaincall.core.network.service.party.request.CreatePartyRequest
 import com.cmc.curtaincall.core.network.service.party.request.UpdatePartyRequest
+import com.cmc.curtaincall.core.network.service.party.response.CheckPartyResponse
 import com.cmc.curtaincall.core.network.service.party.response.CreatePartyResponse
 import com.cmc.curtaincall.core.network.service.party.response.PartyDetailResponse
 import com.cmc.curtaincall.core.network.service.party.response.PartyResponse
@@ -102,6 +103,16 @@ class PartyRemoteSource @Inject constructor(
     ): Flow<Boolean> = flow {
         emit(
             partyService.participateParty(partyId = partyId).isSuccessful
+        )
+    }
+
+    fun checkParty(
+        partyId: Int
+    ): Flow<CheckPartyResponse> = flow {
+        emit(
+            partyService.checkParties(
+                partyIds = listOf(partyId)
+            ).checkParties.first()
         )
     }
 }

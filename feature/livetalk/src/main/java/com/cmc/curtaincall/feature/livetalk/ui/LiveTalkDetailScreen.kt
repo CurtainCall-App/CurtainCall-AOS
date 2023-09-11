@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -63,7 +62,6 @@ import io.getstream.chat.android.compose.ui.theme.StreamColors
 import io.getstream.chat.android.compose.viewmodel.messages.MessageComposerViewModel
 import io.getstream.chat.android.compose.viewmodel.messages.MessageListViewModel
 import io.getstream.chat.android.compose.viewmodel.messages.MessagesViewModelFactory
-import timber.log.Timber
 
 @Composable
 internal fun LiveTalkDetailScreen(
@@ -119,8 +117,6 @@ private fun LiveTalkDetailContent(
     val messageListViewModel = viewModel(MessageListViewModel::class.java, factory = messageFactory)
     val messageComposerViewModel = viewModel(MessageComposerViewModel::class.java, factory = messageFactory)
     val messageComposerState by messageComposerViewModel.messageComposerState.collectAsStateWithLifecycle()
-
-    Timber.d("LiveTalkDetailScreen ${messageListViewModel.hashCode()} ${messageComposerViewModel.hashCode()} $showId $showAt")
 
     Scaffold(
         modifier = Modifier
@@ -193,7 +189,7 @@ private fun LiveTalkDetailContent(
                 input = { inputState ->
                     Row(
                         modifier = Modifier
-                            .padding(top = 10.dp, bottom = 28.dp)
+                            .padding(vertical = 10.dp)
                             .padding(horizontal = 20.dp)
                             .fillMaxWidth()
                     ) {
@@ -202,7 +198,7 @@ private fun LiveTalkDetailContent(
                             onValueChange = { messageComposerViewModel.setMessageInput(it) },
                             modifier = Modifier
                                 .weight(1f)
-                                .height(36.dp),
+                                .heightIn(min = 36.dp, max = 108.dp),
                             fontSize = 14.dp.toSp(),
                             shape = RoundedCornerShape(20.dp),
                             containerColor = Eggplant,

@@ -1,6 +1,7 @@
 package com.cmc.curtaincall.domain.repository
 
 import androidx.paging.PagingData
+import com.cmc.curtaincall.domain.model.party.CheckPartyModel
 import com.cmc.curtaincall.domain.model.party.CreatePartyModel
 import com.cmc.curtaincall.domain.model.party.PartyDetailModel
 import com.cmc.curtaincall.domain.model.party.PartyModel
@@ -64,4 +65,8 @@ interface PartyRepository {
     fun participateParty(
         partyId: Int
     ): Flow<Boolean>
+
+    fun checkParty(
+        partyId: Int
+    ): Flow<CheckPartyModel>
 }

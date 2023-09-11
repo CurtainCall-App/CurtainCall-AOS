@@ -58,7 +58,6 @@ import com.cmc.curtaincall.common.design.theme.Nero
 import com.cmc.curtaincall.common.design.theme.Silver_Sand
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
-import com.cmc.curtaincall.common.utility.extensions.toChangeDate
 import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
 import com.cmc.curtaincall.common.utility.extensions.toTime
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -68,7 +67,6 @@ import kotlinx.coroutines.flow.collectLatest
 fun PartyMemberDetailScreen(
     partyMemberDetailViewModel: PartyMemberDetailViewModel = hiltViewModel(),
     partyId: Int,
-    isParticipation: Boolean = false,
     myWriting: Boolean = false,
     fromRecruitment: Boolean = false,
     fromParticipation: Boolean = false,
@@ -82,7 +80,6 @@ fun PartyMemberDetailScreen(
 
     var isShowDialog by remember { mutableStateOf(false) }
     var isShowRemoveDialog by remember { mutableStateOf(false) }
-    var isParticipationState by remember { mutableStateOf(isParticipation) }
     val partyMemberDetailState by partyMemberDetailViewModel.uiState.collectAsStateWithLifecycle()
 
     if (isShowDialog) {
@@ -116,6 +113,7 @@ fun PartyMemberDetailScreen(
 
     LaunchedEffect(partyMemberDetailViewModel) {
         partyMemberDetailViewModel.requestPartyDetail(partyId)
+        partyMemberDetailViewModel.checkParty(partyId)
         partyMemberDetailViewModel.effects.collectLatest {
             when (it) {
                 PartyMemberDetailSideEffect.SuccessDelete -> {
@@ -124,8 +122,10 @@ fun PartyMemberDetailScreen(
 
                 PartyMemberDetailSideEffect.SuccessParticipation -> {
                     partyMemberDetailViewModel.requestPartyDetail(partyId)
-                    isParticipationState = true
+                    partyMemberDetailViewModel.checkParty(partyId)
                 }
+
+                else -> Unit
             }
         }
     }
@@ -181,7 +181,7 @@ fun PartyMemberDetailScreen(
             }
         },
         floatingActionButton = {
-            if (isParticipationState) {
+            if (partyMemberDetailState.isParticipation) {
                 CurtainCallRoundedTextButton(
                     onClick = onNavigateLiveTalk,
                     modifier = Modifier
@@ -242,7 +242,7 @@ private fun PartyMemberDetailContent(
                 .padding(top = 30.dp)
                 .padding(horizontal = 20.dp),
             nickname = partyMemberDetailUiState.partyDetailModel.creatorNickname,
-            createAtDate = partyMemberDetailUiState.partyDetailModel.createdAt.toChangeDate(),
+            createAtDate = partyMemberDetailUiState.partyDetailModel.createdAt.toChangeFullDate(),
             createAtTime = partyMemberDetailUiState.partyDetailModel.createdAt.toTime(),
             title = partyMemberDetailUiState.partyDetailModel.title,
             description = partyMemberDetailUiState.partyDetailModel.content
@@ -308,7 +308,7 @@ fun PartyMemberDetailHeader(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = String.format("%s %s", createAtTime, createAtDate),
+                    text = String.format("%s %s", createAtDate, createAtTime),
                     color = Silver_Sand,
                     fontSize = 12.dp.toSp(),
                     fontWeight = FontWeight.Medium,
@@ -359,7 +359,11 @@ fun PartyMemberDetailBody(
                 modifier = Modifier.padding(top = 20.dp),
                 icon = painterResource(R.drawable.ic_calendar),
                 category = stringResource(R.string.partymember_detail_date),
-                description = showAt.ifEmpty { "날짜미정" }
+                description = if (showAt.isEmpty()) {
+                    "날짜 미정"
+                } else {
+                    showAt.toChangeFullDate()
+                }
             )
             DottedLine(
                 modifier = Modifier

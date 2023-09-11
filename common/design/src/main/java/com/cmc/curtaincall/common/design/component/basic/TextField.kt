@@ -1,5 +1,6 @@
 package com.cmc.curtaincall.common.design.component.basic
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
@@ -26,6 +27,7 @@ import com.cmc.curtaincall.common.design.theme.Cultured
 import com.cmc.curtaincall.common.design.theme.Roman_Silver
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CurtainCallMultiLineTextField(
     value: String,
@@ -42,7 +44,8 @@ fun CurtainCallMultiLineTextField(
     BasicTextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = modifier.background(containerColor, shape),
+        modifier = modifier
+            .background(containerColor, shape),
         textStyle = TextStyle(
             color = contentColor,
             fontSize = fontSize,

@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -123,8 +124,12 @@ class MyPageViewModel @Inject constructor(
             memberId = _memberId.value
         ).onEach {
             _favoriteShowList.value = it
-        }.flatMapLatest {
-            favoriteRepository.checkFavoriteShows(it.map { it.id })
+        }.filter {
+            it.isNotEmpty()
+        }.flatMapLatest { favoriteShowModels ->
+            favoriteRepository.checkFavoriteShows(
+                favoriteShowModels.map { it.id }
+            )
         }.onEach { favoriteShows ->
             _favoriteShowList.value = _favoriteShowList.value.map { favoriteShow ->
                 favoriteShow.copy(

@@ -35,19 +35,35 @@ class PartyMemberDetailViewModel @Inject constructor(
             currentState.copy(user = event.user)
         }
 
+        is PartyMemberDetailEvent.ChangeParticipation -> {
+            currentState.copy(isParticipation = event.isParticipation)
+        }
+
         else -> currentState
     }
 
     fun requestPartyDetail(partyId: Int) {
-        partyRepository.requestPartyDetail(partyId).onEach { sendAction(PartyMemberDetailEvent.RequestPartyDetail(it)) }.launchIn(viewModelScope)
+        partyRepository.requestPartyDetail(partyId)
+            .onEach { sendAction(PartyMemberDetailEvent.RequestPartyDetail(it)) }
+            .launchIn(viewModelScope)
     }
 
     fun deleteParty(partyId: Int) {
-        partyRepository.deleteParty(partyId).onEach { sendSideEffect(PartyMemberDetailSideEffect.SuccessDelete) }.launchIn(viewModelScope)
+        partyRepository.deleteParty(partyId)
+            .onEach { sendSideEffect(PartyMemberDetailSideEffect.SuccessDelete) }
+            .launchIn(viewModelScope)
     }
 
     fun participateParty(partyId: Int) {
-        partyRepository.participateParty(partyId).onEach { sendSideEffect(PartyMemberDetailSideEffect.SuccessParticipation) }.launchIn(viewModelScope)
+        partyRepository.participateParty(partyId)
+            .onEach { sendSideEffect(PartyMemberDetailSideEffect.SuccessParticipation) }
+            .launchIn(viewModelScope)
+    }
+
+    fun checkParty(partyId: Int) {
+        partyRepository.checkParty(partyId)
+            .onEach { sendAction(PartyMemberDetailEvent.ChangeParticipation(it.participated)) }
+            .launchIn(viewModelScope)
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

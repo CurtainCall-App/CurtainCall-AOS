@@ -255,7 +255,6 @@ fun NavGraphBuilder.mypageNavGraph(
                 onNavigateRecruitmentDetail = { partyType, partyId ->
                     navHostController.navigate(
                         PartyMemberDestination.Detail.route + "?" +
-                            "${PartyMemberDestination.Detail.isParticipationArg}=true" + "&" +
                             "${PartyMemberDestination.Detail.partyIdArg}=$partyId" + "&" +
                             "${PartyMemberDestination.Detail.typeArg}=$partyType" + "&" +
                             "${PartyMemberDestination.Detail.myWritingArg}=true" + "&" +
@@ -279,7 +278,6 @@ fun NavGraphBuilder.mypageNavGraph(
                 onNavigateParticipationDetail = { partyType, partyId ->
                     navHostController.navigate(
                         PartyMemberDestination.Detail.route + "?" +
-                            "${PartyMemberDestination.Detail.isParticipationArg}=true" + "&" +
                             "${PartyMemberDestination.Detail.partyIdArg}=$partyId" + "&" +
                             "${PartyMemberDestination.Detail.typeArg}=$partyType" + "&" +
                             "${PartyMemberDestination.Detail.myWritingArg}=false" + "&" +

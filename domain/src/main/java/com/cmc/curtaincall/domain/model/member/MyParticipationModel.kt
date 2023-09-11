@@ -3,6 +3,7 @@ package com.cmc.curtaincall.domain.model.member
 data class MyParticipationModel(
     val id: Int = Int.MIN_VALUE,
     val title: String = "",
+    val content: String = "",
     val curMemberNum: Int = 0,
     val maxMemberNum: Int = 0,
     val showAt: String = "",

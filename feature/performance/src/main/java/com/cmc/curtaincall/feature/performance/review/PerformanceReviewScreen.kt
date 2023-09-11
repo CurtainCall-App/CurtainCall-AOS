@@ -37,6 +37,10 @@ internal fun PerformanceReviewScreen(
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(White)
 
+    LaunchedEffect(Unit) {
+        performanceDetailViewModel.requestShowReviewList(showId)
+    }
+
     Scaffold(
         topBar = {
             TopAppBarWithBack(
@@ -157,7 +161,7 @@ private fun PerformanceReviewContent(
                                 performanceDetailViewModel.uiState.value.showDetailModel.poster,
                                 performanceDetailViewModel.uiState.value.showDetailModel.genre,
                                 performanceDetailViewModel.uiState.value.showDetailModel.name,
-                                false,
+                                true,
                                 reviewItem.id
                             )
                         },

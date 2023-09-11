@@ -38,6 +38,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallMultiLineTextField
+import com.cmc.curtaincall.common.design.component.content.card.PartyType
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
 import com.cmc.curtaincall.common.design.theme.Chinese_Black
@@ -62,7 +63,6 @@ import io.getstream.chat.android.compose.ui.theme.StreamColors
 import io.getstream.chat.android.compose.viewmodel.messages.MessageComposerViewModel
 import io.getstream.chat.android.compose.viewmodel.messages.MessageListViewModel
 import io.getstream.chat.android.compose.viewmodel.messages.MessagesViewModelFactory
-import timber.log.Timber
 
 @Composable
 fun PartyMemberLiveTalkScreen(
@@ -82,8 +82,16 @@ fun PartyMemberLiveTalkScreen(
     ) {
         PartyMemberLiveTalkContent(
             partyId = partyMemberDetailState.partyDetailModel.id,
-            showName = partyMemberDetailState.partyDetailModel.showName ?: "",
-            showAt = partyMemberDetailState.partyDetailModel.showAt ?: "",
+            showName = if (partyMemberDetailState.partyDetailModel.category == PartyType.ETC.category) {
+                partyMemberDetailState.partyDetailModel.title
+            } else {
+                partyMemberDetailState.partyDetailModel.showName ?: ""
+            },
+            showAt = if (partyMemberDetailState.partyDetailModel.category == PartyType.ETC.category) {
+                partyMemberDetailState.partyDetailModel.createdAt
+            } else {
+                partyMemberDetailState.partyDetailModel.showAt ?: ""
+            },
             user = partyMemberDetailState.user,
             chatClient = chatClient,
             onBack = onBack
@@ -111,9 +119,7 @@ private fun PartyMemberLiveTalkContent(
 
     val messageListViewModel = viewModel(MessageListViewModel::class.java, factory = messageFactory)
     val messageComposerViewModel = viewModel(MessageComposerViewModel::class.java, factory = messageFactory)
-
     val messageComposerState by messageComposerViewModel.messageComposerState.collectAsStateWithLifecycle()
-    Timber.d("messageComposerState message ${messageComposerState.inputValue}")
 
     Scaffold(
         modifier = Modifier

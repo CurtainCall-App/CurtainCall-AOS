@@ -76,7 +76,9 @@ interface ShowRepository {
         genre: String?
     ): Flow<List<SimilarShowInfoModel>>
 
-    fun fetchLiveTalkShowList(
+    fun requestLiveTalkShowList(
+        page: Int?,
+        size: Int?,
         baseDateTime: String
-    ): Flow<PagingData<LiveTalkShowModel>>
+    ): Flow<List<LiveTalkShowModel>>
 }
