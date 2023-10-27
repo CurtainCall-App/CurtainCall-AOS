@@ -28,7 +28,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.flow.collectLatest
 
 private const val UNSELECTED_INDEX = -1
-const val DEFAULT_PERSONNEL_COUNT = 1
+const val DEFAULT_PERSONNEL_COUNT = 2
 
 enum class STEP(val prevStep: STEP) {
     PHASE1(PHASE1), PHASE2(PHASE1), PHASE3(PHASE2), PHASE1_1(PHASE1_1), PHASE1_2(PHASE1_1)
@@ -252,10 +252,10 @@ private fun PartyMemberCreateContent(
                         .padding(horizontal = 20.dp)
                         .padding(bottom = 19.dp)
                         .height(52.dp),
-                    enabled = selectedDateState.isNotEmpty() and selectedTimeState.isNotEmpty() and (personnelCountState > 1),
+                    enabled = selectedDateState.isNotEmpty() and selectedTimeState.isNotEmpty() and (personnelCountState >= DEFAULT_PERSONNEL_COUNT),
                     shape = RoundedCornerShape(12.dp),
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = if (selectedDateState.isNotEmpty() and selectedTimeState.isNotEmpty() and (personnelCountState > 1)) {
+                        containerColor = if (selectedDateState.isNotEmpty() and selectedTimeState.isNotEmpty() and (personnelCountState >= DEFAULT_PERSONNEL_COUNT)) {
                             Me_Pink
                         } else {
                             Bright_Gray
@@ -303,7 +303,7 @@ private fun PartyMemberCreateContent(
             }
 
             STEP.PHASE1_1 -> {
-                var validation = (selectedDateState.isNotEmpty() or clickedUndeterminDateState) and (personnelCountState > DEFAULT_PERSONNEL_COUNT)
+                var validation = (selectedDateState.isNotEmpty() or clickedUndeterminDateState) and (personnelCountState >= DEFAULT_PERSONNEL_COUNT)
                 Button(
                     onClick = {
                         if (clickedUndeterminDateState) {

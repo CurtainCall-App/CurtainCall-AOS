@@ -282,7 +282,7 @@ fun SelectPersonnelButton(
             ) {
                 Text(
                     text = personnelCount.toString(),
-                    color = if (personnelCount > DEFAULT_PERSONNEL_COUNT) Chinese_Black else Silver_Sand,
+                    color = if (personnelCount >= DEFAULT_PERSONNEL_COUNT) Chinese_Black else Silver_Sand,
                     fontSize = 20.dp.toSp(),
                     fontWeight = FontWeight.Bold,
                     fontFamily = spoqahansanseeo
