@@ -72,6 +72,12 @@ jobs:
         env:
           BASE_URL: ${{ secrets.CURTAIN_CALL_BASE_URL }}
 
+      - name: Access GET_STREAM_API_KEY
+        run: echo GET_STREAM_API_KEY=\"BASE_URL\" >> local.properties
+        shell: bash
+        env:
+          BASE_URL: ${{ secrets.GET_STREAM_API_KEY }}
+
       - name: Run ktlint
         run: ./gradlew ktlintCheck
 
