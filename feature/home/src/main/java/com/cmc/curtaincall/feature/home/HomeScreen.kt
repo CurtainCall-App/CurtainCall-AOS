@@ -421,7 +421,7 @@ internal fun HomeBanner(
     val pagerState = rememberPagerState { bannerItems.size }
     Column(modifier) {
         Text(
-            text = "안녕하세요 ${nickname}님",
+            text = "안녕하세요 ${nickname}님 :)",
             modifier = Modifier.padding(
                 top = 22.dp,
                 start = 20.dp
