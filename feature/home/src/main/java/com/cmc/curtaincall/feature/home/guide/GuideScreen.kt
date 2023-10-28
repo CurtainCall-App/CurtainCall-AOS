@@ -29,6 +29,7 @@ import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.Chinese_Black
 import com.cmc.curtaincall.common.design.theme.Cultured
 import com.cmc.curtaincall.common.design.theme.Nero
+import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -62,7 +63,7 @@ internal fun GuideScreen(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
-                .background(Cultured),
+                .background(White),
             guideType = guideType
         )
     }
@@ -77,6 +78,7 @@ private fun GuideContent(
     Column(modifier.verticalScroll(verticalScrollState)) {
         GuideHeader(
             modifier = Modifier
+                .background(Cultured)
                 .fillMaxWidth()
                 .padding(top = 27.dp, start = 19.dp),
             icon = painterResource(getGuideIcon(guideType)),
@@ -86,6 +88,7 @@ private fun GuideContent(
             GuideType.DICTIONARY -> {
                 GuideMenuTab(
                     modifier = Modifier
+                        .background(Cultured)
                         .fillMaxWidth()
                         .padding(top = 10.dp),
                     menus = listOf(
@@ -102,6 +105,7 @@ private fun GuideContent(
             GuideType.TICKETING -> {
                 GuideMenuTab(
                     modifier = Modifier
+                        .background(Cultured)
                         .fillMaxWidth()
                         .padding(top = 10.dp),
                     menus = listOf(
@@ -114,6 +118,7 @@ private fun GuideContent(
             GuideType.DISCOUNT -> {
                 GuideDiscountContent(
                     modifier = Modifier
+                        .background(Cultured)
                         .padding(top = 10.dp)
                         .fillMaxSize()
                 )
