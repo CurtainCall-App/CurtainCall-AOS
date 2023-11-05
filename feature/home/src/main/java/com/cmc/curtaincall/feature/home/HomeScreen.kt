@@ -26,13 +26,13 @@ import com.cmc.curtaincall.common.design.component.content.card.LiveTalkContentC
 import com.cmc.curtaincall.common.design.component.content.card.MyContentCard
 import com.cmc.curtaincall.common.design.component.content.card.PerformanceCard
 import com.cmc.curtaincall.common.design.component.content.row.ContentTitleRow
+import com.cmc.curtaincall.common.design.component.lib.pager.DynamicHorizontalPagerIndicator
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.cmc.curtaincall.common.utility.extensions.toDateWithDay
 import com.cmc.curtaincall.common.utility.extensions.toDday
 import com.cmc.curtaincall.common.utility.extensions.toTime
 import com.cmc.curtaincall.feature.home.guide.GuideType
-import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import io.getstream.chat.android.client.ChatClient
 
@@ -449,17 +449,18 @@ internal fun HomeBanner(
                 onClick = bannerItems[position].onClick
             )
         }
-        HorizontalPagerIndicator(
+        DynamicHorizontalPagerIndicator(
             pagerState = pagerState,
             pageCount = bannerItems.size,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 14.dp),
             activeColor = White,
-            inactiveColor = White.copy(alpha = 0.2f),
-            indicatorWidth = 7.dp,
-            indicatorHeight = 7.dp,
-            spacing = 5.dp
+            activeIndicatorWidth = 14.dp,
+            activeIndicatorHeight = 6.dp,
+            inactiveColor = White.copy(0.2f),
+            inactiveIndicatorWidth = 6.dp,
+            spacing = 6.dp
         )
     }
 }
