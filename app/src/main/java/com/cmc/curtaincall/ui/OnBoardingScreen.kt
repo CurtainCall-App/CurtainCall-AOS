@@ -18,12 +18,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallRoundedTextButton
+import com.cmc.curtaincall.common.design.component.lib.pager.DynamicHorizontalPagerIndicator
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
 import com.cmc.curtaincall.common.design.theme.Me_Pink
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
-import com.google.accompanist.pager.HorizontalPagerIndicator
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -50,14 +50,18 @@ internal fun OnBoardingScreen(
             .fillMaxSize()
             .background(Cetacean_Blue)
     ) {
-        HorizontalPagerIndicator(
+        DynamicHorizontalPagerIndicator(
             pagerState = pagerState,
             pageCount = pagerItems.size,
             modifier = Modifier
                 .align(Alignment.End)
                 .padding(top = 50.dp, end = 20.dp),
             activeColor = White,
-            inactiveColor = White.copy(0.2f)
+            activeIndicatorWidth = 16.dp,
+            activeIndicatorHeight = 7.dp,
+            inactiveColor = White.copy(0.2f),
+            inactiveIndicatorWidth = 7.dp,
+            spacing = 5.dp
         )
         HorizontalPager(
             state = pagerState
