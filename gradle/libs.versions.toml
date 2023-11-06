@@ -93,6 +93,7 @@ androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = 
 accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanist-compose" }
 accompanist-pager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanist-compose" }
 accompanist-pager-indicators = { group = "com.google.accompanist", name = "accompanist-pager-indicators", version.ref = "accompanist-compose" }
+accompanist-webview = { group = "com.google.accompanist", name = "accompanist-webview", version.ref = "accompanist-compose" }
 
 # test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
