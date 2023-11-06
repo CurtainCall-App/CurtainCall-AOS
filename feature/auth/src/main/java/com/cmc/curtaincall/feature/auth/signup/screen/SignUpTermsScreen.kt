@@ -1,5 +1,6 @@
 package com.cmc.curtaincall.feature.auth.signup.screen
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -17,8 +18,17 @@ import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.google.accompanist.web.WebContent
+import com.google.accompanist.web.WebView
+import com.google.accompanist.web.WebViewNavigator
+import com.google.accompanist.web.WebViewState
+import com.google.accompanist.web.rememberWebViewNavigator
+import com.google.accompanist.web.rememberWebViewState
+import timber.log.Timber
 
-@OptIn(ExperimentalMaterial3Api::class)
+private const val SERVICE_TERMS_URL = "https://ssarivibebe.github.io/curtaincall/%EC%84%9C%EB%B9%84%EC%8A%A4%20%EC%9D%B4%EC%9A%A9%EC%95%BD%EA%B4%8001.html"
+private const val PRIVACY_INFORMATION_TERMS_URL = "https://ssarivibebe.github.io/curtaincall/%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4%EC%B2%98%EB%A6%AC%EB%B0%A9%EC%B9%A801.html"
+
 @Composable
 internal fun SignUpTermsScreen(
     onNavigateSignUpInput: () -> Unit,
@@ -27,13 +37,29 @@ internal fun SignUpTermsScreen(
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(White)
 
+    var webViewUrl by remember { mutableStateOf("") }
+    val webViewState = rememberWebViewState(url = webViewUrl)
+    BackHandler {
+        if (webViewUrl.isNotEmpty()) {
+            webViewUrl = ""
+        } else {
+            onBack()
+        }
+    }
+
     Scaffold(
         topBar = {
             TopAppBarWithBack(
                 title = stringResource(R.string.signup_terms),
                 containerColor = White,
                 contentColor = Nero,
-                onClick = onBack
+                onClick = {
+                    if (webViewUrl.isNotEmpty()) {
+                        webViewUrl = ""
+                    } else {
+                        onBack()
+                    }
+                }
             )
         }
     ) { paddingValues ->
@@ -42,7 +68,12 @@ internal fun SignUpTermsScreen(
                 .padding(paddingValues)
                 .fillMaxSize()
                 .background(White),
-            onNavigateSignUpInput = onNavigateSignUpInput
+            webViewUrl = webViewUrl,
+            webViewState = webViewState,
+            onNavigateSignUpInput = onNavigateSignUpInput,
+            onNavigateSignUpTermsWebView = {
+                webViewUrl = it
+            }
         )
     }
 }
@@ -50,99 +81,122 @@ internal fun SignUpTermsScreen(
 @Composable
 private fun SignUpTermsContent(
     modifier: Modifier = Modifier,
-    onNavigateSignUpInput: () -> Unit
+    webViewUrl: String,
+    webViewState: WebViewState,
+    onNavigateSignUpInput: () -> Unit = {},
+    onNavigateSignUpTermsWebView: (String) -> Unit = {}
 ) {
     var allTermsState by remember { mutableStateOf(false) }
     var serviceTermsState by remember { mutableStateOf(false) }
     var privacyInfoTermsState by remember { mutableStateOf(false) }
     var ageState by remember { mutableStateOf(false) }
 
-    Column(modifier.padding(horizontal = 20.dp)) {
-        Text(
-            text = stringResource(R.string.signup_terms_description),
-            modifier = Modifier.padding(top = 40.dp),
-            color = Black,
-            fontSize = 22.dp.toSp(),
-            fontWeight = FontWeight.Bold,
-            fontFamily = spoqahansanseeo,
-            lineHeight = 32.dp.toSp()
-        )
-        Text(
-            text = stringResource(R.string.signup_terms_sub_description),
-            modifier = Modifier.padding(top = 14.dp),
-            color = Roman_Silver,
-            fontSize = 14.dp.toSp(),
-            fontWeight = FontWeight.Medium,
-            fontFamily = spoqahansanseeo,
-            lineHeight = 22.dp.toSp()
-        )
-        SignUpTerms(
+    Box(modifier) {
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 40.dp),
-            description = stringResource(R.string.signup_terms_all_agree),
-            checked = allTermsState,
-            isBold = true,
-            onCheckedChange = {
-                allTermsState = allTermsState.not()
-                serviceTermsState = allTermsState
-                privacyInfoTermsState = allTermsState
-                ageState = allTermsState
-            }
-        )
-        Spacer(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 24.dp)
-                .height(1.dp)
-                .background(Cultured)
-        )
-        SignUpTerms(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 25.dp),
-            description = stringResource(R.string.signup_terms_service),
-            checked = serviceTermsState,
-            onCheckedChange = {
-                serviceTermsState = serviceTermsState.not()
-                allTermsState = listOf(serviceTermsState, privacyInfoTermsState, ageState).all { it }
-            }
-        )
-        SignUpTerms(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 25.dp),
-            description = stringResource(R.string.signup_terms_privacy_information_agree),
-            checked = privacyInfoTermsState,
-            onCheckedChange = {
-                privacyInfoTermsState = privacyInfoTermsState.not()
-                allTermsState = listOf(serviceTermsState, privacyInfoTermsState, ageState).all { it }
-            }
-        )
-        SignUpTerms(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 25.dp),
-            description = stringResource(R.string.signup_terms_age_agree),
-            checked = ageState,
-            onCheckedChange = {
-                ageState = ageState.not()
-                allTermsState = listOf(serviceTermsState, privacyInfoTermsState, ageState).all { it }
-            }
-        )
-        Spacer(Modifier.weight(1f))
-        CurtainCallRoundedTextButton(
-            onClick = onNavigateSignUpInput,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 19.dp)
-                .height(52.dp),
-            title = stringResource(R.string.signup_next),
-            fontSize = 16.dp.toSp(),
-            enabled = allTermsState,
-            containerColor = if (serviceTermsState) Me_Pink else Bright_Gray,
-            contentColor = if (allTermsState) White else Silver_Sand
-        )
+                .padding(horizontal = 20.dp)
+                .fillMaxSize()
+        ) {
+            Text(
+                text = stringResource(R.string.signup_terms_description),
+                modifier = Modifier.padding(top = 40.dp),
+                color = Black,
+                fontSize = 22.dp.toSp(),
+                fontWeight = FontWeight.Bold,
+                fontFamily = spoqahansanseeo,
+                lineHeight = 32.dp.toSp()
+            )
+            Text(
+                text = stringResource(R.string.signup_terms_sub_description),
+                modifier = Modifier.padding(top = 14.dp),
+                color = Roman_Silver,
+                fontSize = 14.dp.toSp(),
+                fontWeight = FontWeight.Medium,
+                fontFamily = spoqahansanseeo,
+                lineHeight = 22.dp.toSp()
+            )
+            SignUpTerms(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 40.dp),
+                description = stringResource(R.string.signup_terms_all_agree),
+                checked = allTermsState,
+                isBold = true,
+                onCheckedChange = {
+                    allTermsState = allTermsState.not()
+                    serviceTermsState = allTermsState
+                    privacyInfoTermsState = allTermsState
+                    ageState = allTermsState
+                }
+            )
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 24.dp)
+                    .height(1.dp)
+                    .background(Cultured)
+            )
+            SignUpTerms(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 25.dp),
+                description = stringResource(R.string.signup_terms_service),
+                checked = serviceTermsState,
+                onCheckedChange = {
+                    serviceTermsState = serviceTermsState.not()
+                    allTermsState = listOf(serviceTermsState, privacyInfoTermsState, ageState).all { it }
+                },
+                onClickDown = {
+                    onNavigateSignUpTermsWebView(SERVICE_TERMS_URL)
+                }
+            )
+            SignUpTerms(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 25.dp),
+                description = stringResource(R.string.signup_terms_privacy_information_agree),
+                checked = privacyInfoTermsState,
+                onCheckedChange = {
+                    privacyInfoTermsState = privacyInfoTermsState.not()
+                    allTermsState = listOf(serviceTermsState, privacyInfoTermsState, ageState).all { it }
+                },
+                onClickDown = {
+                    onNavigateSignUpTermsWebView(PRIVACY_INFORMATION_TERMS_URL)
+                }
+            )
+            SignUpTerms(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 25.dp),
+                description = stringResource(R.string.signup_terms_age_agree),
+                checked = ageState,
+                onCheckedChange = {
+                    ageState = ageState.not()
+                    allTermsState = listOf(serviceTermsState, privacyInfoTermsState, ageState).all { it }
+                }
+            )
+            Spacer(Modifier.weight(1f))
+            CurtainCallRoundedTextButton(
+                onClick = onNavigateSignUpInput,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 19.dp)
+                    .height(52.dp),
+                title = stringResource(R.string.signup_next),
+                fontSize = 16.dp.toSp(),
+                enabled = allTermsState,
+                containerColor = if (serviceTermsState) Me_Pink else Bright_Gray,
+                contentColor = if (allTermsState) White else Silver_Sand
+            )
+        }
+        if (webViewUrl.isNotEmpty()) {
+            WebView(
+                state = webViewState,
+                modifier = Modifier
+                    .padding(horizontal = 20.dp, vertical = 10.dp)
+                    .fillMaxSize()
+            )
+        }
     }
 }
 
