@@ -44,8 +44,9 @@ dependencies {
     // compose
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.androidx.compose)
-    implementation(libs.bundles.accompanist.compose)
     implementation(libs.androidx.lifecycle.compose)
+    implementation(libs.accompanist.systemuicontroller)
+    implementation(libs.accompanist.webview)
 
     // firebase
     implementation(platform(libs.firebase.bom))
