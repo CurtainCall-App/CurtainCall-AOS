@@ -2,10 +2,25 @@ package com.cmc.curtaincall.feature.auth.signup.screen
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -16,18 +31,22 @@ import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallRoundedTextButton
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.extensions.toSp
-import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.common.design.theme.Arsenic
+import com.cmc.curtaincall.common.design.theme.Black
+import com.cmc.curtaincall.common.design.theme.Bright_Gray
+import com.cmc.curtaincall.common.design.theme.Cultured
+import com.cmc.curtaincall.common.design.theme.Me_Pink
+import com.cmc.curtaincall.common.design.theme.Nero
+import com.cmc.curtaincall.common.design.theme.Roman_Silver
+import com.cmc.curtaincall.common.design.theme.Silver_Sand
+import com.cmc.curtaincall.common.design.theme.White
+import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
+import com.cmc.curtaincall.domain.Urls.PRIVACY_INFORMATION_TERMS_URL
+import com.cmc.curtaincall.domain.Urls.SERVICE_TERMS_URL
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import com.google.accompanist.web.WebContent
 import com.google.accompanist.web.WebView
-import com.google.accompanist.web.WebViewNavigator
 import com.google.accompanist.web.WebViewState
-import com.google.accompanist.web.rememberWebViewNavigator
 import com.google.accompanist.web.rememberWebViewState
-import timber.log.Timber
-
-private const val SERVICE_TERMS_URL = "https://ssarivibebe.github.io/curtaincall/%EC%84%9C%EB%B9%84%EC%8A%A4%20%EC%9D%B4%EC%9A%A9%EC%95%BD%EA%B4%8001.html"
-private const val PRIVACY_INFORMATION_TERMS_URL = "https://ssarivibebe.github.io/curtaincall/%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4%EC%B2%98%EB%A6%AC%EB%B0%A9%EC%B9%A801.html"
 
 @Composable
 internal fun SignUpTermsScreen(

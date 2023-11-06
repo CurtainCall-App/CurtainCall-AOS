@@ -52,24 +52,19 @@ class SplashViewModel @Inject constructor(
             }.zip(memberRepository.getMemberId()) { loginResultModel, memberId ->
                 loginResultModel.copy(memberId = memberId)
             }.onEach { loginResult ->
-                Timber.d(
-                    "isValidationToken init ${loginResult.accessToken} " +
-                            "${loginResult.accessTokenExpiresAt} " +
-                            "${loginResult.refreshToken} " +
-                            loginResult.refreshTokenExpiresAt
-                )
+                Timber.d("isValidationToken init ${loginResult.accessToken} " + "${loginResult.accessTokenExpiresAt} " + "${loginResult.refreshToken} " + loginResult.refreshTokenExpiresAt)
                 if (loginResult.accessToken.isNotEmpty() && loginResult.accessTokenExpiresAt > today) {
-                    if(loginResult.memberId == Int.MIN_VALUE){
+                    if (loginResult.memberId == Int.MIN_VALUE) {
                         sendSideEffect(SplashSideEffect.NeedLogin)
-                    } else{
+                    } else {
                         sendSideEffect(SplashSideEffect.AutoLogin)
                     }
                 } else if (loginResult.accessToken.isNotEmpty() && (loginResult.accessTokenExpiresAt < today) && (loginResult.refreshTokenExpiresAt > today)) {
                     val tokenInfo = authRepository.requestReissue(loginResult.refreshToken).first()
                     if (tokenInfo.accessToken.isNotEmpty() && tokenInfo.accessTokenExpiresAt > today) {
-                        if(loginResult.memberId == Int.MIN_VALUE){
+                        if (loginResult.memberId == Int.MIN_VALUE) {
                             sendSideEffect(SplashSideEffect.NeedLogin)
-                        } else{
+                        } else {
                             sendSideEffect(SplashSideEffect.AutoLogin)
                         }
                     } else {

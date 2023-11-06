@@ -21,8 +21,6 @@ import com.cmc.curtaincall.feature.mypage.question.MyPageQuestionScreen
 import com.cmc.curtaincall.feature.mypage.saveperformance.MyPageSavedPerformanceScreen
 import com.cmc.curtaincall.feature.mypage.setting.MyPageDeleteMemberScreen
 import com.cmc.curtaincall.feature.mypage.setting.MyPageSettingScreen
-import com.cmc.curtaincall.feature.mypage.terms.MyPagePrivacyTermsScreen
-import com.cmc.curtaincall.feature.mypage.terms.MyPageServiceTermsScreen
 import com.cmc.curtaincall.feature.mypage.write.MyPageWriteScreen
 import com.cmc.curtaincall.feature.partymember.PartyMemberDestination
 import com.cmc.curtaincall.feature.performance.PerformanceDestination
@@ -39,8 +37,6 @@ private const val MYPAGE_NOTICE = "mypage_notice"
 private const val MYPAGE_NOTICE_DETAIL = "mypage_notice_detail"
 private const val MYPAGE_RECRUITMENT = "mypage_recruitment"
 private const val MYPAGE_PARTICIPATION = "mypage_participantion"
-private const val MYPAGE_PRIVACY_TERMS = "mypage_privacy_terms"
-private const val MYPAGE_SERVICE_TERMS = "mypage_service_terms"
 private const val MYPAGE_QUESTIONS = "mypage_questions"
 
 sealed interface MyPageDestination : CurtainCallDestination {
@@ -100,14 +96,6 @@ sealed interface MyPageDestination : CurtainCallDestination {
 
     object Participation : MyPageDestination {
         override val route = MYPAGE_PARTICIPATION
-    }
-
-    object PrivacyTerms : MyPageDestination {
-        override val route = MYPAGE_PRIVACY_TERMS
-    }
-
-    object ServiceTerms : MyPageDestination {
-        override val route = MYPAGE_SERVICE_TERMS
     }
 
     object Questions : MyPageDestination {
@@ -207,12 +195,6 @@ fun NavGraphBuilder.mypageNavGraph(
                 onNavigateDeleteMember = {
                     navHostController.navigate(MyPageDestination.DeleteMember.route)
                 },
-                onNavigatePrivacyTerms = {
-                    navHostController.navigate(MyPageDestination.PrivacyTerms.route)
-                },
-                onNavigateServiceTerms = {
-                    navHostController.navigate(MyPageDestination.ServiceTerms.route)
-                },
                 onBack = {
                     navHostController.popBackStack()
                 }
@@ -292,13 +274,6 @@ fun NavGraphBuilder.mypageNavGraph(
                     navHostController.popBackStack()
                 }
             )
-        }
-        composable(MyPageDestination.PrivacyTerms.route) {
-            MyPagePrivacyTermsScreen { navHostController.popBackStack() }
-        }
-
-        composable(MyPageDestination.ServiceTerms.route) {
-            MyPageServiceTermsScreen { navHostController.popBackStack() }
         }
 
         composable(MyPageDestination.Questions.route) {
