@@ -161,6 +161,7 @@ private fun SignUpTermsContent(
                     .padding(top = 25.dp),
                 description = stringResource(R.string.signup_terms_service),
                 checked = serviceTermsState,
+                hasMore = true,
                 onCheckedChange = {
                     serviceTermsState = serviceTermsState.not()
                     allTermsState = listOf(serviceTermsState, privacyInfoTermsState, ageState).all { it }
@@ -175,6 +176,7 @@ private fun SignUpTermsContent(
                     .padding(top = 25.dp),
                 description = stringResource(R.string.signup_terms_privacy_information_agree),
                 checked = privacyInfoTermsState,
+                hasMore = true,
                 onCheckedChange = {
                     privacyInfoTermsState = privacyInfoTermsState.not()
                     allTermsState = listOf(serviceTermsState, privacyInfoTermsState, ageState).all { it }
@@ -225,6 +227,7 @@ private fun SignUpTerms(
     description: String,
     checked: Boolean = false,
     isBold: Boolean = false,
+    hasMore: Boolean = false,
     onCheckedChange: () -> Unit = {},
     onClickDown: () -> Unit = {}
 ) {
@@ -254,7 +257,7 @@ private fun SignUpTerms(
             fontFamily = spoqahansanseeo
         )
         Spacer(Modifier.weight(1f))
-        if (isBold.not()) {
+        if (hasMore) {
             IconButton(
                 onClick = onClickDown,
                 modifier = Modifier.size(20.dp)
