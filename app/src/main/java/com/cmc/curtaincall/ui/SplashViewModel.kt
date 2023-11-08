@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.cmc.curtaincall.core.base.BaseViewModel
 import com.cmc.curtaincall.domain.model.auth.LoginResultModel
 import com.cmc.curtaincall.domain.repository.AuthRepository
+import com.cmc.curtaincall.domain.repository.MemberRepository
 import com.cmc.curtaincall.domain.repository.TokenRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val memberRepository: MemberRepository
 ) : BaseViewModel<SplashState, Nothing, SplashSideEffect>(
     initialState = SplashState
 ) {
@@ -47,19 +49,24 @@ class SplashViewModel @Inject constructor(
                 loginResultModel.copy(refreshToken = refreshToken)
             }.zip(tokenRepository.getRefreshTokenExpiresAt()) { loginResultModel, refreshTokenExpiresAt ->
                 loginResultModel.copy(refreshTokenExpiresAt = refreshTokenExpiresAt)
+            }.zip(memberRepository.getMemberId()) { loginResultModel, memberId ->
+                loginResultModel.copy(memberId = memberId)
             }.onEach { loginResult ->
-                Timber.d(
-                    "isValidationToken init ${loginResult.accessToken} " +
-                        "${loginResult.accessTokenExpiresAt} " +
-                        "${loginResult.refreshToken} " +
-                        loginResult.refreshTokenExpiresAt
-                )
+                Timber.d("isValidationToken init ${loginResult.accessToken} " + "${loginResult.accessTokenExpiresAt} " + "${loginResult.refreshToken} " + loginResult.refreshTokenExpiresAt)
                 if (loginResult.accessToken.isNotEmpty() && loginResult.accessTokenExpiresAt > today) {
-                    sendSideEffect(SplashSideEffect.AutoLogin)
+                    if (loginResult.memberId == Int.MIN_VALUE) {
+                        sendSideEffect(SplashSideEffect.NeedLogin)
+                    } else {
+                        sendSideEffect(SplashSideEffect.AutoLogin)
+                    }
                 } else if (loginResult.accessToken.isNotEmpty() && (loginResult.accessTokenExpiresAt < today) && (loginResult.refreshTokenExpiresAt > today)) {
                     val tokenInfo = authRepository.requestReissue(loginResult.refreshToken).first()
                     if (tokenInfo.accessToken.isNotEmpty() && tokenInfo.accessTokenExpiresAt > today) {
-                        sendSideEffect(SplashSideEffect.AutoLogin)
+                        if (loginResult.memberId == Int.MIN_VALUE) {
+                            sendSideEffect(SplashSideEffect.NeedLogin)
+                        } else {
+                            sendSideEffect(SplashSideEffect.AutoLogin)
+                        }
                     } else {
                         sendSideEffect(SplashSideEffect.NeedLogin)
                     }
