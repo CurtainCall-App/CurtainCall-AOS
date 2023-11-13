@@ -11,7 +11,7 @@ val spoqahansanseeo = FontFamily(
     Font(R.font.spoqahansansneo_medium, FontWeight.Medium, FontStyle.Normal),
     Font(R.font.spoqahansansneo_regular, FontWeight.Normal, FontStyle.Normal),
     Font(R.font.spoqahansansneo_light, FontWeight.Light, FontStyle.Normal),
-    Font(R.font.spoqahansanseeo_thin, FontWeight.Thin, FontStyle.Normal)
+    Font(R.font.spoqahansansneo_thin, FontWeight.Thin, FontStyle.Normal)
 )
 
 val avenirnext = FontFamily(
