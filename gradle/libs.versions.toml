@@ -81,6 +81,7 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltPlugin" }
 # custom plugin
 curtaincall-android-application = { id = "curtaincall.android.application", version = "unspecified" }
 curtaincall-android-application-compose = { id = "curtaincall.android.application.compose", version = "unspecified" }
+curtaincall-android-hilt = { id = "curtaincall.android.hilt", version = "unspecified"}
 
 [libraries]
 # androidx

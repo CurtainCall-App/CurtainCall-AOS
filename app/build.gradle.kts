@@ -4,9 +4,8 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 plugins {
     alias(libs.plugins.curtaincall.android.application)
     alias(libs.plugins.curtaincall.android.application.compose)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.curtaincall.android.hilt)
     alias(libs.plugins.google.services)
-    alias(libs.plugins.hilt)
 }
 
 android {
@@ -54,11 +53,6 @@ dependencies {
 
     // auth
     implementation(libs.kakao.user)
-
-    // hilt
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
-    implementation(libs.hilt.navigation.compose)
 
     // test
     testImplementation(libs.junit)

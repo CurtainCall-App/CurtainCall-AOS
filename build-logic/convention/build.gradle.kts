@@ -23,5 +23,9 @@ gradlePlugin {
             id = "curtaincall.android.application.compose"
             implementationClass = "AndroidApplicationComposeConventionPlugin"
         }
+        register("androidHilt") {
+            id = "curtaincall.android.hilt"
+            implementationClass = "AndroidHiltConventionPlugin"
+        }
     }
 }
