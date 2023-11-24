@@ -42,10 +42,9 @@ dependencies {
     implementation(libs.androidx.splashscreen)
 
     // compose
-    implementation(libs.bundles.accompanist.compose)
+    implementation(libs.accompanist.systemuicontroller)
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pager.indicators)
-    implementation(libs.androidx.lifecycle.compose)
     implementation(libs.getstream.chat.android.compose)
 
     // logging
@@ -55,10 +54,5 @@ dependencies {
     implementation(libs.kakao.user)
 
     // test
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.junit)
     debugImplementation(libs.androidx.compose.ui.tooling)
 }

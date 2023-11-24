@@ -21,7 +21,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":core:local"))
 
-    implementation(libs.datastore.preferences)
+    implementation(libs.androidx.datastore.preferences)
     implementation(libs.timber)
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)

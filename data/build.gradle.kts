@@ -24,7 +24,7 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
 
-    implementation(libs.datastore.preferences)
+    implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.paging.runtime)
     implementation(libs.timber)
 
