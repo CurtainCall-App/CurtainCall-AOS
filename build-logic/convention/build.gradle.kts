@@ -35,5 +35,9 @@ gradlePlugin {
             id = "curtaincall.android.library.compose"
             implementationClass = "AndroidLibraryComposeConventionPlugin"
         }
+        register("androidRoom") {
+            id = "curtaincall.android.room"
+            implementationClass = "AndroidRoomConventionPlugin"
+        }
     }
 }

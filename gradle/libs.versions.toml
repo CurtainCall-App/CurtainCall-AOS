@@ -87,6 +87,7 @@ curtaincall-android-application-compose = { id = "curtaincall.android.applicatio
 curtaincall-android-hilt = { id = "curtaincall.android.hilt", version = "unspecified" }
 curtaincall-android-library = { id = "curtaincall.android.library", version = "unspecified" }
 curtaincall-android-library-compose = { id = "curtaincall.android.library.compose", version = "unspecified" }
+curtaincall-android-room = { id = "curtaincall.android.room", version = "unspecified"}
 
 
 
