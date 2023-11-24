@@ -27,5 +27,13 @@ gradlePlugin {
             id = "curtaincall.android.hilt"
             implementationClass = "AndroidHiltConventionPlugin"
         }
+        register("androidLibrary") {
+            id = "curtaincall.android.library"
+            implementationClass = "AndroidLibraryConventionPlugin"
+        }
+        register("androidLibraryCompose") {
+            id = "curtaincall.android.library.compose"
+            implementationClass = "AndroidLibraryComposeConventionPlugin"
+        }
     }
 }
