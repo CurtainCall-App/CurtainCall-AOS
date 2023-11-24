@@ -12,9 +12,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
+    // 3rd party compose UI
     implementation(libs.coil.compose)
-
-    // 3rd party
     implementation(libs.calendar.compose)
     implementation(libs.bottomsheet.dialog)
 }

@@ -1,22 +1,18 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.curtaincall.android.library)
 }
 
 android {
     namespace = "com.cmc.curtaincall.common.utility"
-
-    defaultConfig {
-        consumerProguardFiles("consumer-rules.pro")
-    }
 }
 
 dependencies {
     implementation(project(":domain"))
+
+    // androidx
     implementation(libs.androidx.core.ktx)
+
+    // 3rd party compose UI
     implementation(libs.calendar.compose)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso)
 }

@@ -1,17 +1,11 @@
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
-    alias(libs.plugins.hilt)
+    alias(libs.plugins.curtaincall.android.library)
+    alias(libs.plugins.curtaincall.android.hilt)
 }
 
 android {
     namespace = "com.cmc.curtaincall.data"
-
-    defaultConfig {
-        consumerProguardFiles("consumer-rules.pro")
-    }
 }
 
 dependencies {
@@ -20,16 +14,14 @@ dependencies {
     implementation(project(":core:local"))
     implementation(project(":common:utility"))
 
+    // retrofit
     implementation(libs.bundles.retrofit)
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
 
-    implementation(libs.androidx.datastore.preferences)
-    implementation(libs.androidx.paging.runtime)
+    // logging
     implementation(libs.timber)
 
+    // androidx
     implementation(libs.androidx.core.ktx)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso)
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.datastore.preferences)
 }
