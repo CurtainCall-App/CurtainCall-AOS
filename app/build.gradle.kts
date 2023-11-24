@@ -2,8 +2,8 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.curtaincall.android.application)
+    alias(libs.plugins.curtaincall.android.application.compose)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.google.services)
     alias(libs.plugins.hilt)
@@ -22,18 +22,6 @@ android {
         resValue("string", "NAVER_API_MAP_KEY", gradleLocalProperties(rootDir).getProperty("NAVER_API_MAP_KEY"))
         vectorDrawables {
             useSupportLibrary = true
-        }
-    }
-
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
-    }
-    packagingOptions {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
 }
@@ -55,8 +43,6 @@ dependencies {
     implementation(libs.androidx.splashscreen)
 
     // compose
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.bundles.androidx.compose)
     implementation(libs.bundles.accompanist.compose)
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pager.indicators)

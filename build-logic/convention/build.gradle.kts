@@ -19,5 +19,9 @@ gradlePlugin {
             id = "curtaincall.android.application"
             implementationClass = "AndroidApplicationConventionPlugin"
         }
+        register("androidApplicationCompose") {
+            id = "curtaincall.android.application.compose"
+            implementationClass = "AndroidApplicationComposeConventionPlugin"
+        }
     }
 }
