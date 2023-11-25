@@ -41,7 +41,6 @@ import com.cmc.curtaincall.common.design.component.basic.TopAppBarOnlySetting
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.Arsenic
 import com.cmc.curtaincall.common.design.theme.Black
-import com.cmc.curtaincall.common.design.theme.Black_Coral
 import com.cmc.curtaincall.common.design.theme.Bright_Gray
 import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
 import com.cmc.curtaincall.common.design.theme.Cultured
@@ -212,29 +211,32 @@ private fun MyPageFooter(
             fontWeight = FontWeight.Medium,
             fontFamily = spoqahansanseeo
         )
-        Text(
-            text = stringResource(R.string.mypage_can_consult_time),
-            modifier = Modifier.padding(top = 18.dp),
-            color = Black_Coral,
-            fontSize = 12.dp.toSp(),
-            fontWeight = FontWeight.Normal,
-            fontFamily = spoqahansanseeo
-        )
         Spacer(
             modifier = Modifier
-                .padding(top = 16.dp, bottom = 18.dp)
+                .padding(vertical = 20.dp)
                 .fillMaxWidth()
                 .height(1.dp)
                 .background(Bright_Gray)
         )
         Text(
             text = stringResource(R.string.mypage_source_of_performance_information),
-            modifier = Modifier.padding(bottom = 39.dp),
             color = Roman_Silver,
-            fontSize = 10.dp.toSp(),
+            fontSize = 12.dp.toSp(),
             fontWeight = FontWeight.Normal,
             fontFamily = spoqahansanseeo,
-            lineHeight = 15.dp.toSp()
+            lineHeight = 17.dp.toSp()
+        )
+        Text(
+            text = stringResource(R.string.mypage_copyright_information),
+            modifier = Modifier.padding(
+                top = 12.dp,
+                bottom = 30.dp
+            ),
+            color = Roman_Silver,
+            fontSize = 12.dp.toSp(),
+            fontWeight = FontWeight.Normal,
+            fontFamily = spoqahansanseeo,
+            lineHeight = 17.dp.toSp()
         )
     }
 }
