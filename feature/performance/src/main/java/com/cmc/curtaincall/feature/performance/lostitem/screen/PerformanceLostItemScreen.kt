@@ -29,10 +29,11 @@ import com.cmc.curtaincall.common.design.component.custom.SelectedDateCalender
 import com.cmc.curtaincall.common.design.component.items.EmptyItem
 import com.cmc.curtaincall.common.design.component.items.GridLostItem
 import com.cmc.curtaincall.common.design.component.items.SearchItem
+import com.cmc.curtaincall.common.design.component.show.lostproperty.LostPropertyTypeGrid
+import com.cmc.curtaincall.common.design.component.show.lostproperty.LostPropertyTypeItem
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.cmc.curtaincall.feature.performance.detail.PerformanceDetailViewModel
-import com.cmc.curtaincall.feature.performance.lostitem.LostItemTypeGrid
 import com.cmc.curtaincall.feature.performance.lostitem.PerformanceLostItemViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -305,19 +306,39 @@ private fun PerformanceLostItemContent(
                     )
                 }
                 if (isClickedType) {
-                    LostItemTypeGrid(
+                    LostPropertyTypeGrid(
                         modifier = Modifier
                             .padding(vertical = 24.dp, horizontal = 30.dp)
                             .fillMaxWidth()
-                            .height(336.dp),
-                        itemModifier = Modifier.size(60.dp, 90.dp),
-                        onTypeChange = {
-                            lostTypeState = it.label
-                            isClickedType = false
-                            performanceDetailViewModel.requestLostItemList(type = it.code)
-                            lostItems.refresh()
-                        }
-                    )
+                            .height(482.dp),
+                        contentPadding = PaddingValues(horizontal = 32.dp, vertical = 23.dp),
+                        verticalArrangement = Arrangement.spacedBy(28.dp),
+                        horizontalArrangement = Arrangement.spacedBy(49.dp)
+                    ) {
+                        LostPropertyTypeItem(
+                            modifier = Modifier.size(60.dp, 90.dp),
+                            lostPropertyType = it,
+                            onTypeChange = { lostPropertyType ->
+                                lostTypeState = lostPropertyType.label
+                                isClickedType = false
+                                performanceDetailViewModel.requestLostItemList(type = lostPropertyType.code)
+                                lostItems.refresh()
+                            }
+                        )
+                    }
+//                    LostItemTypeGrid(
+//                        modifier = Modifier
+//                            .padding(vertical = 24.dp, horizontal = 30.dp)
+//                            .fillMaxWidth()
+//                            .height(336.dp),
+//                        itemModifier = Modifier.size(60.dp, 90.dp),
+//                        onTypeChange = {
+//                            lostTypeState = it.label
+//                            isClickedType = false
+//                            performanceDetailViewModel.requestLostItemList(type = it.code)
+//                            lostItems.refresh()
+//                        }
+//                    )
                 }
             }
         )

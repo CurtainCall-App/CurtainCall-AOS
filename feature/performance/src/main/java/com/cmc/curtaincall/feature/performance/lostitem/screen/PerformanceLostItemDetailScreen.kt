@@ -31,10 +31,10 @@ import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallSnackbar
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallSnackbarHost
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithReportAction
+import com.cmc.curtaincall.common.design.component.enum.LostPropertyType
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
 import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
-import com.cmc.curtaincall.feature.performance.lostitem.LostItemType
 import com.cmc.curtaincall.feature.performance.lostitem.PerformanceLostItemViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
@@ -228,15 +228,15 @@ private fun PerformanceLostItemDetailBody(
                 .padding(top = 20.dp),
             type = stringResource(R.string.performance_find_lost_item_detail_classification),
             content = when (type) {
-                LostItemType.BAG.code -> LostItemType.BAG.label
-                LostItemType.WALLET.code -> LostItemType.WALLET.label
-                LostItemType.MONEY.code -> LostItemType.MONEY.label
-                LostItemType.CARD.code -> LostItemType.CARD.label
-                LostItemType.JEWELRY.code -> LostItemType.JEWELRY.label
-                LostItemType.ELECTRONICS.code -> LostItemType.ELECTRONICS.label
-                LostItemType.BOOKS.code -> LostItemType.BOOKS.label
-                LostItemType.CLOTHES.code -> LostItemType.CLOTHES.label
-                else -> LostItemType.ETC.label
+                LostPropertyType.BAG.code -> LostPropertyType.BAG.label
+                LostPropertyType.WALLET.code -> LostPropertyType.WALLET.label
+                LostPropertyType.MONEY.code -> LostPropertyType.MONEY.label
+                LostPropertyType.CARD.code -> LostPropertyType.CARD.label
+                LostPropertyType.JEWELRY.code -> LostPropertyType.JEWELRY.label
+                LostPropertyType.ELECTRONICS.code -> LostPropertyType.ELECTRONICS.label
+                LostPropertyType.BOOKS.code -> LostPropertyType.BOOKS.label
+                LostPropertyType.CLOTHES.code -> LostPropertyType.CLOTHES.label
+                else -> LostPropertyType.ETC.label
             },
             icon = painterResource(R.drawable.ic_lost_item)
         )

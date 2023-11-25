@@ -1,6 +1,7 @@
 package com.cmc.curtaincall.feature.performance.lostitem
 
 import androidx.paging.PagingData
+import com.cmc.curtaincall.common.design.component.enum.LostPropertyType
 import com.cmc.curtaincall.core.base.BaseState
 import com.cmc.curtaincall.domain.model.lostItem.LostItemDetailModel
 import com.cmc.curtaincall.domain.model.lostItem.LostItemModel
@@ -12,7 +13,7 @@ data class PerformanceLostItemUiState(
     val isDoneSearch: Boolean = false,
     val queryString: String = "",
     val lostDate: String? = null,
-    val lostItemType: LostItemType? = null,
+    val lostItemType: LostPropertyType? = null,
     val lostItemSearchItems: Flow<PagingData<LostItemModel>> = flowOf(),
     val lostDetailItem: LostItemDetailModel = LostItemDetailModel()
 ) : BaseState

@@ -50,10 +50,11 @@ import com.cmc.curtaincall.common.design.component.basic.CurtainCallSingleLineTe
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithClose
 import com.cmc.curtaincall.common.design.component.custom.CurtainCallTimePicker
 import com.cmc.curtaincall.common.design.component.custom.PreviousDateCalendar
+import com.cmc.curtaincall.common.design.component.enum.LostPropertyType
+import com.cmc.curtaincall.common.design.component.show.lostproperty.LostPropertyTypeGrid
+import com.cmc.curtaincall.common.design.component.show.lostproperty.LostPropertyTypeItem
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.*
-import com.cmc.curtaincall.feature.performance.lostitem.LostItemType
-import com.cmc.curtaincall.feature.performance.lostitem.LostItemTypeGrid
 import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
 import java.io.ByteArrayInputStream
@@ -226,32 +227,50 @@ private fun PerformanceLostItemCreateContent(
             title = stringResource(R.string.performance_find_lost_item_create_classification),
             placeholder = stringResource(R.string.performance_find_lost_item_create_classification_placeholder),
             value = when (lostItemCreateUiState.type) {
-                LostItemType.BAG.code -> LostItemType.BAG.label
-                LostItemType.WALLET.code -> LostItemType.WALLET.label
-                LostItemType.MONEY.code -> LostItemType.MONEY.label
-                LostItemType.CARD.code -> LostItemType.CARD.label
-                LostItemType.JEWELRY.code -> LostItemType.JEWELRY.label
-                LostItemType.ELECTRONICS.code -> LostItemType.ELECTRONICS.label
-                LostItemType.BOOKS.code -> LostItemType.BOOKS.label
-                LostItemType.CLOTHES.code -> LostItemType.CLOTHES.label
-                LostItemType.ETC.code -> LostItemType.ETC.label
+                LostPropertyType.BAG.code -> LostPropertyType.BAG.label
+                LostPropertyType.WALLET.code -> LostPropertyType.WALLET.label
+                LostPropertyType.MONEY.code -> LostPropertyType.MONEY.label
+                LostPropertyType.CARD.code -> LostPropertyType.CARD.label
+                LostPropertyType.JEWELRY.code -> LostPropertyType.JEWELRY.label
+                LostPropertyType.ELECTRONICS.code -> LostPropertyType.ELECTRONICS.label
+                LostPropertyType.BOOKS.code -> LostPropertyType.BOOKS.label
+                LostPropertyType.CLOTHES.code -> LostPropertyType.CLOTHES.label
+                LostPropertyType.ETC.code -> LostPropertyType.ETC.label
                 else -> ""
             }
         ) {
-            LostItemTypeGrid(
+            LostPropertyTypeGrid(
                 modifier = Modifier
+                    .padding(20.dp)
                     .fillMaxWidth()
-                    .height(328.dp)
-                    .padding(20.dp),
-                itemModifier = Modifier.size(48.dp, 72.dp),
-                fontSize = 12.dp.toSp(),
-                onTypeChange = {
-                    performanceLostItemCreateViewModel.setItemType(
-                        type = it.code
-                    )
-                    isClickLostItemType = false
-                }
-            )
+                    .height(431.dp),
+                contentPadding = PaddingValues(horizontal = 24.dp, vertical = 23.dp),
+                verticalArrangement = Arrangement.spacedBy(27.dp),
+                horizontalArrangement = Arrangement.spacedBy(32.dp)
+            ) {
+                LostPropertyTypeItem(
+                    modifier = Modifier.size(50.dp, 76.dp),
+                    lostPropertyType = it,
+                    onTypeChange = { lostPropertyType ->
+                        performanceLostItemCreateViewModel.setItemType(type = lostPropertyType.code)
+                        isClickLostItemType = false
+                    }
+                )
+            }
+//            LostItemTypeGrid(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(328.dp)
+//                    .padding(20.dp),
+//                itemModifier = Modifier.size(48.dp, 72.dp),
+//                fontSize = 12.dp.toSp(),
+//                onTypeChange = {
+//                    performanceLostItemCreateViewModel.setItemType(
+//                        type = it.code
+//                    )
+//                    isClickLostItemType = false
+//                }
+//            )
         }
         LostItemInfoTextField(
             modifier = Modifier

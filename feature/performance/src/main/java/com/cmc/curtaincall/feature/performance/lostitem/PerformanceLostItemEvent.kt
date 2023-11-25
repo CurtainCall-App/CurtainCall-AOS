@@ -1,6 +1,7 @@
 package com.cmc.curtaincall.feature.performance.lostitem
 
 import androidx.paging.PagingData
+import com.cmc.curtaincall.common.design.component.enum.LostPropertyType
 import com.cmc.curtaincall.core.base.BaseEvent
 import com.cmc.curtaincall.domain.model.lostItem.LostItemDetailModel
 import com.cmc.curtaincall.domain.model.lostItem.LostItemModel
@@ -21,7 +22,7 @@ sealed class PerformanceLostItemEvent : BaseEvent {
     ) : PerformanceLostItemEvent()
 
     data class SelectItemType(
-        val lostItemType: LostItemType
+        val lostItemType: LostPropertyType
     ) : PerformanceLostItemEvent()
 
     data class SetQueryString(
