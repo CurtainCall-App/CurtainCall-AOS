@@ -15,7 +15,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":common:design"))
+    implementation(project(":common:designsystem"))
 
     // androidx
     implementation(libs.androidx.core.ktx)

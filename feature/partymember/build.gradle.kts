@@ -9,7 +9,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":common:design"))
+    implementation(project(":common:designsystem"))
     implementation(project(":common:utility"))
     implementation(project(":core:base"))
     implementation(project(":domain"))
