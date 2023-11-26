@@ -22,7 +22,7 @@ private val LostPropertyTypeGridContentPadding = 23.dp
 private val LostPropertyTypeGridBottomPadding = 10.dp
 private val LostPropertyTypeGridRadius = 10.dp
 private val LostPropertyTypeGridElevation = 15.dp
-private val LostPropertyTypeGridCellCount = 3
+private const val LostPropertyTypeGridCellCount = 3
 
 @Composable
 fun LostPropertyTypeGrid(
