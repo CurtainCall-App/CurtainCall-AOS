@@ -152,13 +152,11 @@ private fun LoginKaKao(
                     val result = loginKaKao(context)
                     when (result) {
                         is AuthResult.Success -> {
-                            // TODO 카카오  AccessToken 서버 전달
-                            loginViewModel.fetchLogin("kakao", result.idToken)
-                            // onNavigateSignUpTerms()
+                            loginViewModel.fetchLogin(result.idToken)
                         }
 
                         is AuthResult.Failure -> {
-                            // TODO 카카오 로그인 에러 메세지 정의
+                            // TODO 카카오 로그인 실패 팝업
                         }
                     }
                 }
@@ -243,7 +241,11 @@ private suspend fun loginKaKao(context: Context): AuthResult = suspendCancellabl
                 }
                 loginWithKaKaoAccount(context, continuation)
             } else if (token != null) {
-                continuation.resume(AuthResult.Success(token.accessToken))
+                token.idToken?.let { token ->
+                    continuation.resume(AuthResult.Success(token))
+                } ?: kotlin.run {
+                    continuation.resume(AuthResult.Failure("kakao idToken error"))
+                }
             }
         }
     } else {

@@ -4,12 +4,11 @@ import com.cmc.curtaincall.domain.model.auth.LoginResultModel
 import kotlinx.coroutines.flow.Flow
 
 interface AuthRepository {
-    fun requestLogin(
-        registrationId: String,
-        accessToken: String
-    ): Flow<LoginResultModel>
+    fun requestLogin(authorization: String): Flow<LoginResultModel>
 
     fun requestReissue(refreshToken: String): Flow<LoginResultModel>
 
     fun requestLogout(accessToken: String): Flow<Boolean>
+
+    fun checkDuplicateNickname(nickname: String): Flow<Boolean>
 }

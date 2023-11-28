@@ -75,6 +75,8 @@ private fun SignUpInputContent(
                 is SignUpSideEffect.CreateMember -> {
                     onNavigateWelcome()
                 }
+
+                else -> Unit
             }
         }
     }

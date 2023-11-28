@@ -5,15 +5,11 @@ import com.cmc.curtaincall.domain.model.auth.LoginResultModel
 data class LoginResponse(
     val memberId: Int?,
     val accessToken: String,
-    val accessTokenExpiresAt: String,
-    val refreshToken: String,
-    val refreshTokenExpiresAt: String
+    val accessTokenExpiresAt: String
 ) {
     fun toModel() = LoginResultModel(
         memberId = memberId,
         accessToken = accessToken,
-        accessTokenExpiresAt = accessTokenExpiresAt,
-        refreshToken = refreshToken,
-        refreshTokenExpiresAt = refreshTokenExpiresAt
+        accessTokenExpiresAt = accessTokenExpiresAt
     )
 }

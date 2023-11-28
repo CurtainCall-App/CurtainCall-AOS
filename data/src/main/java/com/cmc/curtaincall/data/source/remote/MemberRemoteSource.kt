@@ -14,10 +14,6 @@ import javax.inject.Inject
 class MemberRemoteSource @Inject constructor(
     private val memberService: MemberService
 ) {
-    fun checkDuplicateNickname(nickname: String): Flow<Boolean> = flow {
-        emit(memberService.checkDuplicateNickname(nickname).result)
-    }
-
     fun createMember(nickname: String): Flow<Int> = flow {
         emit(memberService.createMember(MemberCreateRequest(nickname)).id)
     }

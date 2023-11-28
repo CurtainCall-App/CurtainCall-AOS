@@ -55,9 +55,6 @@ class MemberRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun checkDuplicateNickname(nickname: String): Flow<Boolean> =
-        memberRemoteSource.checkDuplicateNickname(nickname)
-
     override fun createMember(nickname: String): Flow<Int> =
         memberRemoteSource.createMember(nickname)
 
