@@ -2,6 +2,7 @@ package com.cmc.curtaincall.feature.auth.signup
 
 import androidx.lifecycle.viewModelScope
 import com.cmc.curtaincall.core.base.BaseViewModel
+import com.cmc.curtaincall.domain.repository.AuthRepository
 import com.cmc.curtaincall.domain.repository.MemberRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -10,6 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
     private val memberRepository: MemberRepository
 ) : BaseViewModel<SignUpState, SignUpEvent, SignUpSideEffect>(
     initialState = SignUpState()
@@ -32,7 +34,7 @@ class SignUpViewModel @Inject constructor(
     }
 
     fun checkDuplicateNickname(nickname: String) {
-        memberRepository.checkDuplicateNickname(nickname)
+        authRepository.checkDuplicateNickname(nickname)
             .onEach { sendAction(SignUpEvent.CheckDuplicateNickname(it)) }
             .launchIn(viewModelScope)
     }
@@ -43,7 +45,6 @@ class SignUpViewModel @Inject constructor(
                 memberRepository.saveMemberId(it)
                 memberRepository.saveMemberNickname(nickname)
                 sendSideEffect(SignUpSideEffect.CreateMember(it))
-            }
-            .launchIn(viewModelScope)
+            }.launchIn(viewModelScope)
     }
 }

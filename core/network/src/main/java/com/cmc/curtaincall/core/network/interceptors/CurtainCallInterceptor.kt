@@ -8,16 +8,12 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
-import timber.log.Timber
-import java.text.SimpleDateFormat
-import java.util.Calendar
 import javax.inject.Inject
 
 private data class TokenInfo(
     val accessToken: String,
     val accessTokenExpiresAt: String,
-    val refreshToken: String,
-    val refreshTokenExpiresAt: String
+    val idToken: String
 )
 
 class CurtainCallInterceptor @Inject constructor(
@@ -27,46 +23,22 @@ class CurtainCallInterceptor @Inject constructor(
 
     @SuppressLint("SimpleDateFormat")
     override fun intercept(chain: Interceptor.Chain): Response {
-        var tokenInfo = runBlocking {
+        val tokenInfo = runBlocking {
             combine(
                 tokenRepository.getAccessToken(),
                 tokenRepository.getAccessTokenExpiresAt(),
-                tokenRepository.getRefreshToken(),
-                tokenRepository.getRefreshTokenExpiresAt()
-            ) { accessToken, accessTokenExpiresAt, refreshToken, refreshTokenExpiresAt ->
+                tokenRepository.getIdToken()
+            ) { accessToken, accessTokenExpiresAt, idToken ->
                 TokenInfo(
                     accessToken = accessToken,
                     accessTokenExpiresAt = accessTokenExpiresAt,
-                    refreshToken = refreshToken,
-                    refreshTokenExpiresAt = refreshTokenExpiresAt
+                    idToken = idToken
                 )
             }.first()
         }
-
-        val today = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(Calendar.getInstance().time)
-        if (tokenInfo.accessTokenExpiresAt < today) {
-            Timber.d("refreshToken start")
-            try {
-                if (tokenInfo.refreshTokenExpiresAt > today) {
-                    tokenInfo = runBlocking {
-                        val result = authRepository.requestReissue(tokenInfo.refreshToken).first()
-                        tokenRepository.saveToken(result)
-                        TokenInfo(
-                            accessToken = result.accessToken,
-                            accessTokenExpiresAt = result.accessTokenExpiresAt,
-                            refreshToken = result.refreshToken,
-                            refreshTokenExpiresAt = result.refreshTokenExpiresAt
-                        )
-                    }
-                    Timber.d("refreshToken end accessToken: ${tokenInfo.accessToken} accessTokenExpiresAt: ${tokenInfo.accessTokenExpiresAt}")
-                }
-            } catch (e: Exception) {
-                return chain.proceed(chain.request())
-            }
-        }
         val newRequest = chain.request()
             .newBuilder()
-            .addHeader("Authorization", "Bearer ${tokenInfo.accessToken}")
+            .addHeader("Authorization", "Bearer ${if (tokenInfo.accessToken.isEmpty()) tokenInfo.accessToken else tokenInfo.accessToken}")
             .build()
         return chain.proceed(newRequest)
     }
