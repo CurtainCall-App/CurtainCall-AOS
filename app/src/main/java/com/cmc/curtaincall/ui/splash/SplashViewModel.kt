@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.ui
+package com.cmc.curtaincall.ui.splash
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.viewModelScope

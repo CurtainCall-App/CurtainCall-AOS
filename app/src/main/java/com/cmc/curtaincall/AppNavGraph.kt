@@ -12,8 +12,8 @@ import com.cmc.curtaincall.feature.auth.AuthDestination
 import com.cmc.curtaincall.feature.auth.authNavGraph
 import com.cmc.curtaincall.feature.home.navigation.HomeDestination
 import com.cmc.curtaincall.feature.home.navigation.HomeNavHost
-import com.cmc.curtaincall.ui.OnBoardingScreen
-import com.cmc.curtaincall.ui.SplashScreen
+import com.cmc.curtaincall.ui.onboarding.OnBoardingScreen
+import com.cmc.curtaincall.ui.splash.SplashScreen
 import io.getstream.chat.android.client.ChatClient
 
 private const val ROOT_GRAPH = "root_graph"

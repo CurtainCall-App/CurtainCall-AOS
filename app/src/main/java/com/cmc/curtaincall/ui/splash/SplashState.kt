@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.ui
+package com.cmc.curtaincall.ui.splash
 
 import com.cmc.curtaincall.core.base.BaseState
 

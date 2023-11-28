@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.ui
+package com.cmc.curtaincall.ui.splash
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
