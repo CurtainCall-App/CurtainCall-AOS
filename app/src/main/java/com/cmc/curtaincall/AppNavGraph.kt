@@ -48,22 +48,13 @@ internal fun AppNavHost(
         }
 
         composable(route = RootDestination.OnBoarding.route) {
-            OnBoardingScreen(
-                onNavigateLoginUp = {
-                    navHostController.navigate(AuthDestination.Login.route) {
-                        popUpTo(RootDestination.OnBoarding.route) {
-                            inclusive = true
-                        }
-                    }
-                },
-                onNavigateHome = {
-                    navHostController.navigate(HomeDestination.Home.route) {
-                        popUpTo(RootDestination.OnBoarding.route) {
-                            inclusive = true
-                        }
+            OnBoardingScreen {
+                navHostController.navigate(AuthDestination.Login.route) {
+                    popUpTo(RootDestination.OnBoarding.route) {
+                        inclusive = true
                     }
                 }
-            )
+            }
         }
 
         composable(route = HomeDestination.Home.route) {

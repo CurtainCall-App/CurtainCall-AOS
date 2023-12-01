@@ -1,19 +1,19 @@
 package com.cmc.curtaincall.ui.splash
 
-import android.annotation.SuppressLint
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cmc.curtaincall.core.base.BaseViewModel
+import com.cmc.curtaincall.common.utility.extensions.getTodayDate
 import com.cmc.curtaincall.domain.model.auth.LoginResultModel
 import com.cmc.curtaincall.domain.repository.AuthRepository
 import com.cmc.curtaincall.domain.repository.MemberRepository
 import com.cmc.curtaincall.domain.repository.TokenRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.zip
-import java.text.SimpleDateFormat
-import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,22 +21,17 @@ class SplashViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
     private val authRepository: AuthRepository,
     private val memberRepository: MemberRepository
-) : BaseViewModel<SplashState, Nothing, SplashSideEffect>(
-    initialState = SplashState
-) {
+) : ViewModel() {
 
     init {
         isValidationToken()
     }
 
-    override fun reduceState(currentState: SplashState, event: Nothing): SplashState {
-        return currentState
-    }
+    private val _isAutoLogin = MutableStateFlow(false)
+    val isAutoLogin: StateFlow<Boolean> = _isAutoLogin.asStateFlow()
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    @SuppressLint("SimpleDateFormat")
-    fun isValidationToken() {
-        val today = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(Calendar.getInstance().time)
+    private fun isValidationToken() {
+        val today = getTodayDate()
         tokenRepository.getAccessToken()
             .zip(tokenRepository.getAccessTokenExpiresAt()) { accessToken, accessTokenExpiresAt ->
                 LoginResultModel(
@@ -47,13 +42,9 @@ class SplashViewModel @Inject constructor(
                 loginResultModel.copy(memberId = memberId)
             }.onEach { loginResult ->
                 if (loginResult.accessToken.isNotEmpty() && loginResult.accessTokenExpiresAt > today) {
-                    if (loginResult.memberId == Int.MIN_VALUE) {
-                        sendSideEffect(SplashSideEffect.NeedLogin)
-                    } else {
-                        sendSideEffect(SplashSideEffect.AutoLogin)
-                    }
+                    _isAutoLogin.value = loginResult.memberId != Int.MIN_VALUE
                 } else {
-                    sendSideEffect(SplashSideEffect.NeedLogin)
+                    _isAutoLogin.value = false
                 }
             }.launchIn(viewModelScope)
     }

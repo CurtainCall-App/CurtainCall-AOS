@@ -5,6 +5,11 @@ import java.util.Calendar
 import java.util.Locale
 import java.util.TimeZone
 
+private const val DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss"
+fun getTodayDate(): String {
+    return SimpleDateFormat(DATE_PATTERN, Locale.KOREA).format(Calendar.getInstance().time)
+}
+
 fun String.toDateWithDay(): String {
     if (isEmpty()) return ""
     val date = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").parse(this)

@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.ui.main
+package com.cmc.curtaincall.ui
 
 import android.content.Context
 import android.os.Bundle

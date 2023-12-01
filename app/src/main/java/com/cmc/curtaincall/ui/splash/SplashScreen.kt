@@ -1,14 +1,10 @@
 package com.cmc.curtaincall.ui.splash
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.cmc.curtaincall.common.design.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -17,21 +13,14 @@ fun SplashScreen(
     onNavigateOnBoarding: () -> Unit,
     onNavigateOnHome: () -> Unit
 ) {
-    val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(Cetacean_Blue)
-
+    SystemUiStatusBar(Cetacean_Blue)
     LaunchedEffect(true) {
-        splashViewModel.effects.collectLatest { effect ->
-            if (effect == SplashSideEffect.AutoLogin) {
+        splashViewModel.isAutoLogin.collectLatest { isAutoLogin ->
+            if (isAutoLogin) {
                 onNavigateOnHome()
             } else {
                 onNavigateOnBoarding()
             }
         }
     }
-    Spacer(
-        Modifier
-            .fillMaxSize()
-            .background(Cetacean_Blue)
-    )
 }

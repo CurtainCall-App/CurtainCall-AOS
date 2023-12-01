@@ -19,6 +19,7 @@ android {
 dependencies {
     implementation(project(":common:designsystem"))
     implementation(project(":common:navigation"))
+    implementation(project(":common:utility"))
     implementation(project(":core:base"))
     implementation(project(":core:network"))
     implementation(project(":core:local"))

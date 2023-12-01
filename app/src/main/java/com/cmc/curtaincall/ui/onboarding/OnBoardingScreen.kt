@@ -40,8 +40,7 @@ private data class OnBoardingBanner(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun OnBoardingScreen(
-    onNavigateLoginUp: () -> Unit,
-    onNavigateHome: () -> Unit
+    onNavigateLoginUp: () -> Unit
 ) {
     val banners = listOf(
         OnBoardingBanner(
