@@ -7,7 +7,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.cmc.curtaincall.core.base.CurtainCallDestination
+import com.cmc.curtaincall.common.navigation.NavGraphLabel
+import com.cmc.curtaincall.common.navigation.root.RootDestination
 import com.cmc.curtaincall.feature.auth.AuthDestination
 import com.cmc.curtaincall.feature.auth.authNavGraph
 import com.cmc.curtaincall.feature.home.navigation.HomeDestination
@@ -16,18 +17,6 @@ import com.cmc.curtaincall.ui.onboarding.OnBoardingScreen
 import com.cmc.curtaincall.ui.splash.SplashScreen
 import io.getstream.chat.android.client.ChatClient
 
-private const val ROOT_GRAPH = "root_graph"
-private const val SPLASH = "splash"
-private const val ONBOARDING = "onboarding"
-
-object Splash : CurtainCallDestination {
-    override val route = SPLASH
-}
-
-object OnBoarding : CurtainCallDestination {
-    override val route = ONBOARDING
-}
-
 @Composable
 internal fun AppNavHost(
     navHostController: NavHostController = rememberNavController(),
@@ -35,22 +24,22 @@ internal fun AppNavHost(
 ) {
     NavHost(
         navController = navHostController,
-        startDestination = Splash.route,
+        startDestination = RootDestination.Splash.route,
         modifier = Modifier.fillMaxSize(),
-        route = ROOT_GRAPH
+        route = NavGraphLabel.ROOT
     ) {
-        composable(route = Splash.route) {
+        composable(route = RootDestination.Splash.route) {
             SplashScreen(
                 onNavigateOnBoarding = {
-                    navHostController.navigate(OnBoarding.route) {
-                        popUpTo(Splash.route) {
+                    navHostController.navigate(RootDestination.OnBoarding.route) {
+                        popUpTo(RootDestination.Splash.route) {
                             inclusive = true
                         }
                     }
                 },
                 onNavigateOnHome = {
                     navHostController.navigate(HomeDestination.Home.route) {
-                        popUpTo(Splash.route) {
+                        popUpTo(RootDestination.Splash.route) {
                             inclusive = true
                         }
                     }
@@ -58,18 +47,18 @@ internal fun AppNavHost(
             )
         }
 
-        composable(route = OnBoarding.route) {
+        composable(route = RootDestination.OnBoarding.route) {
             OnBoardingScreen(
                 onNavigateLoginUp = {
                     navHostController.navigate(AuthDestination.Login.route) {
-                        popUpTo(OnBoarding.route) {
+                        popUpTo(RootDestination.OnBoarding.route) {
                             inclusive = true
                         }
                     }
                 },
                 onNavigateHome = {
                     navHostController.navigate(HomeDestination.Home.route) {
-                        popUpTo(OnBoarding.route) {
+                        popUpTo(RootDestination.OnBoarding.route) {
                             inclusive = true
                         }
                     }
