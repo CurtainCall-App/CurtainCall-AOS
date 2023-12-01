@@ -12,6 +12,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -26,25 +27,42 @@ import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 import kotlinx.coroutines.launch
 
+private val OnBoardingButtonHeight = 52.dp
+private val OnBoardingButtonHorizontalPadding = 20.dp
+private val OnBoardingButtonBottomPadding = 19.dp
+
+private data class OnBoardingBanner(
+    val title: String,
+    val description: String,
+    val image: Painter
+)
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun OnBoardingScreen(
     onNavigateLoginUp: () -> Unit,
     onNavigateHome: () -> Unit
 ) {
-    val pagerItems = listOf(
-        stringResource(R.string.onboarding_performance_navigation) to stringResource(R.string.onboarding_performance_navigation_description),
-        stringResource(R.string.onboarding_partymember_gathering) to stringResource(R.string.onboarding_partymember_gathering_description),
-        stringResource(R.string.onboarding_livetalk) to stringResource(R.string.onboarding_livetalk_description)
-    )
-    val painterItems = listOf(
-        painterResource(R.drawable.ic_onboarding_performance),
-        painterResource(R.drawable.ic_onboarding_partymember),
-        painterResource(R.drawable.ic_onboarding_livetalk)
+    val banners = listOf(
+        OnBoardingBanner(
+            title = stringResource(R.string.performance_search),
+            description = stringResource(R.string.onboarding_performance_search_banner_description),
+            image = painterResource(R.drawable.ic_onboarding_performance_search)
+        ),
+        OnBoardingBanner(
+            title = stringResource(R.string.partymember_recruit),
+            description = stringResource(R.string.onboarding_partymember_recruit_banner_description),
+            image = painterResource(R.drawable.ic_onboarding_partymember_recruit)
+        ),
+        OnBoardingBanner(
+            title = stringResource(R.string.livetalk),
+            description = stringResource(R.string.onboarding_livetalk_banner_description),
+            image = painterResource(R.drawable.ic_onboarding_livetalk)
+        )
     )
 
-    val pagerState = rememberPagerState { pagerItems.size }
-    val coroutineScopre = rememberCoroutineScope()
+    val pagerState = rememberPagerState { banners.size }
+    val coroutineScope = rememberCoroutineScope()
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -52,7 +70,7 @@ internal fun OnBoardingScreen(
     ) {
         DynamicHorizontalPagerIndicator(
             pagerState = pagerState,
-            pageCount = pagerItems.size,
+            pageCount = banners.size,
             modifier = Modifier
                 .align(Alignment.End)
                 .padding(top = 50.dp, end = 20.dp),
@@ -63,27 +81,35 @@ internal fun OnBoardingScreen(
             inactiveIndicatorWidth = 7.dp,
             spacing = 5.dp
         )
-        HorizontalPager(
-            state = pagerState
-        ) { position ->
-            val isSkip = position != pagerItems.lastIndex
-            OnBoardingPagerItem(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 20.dp)
-                    .padding(top = 36.dp, bottom = 67.dp),
-                title = pagerItems[position].first,
-                description = pagerItems[position].second,
-                painter = painterItems[position],
-                isSkipButton = isSkip
-            ) {
-                if (isSkip) {
-                    coroutineScopre.launch {
-                        pagerState.scrollToPage(pagerItems.lastIndex)
-                    }
-                } else {
-                    onNavigateLoginUp()
-                }
+        HorizontalPager(state = pagerState) { position ->
+            Column(modifier = Modifier.fillMaxSize()) {
+                OnBoardingPagerItem(
+                    modifier = Modifier
+                        .padding(top = 36.dp)
+                        .fillMaxWidth()
+                        .weight(1f),
+                    banner = banners[position]
+                )
+                CurtainCallRoundedTextButton(
+                    onClick = {
+                        coroutineScope.launch {
+                            if (position == banners.lastIndex) {
+                                onNavigateLoginUp()
+                            } else {
+                                pagerState.scrollToPage(banners.lastIndex)
+                            }
+                        }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = OnBoardingButtonHorizontalPadding)
+                        .padding(bottom = OnBoardingButtonBottomPadding)
+                        .height(OnBoardingButtonHeight),
+                    title = stringResource(if (position == banners.lastIndex) R.string.onboarding_skip_button else R.string.onboarding_login_button),
+                    fontSize = 16.dp.toSp(),
+                    containerColor = Me_Pink,
+                    contentColor = Cetacean_Blue
+                )
             }
         }
     }
@@ -92,52 +118,35 @@ internal fun OnBoardingScreen(
 @Composable
 private fun OnBoardingPagerItem(
     modifier: Modifier = Modifier,
-    title: String,
-    description: String,
-    painter: Painter,
-    isSkipButton: Boolean,
-    onClick: () -> Unit
+    banner: OnBoardingBanner
 ) {
     Column(modifier) {
         Text(
-            text = title,
+            text = banner.title,
+            modifier = Modifier.padding(start = 20.dp),
             color = White,
             fontSize = 24.dp.toSp(),
             fontWeight = FontWeight.Bold,
             fontFamily = spoqahansanseeo
         )
         Text(
-            text = description,
-            modifier = Modifier.padding(top = 30.dp),
+            text = banner.description,
+            modifier = Modifier.padding(top = 30.dp, start = 20.dp),
             color = White,
-            fontSize = 16.dp.toSp(),
+            fontSize = 15.dp.toSp(),
             fontWeight = FontWeight.Medium,
             fontFamily = spoqahansanseeo,
-            lineHeight = 22.dp.toSp()
+            lineHeight = 23.dp.toSp()
         )
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            contentAlignment = Alignment.BottomCenter
-        ) {
+        Column(Modifier.fillMaxSize()) {
+            Spacer(Modifier.weight(42f))
             Image(
-                painter = painter,
-                contentDescription = null,
-                modifier = Modifier
-                    .padding(bottom = 185.dp)
-                    .width(145.dp)
+                painter = banner.image,
+                contentDescription = banner.title,
+                modifier = Modifier.fillMaxWidth(),
+                contentScale = ContentScale.FillWidth
             )
+            Spacer(Modifier.weight(128f))
         }
-        CurtainCallRoundedTextButton(
-            onClick = onClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(52.dp),
-            title = stringResource(if (isSkipButton) R.string.onboarding_skip else R.string.onboarding_login),
-            fontSize = 16.dp.toSp(),
-            containerColor = Me_Pink,
-            contentColor = Cetacean_Blue
-        )
     }
 }
