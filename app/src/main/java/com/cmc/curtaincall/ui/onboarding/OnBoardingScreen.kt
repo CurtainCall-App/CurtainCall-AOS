@@ -105,7 +105,7 @@ internal fun OnBoardingScreen(
                         .padding(horizontal = OnBoardingButtonHorizontalPadding)
                         .padding(bottom = OnBoardingButtonBottomPadding)
                         .height(OnBoardingButtonHeight),
-                    title = stringResource(if (position == banners.lastIndex) R.string.onboarding_skip_button else R.string.onboarding_login_button),
+                    title = stringResource(if (position == banners.lastIndex) R.string.onboarding_login_button else R.string.onboarding_skip_button),
                     fontSize = 16.dp.toSp(),
                     containerColor = Me_Pink,
                     contentColor = Cetacean_Blue
