@@ -16,8 +16,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.core.base.BottomDestination
-import com.cmc.curtaincall.core.base.CurtainCallDestination
+import com.cmc.curtaincall.core.navigation.BottomDestination
+import com.cmc.curtaincall.core.navigation.CurtainCallDestination
 import com.cmc.curtaincall.feature.home.HomeScreen
 import com.cmc.curtaincall.feature.home.guide.GuideScreen
 import com.cmc.curtaincall.feature.home.guide.GuideType

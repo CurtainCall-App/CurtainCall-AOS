@@ -1,5 +1,6 @@
 package com.cmc.curtaincall
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -24,25 +25,9 @@ import io.getstream.chat.android.offline.plugin.factory.StreamOfflinePluginFacto
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val offlinePluginFactory = StreamOfflinePluginFactory(
-            config = Config(
-                backgroundSyncEnabled = true,
-                userPresence = true,
-                persistenceEnabled = true,
-                uploadAttachmentsNetworkType = UploadAttachmentsNetworkType.NOT_ROAMING
-            ),
-            appContext = this
-
-        )
-        val chatClient = ChatClient.Builder(BuildConfig.GET_STREAM_API_KEY, this)
-            .withPlugin(offlinePluginFactory)
-            .logLevel(if (BuildConfig.DEBUG) ChatLogLevel.DEBUG else ChatLogLevel.ERROR)
-            .build()
-
         installSplashScreen()
         setContent {
-            CurtainCallApp(chatClient)
+            CurtainCallApp(chatClient = createChatClient(this))
         }
     }
 }
@@ -59,4 +44,21 @@ private fun CurtainCallApp(chatClient: ChatClient) {
             }
         }
     }
+}
+
+private fun createChatClient(context: Context): ChatClient {
+    val pluginFactory = StreamOfflinePluginFactory(
+        config = Config(
+            backgroundSyncEnabled = true,
+            userPresence = true,
+            persistenceEnabled = true,
+            uploadAttachmentsNetworkType = UploadAttachmentsNetworkType.NOT_ROAMING
+        ),
+        appContext = context
+    )
+
+    return ChatClient.Builder(BuildConfig.GET_STREAM_API_KEY, context)
+        .withPlugin(pluginFactory)
+        .logLevel(if (BuildConfig.DEBUG) ChatLogLevel.DEBUG else ChatLogLevel.ERROR)
+        .build()
 }

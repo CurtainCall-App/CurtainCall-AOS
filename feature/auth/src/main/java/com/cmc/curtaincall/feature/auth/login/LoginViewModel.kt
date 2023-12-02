@@ -1,7 +1,7 @@
 package com.cmc.curtaincall.feature.auth.login
 
 import androidx.lifecycle.viewModelScope
-import com.cmc.curtaincall.core.base.BaseViewModel
+import com.cmc.curtaincall.core.base.RootViewModel
 import com.cmc.curtaincall.domain.repository.AuthRepository
 import com.cmc.curtaincall.domain.repository.MemberRepository
 import com.cmc.curtaincall.domain.repository.TokenRepository
@@ -18,28 +18,21 @@ class LoginViewModel @Inject constructor(
     private val authRepository: AuthRepository,
     private val tokenRepository: TokenRepository,
     private val memberRepository: MemberRepository
-) : BaseViewModel<LoginState, Nothing, LoginSideEffect>(
-    initialState = LoginState
-) {
-    override fun reduceState(currentState: LoginState, event: Nothing): LoginState = currentState
-
+) : RootViewModel<LoginSideEffect>() {
     fun fetchLogin(idToken: String) {
         authRepository.requestLogin(idToken)
             .onStart { tokenRepository.saveIdToken(idToken) }
-            .onEach { resultModel ->
-                if (resultModel.memberId != null) {
-                    resultModel.memberId?.let { memberRepository.saveMemberId(it) }
-                    tokenRepository.saveToken(resultModel)
-                    sendSideEffect(LoginSideEffect.ExistMember)
-                } else {
-                    tokenRepository.saveToken(resultModel)
-                    sendSideEffect(LoginSideEffect.SuccessLogin)
-                }
-            }.catch {
-                if (it is HttpException) {
-                    sendSideEffect(LoginSideEffect.SuccessLogin)
-                }
+            .catch { e ->
+                if (e is HttpException) sendSideEffect(LoginSideEffect.SuccessLogin)
             }
-            .launchIn(viewModelScope)
+            .onEach { resultModel ->
+                tokenRepository.saveToken(resultModel)
+                resultModel.memberId?.let {
+                    memberRepository.saveMemberId(it)
+                    sendSideEffect(LoginSideEffect.ExistMember)
+                } ?: kotlin.run {
+                    sendSideEffect(LoginSideEffect.SuccessLogin)
+                }
+            }.launchIn(viewModelScope)
     }
 }

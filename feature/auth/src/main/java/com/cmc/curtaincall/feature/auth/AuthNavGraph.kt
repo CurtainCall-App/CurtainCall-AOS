@@ -4,39 +4,19 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.cmc.curtaincall.core.base.CurtainCallDestination
+import com.cmc.curtaincall.common.navigation.NavGraphLabel
+import com.cmc.curtaincall.common.navigation.destination.AuthDestination
 import com.cmc.curtaincall.feature.auth.login.LoginScreen
 import com.cmc.curtaincall.feature.auth.signup.screen.SignUpInputScreen
 import com.cmc.curtaincall.feature.auth.signup.screen.SignUpTermsScreen
 import com.cmc.curtaincall.feature.auth.welcome.WelComeScreen
 import com.cmc.curtaincall.feature.home.navigation.HomeDestination
 
-private const val AUTH_GRAPH = "auth_graph"
-private const val LOGIN = "login"
-private const val SIGNUP_TERMS = "signup_terms"
-private const val SIGNUP_INPUT = "signup_input"
-private const val WELCOME = "welcome"
-
-sealed interface AuthDestination : CurtainCallDestination {
-    object Login : AuthDestination {
-        override val route = LOGIN
-    }
-
-    object SignUpTerms : AuthDestination {
-        override val route = SIGNUP_TERMS
-    }
-
-    object SignUpInput : AuthDestination {
-        override val route = SIGNUP_INPUT
-    }
-
-    object Welcome : AuthDestination {
-        override val route = WELCOME
-    }
-}
-
 fun NavGraphBuilder.authNavGraph(navHostController: NavHostController) {
-    navigation(startDestination = AuthDestination.Login.route, route = AUTH_GRAPH) {
+    navigation(
+        startDestination = AuthDestination.Login.route,
+        route = NavGraphLabel.AUTH
+    ) {
         composable(route = AuthDestination.Login.route) {
             LoginScreen(
                 onNavigateSignUpTerms = {

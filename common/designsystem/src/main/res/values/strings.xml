@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- common -->
+    <string name="performance_search">작품 탐색</string>
+    <string name="partymember_recruit">파티원 모집</string>
+    <string name="livetalk">라이브톡</string>
+
     <!-- splash -->
     <string name="splash_logo_image_description">Splash Logo Image</string>
 
     <!-- onboarding -->
-    <string name="onboarding_performance_navigation">작품 탐색</string>
-    <string name="onboarding_performance_navigation_description">현재 상영 중인 연극 및 뮤지컬에\n관한 모든 정보를 확인할 수 있어요.</string>
-    <string name="onboarding_partymember_gathering">파티원 모집</string>
-    <string name="onboarding_partymember_gathering_description">보고 싶은 작품을 다른 사람과 함께\n감상하거나 이야기를 나누며 작품을\n온전히 즐길 수 있어요.</string>
-    <string name="onboarding_livetalk">라이브톡</string>
-    <string name="onboarding_livetalk_description">당일 상연하는 작품들에 한해\n실시간으로 다른 관객들과 함께\n이야기를 나눌 수 있어요.</string>
-    <string name="onboarding_skip">건너뛰기</string>
-    <string name="onboarding_login">로그인 하기</string>
+    <string name="onboarding_performance_search_banner_description">공연에 대한 상세한 정보와\n한 줄 리뷰, 그리고 공연장의 분실물\n정보를 알 수 있어요!</string>
+    <string name="onboarding_partymember_recruit_banner_description">보고 싶은 작품을 다른 사람과 함께\n감상하거나 이야기를 나누며 작품을\n온전히 즐길 수 있어요!</string>
+    <string name="onboarding_livetalk_banner_description">공연 전후에 실시간으로 다른\n사람들과 대화를 나눌 수 있어요!</string>
+    <string name="onboarding_skip_button">건너뛰기</string>
+    <string name="onboarding_login_button">로그인 하기</string>
 
     <!-- login -->
-    <string name="login_inquire">[문의하기]\ncurtaincall@gmail.com</string>
+    <string name="login_start_without_login">로그인 없이 시작하기</string>
 
     <!-- search -->
     <string name="search_performance_title">작품명 입력</string>
@@ -101,7 +103,6 @@
     <string name="partymember_upload_move_to_home">홈으로 이동</string>
 
     <!-- performance-->
-    <string name="performance_search">작품 탐색</string>
     <string name="performance_search_rank_sort">별점순</string>
     <string name="performance_search_popular_sort">인기순</string>
     <string name="performance_search_korean_sort">가나다순</string>

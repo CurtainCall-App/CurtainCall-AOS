@@ -16,4 +16,5 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.calendar.compose)
     implementation(libs.bottomsheet.dialog)
+    implementation(libs.accompanist.systemuicontroller)
 }
