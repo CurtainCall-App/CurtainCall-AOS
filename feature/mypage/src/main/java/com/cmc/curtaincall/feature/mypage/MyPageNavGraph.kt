@@ -9,8 +9,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.core.base.BottomDestination
-import com.cmc.curtaincall.core.base.CurtainCallDestination
+import com.cmc.curtaincall.core.navigation.BottomDestination
+import com.cmc.curtaincall.core.navigation.CurtainCallDestination
 import com.cmc.curtaincall.feature.mypage.editprofile.MyPageProfileEditScreen
 import com.cmc.curtaincall.feature.mypage.main.MyPageScreen
 import com.cmc.curtaincall.feature.mypage.notice.MyPageNoticeDetailScreen

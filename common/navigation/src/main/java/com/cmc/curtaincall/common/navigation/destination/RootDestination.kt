@@ -1,7 +1,7 @@
-package com.cmc.curtaincall.common.navigation.root
+package com.cmc.curtaincall.common.navigation.destination
 
 import com.cmc.curtaincall.common.navigation.NavRouteLabel
-import com.cmc.curtaincall.core.base.CurtainCallDestination
+import com.cmc.curtaincall.core.navigation.CurtainCallDestination
 
 sealed interface RootDestination : CurtainCallDestination {
     object Splash : RootDestination {

@@ -23,8 +23,8 @@ import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
-import com.cmc.curtaincall.core.base.BottomDestination
-import com.cmc.curtaincall.core.base.CurtainCallDestination
+import com.cmc.curtaincall.core.navigation.BottomDestination
+import com.cmc.curtaincall.core.navigation.CurtainCallDestination
 import com.cmc.curtaincall.feature.livetalk.LiveTalkDestination
 import com.cmc.curtaincall.feature.mypage.MyPageDestination
 import com.cmc.curtaincall.feature.partymember.PartyMemberDestination

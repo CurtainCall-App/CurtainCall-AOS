@@ -8,8 +8,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.cmc.curtaincall.common.navigation.NavGraphLabel
-import com.cmc.curtaincall.common.navigation.root.RootDestination
-import com.cmc.curtaincall.feature.auth.AuthDestination
+import com.cmc.curtaincall.common.navigation.destination.AuthDestination
+import com.cmc.curtaincall.common.navigation.destination.RootDestination
 import com.cmc.curtaincall.feature.auth.authNavGraph
 import com.cmc.curtaincall.feature.home.navigation.HomeDestination
 import com.cmc.curtaincall.feature.home.navigation.HomeNavHost

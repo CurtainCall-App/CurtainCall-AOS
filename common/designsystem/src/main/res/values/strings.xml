@@ -16,7 +16,7 @@
     <string name="onboarding_login_button">로그인 하기</string>
 
     <!-- login -->
-    <string name="login_inquire">[문의하기]\ncurtaincall@gmail.com</string>
+    <string name="login_start_without_login">로그인 없이 시작하기</string>
 
     <!-- search -->
     <string name="search_performance_title">작품명 입력</string>
