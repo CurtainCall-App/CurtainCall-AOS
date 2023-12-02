@@ -13,12 +13,12 @@ import com.cmc.curtaincall.feature.auth.AuthDestination
 import com.cmc.curtaincall.feature.auth.authNavGraph
 import com.cmc.curtaincall.feature.home.navigation.HomeDestination
 import com.cmc.curtaincall.feature.home.navigation.HomeNavHost
-import com.cmc.curtaincall.ui.onboarding.OnBoardingScreen
-import com.cmc.curtaincall.ui.splash.SplashScreen
+import com.cmc.curtaincall.onboarding.OnBoardingScreen
+import com.cmc.curtaincall.splash.SplashScreen
 import io.getstream.chat.android.client.ChatClient
 
 @Composable
-internal fun AppNavHost(
+fun AppNavHost(
     navHostController: NavHostController = rememberNavController(),
     chatClient: ChatClient
 ) {

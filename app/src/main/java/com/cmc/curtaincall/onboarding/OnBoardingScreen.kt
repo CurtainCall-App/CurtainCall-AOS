@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.ui.onboarding
+package com.cmc.curtaincall.onboarding
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image

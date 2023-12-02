@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.ui.splash
+package com.cmc.curtaincall.splash
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
