@@ -6,12 +6,12 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Shape
 
 @Immutable
-data class CurtainCallShape(
+data class CurtainCallShapes(
     val bottomButton: Shape
 )
 
-val LocalCurtainCallShape = staticCompositionLocalOf {
-    CurtainCallShape(
+val LocalCurtainCallShapes = staticCompositionLocalOf {
+    CurtainCallShapes(
         bottomButton = ShapeDefaults.Small
     )
 }
