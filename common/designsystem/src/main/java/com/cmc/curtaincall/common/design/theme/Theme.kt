@@ -1,47 +1,37 @@
 package com.cmc.curtaincall.common.design.theme
 
-import android.app.Activity
-import android.os.Build
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ripple.RippleAlpha
 import androidx.compose.material.ripple.RippleTheme
-import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalView
-import androidx.core.view.WindowCompat
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.unit.dp
 
-object NoRippleTheme : RippleTheme {
-
-    @Composable
-    override fun defaultColor(): Color = Color.Transparent
-
-    @Composable
-    override fun rippleAlpha(): RippleAlpha = RippleAlpha(0f, 0f, 0f, 0f)
-}
-
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+private val curtainCallTypography = CurtainCallTypography(
+    h1 = TextStyle.Default,
+    h2 = TextStyle.Default,
+    h3 = TextStyle.Default,
+    subTitle1 = TextStyle.Default,
+    subTitle2 = TextStyle.Default,
+    subTitle3 = TextStyle.Default,
+    body1 = TextStyle.Default,
+    body2 = TextStyle.Default,
+    body3 = TextStyle.Default,
+    body4 = TextStyle.Default,
+    body5 = TextStyle.Default,
+    caption = TextStyle.Default
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+private val curtainCallColors = CurtainCallColors(
+    primary = Color.Unspecified,
+    onPrimary = Color.Unspecified
+)
 
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+private val curtainCallShapes = CurtainCallShapes(
+    bottomButton = RoundedCornerShape(12.dp)
 )
 
 @Composable
@@ -51,27 +41,51 @@ fun CurtainCallTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+//    val colorScheme = when {
+//        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+//            val context = LocalContext.current
+//            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+//        }
+//
+//        darkTheme -> DarkColorScheme
+//        else -> LightColorScheme
+//    }
+//    val view = LocalView.current
+//    if (!view.isInEditMode) {
+//        SideEffect {
+//            val window = (view.context as Activity).window
+//            window.statusBarColor = colorScheme.primary.toArgb()
+//            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
+//        }
+//    }
+    CompositionLocalProvider(
+        LocalCurtainCallTypography provides curtainCallTypography,
+        LocalCurtainCallColors provides curtainCallColors,
+        LocalCurtainCallShapes provides curtainCallShapes
+    ) {
+        MaterialTheme(content = content)
     }
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
-        }
-    }
+}
 
-    MaterialTheme(
-        colorScheme = colorScheme,
-        typography = Typography,
-        content = content
-    )
+object CurtainCallTheme {
+    val typography: CurtainCallTypography
+        @Composable
+        get() = LocalCurtainCallTypography.current
+
+    val colors: CurtainCallColors
+        @Composable
+        get() = LocalCurtainCallColors.current
+
+    val shapes: CurtainCallShapes
+        @Composable
+        get() = LocalCurtainCallShapes.current
+}
+
+object NoRippleTheme : RippleTheme {
+
+    @Composable
+    override fun defaultColor(): Color = Color.Transparent
+
+    @Composable
+    override fun rippleAlpha(): RippleAlpha = RippleAlpha(0f, 0f, 0f, 0f)
 }
