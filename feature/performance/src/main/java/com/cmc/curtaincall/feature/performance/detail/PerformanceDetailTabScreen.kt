@@ -22,11 +22,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.common.design.component.basic.CurtainCallBorderTextButton
-import com.cmc.curtaincall.common.design.component.content.card.PerformanceCard
-import com.cmc.curtaincall.common.design.extensions.toSp
-import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.common.designsystem.R
+import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallBorderTextButton
+import com.cmc.curtaincall.common.designsystem.component.content.card.PerformanceCard
+import com.cmc.curtaincall.common.designsystem.extensions.toSp
+import com.cmc.curtaincall.common.designsystem.theme.*
 import com.cmc.curtaincall.common.utility.extensions.getShowTimes
 import com.cmc.curtaincall.domain.model.show.FacilityDetailModel
 import com.cmc.curtaincall.domain.model.show.ShowTimeModel

@@ -11,18 +11,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.cmc.curtaincall.common.design.component.basic.SearchTopAppBarWithBack
-import com.cmc.curtaincall.common.design.component.basic.TopAppBarOnlySearch
-import com.cmc.curtaincall.common.design.component.basic.TopAppBarOnlySetting
-import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
-import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithClose
-import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithDelete
-import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithReportAction
-import com.cmc.curtaincall.common.design.theme.Black_Coral
-import com.cmc.curtaincall.common.design.theme.Cultured
-import com.cmc.curtaincall.common.design.theme.Nero
-import com.cmc.curtaincall.common.design.theme.Roman_Silver
-import com.cmc.curtaincall.common.design.theme.White
+import com.cmc.curtaincall.common.designsystem.component.basic.SearchTopAppBarWithBack
+import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarOnlySearch
+import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarOnlySetting
+import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarWithBack
+import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarWithClose
+import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarWithDelete
+import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarWithReportAction
+import com.cmc.curtaincall.common.designsystem.theme.Black_Coral
+import com.cmc.curtaincall.common.designsystem.theme.Cultured
+import com.cmc.curtaincall.common.designsystem.theme.Nero
+import com.cmc.curtaincall.common.designsystem.theme.Roman_Silver
+import com.cmc.curtaincall.common.designsystem.theme.White
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable

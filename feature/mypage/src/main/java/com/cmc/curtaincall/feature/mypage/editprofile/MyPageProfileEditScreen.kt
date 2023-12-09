@@ -41,21 +41,21 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
-import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.common.design.component.basic.CurtainCallRoundedTextButton
-import com.cmc.curtaincall.common.design.component.basic.CurtainCallSingleLineTextField
-import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
-import com.cmc.curtaincall.common.design.extensions.toSp
-import com.cmc.curtaincall.common.design.theme.Bright_Gray
-import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
-import com.cmc.curtaincall.common.design.theme.Cheery_Paddle_Pop
-import com.cmc.curtaincall.common.design.theme.Cultured
-import com.cmc.curtaincall.common.design.theme.Green
-import com.cmc.curtaincall.common.design.theme.Me_Pink
-import com.cmc.curtaincall.common.design.theme.Nero
-import com.cmc.curtaincall.common.design.theme.Silver_Sand
-import com.cmc.curtaincall.common.design.theme.White
-import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
+import com.cmc.curtaincall.common.designsystem.R
+import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallRoundedTextButton
+import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallSingleLineTextField
+import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarWithBack
+import com.cmc.curtaincall.common.designsystem.extensions.toSp
+import com.cmc.curtaincall.common.designsystem.theme.Bright_Gray
+import com.cmc.curtaincall.common.designsystem.theme.Cetacean_Blue
+import com.cmc.curtaincall.common.designsystem.theme.Cheery_Paddle_Pop
+import com.cmc.curtaincall.common.designsystem.theme.Cultured
+import com.cmc.curtaincall.common.designsystem.theme.Green
+import com.cmc.curtaincall.common.designsystem.theme.Me_Pink
+import com.cmc.curtaincall.common.designsystem.theme.Nero
+import com.cmc.curtaincall.common.designsystem.theme.Silver_Sand
+import com.cmc.curtaincall.common.designsystem.theme.White
+import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
 import kotlinx.coroutines.flow.collectLatest
 
 private const val INPUT_REGEX = "^[ㄱ-ㅎ가-힣a-zA-Z0-9]{0,10}$"

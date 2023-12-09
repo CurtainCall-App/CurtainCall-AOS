@@ -2,7 +2,7 @@ package com.cmc.curtaincall.feature.performance
 
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.cmc.curtaincall.common.design.component.custom.SortType
+import com.cmc.curtaincall.common.designsystem.component.custom.SortType
 import com.cmc.curtaincall.core.base.BaseViewModel
 import com.cmc.curtaincall.domain.model.show.ShowSearchWordModel
 import com.cmc.curtaincall.domain.repository.FavoriteRepository

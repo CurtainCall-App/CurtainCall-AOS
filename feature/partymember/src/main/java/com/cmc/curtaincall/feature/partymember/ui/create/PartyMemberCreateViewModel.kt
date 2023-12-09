@@ -2,8 +2,8 @@ package com.cmc.curtaincall.feature.partymember.ui.create
 
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.cmc.curtaincall.common.design.component.content.card.PartyType
-import com.cmc.curtaincall.common.design.component.custom.SortType
+import com.cmc.curtaincall.common.designsystem.component.content.card.PartyType
+import com.cmc.curtaincall.common.designsystem.component.custom.SortType
 import com.cmc.curtaincall.common.utility.extensions.changeShowAt
 import com.cmc.curtaincall.core.base.BaseViewModel
 import com.cmc.curtaincall.domain.repository.PartyRepository

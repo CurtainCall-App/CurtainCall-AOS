@@ -14,13 +14,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
-import com.cmc.curtaincall.common.design.extensions.toSp
-import com.cmc.curtaincall.common.design.theme.Nero
-import com.cmc.curtaincall.common.design.theme.Roman_Silver
-import com.cmc.curtaincall.common.design.theme.White
-import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
+import com.cmc.curtaincall.common.designsystem.R
+import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarWithBack
+import com.cmc.curtaincall.common.designsystem.extensions.toSp
+import com.cmc.curtaincall.common.designsystem.theme.Nero
+import com.cmc.curtaincall.common.designsystem.theme.Roman_Silver
+import com.cmc.curtaincall.common.designsystem.theme.White
+import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
 
 @Composable
 internal fun MyPagePrivacyTermsScreen(

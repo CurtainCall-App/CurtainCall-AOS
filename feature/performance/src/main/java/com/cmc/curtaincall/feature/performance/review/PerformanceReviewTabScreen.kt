@@ -17,13 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.common.design.component.items.EmptyItem
-import com.cmc.curtaincall.common.design.component.items.ReviewItem
-import com.cmc.curtaincall.common.design.extensions.toSp
-import com.cmc.curtaincall.common.design.theme.Chinese_Black
-import com.cmc.curtaincall.common.design.theme.Me_Pink
-import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
+import com.cmc.curtaincall.common.designsystem.R
+import com.cmc.curtaincall.common.designsystem.component.items.EmptyItem
+import com.cmc.curtaincall.common.designsystem.component.items.ReviewItem
+import com.cmc.curtaincall.common.designsystem.extensions.toSp
+import com.cmc.curtaincall.common.designsystem.theme.Chinese_Black
+import com.cmc.curtaincall.common.designsystem.theme.Me_Pink
+import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
 import com.cmc.curtaincall.common.utility.extensions.toChangeDate
 import com.cmc.curtaincall.domain.model.review.ShowReviewModel
 

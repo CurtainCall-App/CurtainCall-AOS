@@ -1,7 +1,7 @@
 package com.cmc.curtaincall.feature.performance
 
 import androidx.paging.PagingData
-import com.cmc.curtaincall.common.design.component.custom.SortType
+import com.cmc.curtaincall.common.designsystem.component.custom.SortType
 import com.cmc.curtaincall.core.base.BaseState
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import kotlinx.coroutines.flow.Flow

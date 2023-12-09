@@ -19,22 +19,22 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.cmc.curtaincall.common.design.extensions.toSp
-import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
-import com.cmc.curtaincall.common.design.theme.White
-import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
+import com.cmc.curtaincall.common.designsystem.extensions.toSp
+import com.cmc.curtaincall.common.designsystem.theme.Cetacean_Blue
+import com.cmc.curtaincall.common.designsystem.theme.White
+import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
+import com.cmc.curtaincall.common.navigation.destination.PerformanceExDestination
 import com.cmc.curtaincall.core.navigation.BottomDestination
 import com.cmc.curtaincall.core.navigation.CurtainCallDestination
 import com.cmc.curtaincall.feature.livetalk.LiveTalkDestination
 import com.cmc.curtaincall.feature.mypage.MyPageDestination
 import com.cmc.curtaincall.feature.partymember.PartyMemberDestination
-import com.cmc.curtaincall.feature.performance.PerformanceDestination
 
 @Composable
 fun HomeBottomBar(navHostController: NavHostController) {
     val bottomDestinations = listOf(
         HomeDestination.Home,
-        PerformanceDestination.Performance,
+        PerformanceExDestination.Search,
         LiveTalkDestination.LiveTalk,
         PartyMemberDestination.PartyMember,
         MyPageDestination.MyPage

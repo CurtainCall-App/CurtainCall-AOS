@@ -36,21 +36,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.common.design.component.basic.CurtainCallMultiLineTextField
-import com.cmc.curtaincall.common.design.component.basic.CurtainCallRoundedTextButton
-import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithClose
-import com.cmc.curtaincall.common.design.extensions.toSp
-import com.cmc.curtaincall.common.design.theme.Black_Coral
-import com.cmc.curtaincall.common.design.theme.Bright_Gray
-import com.cmc.curtaincall.common.design.theme.Chinese_Black
-import com.cmc.curtaincall.common.design.theme.Cultured
-import com.cmc.curtaincall.common.design.theme.Me_Pink
-import com.cmc.curtaincall.common.design.theme.Nero
-import com.cmc.curtaincall.common.design.theme.Roman_Silver
-import com.cmc.curtaincall.common.design.theme.Silver_Sand
-import com.cmc.curtaincall.common.design.theme.White
-import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
+import com.cmc.curtaincall.common.designsystem.R
+import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallMultiLineTextField
+import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallRoundedTextButton
+import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarWithClose
+import com.cmc.curtaincall.common.designsystem.extensions.toSp
+import com.cmc.curtaincall.common.designsystem.theme.Black_Coral
+import com.cmc.curtaincall.common.designsystem.theme.Bright_Gray
+import com.cmc.curtaincall.common.designsystem.theme.Chinese_Black
+import com.cmc.curtaincall.common.designsystem.theme.Cultured
+import com.cmc.curtaincall.common.designsystem.theme.Me_Pink
+import com.cmc.curtaincall.common.designsystem.theme.Nero
+import com.cmc.curtaincall.common.designsystem.theme.Roman_Silver
+import com.cmc.curtaincall.common.designsystem.theme.Silver_Sand
+import com.cmc.curtaincall.common.designsystem.theme.White
+import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable

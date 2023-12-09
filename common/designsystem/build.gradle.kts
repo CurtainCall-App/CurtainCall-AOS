@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.cmc.curtaincall.common.design"
+    namespace = "com.cmc.curtaincall.common.designsystem"
 }
 
 dependencies {

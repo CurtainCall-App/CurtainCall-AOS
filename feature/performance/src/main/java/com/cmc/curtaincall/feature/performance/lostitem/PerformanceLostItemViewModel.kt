@@ -2,7 +2,7 @@ package com.cmc.curtaincall.feature.performance.lostitem
 
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.cmc.curtaincall.common.design.component.enum.LostPropertyType
+import com.cmc.curtaincall.common.designsystem.component.enum.LostPropertyType
 import com.cmc.curtaincall.core.base.BaseViewModel
 import com.cmc.curtaincall.domain.model.lostItem.LostItemSearchWordModel
 import com.cmc.curtaincall.domain.repository.LostItemRepository

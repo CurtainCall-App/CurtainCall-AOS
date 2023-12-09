@@ -22,12 +22,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.common.design.component.basic.SystemUiStatusBar
-import com.cmc.curtaincall.common.design.extensions.toSp
-import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
-import com.cmc.curtaincall.common.design.theme.Me_Pink
-import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
+import com.cmc.curtaincall.common.designsystem.R
+import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
+import com.cmc.curtaincall.common.designsystem.extensions.toSp
+import com.cmc.curtaincall.common.designsystem.theme.Cetacean_Blue
+import com.cmc.curtaincall.common.designsystem.theme.Me_Pink
+import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
 import com.cmc.curtaincall.feature.auth.login.kakao.LoginKaKaoButton
 import kotlinx.coroutines.flow.collectLatest
 

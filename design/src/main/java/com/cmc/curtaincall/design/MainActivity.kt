@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.cmc.curtaincall.common.design.theme.NoRippleTheme
+import com.cmc.curtaincall.common.designsystem.theme.NoRippleTheme
 import com.cmc.curtaincall.design.ui.theme.CurtainCallTheme
 
 class MainActivity : ComponentActivity() {
