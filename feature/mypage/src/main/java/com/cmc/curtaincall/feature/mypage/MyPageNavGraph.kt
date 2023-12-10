@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.cmc.curtaincall.common.designsystem.R
+import com.cmc.curtaincall.common.navigation.destination.PerformanceDestination
 import com.cmc.curtaincall.core.navigation.BottomDestination
 import com.cmc.curtaincall.core.navigation.CurtainCallDestination
 import com.cmc.curtaincall.feature.mypage.editprofile.MyPageProfileEditScreen
@@ -23,7 +24,6 @@ import com.cmc.curtaincall.feature.mypage.setting.MyPageDeleteMemberScreen
 import com.cmc.curtaincall.feature.mypage.setting.MyPageSettingScreen
 import com.cmc.curtaincall.feature.mypage.write.MyPageWriteScreen
 import com.cmc.curtaincall.feature.partymember.PartyMemberDestination
-import com.cmc.curtaincall.feature.performance.PerformanceDestination
 
 private const val MYPAGE_GRAPH = "mypage_graph"
 const val MYPAGE = "mypage"
@@ -168,19 +168,14 @@ fun NavGraphBuilder.mypageNavGraph(
         composable(MyPageDestination.Write.route) { entry ->
             MyPageWriteScreen(
                 onNavigateReviewEdit = { showId, reviewId ->
-                    navHostController.navigate(
-                        PerformanceDestination.ReviewCreate.route + "?" +
-                            "${PerformanceDestination.ReviewCreate.showIdArgs}=$showId" + "&" +
-                            "${PerformanceDestination.ReviewCreate.fromMypageArg}=true" + "&" +
-                            "${PerformanceDestination.ReviewCreate.reviewIdArg}=$reviewId"
-                    )
+                    navHostController.navigate("${PerformanceDestination.ReviewCreate.route}/$showId/$reviewId")
                 },
-                onNavigateLostItemEdit = { lostItemId, facilityId, facilityName ->
+                onNavigateLostItemEdit = { lostPropertyId, facilityId, facilityName ->
                     navHostController.navigate(
-                        PerformanceDestination.LostItemCreate.route + "?" +
-                            "${PerformanceDestination.LostItemCreate.lostItemIdArg}=$lostItemId" + "&" +
-                            "${PerformanceDestination.LostItemCreate.facilityIdArg}=$facilityId" + "&" +
-                            "${PerformanceDestination.LostItemCreate.facilityNameArg}=$facilityName"
+                        "${PerformanceDestination.LostPropertyCreate.route}?" +
+                            "${PerformanceDestination.LostPropertyCreate.lostPropertyIdArg}=$lostPropertyId&" +
+                            "${PerformanceDestination.LostPropertyCreate.facilityIdArg}=$facilityId&" +
+                            "${PerformanceDestination.LostPropertyCreate.facilityNameArg}=$facilityName"
                     )
                 },
                 onBack = {

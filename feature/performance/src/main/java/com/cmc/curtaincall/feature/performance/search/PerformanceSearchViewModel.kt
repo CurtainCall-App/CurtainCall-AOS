@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.performance
+package com.cmc.curtaincall.feature.performance.search
 
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
@@ -16,11 +16,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PerformanceViewModel @Inject constructor(
+class PerformanceSearchViewModel @Inject constructor(
     private val showRepository: ShowRepository,
     private val favoriteRepository: FavoriteRepository
-) : BaseViewModel<PerformanceState, PerformanceEvent, Nothing>(
-    initialState = PerformanceState()
+) : BaseViewModel<PerformanceSearchUiState, PerformanceSearchEvent, Nothing>(
+    initialState = PerformanceSearchUiState()
 ) {
 
     private var _searchWords = MutableStateFlow<List<ShowSearchWordModel>>(listOf())
@@ -32,51 +32,51 @@ class PerformanceViewModel @Inject constructor(
         loadMusicalItems()
     }
 
-    override fun reduceState(currentState: PerformanceState, event: PerformanceEvent): PerformanceState =
+    override fun reduceState(currentState: PerformanceSearchUiState, event: PerformanceSearchEvent): PerformanceSearchUiState =
         when (event) {
-            is PerformanceEvent.ChangeLastIndex -> {
+            is PerformanceSearchEvent.ChangeLastIndex -> {
                 currentState.copy(lastIndex = event.lastIndex)
             }
 
-            is PerformanceEvent.ChangeGenre -> {
+            is PerformanceSearchEvent.ChangeGenre -> {
                 currentState.copy(genre = event.genre)
             }
 
-            is PerformanceEvent.ChangeActiveSearch -> {
+            is PerformanceSearchEvent.ChangeActiveSearch -> {
                 currentState.copy(isActiveSearch = event.isActiveSearch)
             }
 
-            is PerformanceEvent.ChangeDoneSearch -> {
+            is PerformanceSearchEvent.ChangeDoneSearch -> {
                 currentState.copy(isDoneSearch = event.isDoneSearch)
             }
 
-            is PerformanceEvent.ChangeSort -> {
+            is PerformanceSearchEvent.ChangeSort -> {
                 currentState.copy(sortType = event.sortType)
             }
 
-            is PerformanceEvent.SetQueryString -> {
+            is PerformanceSearchEvent.SetQueryString -> {
                 currentState.copy(queryString = event.queryString)
             }
 
-            is PerformanceEvent.SearchShowList -> {
+            is PerformanceSearchEvent.SearchShowList -> {
                 currentState.copy(showSearchItems = event.showSearchItems)
             }
 
-            is PerformanceEvent.LoadPlayItems -> {
+            is PerformanceSearchEvent.LoadPlayItems -> {
                 currentState.copy(playItems = event.playItems)
             }
 
-            is PerformanceEvent.LoadMusicalItems -> {
+            is PerformanceSearchEvent.LoadMusicalItems -> {
                 currentState.copy(musicalItems = event.musicalItems)
             }
         }
 
     fun changeLastIndex(lastIndex: Int) {
-        sendAction(PerformanceEvent.ChangeLastIndex(lastIndex))
+        sendAction(PerformanceSearchEvent.ChangeLastIndex(lastIndex))
     }
 
     fun changeGenre(genre: String) {
-        sendAction(PerformanceEvent.ChangeGenre(genre))
+        sendAction(PerformanceSearchEvent.ChangeGenre(genre))
         if (genre == "PLAY") {
             loadPlayItems()
         } else {
@@ -85,16 +85,16 @@ class PerformanceViewModel @Inject constructor(
     }
 
     fun changeActiveSearch(isActive: Boolean) {
-        sendAction(PerformanceEvent.ChangeActiveSearch(isActive))
+        sendAction(PerformanceSearchEvent.ChangeActiveSearch(isActive))
     }
 
     fun changeDoneSearch(isDone: Boolean) {
-        sendAction(PerformanceEvent.ChangeDoneSearch(isDone))
+        sendAction(PerformanceSearchEvent.ChangeDoneSearch(isDone))
     }
 
     fun changeSortType(sortType: SortType) {
         sendAction(
-            PerformanceEvent.ChangeSort(
+            PerformanceSearchEvent.ChangeSort(
                 sortType = sortType
             )
         )
@@ -103,12 +103,12 @@ class PerformanceViewModel @Inject constructor(
     }
 
     fun setQueryString(query: String) {
-        sendAction(PerformanceEvent.SetQueryString(query))
+        sendAction(PerformanceSearchEvent.SetQueryString(query))
     }
 
     fun searchShowList(query: String) {
         sendAction(
-            PerformanceEvent.SearchShowList(
+            PerformanceSearchEvent.SearchShowList(
                 showSearchItems = showRepository
                     .fetchSearchShowList(query)
                     .cachedIn(viewModelScope)
@@ -118,7 +118,7 @@ class PerformanceViewModel @Inject constructor(
 
     fun loadPlayItems() {
         sendAction(
-            PerformanceEvent.LoadPlayItems(
+            PerformanceSearchEvent.LoadPlayItems(
                 playItems = showRepository.fetchShowList(
                     "PLAY",
                     uiState.value.sortType.code
@@ -129,7 +129,7 @@ class PerformanceViewModel @Inject constructor(
 
     fun loadMusicalItems() {
         sendAction(
-            PerformanceEvent.LoadMusicalItems(
+            PerformanceSearchEvent.LoadMusicalItems(
                 musicalItems = showRepository.fetchShowList(
                     "MUSICAL",
                     uiState.value.sortType.code

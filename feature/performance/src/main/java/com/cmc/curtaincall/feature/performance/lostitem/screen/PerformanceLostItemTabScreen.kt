@@ -39,7 +39,7 @@ internal fun PerformanceLostItemTabScreen(
     modifier: Modifier = Modifier,
     facilityName: String,
     lostItems: List<LostItemModel> = listOf(),
-    onNavigateLostItem: (String) -> Unit
+    onNavigateLostProperty: (String) -> Unit
 ) {
     Timber.d("PerformanceLostItemTabScreen $lostItems")
     Column(modifier.padding(horizontal = 20.dp)) {
@@ -56,7 +56,7 @@ internal fun PerformanceLostItemTabScreen(
                 modifier = Modifier
                     .border(BorderStroke(1.dp, Me_Pink), RoundedCornerShape(14.dp))
                     .padding(vertical = 6.dp, horizontal = 10.dp)
-                    .clickable { onNavigateLostItem(facilityName) },
+                    .clickable { onNavigateLostProperty(facilityName) },
                 contentAlignment = Alignment.Center
             ) {
                 Text(

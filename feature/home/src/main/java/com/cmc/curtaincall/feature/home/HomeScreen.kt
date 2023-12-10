@@ -126,8 +126,8 @@ private fun HomeContent(
 
     LaunchedEffect(homeViewModel) {
         homeViewModel.requestLiveTalks()
-        homeViewModel.requestMyRecruitments()
-        homeViewModel.requestMyParticipations()
+        // homeViewModel.requestMyRecruitments()
+        // homeViewModel.requestMyParticipations()
         homeViewModel.requestPopularShowList()
         homeViewModel.requestOpenShowList()
         homeViewModel.requestEndShowList()

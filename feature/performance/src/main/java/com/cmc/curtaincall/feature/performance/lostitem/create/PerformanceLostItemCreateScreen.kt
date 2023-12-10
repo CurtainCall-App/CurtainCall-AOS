@@ -55,6 +55,7 @@ import com.cmc.curtaincall.common.designsystem.component.show.lostproperty.LostP
 import com.cmc.curtaincall.common.designsystem.component.show.lostproperty.LostPropertyTypeItem
 import com.cmc.curtaincall.common.designsystem.extensions.toSp
 import com.cmc.curtaincall.common.designsystem.theme.*
+import com.cmc.curtaincall.common.navigation.destination.PERFORMANCE_DEFAULT_LOST_PROPERTY_ID
 import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
 import java.io.ByteArrayInputStream
@@ -64,16 +65,19 @@ import java.io.ByteArrayOutputStream
 @Composable
 internal fun PerformanceLostItemCreateScreen(
     performanceLostItemCreateViewModel: PerformanceLostItemCreateViewModel = hiltViewModel(),
-    fromMyPage: Boolean = false,
-    lostItemId: Int = 0,
-    facilityId: String,
-    facilityName: String,
+    // fromMyPage: Boolean = false,
+    lostPropertyId: Int?,
+    facilityId: String?,
+    facilityName: String?,
     onNavigateDetail: (Int) -> Unit,
     onBack: () -> Unit
 ) {
+    requireNotNull(lostPropertyId)
+    requireNotNull(facilityId)
+    requireNotNull(facilityName)
     LaunchedEffect(Unit) {
         performanceLostItemCreateViewModel.completeEffect.collectLatest { isComplete ->
-            if (isComplete && fromMyPage.not()) {
+            if (isComplete && lostPropertyId != PERFORMANCE_DEFAULT_LOST_PROPERTY_ID) {
                 onNavigateDetail(performanceLostItemCreateViewModel.lostItemId.value)
             }
         }
@@ -83,7 +87,7 @@ internal fun PerformanceLostItemCreateScreen(
     Scaffold(
         topBar = {
             TopAppBarWithClose(
-                title = if (fromMyPage) {
+                title = if (lostPropertyId != PERFORMANCE_DEFAULT_LOST_PROPERTY_ID) {
                     stringResource(R.string.mypage_writing_find_lost_item_edit)
                 } else {
                     stringResource(R.string.performance_find_lost_item_create)
@@ -96,8 +100,8 @@ internal fun PerformanceLostItemCreateScreen(
         floatingActionButton = {
             CurtainCallRoundedTextButton(
                 onClick = {
-                    if (fromMyPage) {
-                        performanceLostItemCreateViewModel.updateLostItem(lostItemId)
+                    if (lostPropertyId != PERFORMANCE_DEFAULT_LOST_PROPERTY_ID) {
+                        performanceLostItemCreateViewModel.updateLostItem(lostPropertyId)
                     } else {
                         performanceLostItemCreateViewModel.createLostItem(facilityId)
                     }

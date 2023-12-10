@@ -42,11 +42,12 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 internal fun PerformanceLostItemScreen(
     performanceLostItemViewModel: PerformanceLostItemViewModel = hiltViewModel(),
     performanceDetailViewModel: PerformanceDetailViewModel,
-    facilityName: String,
+    facilityName: String?,
     onNavigateLostItemDetail: (Int) -> Unit,
     onNavigateLostItemCreate: (String, String) -> Unit,
     onBack: () -> Unit
 ) {
+    checkNotNull(facilityName)
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(White)
 
@@ -93,10 +94,7 @@ internal fun PerformanceLostItemScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    onNavigateLostItemCreate(
-                        performanceDetailViewModel.uiState.value.facilityDetailModel.id,
-                        facilityName
-                    )
+                    onNavigateLostItemCreate(performanceDetailViewModel.uiState.value.facilityDetailModel.id, facilityName)
                 },
                 modifier = Modifier
                     .padding(bottom = 40.dp)

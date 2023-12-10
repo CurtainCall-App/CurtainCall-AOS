@@ -43,10 +43,11 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun PerformanceLostItemDetailScreen(
     performanceLostItemViewModel: PerformanceLostItemViewModel = hiltViewModel(),
-    lostItem: Int,
+    lostPropertyId: Int?,
     onNavigateReport: (Int, String) -> Unit,
     onBack: () -> Unit
 ) {
+    checkNotNull(lostPropertyId)
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(Cultured)
 
@@ -55,8 +56,8 @@ internal fun PerformanceLostItemDetailScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
-        if (lostItem != Int.MIN_VALUE) {
-            performanceLostItemViewModel.requestLostDetailItem(lostItem)
+        if (lostPropertyId != Int.MIN_VALUE) {
+            performanceLostItemViewModel.requestLostDetailItem(lostPropertyId)
             coroutineScope.launch {
                 snackbarHostState.showSnackbar(
                     context.getString(R.string.snackbar_upload_lostitem_complete)
@@ -82,7 +83,7 @@ internal fun PerformanceLostItemDetailScreen(
                 onBack = onBack,
                 onAction = {
                     onNavigateReport(
-                        lostItem,
+                        lostPropertyId,
                         "LOST_ITEM"
                     )
                 }

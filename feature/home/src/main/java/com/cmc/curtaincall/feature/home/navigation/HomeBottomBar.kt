@@ -23,7 +23,7 @@ import com.cmc.curtaincall.common.designsystem.extensions.toSp
 import com.cmc.curtaincall.common.designsystem.theme.Cetacean_Blue
 import com.cmc.curtaincall.common.designsystem.theme.White
 import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
-import com.cmc.curtaincall.common.navigation.destination.PerformanceExDestination
+import com.cmc.curtaincall.common.navigation.destination.PerformanceDestination
 import com.cmc.curtaincall.core.navigation.BottomDestination
 import com.cmc.curtaincall.core.navigation.CurtainCallDestination
 import com.cmc.curtaincall.feature.livetalk.LiveTalkDestination
@@ -34,7 +34,7 @@ import com.cmc.curtaincall.feature.partymember.PartyMemberDestination
 fun HomeBottomBar(navHostController: NavHostController) {
     val bottomDestinations = listOf(
         HomeDestination.Home,
-        PerformanceExDestination.Search,
+        PerformanceDestination.Search,
         LiveTalkDestination.LiveTalk,
         PartyMemberDestination.PartyMember,
         MyPageDestination.MyPage

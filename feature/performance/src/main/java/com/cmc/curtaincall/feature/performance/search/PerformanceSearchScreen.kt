@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.performance
+package com.cmc.curtaincall.feature.performance.search
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,8 +34,8 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PerformanceScreen(
-    performanceViewModel: PerformanceViewModel = hiltViewModel(),
+fun PerformanceSearchScreen(
+    performanceViewModel: PerformanceSearchViewModel = hiltViewModel(),
     onNavigateDetail: (String) -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
@@ -106,7 +106,7 @@ fun PerformanceScreen(
 
 @Composable
 private fun PerformanceSearchContent(
-    performanceViewModel: PerformanceViewModel,
+    performanceViewModel: PerformanceSearchViewModel,
     modifier: Modifier = Modifier,
     onClick: (String) -> Unit,
     onNavigateDetail: (String) -> Unit
@@ -230,7 +230,7 @@ private fun PerformanceSearchContent(
 
 @Composable
 private fun PerformanceContent(
-    performanceViewModel: PerformanceViewModel,
+    performanceViewModel: PerformanceSearchViewModel,
     modifier: Modifier = Modifier,
     onNavigateDetail: (String) -> Unit
 ) {

@@ -49,7 +49,6 @@ import com.cmc.curtaincall.common.designsystem.theme.White
 import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
 import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
 import com.cmc.curtaincall.common.utility.extensions.toRunningTime
-import com.cmc.curtaincall.feature.performance.PerformanceViewModel
 import com.cmc.curtaincall.feature.performance.lostitem.screen.PerformanceLostItemTabScreen
 import com.cmc.curtaincall.feature.performance.review.PerformanceReviewTabScreen
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -60,21 +59,23 @@ enum class TabType(val label: String) {
 
 @Composable
 internal fun PerformanceDetailScreen(
-    performanceViewModel: PerformanceViewModel = hiltViewModel(),
+    // performanceViewModel: PerformanceSearchViewModel = hiltViewModel(),
     performanceDetailViewModel: PerformanceDetailViewModel = hiltViewModel(),
-    showId: String,
-    onNavigateReview: (String) -> Unit,
-    onNavigateLostItem: (String) -> Unit,
-    onNavigateDetail: (String) -> Unit,
+    showId: String?,
+    onNavigateReview: (String) -> Unit = {},
+    onNavigateLostProperty: (String) -> Unit = {},
+    onNavigateDetail: (String) -> Unit = {},
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(Black)
 
     LaunchedEffect(Unit) {
-        performanceDetailViewModel.requestShowDetail(showId)
-        performanceDetailViewModel.checkFavoriteShows(showId)
-        performanceDetailViewModel.requestShowReviewList(showId)
+        showId?.let { showId ->
+            performanceDetailViewModel.requestShowDetail(showId)
+            performanceDetailViewModel.checkFavoriteShows(showId)
+            performanceDetailViewModel.requestShowReviewList(showId)
+        }
     }
 
     val scrollState = rememberScrollState()
@@ -87,7 +88,7 @@ internal fun PerformanceDetailScreen(
         contentAlignment = Alignment.TopCenter
     ) {
         PerformanceDetailContent(
-            performanceViewModel = performanceViewModel,
+            // performanceViewModel = performanceViewModel,
             performanceDetailViewModel = performanceDetailViewModel,
             modifier = Modifier
                 .fillMaxWidth()
@@ -116,7 +117,7 @@ internal fun PerformanceDetailScreen(
                 modifier = Modifier.padding(top = 26.dp),
                 showId = showId,
                 onNavigateReview = onNavigateReview,
-                onNavigateLostItem = onNavigateLostItem,
+                onNavigateLostProperty = onNavigateLostProperty,
                 onNavigateDetail = onNavigateDetail
             )
         }
@@ -127,9 +128,9 @@ internal fun PerformanceDetailScreen(
 private fun PerformanceDetailTab(
     performanceDetailViewModel: PerformanceDetailViewModel,
     modifier: Modifier = Modifier,
-    showId: String,
+    showId: String?,
     onNavigateReview: (String) -> Unit,
-    onNavigateLostItem: (String) -> Unit,
+    onNavigateLostProperty: (String) -> Unit,
     onNavigateDetail: (String) -> Unit
 ) {
     val performanceDetailUiState by performanceDetailViewModel.uiState.collectAsStateWithLifecycle()
@@ -258,7 +259,7 @@ private fun PerformanceDetailTab(
                         .padding(top = 50.dp),
                     facilityName = performanceDetailUiState.showDetailModel.facilityName,
                     lostItems = performanceDetailUiState.lostItems,
-                    onNavigateLostItem = onNavigateLostItem
+                    onNavigateLostProperty = onNavigateLostProperty
                 )
             }
         }
@@ -267,7 +268,7 @@ private fun PerformanceDetailTab(
 
 @Composable
 private fun PerformanceDetailContent(
-    performanceViewModel: PerformanceViewModel,
+    // performanceViewModel: PerformanceSearchViewModel,
     performanceDetailViewModel: PerformanceDetailViewModel,
     modifier: Modifier = Modifier,
     posterUrl: String? = null,
@@ -299,8 +300,8 @@ private fun PerformanceDetailContent(
             contentColor = White,
             textModifier = Modifier.width(160.dp),
             onClick = {
-                performanceViewModel.loadPlayItems()
-                performanceViewModel.loadMusicalItems()
+                // performanceViewModel.loadPlayItems()
+                // performanceViewModel.loadMusicalItems()
                 onBack()
             }
         )

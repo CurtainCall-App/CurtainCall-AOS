@@ -16,6 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.cmc.curtaincall.common.designsystem.R
+import com.cmc.curtaincall.common.navigation.destination.PerformanceDestination
 import com.cmc.curtaincall.core.navigation.BottomDestination
 import com.cmc.curtaincall.core.navigation.CurtainCallDestination
 import com.cmc.curtaincall.feature.home.HomeScreen
@@ -28,7 +29,6 @@ import com.cmc.curtaincall.feature.mypage.MyPageDestination
 import com.cmc.curtaincall.feature.mypage.mypageNavGraph
 import com.cmc.curtaincall.feature.partymember.PartyMemberDestination
 import com.cmc.curtaincall.feature.partymember.partymemberNavGraph
-import com.cmc.curtaincall.feature.performance.PerformanceDestination
 import com.cmc.curtaincall.feature.performance.performanceNavGraph
 import io.getstream.chat.android.client.ChatClient
 

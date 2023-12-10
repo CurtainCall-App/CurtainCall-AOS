@@ -27,6 +27,7 @@ import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.designsystem.component.custom.RatingBar
 import com.cmc.curtaincall.common.designsystem.extensions.toSp
 import com.cmc.curtaincall.common.designsystem.theme.*
+import com.cmc.curtaincall.common.navigation.destination.PERFORMANCE_DEFAULT_REVIEW_ID
 import com.cmc.curtaincall.feature.performance.detail.PerformanceDetailViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.flow.collectLatest
@@ -36,19 +37,19 @@ import kotlinx.coroutines.flow.collectLatest
 internal fun PerformanceReviewCreateScreen(
     performanceDetailViewModel: PerformanceDetailViewModel = hiltViewModel(),
     performanceReviewViewModel: PerformanceReviewViewModel = hiltViewModel(),
-    showId: String,
-    fromMypage: Boolean = false,
-    posterUrl: String? = null,
-    genre: String = "",
-    title: String = "",
-    reviewId: Int,
+    showId: String?,
+//    fromMypage: Boolean = false,
+//    posterUrl: String? = null,
+//    genre: String = "",
+//    title: String = "",
+    reviewId: Int?,
     onBack: () -> Unit
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(Black)
 
     LaunchedEffect(Unit) {
-        if (fromMypage) performanceDetailViewModel.requestShowDetail(showId)
+        showId?.let { performanceDetailViewModel.requestShowDetail(it) }
     }
 
     val performanceDetailUiState by performanceDetailViewModel.uiState.collectAsStateWithLifecycle()
@@ -58,20 +59,20 @@ internal fun PerformanceReviewCreateScreen(
                 .fillMaxWidth()
                 .height(331.dp)
                 .background(Cetacean_Blue.copy(0.8f)),
-            fromMypage = fromMypage,
-            posterUrl = if (fromMypage) performanceDetailUiState.showDetailModel.poster else posterUrl,
-            genre = if (fromMypage) performanceDetailUiState.showDetailModel.genre else genre,
-            title = if (fromMypage) performanceDetailUiState.showDetailModel.name else title,
+            fromMypage = reviewId == PERFORMANCE_DEFAULT_REVIEW_ID,
+            posterUrl = performanceDetailUiState.showDetailModel.poster,
+            genre = performanceDetailUiState.showDetailModel.genre,
+            title = performanceDetailUiState.showDetailModel.name,
             onBack = onBack
         )
         PerformanceReviewCreateBody(
             performanceReviewViewModel = performanceReviewViewModel,
             modifier = Modifier.fillMaxSize(),
             showId = showId,
-            fromMypage = fromMypage,
+            // fromMypage = fromMypage,
             reviewId = reviewId,
             onBack = {
-                performanceDetailViewModel.requestShowReviewList(showId)
+                showId?.let { performanceDetailViewModel.requestShowReviewList(it) }
                 onBack()
             }
         )
@@ -159,9 +160,8 @@ private fun PerformanceReviewCreateHeader(
 private fun PerformanceReviewCreateBody(
     performanceReviewViewModel: PerformanceReviewViewModel,
     modifier: Modifier = Modifier,
-    showId: String,
-    fromMypage: Boolean,
-    reviewId: Int,
+    showId: String?,
+    reviewId: Int?,
     onBack: () -> Unit,
 ) {
     LaunchedEffect(performanceReviewViewModel) {
@@ -191,10 +191,10 @@ private fun PerformanceReviewCreateBody(
         )
         CurtainCallRoundedTextButton(
             onClick = {
-                if (fromMypage) {
+                reviewId?.let { reviewId ->
                     performanceReviewViewModel.updateShowReview(reviewId, review, rating)
-                } else {
-                    performanceReviewViewModel.createShowReview(showId, rating, review)
+                } ?: kotlin.run {
+                    showId?.let { performanceReviewViewModel.createShowReview(it, rating, review) }
                 }
             },
             modifier = Modifier

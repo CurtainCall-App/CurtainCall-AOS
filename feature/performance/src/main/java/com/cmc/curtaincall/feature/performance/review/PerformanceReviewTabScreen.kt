@@ -30,7 +30,7 @@ import com.cmc.curtaincall.domain.model.review.ShowReviewModel
 @Composable
 internal fun PerformanceReviewTabScreen(
     modifier: Modifier = Modifier,
-    showId: String,
+    showId: String?,
     reviewCount: Int = 0,
     showReviews: List<ShowReviewModel> = listOf(),
     onNavigateReview: (String) -> Unit
@@ -49,7 +49,7 @@ internal fun PerformanceReviewTabScreen(
                 modifier = Modifier
                     .border(BorderStroke(1.dp, Me_Pink), RoundedCornerShape(14.dp))
                     .padding(vertical = 6.dp, horizontal = 10.dp)
-                    .clickable { onNavigateReview(showId) },
+                    .clickable { showId?.let(onNavigateReview) },
                 contentAlignment = Alignment.Center
             ) {
                 Text(

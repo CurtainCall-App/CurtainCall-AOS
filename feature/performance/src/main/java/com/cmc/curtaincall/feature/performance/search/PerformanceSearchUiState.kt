@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.performance
+package com.cmc.curtaincall.feature.performance.search
 
 import androidx.paging.PagingData
 import com.cmc.curtaincall.common.designsystem.component.custom.SortType
@@ -7,7 +7,7 @@ import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-data class PerformanceState(
+data class PerformanceSearchUiState(
     val lastIndex: Int = 0,
     val genre: String = "PLAY",
     val isActiveSearch: Boolean = false,

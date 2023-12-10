@@ -4,230 +4,67 @@ import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.navigation.NavGraphLabel
-import com.cmc.curtaincall.common.navigation.destination.PerformanceExDestination
-import com.cmc.curtaincall.core.navigation.BottomDestination
-import com.cmc.curtaincall.core.navigation.CurtainCallDestination
+import com.cmc.curtaincall.common.navigation.destination.PerformanceDestination
 import com.cmc.curtaincall.feature.performance.detail.PerformanceDetailScreen
 import com.cmc.curtaincall.feature.performance.lostitem.create.PerformanceLostItemCreateScreen
 import com.cmc.curtaincall.feature.performance.lostitem.screen.PerformanceLostItemDetailScreen
 import com.cmc.curtaincall.feature.performance.lostitem.screen.PerformanceLostItemScreen
 import com.cmc.curtaincall.feature.performance.review.PerformanceReviewCreateScreen
 import com.cmc.curtaincall.feature.performance.review.PerformanceReviewScreen
-
-private const val PERFORMANCE_GRAPH = "performance_graph"
-const val PERFORMANCE = "performance"
-private const val PERFORMANCE_LABEL = "작품"
-private const val PERFORMANCE_DETAIL = "performance_detail"
-private const val PERFORMANCE_REVIEW = "performance_review"
-private const val PERFORMANCE_REVIEW_CREATE = "performance_review_create"
-private const val PERFORMANCE_LOST_ITEM = "performance_lost_item"
-private const val PERFORMANCE_LOST_ITEM_DETAIL = "performance_lost_item_detail"
-private const val PERFORMANCE_LOST_ITEM_CREATE = "performance_lost_item_create"
-
-sealed interface PerformanceDestination : CurtainCallDestination {
-    object Performance : PerformanceDestination, BottomDestination {
-        override val route = PERFORMANCE
-        override val icon = R.drawable.ic_performance
-        override val selectIcon = R.drawable.ic_performance_sel
-        override val label = PERFORMANCE_LABEL
-    }
-
-    object Detail : PerformanceDestination {
-        override val route = PERFORMANCE_DETAIL
-        const val showIdArg = "showId"
-        val routeWithArgs = "$route/{$showIdArg}"
-        val arguments = listOf(
-            navArgument(showIdArg) {
-                type = NavType.StringType
-            }
-        )
-    }
-
-    object Review : PerformanceDestination {
-        override val route = PERFORMANCE_REVIEW
-        const val showIdArg = "showId"
-        val routeWithArgs = "$route/{$showIdArg}"
-        val arguments = listOf(
-            navArgument(showIdArg) {
-                type = NavType.StringType
-            }
-        )
-    }
-
-    object ReviewCreate : PerformanceDestination {
-        override val route = PERFORMANCE_REVIEW_CREATE
-        const val showIdArgs = "showId"
-        const val fromMypageArg = "fromMypage"
-        const val posterUrlArg = "posterUrl"
-        const val genreArg = "genre"
-        const val titleArg = "title"
-        const val reviewIdArg = "reviewId"
-        val routeWithArgs = "$route?" +
-            "$showIdArgs={$showIdArgs}&" +
-            "$fromMypageArg={$fromMypageArg}&" +
-            "$posterUrlArg={$posterUrlArg}&" +
-            "$genreArg={$genreArg}&" +
-            "$titleArg={$titleArg}&" +
-            "$reviewIdArg={$reviewIdArg}"
-
-        val arguments = listOf(
-            navArgument(showIdArgs) {
-                type = NavType.StringType
-            },
-            navArgument(fromMypageArg) {
-                type = NavType.BoolType
-            },
-            navArgument(posterUrlArg) {
-                type = NavType.StringType
-                defaultValue = ""
-            },
-            navArgument(genreArg) {
-                type = NavType.StringType
-                defaultValue = ""
-            },
-            navArgument(titleArg) {
-                type = NavType.StringType
-                defaultValue = ""
-            },
-            navArgument(reviewIdArg) {
-                type = NavType.IntType
-            }
-        )
-    }
-
-    object LostItem : PerformanceDestination {
-        override val route = PERFORMANCE_LOST_ITEM
-        const val facilityNameArg = "facilityName"
-        val routeWithArgs = "$route/{$facilityNameArg}"
-
-        val arguments = listOf(
-            navArgument(facilityNameArg) {
-                type = NavType.StringType
-            }
-        )
-    }
-
-    object LostItemDetail : PerformanceDestination {
-        override val route = PERFORMANCE_LOST_ITEM_DETAIL
-        const val lostItemIdArg = "lostItemId"
-        val routeWithArg = "$route/{$lostItemIdArg}"
-
-        val arguments = listOf(
-            navArgument(lostItemIdArg) {
-                type = NavType.IntType
-            }
-        )
-    }
-
-    object LostItemCreate : PerformanceDestination {
-        override val route = PERFORMANCE_LOST_ITEM_CREATE
-        const val lostItemIdArg = "lostItemId"
-        const val facilityIdArg = "facilityId"
-        const val facilityNameArg = "facilityName"
-        val routeWithArg = "$route?" +
-            "${LostItemCreate.lostItemIdArg}={${LostItemCreate.lostItemIdArg}}&" +
-            "${LostItemCreate.facilityIdArg}={${LostItemCreate.facilityIdArg}}&" +
-            "${LostItemCreate.facilityNameArg}={${LostItemCreate.facilityNameArg}}"
-
-        val arguments = listOf(
-            navArgument(lostItemIdArg) {
-                type = NavType.IntType
-                defaultValue = 0
-            },
-            navArgument(facilityIdArg) {
-                type = NavType.StringType
-            },
-            navArgument(facilityNameArg) {
-                type = NavType.StringType
-            }
-        )
-    }
-}
+import com.cmc.curtaincall.feature.performance.search.PerformanceSearchScreen
 
 fun NavGraphBuilder.performanceNavGraph(
     navHostController: NavHostController,
     onNavigateReport: (Int, String) -> Unit
 ) {
     navigation(
-        startDestination = PerformanceExDestination.Search.route,
+        startDestination = PerformanceDestination.Search.route,
         route = NavGraphLabel.PERFORMANCE
     ) {
-        composable(route = PerformanceExDestination.Search.route) {
-            PerformanceScreen {
-                navHostController.navigate("${PerformanceExDestination.Detail.route}/$it")
+        composable(route = PerformanceDestination.Search.route) {
+            PerformanceSearchScreen { showId ->
+                navHostController.navigate("${PerformanceDestination.Detail.route}/$showId")
             }
         }
+
         composable(
             route = PerformanceDestination.Detail.routeWithArgs,
             arguments = PerformanceDestination.Detail.arguments
         ) { entry ->
-            val showIdType = entry.arguments?.getString(PerformanceDestination.Detail.showIdArg) ?: ""
-            if (
-                (navHostController.previousBackStackEntry?.destination?.route == PerformanceDestination.Performance.route) ||
-                (navHostController.previousBackStackEntry?.destination?.route == PerformanceDestination.Detail.routeWithArgs)
-            ) {
-                val parentEntry = remember(entry) { navHostController.getBackStackEntry(PerformanceDestination.Performance.route) }
-                PerformanceDetailScreen(
-                    performanceViewModel = hiltViewModel(parentEntry),
-                    showId = showIdType,
-                    onNavigateReview = {
-                        navHostController.navigate("${PerformanceDestination.Review.route}/$it")
-                    },
-                    onNavigateLostItem = {
-                        navHostController.navigate("${PerformanceDestination.LostItem.route}/$it")
-                    },
-                    onNavigateDetail = {
-                        navHostController.navigate("${PerformanceDestination.Detail.route}/$it")
-                    },
-                    onBack = {
-                        navHostController.popBackStack()
-                    }
-                )
-            } else {
-                PerformanceDetailScreen(
-                    showId = showIdType,
-                    onNavigateReview = {
-                        navHostController.navigate("${PerformanceDestination.Review.route}/$it")
-                    },
-                    onNavigateLostItem = {
-                        navHostController.navigate("${PerformanceDestination.LostItem.route}/$it")
-                    },
-                    onNavigateDetail = {
-                        navHostController.navigate("${PerformanceDestination.Detail.route}/$it")
-                    },
-                    onBack = {
-                        navHostController.popBackStack()
-                    }
-                )
-            }
+            val showIdArg = entry.arguments?.getString(PerformanceDestination.Detail.showIdArg)
+            PerformanceDetailScreen(
+                showId = showIdArg,
+                onNavigateReview = { showId ->
+                    navHostController.navigate("${PerformanceDestination.Review.route}/$showId")
+                },
+                onNavigateLostProperty = { facilityName ->
+                    navHostController.navigate("${PerformanceDestination.LostProperty.route}/$facilityName")
+                },
+                onNavigateDetail = { showId ->
+                    navHostController.navigate("${PerformanceDestination.Detail.route}/$showId")
+                },
+                onBack = {
+                    navHostController.popBackStack()
+                }
+            )
         }
+
         composable(
             route = PerformanceDestination.Review.routeWithArgs,
             arguments = PerformanceDestination.Review.arguments
         ) { entry ->
             val parentEntry = remember(entry) { navHostController.getBackStackEntry(PerformanceDestination.Detail.routeWithArgs) }
-            val showId = entry.arguments?.getString(PerformanceDestination.Review.showIdArg) ?: ""
+            val showIdArg = entry.arguments?.getString(PerformanceDestination.Review.showIdArg)
             PerformanceReviewScreen(
                 performanceDetailViewModel = hiltViewModel(parentEntry),
-                showId = showId,
-                onNavigateReviewCreate = { posterUrl, genre, title, fromMypage, reviewId ->
-                    navHostController.navigate(
-                        PerformanceDestination.ReviewCreate.route + "?" +
-                            "${PerformanceDestination.ReviewCreate.showIdArgs}=$showId" + "&" +
-                            "${PerformanceDestination.ReviewCreate.fromMypageArg}=$fromMypage" + "&" +
-                            "${PerformanceDestination.ReviewCreate.posterUrlArg}=$posterUrl" + "&" +
-                            "${PerformanceDestination.ReviewCreate.genreArg}=$genre" + "&" +
-                            "${PerformanceDestination.ReviewCreate.titleArg}=$title" + "&" +
-                            "${PerformanceDestination.ReviewCreate.reviewIdArg}=$reviewId"
-                    )
-                },
+                showId = showIdArg,
                 onNavigateReport = onNavigateReport,
+                onNavigateReviewCreate = { reviewId ->
+                    navHostController.navigate("${PerformanceDestination.ReviewCreate.route}/$showIdArg/$reviewId")
+                },
                 onBack = {
                     navHostController.popBackStack()
                 }
@@ -237,54 +74,33 @@ fun NavGraphBuilder.performanceNavGraph(
             route = PerformanceDestination.ReviewCreate.routeWithArgs,
             arguments = PerformanceDestination.ReviewCreate.arguments
         ) { entry ->
-            val showId = entry.arguments?.getString(PerformanceDestination.ReviewCreate.showIdArgs) ?: ""
-            val fromMypage = entry.arguments?.getBoolean(PerformanceDestination.ReviewCreate.fromMypageArg) ?: false
-            val posterUrl = entry.arguments?.getString(PerformanceDestination.ReviewCreate.posterUrlArg)
-            val genre = entry.arguments?.getString(PerformanceDestination.ReviewCreate.genreArg) ?: "PLAY"
-            val title = entry.arguments?.getString(PerformanceDestination.ReviewCreate.titleArg) ?: ""
-            val reviewId = entry.arguments?.getInt(PerformanceDestination.ReviewCreate.reviewIdArg) ?: Int.MIN_VALUE
-
-            if (fromMypage) {
-                PerformanceReviewCreateScreen(
-                    showId = showId,
-                    fromMypage = fromMypage,
-                    posterUrl = posterUrl,
-                    genre = genre,
-                    title = title,
-                    reviewId = reviewId,
-                    onBack = { navHostController.popBackStack() }
-                )
-            } else {
-                val parentEntry = remember(entry) { navHostController.getBackStackEntry(PerformanceDestination.Detail.routeWithArgs) }
-                PerformanceReviewCreateScreen(
-                    performanceDetailViewModel = hiltViewModel(parentEntry),
-                    showId = showId,
-                    fromMypage = fromMypage,
-                    posterUrl = posterUrl,
-                    genre = genre,
-                    title = title,
-                    reviewId = reviewId,
-                    onBack = { navHostController.popBackStack() }
-                )
-            }
+            val parentEntry = remember(entry) { navHostController.getBackStackEntry(PerformanceDestination.Detail.routeWithArgs) }
+            val showIdArg = entry.arguments?.getString(PerformanceDestination.ReviewCreate.showIdArg)
+            val reviewIdArg = entry.arguments?.getInt(PerformanceDestination.ReviewCreate.reviewIdArg)
+            PerformanceReviewCreateScreen(
+                performanceDetailViewModel = hiltViewModel(parentEntry),
+                showId = showIdArg,
+                reviewId = reviewIdArg,
+                onBack = { navHostController.popBackStack() }
+            )
         }
         composable(
-            route = PerformanceDestination.LostItem.routeWithArgs,
-            arguments = PerformanceDestination.LostItem.arguments
+            route = PerformanceDestination.LostProperty.routeWithArgs,
+            arguments = PerformanceDestination.LostProperty.arguments
         ) { entry ->
             val parentEntry = remember(entry) { navHostController.getBackStackEntry(PerformanceDestination.Detail.routeWithArgs) }
-            val facilityName = entry.arguments?.getString(PerformanceDestination.LostItem.facilityNameArg) ?: ""
+            val facilityNameArg = entry.arguments?.getString(PerformanceDestination.LostProperty.facilityNameArg)
             PerformanceLostItemScreen(
                 performanceDetailViewModel = hiltViewModel(parentEntry),
-                facilityName = facilityName,
-                onNavigateLostItemDetail = {
-                    navHostController.navigate("${PerformanceDestination.LostItemDetail.route}/$it")
+                facilityName = facilityNameArg,
+                onNavigateLostItemDetail = { lostPropertyId ->
+                    navHostController.navigate("${PerformanceDestination.LostPropertyDetail.route}/$lostPropertyId")
                 },
                 onNavigateLostItemCreate = { facilityId, facilityName ->
                     navHostController.navigate(
-                        PerformanceDestination.LostItemCreate.route + "?" +
-                            "${PerformanceDestination.LostItemCreate.facilityIdArg}=$facilityId" + "&" +
-                            "${PerformanceDestination.LostItemCreate.facilityNameArg}=$facilityName"
+                        "${PerformanceDestination.LostPropertyCreate.route}?" +
+                            "${PerformanceDestination.LostPropertyCreate.facilityIdArg}=$facilityId&" +
+                            "${PerformanceDestination.LostPropertyCreate.facilityNameArg}=$facilityName"
                     )
                 },
                 onBack = {
@@ -293,36 +109,33 @@ fun NavGraphBuilder.performanceNavGraph(
             )
         }
         composable(
-            route = PerformanceDestination.LostItemDetail.routeWithArg,
-            arguments = PerformanceDestination.LostItemDetail.arguments
+            route = PerformanceDestination.LostPropertyCreate.routeWithArg,
+            arguments = PerformanceDestination.LostPropertyCreate.arguments
         ) { entry ->
-            val parentEntry = remember(entry) { navHostController.getBackStackEntry(PerformanceDestination.LostItem.routeWithArgs) }
-            val lostItemId = entry.arguments?.getInt(PerformanceDestination.LostItemDetail.lostItemIdArg) ?: Int.MIN_VALUE
+            val parentEntry = remember(entry) { navHostController.getBackStackEntry(PerformanceDestination.LostProperty.routeWithArgs) }
+            val lostPropertyIdArg = entry.arguments?.getInt(PerformanceDestination.LostPropertyDetail.lostPropertyIdArg)
             PerformanceLostItemDetailScreen(
                 performanceLostItemViewModel = hiltViewModel(parentEntry),
-                lostItem = lostItemId,
+                lostPropertyId = lostPropertyIdArg,
                 onNavigateReport = onNavigateReport,
                 onBack = { navHostController.popBackStack() }
             )
         }
         composable(
-            route = PerformanceDestination.LostItemCreate.routeWithArg,
-            arguments = PerformanceDestination.LostItemCreate.arguments
+            route = PerformanceDestination.LostPropertyCreate.routeWithArg,
+            arguments = PerformanceDestination.LostPropertyCreate.arguments
         ) { entry ->
-            val lostItemId = entry.arguments?.getInt(PerformanceDestination.LostItemCreate.lostItemIdArg) ?: Int.MIN_VALUE
-            val facilityId = entry.arguments?.getString(PerformanceDestination.LostItemCreate.facilityIdArg) ?: ""
-            val facilityName = entry.arguments?.getString(PerformanceDestination.LostItemCreate.facilityNameArg) ?: ""
-            val fromMyPage = navHostController.previousBackStackEntry?.destination?.route != PerformanceDestination.LostItem.routeWithArgs
-
+            val lostPropertyIdArg = entry.arguments?.getInt(PerformanceDestination.LostPropertyCreate.lostPropertyIdArg)
+            val facilityIdArg = entry.arguments?.getString(PerformanceDestination.LostPropertyCreate.facilityIdArg)
+            val facilityNameArg = entry.arguments?.getString(PerformanceDestination.LostPropertyCreate.facilityNameArg)
             PerformanceLostItemCreateScreen(
-                fromMyPage = fromMyPage,
-                lostItemId = lostItemId,
-                facilityId = facilityId,
-                facilityName = facilityName,
+                lostPropertyId = lostPropertyIdArg,
+                facilityId = facilityIdArg,
+                facilityName = facilityNameArg,
                 onNavigateDetail = {
-                    navHostController.navigate("${PerformanceDestination.LostItemDetail.route}/$it") {
+                    navHostController.navigate("${PerformanceDestination.LostPropertyDetail.route}/$it") {
                         navHostController.popBackStack(
-                            route = PerformanceDestination.LostItemCreate.routeWithArg,
+                            route = PerformanceDestination.LostPropertyDetail.routeWithArg,
                             inclusive = true
                         )
                     }
