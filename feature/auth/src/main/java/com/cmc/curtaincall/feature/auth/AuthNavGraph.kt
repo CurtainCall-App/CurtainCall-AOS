@@ -7,8 +7,8 @@ import androidx.navigation.navigation
 import com.cmc.curtaincall.common.navigation.NavGraphLabel
 import com.cmc.curtaincall.common.navigation.destination.AuthDestination
 import com.cmc.curtaincall.feature.auth.login.LoginScreen
-import com.cmc.curtaincall.feature.auth.signup.screen.SignUpInputScreen
-import com.cmc.curtaincall.feature.auth.signup.screen.SignUpTermsScreen
+import com.cmc.curtaincall.feature.auth.signup.input.SignUpInputScreen
+import com.cmc.curtaincall.feature.auth.signup.terms.SignUpTermsScreen
 import com.cmc.curtaincall.feature.auth.welcome.WelComeScreen
 import com.cmc.curtaincall.feature.home.navigation.HomeDestination
 

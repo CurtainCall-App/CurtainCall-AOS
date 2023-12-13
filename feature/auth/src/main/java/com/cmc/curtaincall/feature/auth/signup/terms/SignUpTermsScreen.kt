@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.auth.signup.screen
+package com.cmc.curtaincall.feature.auth.signup.terms
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
@@ -29,6 +29,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallRoundedTextButton
+import com.cmc.curtaincall.common.design.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.Arsenic
@@ -41,31 +42,19 @@ import com.cmc.curtaincall.common.design.theme.Roman_Silver
 import com.cmc.curtaincall.common.design.theme.Silver_Sand
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
-import com.cmc.curtaincall.domain.Urls.PRIVACY_INFORMATION_TERMS_URL
-import com.cmc.curtaincall.domain.Urls.SERVICE_TERMS_URL
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import com.cmc.curtaincall.domain.model.Urls.DEFAULT_URL
+import com.cmc.curtaincall.domain.model.Urls.PRIVACY_INFORMATION_TERMS_URL
+import com.cmc.curtaincall.domain.model.Urls.SERVICE_TERMS_URL
 import com.google.accompanist.web.WebView
-import com.google.accompanist.web.WebViewState
 import com.google.accompanist.web.rememberWebViewState
 
 @Composable
 internal fun SignUpTermsScreen(
-    onNavigateSignUpInput: () -> Unit,
+    onNavigateSignUpInput: () -> Unit = {},
     onBack: () -> Unit
 ) {
-    val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(White)
-
-    var webViewUrl by remember { mutableStateOf("") }
-    val webViewState = rememberWebViewState(url = webViewUrl)
-    BackHandler {
-        if (webViewUrl.isNotEmpty()) {
-            webViewUrl = ""
-        } else {
-            onBack()
-        }
-    }
-
+    var webViewUrl by remember { mutableStateOf(DEFAULT_URL) }
+    SystemUiStatusBar(White)
     Scaffold(
         topBar = {
             TopAppBarWithBack(
@@ -74,7 +63,7 @@ internal fun SignUpTermsScreen(
                 contentColor = Nero,
                 onClick = {
                     if (webViewUrl.isNotEmpty()) {
-                        webViewUrl = ""
+                        webViewUrl = DEFAULT_URL
                     } else {
                         onBack()
                     }
@@ -88,28 +77,31 @@ internal fun SignUpTermsScreen(
                 .fillMaxSize()
                 .background(White),
             webViewUrl = webViewUrl,
-            webViewState = webViewState,
             onNavigateSignUpInput = onNavigateSignUpInput,
             onNavigateSignUpTermsWebView = {
                 webViewUrl = it
             }
         )
     }
+
+    BackHandler {
+        if (webViewUrl.isNotEmpty()) {
+            webViewUrl = DEFAULT_URL
+        } else {
+            onBack()
+        }
+    }
 }
 
 @Composable
 private fun SignUpTermsContent(
     modifier: Modifier = Modifier,
-    webViewUrl: String,
-    webViewState: WebViewState,
+    webViewUrl: String = DEFAULT_URL,
     onNavigateSignUpInput: () -> Unit = {},
     onNavigateSignUpTermsWebView: (String) -> Unit = {}
 ) {
-    var allTermsState by remember { mutableStateOf(false) }
-    var serviceTermsState by remember { mutableStateOf(false) }
-    var privacyInfoTermsState by remember { mutableStateOf(false) }
-    var ageState by remember { mutableStateOf(false) }
-
+    val webViewState = rememberWebViewState(url = webViewUrl)
+    val signUpTermsState by remember { mutableStateOf(SignUpTermsState()) }
     Box(modifier) {
         Column(
             modifier = Modifier
@@ -134,18 +126,15 @@ private fun SignUpTermsContent(
                 fontFamily = spoqahansanseeo,
                 lineHeight = 22.dp.toSp()
             )
-            SignUpTerms(
+            SignUpTermsCheckBox(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 40.dp),
                 description = stringResource(R.string.signup_terms_all_agree),
-                checked = allTermsState,
+                isChecked = signUpTermsState.isAllChecked(),
                 isBold = true,
                 onCheckedChange = {
-                    allTermsState = allTermsState.not()
-                    serviceTermsState = allTermsState
-                    privacyInfoTermsState = allTermsState
-                    ageState = allTermsState
+                    signUpTermsState.clickedAllTerms()
                 }
             )
             Spacer(
@@ -155,45 +144,42 @@ private fun SignUpTermsContent(
                     .height(1.dp)
                     .background(Cultured)
             )
-            SignUpTerms(
+            SignUpTermsCheckBox(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 25.dp),
                 description = stringResource(R.string.signup_terms_service),
-                checked = serviceTermsState,
+                isChecked = signUpTermsState.serviceTerms.value,
                 hasMore = true,
                 onCheckedChange = {
-                    serviceTermsState = serviceTermsState.not()
-                    allTermsState = listOf(serviceTermsState, privacyInfoTermsState, ageState).all { it }
+                    signUpTermsState.clickedServiceTerms()
                 },
-                onClickDown = {
+                onNavigateTermsDetail = {
                     onNavigateSignUpTermsWebView(SERVICE_TERMS_URL)
                 }
             )
-            SignUpTerms(
+            SignUpTermsCheckBox(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 25.dp),
                 description = stringResource(R.string.signup_terms_privacy_information_agree),
-                checked = privacyInfoTermsState,
+                isChecked = signUpTermsState.privacyInfoTerms.value,
                 hasMore = true,
                 onCheckedChange = {
-                    privacyInfoTermsState = privacyInfoTermsState.not()
-                    allTermsState = listOf(serviceTermsState, privacyInfoTermsState, ageState).all { it }
+                    signUpTermsState.clickedPrivacyInfoTerms()
                 },
-                onClickDown = {
+                onNavigateTermsDetail = {
                     onNavigateSignUpTermsWebView(PRIVACY_INFORMATION_TERMS_URL)
                 }
             )
-            SignUpTerms(
+            SignUpTermsCheckBox(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 25.dp),
                 description = stringResource(R.string.signup_terms_age_agree),
-                checked = ageState,
+                isChecked = signUpTermsState.ageTerms.value,
                 onCheckedChange = {
-                    ageState = ageState.not()
-                    allTermsState = listOf(serviceTermsState, privacyInfoTermsState, ageState).all { it }
+                    signUpTermsState.clickedAgeTerms()
                 }
             )
             Spacer(Modifier.weight(1f))
@@ -205,12 +191,12 @@ private fun SignUpTermsContent(
                     .height(52.dp),
                 title = stringResource(R.string.signup_next),
                 fontSize = 16.dp.toSp(),
-                enabled = allTermsState,
-                containerColor = if (serviceTermsState) Me_Pink else Bright_Gray,
-                contentColor = if (allTermsState) White else Silver_Sand
+                enabled = signUpTermsState.isAllChecked(),
+                containerColor = if (signUpTermsState.isAllChecked()) Me_Pink else Bright_Gray,
+                contentColor = if (signUpTermsState.isAllChecked()) White else Silver_Sand
             )
         }
-        if (webViewUrl.isNotEmpty()) {
+        if (webViewUrl != DEFAULT_URL) {
             WebView(
                 state = webViewState,
                 modifier = Modifier
@@ -222,14 +208,14 @@ private fun SignUpTermsContent(
 }
 
 @Composable
-private fun SignUpTerms(
+private fun SignUpTermsCheckBox(
     modifier: Modifier = Modifier,
+    isChecked: Boolean = false,
     description: String,
-    checked: Boolean = false,
     isBold: Boolean = false,
     hasMore: Boolean = false,
     onCheckedChange: () -> Unit = {},
-    onClickDown: () -> Unit = {}
+    onNavigateTermsDetail: () -> Unit = {}
 ) {
     Row(
         modifier = modifier,
@@ -238,13 +224,13 @@ private fun SignUpTerms(
         IconButton(
             onClick = onCheckedChange,
             modifier = Modifier
-                .background(if (checked) Me_Pink else Bright_Gray, CircleShape)
-                .size(20.dp, 20.dp)
+                .background(if (isChecked) Me_Pink else Bright_Gray, CircleShape)
+                .size(20.dp)
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_check),
-                contentDescription = null,
-                modifier = Modifier.size(14.dp, 14.dp),
+                contentDescription = description,
+                modifier = Modifier.size(14.dp),
                 tint = White
             )
         }
@@ -259,12 +245,12 @@ private fun SignUpTerms(
         Spacer(Modifier.weight(1f))
         if (hasMore) {
             IconButton(
-                onClick = onClickDown,
+                onClick = onNavigateTermsDetail,
                 modifier = Modifier.size(20.dp)
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_arrow_right_pink),
-                    contentDescription = null,
+                    contentDescription = description,
                     modifier = Modifier.size(12.dp),
                     tint = Arsenic
                 )
