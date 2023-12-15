@@ -1,9 +1,17 @@
 package com.cmc.curtaincall.feature.auth.signup.input
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -22,20 +30,25 @@ import com.cmc.curtaincall.common.design.component.basic.CurtainCallRoundedTextB
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallSingleLineTextField
 import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.design.extensions.toSp
-import com.cmc.curtaincall.common.design.theme.*
-import com.cmc.curtaincall.feature.auth.signup.CheckState
-import com.cmc.curtaincall.feature.auth.signup.SignUpSideEffect
-import com.cmc.curtaincall.feature.auth.signup.SignUpViewModel
+import com.cmc.curtaincall.common.design.theme.Black
+import com.cmc.curtaincall.common.design.theme.Bright_Gray
+import com.cmc.curtaincall.common.design.theme.Cheery_Paddle_Pop
+import com.cmc.curtaincall.common.design.theme.Cultured
+import com.cmc.curtaincall.common.design.theme.Green
+import com.cmc.curtaincall.common.design.theme.Me_Pink
+import com.cmc.curtaincall.common.design.theme.Nero
+import com.cmc.curtaincall.common.design.theme.Roman_Silver
+import com.cmc.curtaincall.common.design.theme.Silver_Sand
+import com.cmc.curtaincall.common.design.theme.White
+import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
 import kotlinx.coroutines.flow.collectLatest
 
 private const val INPUT_REGEX = "^[ㄱ-ㅎ가-힣a-zA-Z0-9]{0,10}$"
 private const val INPUT_CHECK_REGEX = "^[ㄱ-ㅎ가-힣a-zA-Z0-9]{2,10}$"
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SignUpInputScreen(
-    signUpViewModel: SignUpViewModel = hiltViewModel(),
-    onNavigateWelcome: () -> Unit,
+    onNavigateWelcome: () -> Unit = {},
     onBack: () -> Unit
 ) {
     Scaffold(
@@ -53,31 +66,23 @@ internal fun SignUpInputScreen(
                 .padding(paddingValues)
                 .fillMaxSize()
                 .background(White),
-            signUpViewModel = signUpViewModel,
             onNavigateWelcome = onNavigateWelcome
         )
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SignUpInputContent(
-    signUpViewModel: SignUpViewModel,
     modifier: Modifier = Modifier,
-    onNavigateWelcome: () -> Unit
+    signUpViewModel: SignUpInputViewModel = hiltViewModel(),
+    onNavigateWelcome: () -> Unit = {}
 ) {
+    val nickNameCheck by signUpViewModel.nickNameCheck.collectAsStateWithLifecycle()
     var nicknameState by remember { mutableStateOf("") }
-    val signUpState by signUpViewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(signUpViewModel) {
-        signUpViewModel.effects.collectLatest { sideEffect ->
-            when (sideEffect) {
-                is SignUpSideEffect.CreateMember -> {
-                    onNavigateWelcome()
-                }
-
-                else -> Unit
-            }
+        signUpViewModel.signUpCompleted.collectLatest { isCompleted ->
+            if (isCompleted) onNavigateWelcome()
         }
     }
 
@@ -104,8 +109,8 @@ private fun SignUpInputContent(
             value = nicknameState,
             onValueChange = {
                 if (Regex(INPUT_REGEX).matches(it)) {
-                    signUpViewModel.changeCheckState(CheckState.None)
                     nicknameState = it
+                    signUpViewModel.initNicknameCheck()
                 }
             },
             modifier = Modifier
@@ -116,7 +121,7 @@ private fun SignUpInputContent(
             shape = RoundedCornerShape(10.dp),
             containerColor = Cultured,
             contentColor = Roman_Silver,
-            borderColor = if (signUpState.checkState == CheckState.Duplicate) Cheery_Paddle_Pop else Color.Transparent,
+            borderColor = if (nickNameCheck == NickNameCheck.Duplicate) Cheery_Paddle_Pop else Color.Transparent,
             contentModifier = Modifier.padding(horizontal = 20.dp),
             placeholder = stringResource(R.string.signup_input_nickname)
         )
@@ -125,16 +130,16 @@ private fun SignUpInputContent(
                 .fillMaxWidth()
                 .padding(top = 12.dp)
         ) {
-            if (signUpState.checkState != CheckState.None) {
+            if (nickNameCheck != NickNameCheck.None) {
                 Text(
                     text = stringResource(
-                        if (signUpState.checkState == CheckState.Validate) {
+                        if (nickNameCheck == NickNameCheck.Validate) {
                             R.string.signup_nickname_validate
                         } else {
                             R.string.signup_nickname_duplicate
                         }
                     ),
-                    color = if (signUpState.checkState == CheckState.Validate) Green else Cheery_Paddle_Pop,
+                    color = if (nickNameCheck == NickNameCheck.Validate) Green else Cheery_Paddle_Pop,
                     fontSize = 13.dp.toSp(),
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo,
@@ -149,9 +154,9 @@ private fun SignUpInputContent(
                     .height(32.dp),
                 title = stringResource(R.string.signup_input_double_check),
                 fontSize = 13.dp.toSp(),
-                enabled = Regex(INPUT_CHECK_REGEX).matches(nicknameState) && (signUpState.checkState == CheckState.None),
-                containerColor = if (Regex(INPUT_CHECK_REGEX).matches(nicknameState) && (signUpState.checkState == CheckState.None)) Me_Pink else Bright_Gray,
-                contentColor = if (Regex(INPUT_CHECK_REGEX).matches(nicknameState) && (signUpState.checkState == CheckState.None)) White else Silver_Sand,
+                enabled = Regex(INPUT_CHECK_REGEX).matches(nicknameState) && (nickNameCheck == NickNameCheck.None),
+                containerColor = if (Regex(INPUT_CHECK_REGEX).matches(nicknameState) && (nickNameCheck == NickNameCheck.None)) Me_Pink else Bright_Gray,
+                contentColor = if (Regex(INPUT_CHECK_REGEX).matches(nicknameState) && (nickNameCheck == NickNameCheck.None)) White else Silver_Sand,
                 radiusSize = 8.dp
             )
         }
@@ -164,9 +169,9 @@ private fun SignUpInputContent(
                 .height(52.dp),
             title = stringResource(R.string.signup_nickname_setting_complete),
             fontSize = 16.dp.toSp(),
-            enabled = signUpState.checkState == CheckState.Validate,
-            containerColor = if (signUpState.checkState == CheckState.Validate) Me_Pink else Bright_Gray,
-            contentColor = if (signUpState.checkState == CheckState.Validate) White else Silver_Sand
+            enabled = nickNameCheck == NickNameCheck.Validate,
+            containerColor = if (nickNameCheck == NickNameCheck.Validate) Me_Pink else Bright_Gray,
+            contentColor = if (nickNameCheck == NickNameCheck.Validate) White else Silver_Sand
         )
     }
 }
