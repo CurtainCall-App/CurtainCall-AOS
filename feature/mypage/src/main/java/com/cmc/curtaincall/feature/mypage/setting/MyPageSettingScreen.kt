@@ -38,8 +38,8 @@ import com.cmc.curtaincall.common.design.theme.Nero
 import com.cmc.curtaincall.common.design.theme.Silver_Sand
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
-import com.cmc.curtaincall.domain.Urls.PRIVACY_INFORMATION_TERMS_URL
-import com.cmc.curtaincall.domain.Urls.SERVICE_TERMS_URL
+import com.cmc.curtaincall.domain.model.Urls.PRIVACY_INFORMATION_TERMS_URL
+import com.cmc.curtaincall.domain.model.Urls.SERVICE_TERMS_URL
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.WebViewState
 import com.google.accompanist.web.rememberWebViewState

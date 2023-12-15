@@ -20,20 +20,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.design.R
 import com.cmc.curtaincall.common.design.component.basic.CurtainCallRoundedTextButton
+import com.cmc.curtaincall.common.design.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.design.extensions.toSp
 import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
 import com.cmc.curtaincall.common.design.theme.Me_Pink
 import com.cmc.curtaincall.common.design.theme.White
 import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 internal fun WelComeScreen(
     onNavigateHome: () -> Unit
 ) {
-    val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(Cetacean_Blue)
-
+    SystemUiStatusBar(Cetacean_Blue)
     Column(
         modifier = Modifier
             .fillMaxSize()
