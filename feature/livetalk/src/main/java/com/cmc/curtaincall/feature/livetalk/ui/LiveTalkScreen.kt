@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cmc.curtaincall.common.designsystem.R
-import com.cmc.curtaincall.common.designsystem.component.content.card.LiveTalkCard
+import com.cmc.curtaincall.common.designsystem.component.card.LiveTalkCard
 import com.cmc.curtaincall.common.designsystem.extensions.toSp
 import com.cmc.curtaincall.common.designsystem.theme.Bright_Gray
 import com.cmc.curtaincall.common.designsystem.theme.Cetacean_Blue

@@ -35,8 +35,8 @@ import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallBorderText
 import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallRoundedText
 import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallSelectTypeButton
-import com.cmc.curtaincall.common.designsystem.component.content.card.PerformanceSimpleCard
-import com.cmc.curtaincall.common.designsystem.component.content.row.SortTypeRow
+import com.cmc.curtaincall.common.designsystem.component.card.PerformanceSimpleCard
+import com.cmc.curtaincall.common.designsystem.component.row.SortTypeRow
 import com.cmc.curtaincall.common.designsystem.component.custom.SelectSortTypeBottomSheet
 import com.cmc.curtaincall.common.designsystem.component.custom.SelectedDateCalender
 import com.cmc.curtaincall.common.designsystem.extensions.toSp

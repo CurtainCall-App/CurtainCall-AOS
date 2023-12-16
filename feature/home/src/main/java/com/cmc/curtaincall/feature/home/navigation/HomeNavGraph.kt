@@ -29,7 +29,7 @@ import com.cmc.curtaincall.feature.mypage.MyPageDestination
 import com.cmc.curtaincall.feature.mypage.mypageNavGraph
 import com.cmc.curtaincall.feature.partymember.PartyMemberDestination
 import com.cmc.curtaincall.feature.partymember.partymemberNavGraph
-import com.cmc.curtaincall.feature.performance.showNavGraph
+import com.cmc.curtaincall.feature.show.showNavGraph
 import io.getstream.chat.android.client.ChatClient
 
 private const val HOME_GRAPH = "home_graph"

@@ -44,7 +44,7 @@ import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallRounde
 import com.cmc.curtaincall.common.designsystem.component.basic.DottedLine
 import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarWithDelete
 import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarWithReportAction
-import com.cmc.curtaincall.common.designsystem.component.content.card.PartyType
+import com.cmc.curtaincall.common.designsystem.component.card.PartyType
 import com.cmc.curtaincall.common.designsystem.component.dialog.CurtainCallBasicDialog
 import com.cmc.curtaincall.common.designsystem.component.dialog.CurtainCallConfirmDialog
 import com.cmc.curtaincall.common.designsystem.extensions.toSp

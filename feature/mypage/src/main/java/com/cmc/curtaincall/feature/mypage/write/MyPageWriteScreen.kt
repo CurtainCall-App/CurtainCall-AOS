@@ -34,8 +34,8 @@ import androidx.paging.compose.itemsIndexed
 import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.designsystem.component.dialog.CurtainCallBasicDialog
-import com.cmc.curtaincall.common.designsystem.component.items.MyLostItem
-import com.cmc.curtaincall.common.designsystem.component.items.MyReviewWriteItem
+import com.cmc.curtaincall.common.designsystem.component.item.MyLostItem
+import com.cmc.curtaincall.common.designsystem.component.item.MyReviewWriteItem
 import com.cmc.curtaincall.common.designsystem.extensions.toSp
 import com.cmc.curtaincall.common.designsystem.theme.Cetacean_Blue
 import com.cmc.curtaincall.common.designsystem.theme.Cultured

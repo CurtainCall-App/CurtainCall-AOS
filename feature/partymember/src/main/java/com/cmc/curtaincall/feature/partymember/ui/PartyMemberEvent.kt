@@ -1,7 +1,7 @@
 package com.cmc.curtaincall.feature.partymember.ui
 
 import androidx.paging.PagingData
-import com.cmc.curtaincall.common.designsystem.component.content.card.PartyType
+import com.cmc.curtaincall.common.designsystem.component.card.PartyType
 import com.cmc.curtaincall.core.base.BaseEvent
 import com.cmc.curtaincall.domain.model.party.PartyModel
 import kotlinx.coroutines.flow.Flow

@@ -22,10 +22,10 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarWithBack
-import com.cmc.curtaincall.common.designsystem.component.content.card.PartyMemberEtcItemCard
-import com.cmc.curtaincall.common.designsystem.component.content.card.PartyMemberItemCard
-import com.cmc.curtaincall.common.designsystem.component.content.card.PartyType
-import com.cmc.curtaincall.common.designsystem.component.items.EmptyMyParty
+import com.cmc.curtaincall.common.designsystem.component.card.PartyMemberEtcItemCard
+import com.cmc.curtaincall.common.designsystem.component.card.PartyMemberItemCard
+import com.cmc.curtaincall.common.designsystem.component.card.PartyType
+import com.cmc.curtaincall.common.designsystem.component.item.EmptyMyParty
 import com.cmc.curtaincall.common.designsystem.theme.Cultured
 import com.cmc.curtaincall.common.designsystem.theme.Nero
 import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
