@@ -61,7 +61,7 @@ private fun IconContent(
 ) {
     val icons = listOf(
         R.drawable.ic_home to ("홈" to Color.White),
-        R.drawable.ic_performance to ("작품" to Color.White),
+        R.drawable.ic_show to ("작품" to Color.White),
         R.drawable.ic_partymember to ("파티원" to Color.White),
         R.drawable.ic_my to ("MY" to Color.White),
         R.drawable.ic_check to ("Check" to Color.Unspecified),

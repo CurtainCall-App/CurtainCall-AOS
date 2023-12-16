@@ -8,6 +8,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain"))
     // androidx
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

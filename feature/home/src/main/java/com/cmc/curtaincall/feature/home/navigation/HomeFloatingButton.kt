@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.cmc.curtaincall.common.designsystem.R
-import com.cmc.curtaincall.common.navigation.destination.PerformanceDestination
+import com.cmc.curtaincall.common.navigation.destination.ShowDestination
 import com.cmc.curtaincall.feature.livetalk.LiveTalkDestination
 import com.cmc.curtaincall.feature.mypage.MyPageDestination
 import com.cmc.curtaincall.feature.partymember.PartyMemberDestination
@@ -20,7 +20,7 @@ import com.cmc.curtaincall.feature.partymember.PartyMemberDestination
 fun HomeFloatingButton(navHostController: NavHostController) {
     val bottomDestinations = listOf(
         HomeDestination.Home,
-        PerformanceDestination.Search,
+        ShowDestination.Search,
         LiveTalkDestination.LiveTalk,
         PartyMemberDestination.PartyMember,
         MyPageDestination.MyPage

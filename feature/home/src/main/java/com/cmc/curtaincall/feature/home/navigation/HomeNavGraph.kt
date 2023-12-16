@@ -16,7 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.cmc.curtaincall.common.designsystem.R
-import com.cmc.curtaincall.common.navigation.destination.PerformanceDestination
+import com.cmc.curtaincall.common.navigation.destination.ShowDestination
 import com.cmc.curtaincall.core.navigation.BottomDestination
 import com.cmc.curtaincall.core.navigation.CurtainCallDestination
 import com.cmc.curtaincall.feature.home.HomeScreen
@@ -29,7 +29,7 @@ import com.cmc.curtaincall.feature.mypage.MyPageDestination
 import com.cmc.curtaincall.feature.mypage.mypageNavGraph
 import com.cmc.curtaincall.feature.partymember.PartyMemberDestination
 import com.cmc.curtaincall.feature.partymember.partymemberNavGraph
-import com.cmc.curtaincall.feature.performance.performanceNavGraph
+import com.cmc.curtaincall.feature.performance.showNavGraph
 import io.getstream.chat.android.client.ChatClient
 
 private const val HOME_GRAPH = "home_graph"
@@ -101,7 +101,7 @@ fun HomeNavHost(
                         navHostController.navigate("${HomeDestination.Guide.route}/$it")
                     },
                     onNavigatePerformanceDetail = {
-                        navHostController.navigate("${PerformanceDestination.Detail.route}/$it")
+                        navHostController.navigate("${ShowDestination.Detail.route}/$it")
                     },
                     onNavigateLiveTalk = {
                         navHostController.navigate(LiveTalkDestination.LiveTalk.route)
@@ -148,7 +148,7 @@ fun HomeNavHost(
                 )
             }
 
-            performanceNavGraph(
+            showNavGraph(
                 navHostController = navHostController,
                 onNavigateReport = { id, type ->
                     navHostController.navigate("${HomeDestination.Report.route}/$id/$type")

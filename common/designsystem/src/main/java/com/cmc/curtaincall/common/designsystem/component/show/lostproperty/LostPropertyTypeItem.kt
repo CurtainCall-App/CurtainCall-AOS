@@ -22,7 +22,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.cmc.curtaincall.common.designsystem.component.enum.LostPropertyType
 import com.cmc.curtaincall.common.designsystem.extensions.toSp
 import com.cmc.curtaincall.common.designsystem.theme.Anti_Flash_White
 import com.cmc.curtaincall.common.designsystem.theme.Black_Pearl

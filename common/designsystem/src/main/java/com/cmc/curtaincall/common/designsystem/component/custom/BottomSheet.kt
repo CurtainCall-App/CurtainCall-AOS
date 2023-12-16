@@ -28,21 +28,13 @@ import com.cmc.curtaincall.common.designsystem.theme.Me_Pink
 import com.cmc.curtaincall.common.designsystem.theme.Nero
 import com.cmc.curtaincall.common.designsystem.theme.White
 import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
+import com.cmc.curtaincall.domain.enum.ShowSortType
 import com.holix.android.bottomsheetdialog.compose.BottomSheetDialog
-
-enum class SortType(
-    val value: String,
-    val code: String
-) {
-    STAR("별점순", "reviewGradeAvg,desc"),
-    END("종료 임박순", "endDate"),
-    KOREAN("가나다순", "name")
-}
 
 @Composable
 fun SelectSortTypeBottomSheet(
-    sortType: SortType,
-    onSelectSortType: (SortType) -> Unit,
+    sortType: ShowSortType,
+    onSelectSortType: (ShowSortType) -> Unit,
     onDismissRequest: () -> Unit = {}
 ) {
     BottomSheetDialog(onDismissRequest = onDismissRequest) {
@@ -56,18 +48,18 @@ fun SelectSortTypeBottomSheet(
             Row(
                 modifier = Modifier
                     .weight(1f)
-                    .clickable { onSelectSortType(SortType.STAR) },
+                    .clickable { onSelectSortType(ShowSortType.REVIEW_GRADE) },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = SortType.STAR.value,
+                    text = ShowSortType.REVIEW_GRADE.value,
                     modifier = Modifier.weight(1f),
-                    color = if (sortType == SortType.STAR) Me_Pink else Nero,
+                    color = if (sortType == ShowSortType.REVIEW_GRADE) Me_Pink else Nero,
                     fontSize = 16.dp.toSp(),
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo
                 )
-                if (sortType == SortType.STAR) {
+                if (sortType == ShowSortType.REVIEW_GRADE) {
                     Icon(
                         painter = painterResource(R.drawable.ic_check),
                         contentDescription = null,
@@ -79,18 +71,18 @@ fun SelectSortTypeBottomSheet(
             Row(
                 modifier = Modifier
                     .weight(1f)
-                    .clickable { onSelectSortType(SortType.END) },
+                    .clickable { onSelectSortType(ShowSortType.END_DATE) },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = SortType.END.value,
+                    text = ShowSortType.END_DATE.value,
                     modifier = Modifier.weight(1f),
-                    color = if (sortType == SortType.END) Me_Pink else Nero,
+                    color = if (sortType == ShowSortType.END_DATE) Me_Pink else Nero,
                     fontSize = 16.dp.toSp(),
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo
                 )
-                if (sortType == SortType.END) {
+                if (sortType == ShowSortType.END_DATE) {
                     Icon(
                         painter = painterResource(R.drawable.ic_check),
                         contentDescription = null,
@@ -102,18 +94,18 @@ fun SelectSortTypeBottomSheet(
             Row(
                 modifier = Modifier
                     .weight(1f)
-                    .clickable { onSelectSortType(SortType.KOREAN) },
+                    .clickable { onSelectSortType(ShowSortType.NAME) },
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = SortType.KOREAN.value,
+                    text = ShowSortType.NAME.value,
                     modifier = Modifier.weight(1f),
-                    color = if (sortType == SortType.KOREAN) Me_Pink else Nero,
+                    color = if (sortType == ShowSortType.NAME) Me_Pink else Nero,
                     fontSize = 16.dp.toSp(),
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo
                 )
-                if (sortType == SortType.KOREAN) {
+                if (sortType == ShowSortType.NAME) {
                     Icon(
                         painter = painterResource(R.drawable.ic_check),
                         contentDescription = null,
@@ -200,7 +192,7 @@ fun EditBottomSheet(
 @Composable
 private fun SelectSortTypeBottomSheetPreview() {
     SelectSortTypeBottomSheet(
-        sortType = SortType.STAR,
+        sortType = ShowSortType.REVIEW_GRADE,
         onSelectSortType = {}
     )
 }

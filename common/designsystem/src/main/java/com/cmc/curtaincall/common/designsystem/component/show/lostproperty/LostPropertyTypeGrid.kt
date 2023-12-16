@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.cmc.curtaincall.common.designsystem.component.enum.LostPropertyType
 import com.cmc.curtaincall.common.designsystem.theme.White
 
 private val LostPropertyTypeGridContentPadding = 23.dp

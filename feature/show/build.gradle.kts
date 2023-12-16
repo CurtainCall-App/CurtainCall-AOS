@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.cmc.curtaincall.feature.mypage"
+    namespace = "com.cmc.curtaincall.feature.show"
 }
 
 dependencies {
@@ -14,20 +14,15 @@ dependencies {
     implementation(project(":common:utility"))
     implementation(project(":core:base"))
     implementation(project(":domain"))
-    implementation(project(":feature:show"))
-    implementation(project(":feature:partymember"))
 
     // androidx
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.core.ktx)
 
-    // logging
-    implementation(libs.timber)
-
     // compose
     implementation(libs.accompanist.systemuicontroller)
-    implementation(libs.accompanist.webview)
+    implementation(libs.naver.map.compose)
     implementation(libs.coil.compose)
     implementation(libs.calendar.compose)
 

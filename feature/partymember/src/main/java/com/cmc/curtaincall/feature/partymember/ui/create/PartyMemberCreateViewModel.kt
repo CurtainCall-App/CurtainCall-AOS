@@ -2,10 +2,10 @@ package com.cmc.curtaincall.feature.partymember.ui.create
 
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
-import com.cmc.curtaincall.common.designsystem.component.content.card.PartyType
-import com.cmc.curtaincall.common.designsystem.component.custom.SortType
+import com.cmc.curtaincall.common.designsystem.component.card.PartyType
 import com.cmc.curtaincall.common.utility.extensions.changeShowAt
 import com.cmc.curtaincall.core.base.BaseViewModel
+import com.cmc.curtaincall.domain.enum.ShowSortType
 import com.cmc.curtaincall.domain.repository.PartyRepository
 import com.cmc.curtaincall.domain.repository.ShowRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -67,7 +67,7 @@ class PartyMemberCreateViewModel @Inject constructor(
             }
         }
 
-    fun setSortType(sortType: SortType) {
+    fun setSortType(sortType: ShowSortType) {
         sendAction(PartyMemberCreateEvent.SetSortType(sortType))
         loadPlayItems()
         loadMusicalItems()

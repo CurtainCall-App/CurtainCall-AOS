@@ -9,7 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.cmc.curtaincall.common.designsystem.R
-import com.cmc.curtaincall.common.navigation.destination.PerformanceDestination
+import com.cmc.curtaincall.common.navigation.destination.ShowDestination
 import com.cmc.curtaincall.core.navigation.BottomDestination
 import com.cmc.curtaincall.core.navigation.CurtainCallDestination
 import com.cmc.curtaincall.feature.mypage.editprofile.MyPageProfileEditScreen
@@ -159,7 +159,7 @@ fun NavGraphBuilder.mypageNavGraph(
             MyPageSavedPerformanceScreen(
                 myPageViewModel = hiltViewModel(parentEntry),
                 onNavigateShowDetail = {
-                    navHostController.navigate("${PerformanceDestination.Detail.route}/$it")
+                    navHostController.navigate("${ShowDestination.Detail.route}/$it")
                 },
                 onBack = { navHostController.popBackStack() }
             )
@@ -168,14 +168,14 @@ fun NavGraphBuilder.mypageNavGraph(
         composable(MyPageDestination.Write.route) { entry ->
             MyPageWriteScreen(
                 onNavigateReviewEdit = { showId, reviewId ->
-                    navHostController.navigate("${PerformanceDestination.ReviewCreate.route}/$showId/$reviewId")
+                    navHostController.navigate("${ShowDestination.ReviewCreate.route}/$showId/$reviewId")
                 },
                 onNavigateLostItemEdit = { lostPropertyId, facilityId, facilityName ->
                     navHostController.navigate(
-                        "${PerformanceDestination.LostPropertyCreate.route}?" +
-                            "${PerformanceDestination.LostPropertyCreate.lostPropertyIdArg}=$lostPropertyId&" +
-                            "${PerformanceDestination.LostPropertyCreate.facilityIdArg}=$facilityId&" +
-                            "${PerformanceDestination.LostPropertyCreate.facilityNameArg}=$facilityName"
+                        "${ShowDestination.LostPropertyCreate.route}?" +
+                            "${ShowDestination.LostPropertyCreate.lostPropertyIdArg}=$lostPropertyId&" +
+                            "${ShowDestination.LostPropertyCreate.facilityIdArg}=$facilityId&" +
+                            "${ShowDestination.LostPropertyCreate.facilityNameArg}=$facilityName"
                     )
                 },
                 onBack = {

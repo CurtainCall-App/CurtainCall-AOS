@@ -1,8 +1,8 @@
 package com.cmc.curtaincall.feature.partymember.ui.create
 
 import androidx.paging.PagingData
-import com.cmc.curtaincall.common.designsystem.component.custom.SortType
 import com.cmc.curtaincall.core.base.BaseEvent
+import com.cmc.curtaincall.domain.enum.ShowSortType
 import com.cmc.curtaincall.domain.model.show.ShowDetailModel
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import kotlinx.coroutines.flow.Flow
@@ -31,7 +31,7 @@ sealed class PartyMemberCreateEvent : BaseEvent {
     ) : PartyMemberCreateEvent()
 
     data class SetSortType(
-        val sortType: SortType
+        val sortType: ShowSortType
     ) : PartyMemberCreateEvent()
 
     data class LoadPlayItems(
