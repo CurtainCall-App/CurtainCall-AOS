@@ -12,8 +12,8 @@ import com.cmc.curtaincall.feature.show.detail.ShowDetailScreen
 import com.cmc.curtaincall.feature.show.lostitem.create.PerformanceLostItemCreateScreen
 import com.cmc.curtaincall.feature.show.lostitem.screen.PerformanceLostItemDetailScreen
 import com.cmc.curtaincall.feature.show.lostitem.screen.PerformanceLostItemScreen
-import com.cmc.curtaincall.feature.show.review.PerformanceReviewCreateScreen
-import com.cmc.curtaincall.feature.show.review.PerformanceReviewScreen
+import com.cmc.curtaincall.feature.show.review.ShowReviewCreateScreen
+import com.cmc.curtaincall.feature.show.review.ShowReviewScreen
 import com.cmc.curtaincall.feature.show.search.ShowSearchScreen
 
 fun NavGraphBuilder.showNavGraph(
@@ -56,10 +56,8 @@ fun NavGraphBuilder.showNavGraph(
             route = ShowDestination.Review.routeWithArgs,
             arguments = ShowDestination.Review.arguments
         ) { entry ->
-            val parentEntry = remember(entry) { navHostController.getBackStackEntry(ShowDestination.Detail.routeWithArgs) }
             val showIdArg = entry.arguments?.getString(ShowDestination.Review.showIdArg)
-            PerformanceReviewScreen(
-                performanceDetailViewModel = hiltViewModel(parentEntry),
+            ShowReviewScreen(
                 showId = showIdArg,
                 onNavigateReport = onNavigateReport,
                 onNavigateReviewCreate = { reviewId ->
@@ -77,8 +75,8 @@ fun NavGraphBuilder.showNavGraph(
             val parentEntry = remember(entry) { navHostController.getBackStackEntry(ShowDestination.Detail.routeWithArgs) }
             val showIdArg = entry.arguments?.getString(ShowDestination.ReviewCreate.showIdArg)
             val reviewIdArg = entry.arguments?.getInt(ShowDestination.ReviewCreate.reviewIdArg)
-            PerformanceReviewCreateScreen(
-                performanceDetailViewModel = hiltViewModel(parentEntry),
+            ShowReviewCreateScreen(
+                showDetailViewModel = hiltViewModel(parentEntry),
                 showId = showIdArg,
                 reviewId = reviewIdArg,
                 onBack = { navHostController.popBackStack() }

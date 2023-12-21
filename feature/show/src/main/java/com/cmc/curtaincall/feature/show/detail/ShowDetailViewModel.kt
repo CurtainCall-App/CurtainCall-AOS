@@ -6,10 +6,8 @@ import androidx.paging.cachedIn
 import com.cmc.curtaincall.core.base.BaseViewModel
 import com.cmc.curtaincall.domain.enum.ShowDetailMenuTab
 import com.cmc.curtaincall.domain.model.lostItem.LostItemModel
-import com.cmc.curtaincall.domain.model.review.ShowReviewModel
 import com.cmc.curtaincall.domain.repository.FavoriteRepository
 import com.cmc.curtaincall.domain.repository.LostItemRepository
-import com.cmc.curtaincall.domain.repository.MemberRepository
 import com.cmc.curtaincall.domain.repository.ReviewRepository
 import com.cmc.curtaincall.domain.repository.ShowRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,84 +20,82 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ShowDetailViewModel @Inject constructor(
-    private val memberRepository: MemberRepository,
     private val showRepository: ShowRepository,
     private val reviewRepository: ReviewRepository,
     private val favoriteRepository: FavoriteRepository,
     private val lostItemRepository: LostItemRepository
-) : BaseViewModel<ShowDetailState, PerformanceDetailEvent, Nothing>(
+) : BaseViewModel<ShowDetailState, ShowDetailEvent, Nothing>(
     initialState = ShowDetailState()
 ) {
-    init {
-        getMemberId()
-    }
-
-    var reviewItems: Flow<PagingData<ShowReviewModel>> = reviewRepository
-        .fetchShowReviewList("")
-        .cachedIn(viewModelScope)
 
     var lostItems: Flow<PagingData<LostItemModel>> = lostItemRepository
         .fetchLostItemList("", "", "", "")
         .cachedIn(viewModelScope)
 
-    override fun reduceState(currentState: ShowDetailState, event: PerformanceDetailEvent): ShowDetailState =
+    override fun reduceState(currentState: ShowDetailState, event: ShowDetailEvent): ShowDetailState =
         when (event) {
-            is PerformanceDetailEvent.GetMemberId -> {
+            is ShowDetailEvent.GetMemberId -> {
                 currentState.copy(memberId = event.memberId)
             }
 
-            is PerformanceDetailEvent.ShowDetail -> {
+            is ShowDetailEvent.ShowDetail -> {
                 currentState.copy(showDetailModel = event.showDetailModel)
             }
 
-            is PerformanceDetailEvent.FacilityDetail -> {
+            is ShowDetailEvent.FacilityDetail -> {
                 currentState.copy(facilityDetailModel = event.facilityDetailModel)
             }
 
-            is PerformanceDetailEvent.ShowReviewList -> {
+            is ShowDetailEvent.ShowReviewList -> {
                 currentState.copy(showReviews = event.showReviews)
             }
 
-            is PerformanceDetailEvent.LostItemList -> {
+            is ShowDetailEvent.LostItemList -> {
                 currentState.copy(lostItems = event.lostItems)
             }
 
-            PerformanceDetailEvent.FavoriteShow -> {
+            ShowDetailEvent.FavoriteShow -> {
                 currentState.copy(isFavorite = true)
             }
 
-            PerformanceDetailEvent.DeleteFavoriteShow -> {
+            ShowDetailEvent.DeleteFavoriteShow -> {
                 currentState.copy(isFavorite = false)
             }
 
-            is PerformanceDetailEvent.ChangeTabType -> {
+            is ShowDetailEvent.ChangeTabType -> {
                 currentState.copy(menuTabType = event.tabType)
             }
 
-            is PerformanceDetailEvent.SimilarShowList -> {
+            is ShowDetailEvent.SimilarShowList -> {
                 currentState.copy(similarShows = event.similarShows)
             }
-
-            else -> currentState
         }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun requestShowDetail(showId: String) {
         showRepository.requestShowDetail(showId)
-            .onEach { sendAction(PerformanceDetailEvent.ShowDetail(it)) }
+            .onEach { sendAction(ShowDetailEvent.ShowDetail(it)) }
             .flatMapConcat {
                 requestSimilarShowList(it.facilityId)
                 showRepository.requestFacilityDetail(it.facilityId)
             }
-            .onEach { sendAction(PerformanceDetailEvent.FacilityDetail(it)) }
+            .onEach { sendAction(ShowDetailEvent.FacilityDetail(it)) }
             .flatMapConcat {
                 requestLostItemList(it.id, null, null, null)
                 lostItemRepository.requestLostItemList(0, 3, it.id, null, null, null)
             }
-            .onEach { sendAction(PerformanceDetailEvent.LostItemList(it)) }
+            .onEach { sendAction(ShowDetailEvent.LostItemList(it)) }
             .flatMapConcat { reviewRepository.requestShowReviewList(showId, 0, 3) }
-            .onEach { sendAction(PerformanceDetailEvent.ShowReviewList(it)) }
+            .onEach { sendAction(ShowDetailEvent.ShowReviewList(it)) }
             .launchIn(viewModelScope)
+    }
+
+    fun changeTabType(tabType: ShowDetailMenuTab) {
+        sendAction(
+            ShowDetailEvent.ChangeTabType(
+                tabType = tabType
+            )
+        )
     }
 
     private fun requestSimilarShowList(facilityId: String) {
@@ -108,19 +104,13 @@ class ShowDetailViewModel @Inject constructor(
             page = 0,
             size = 10,
             genre = null
-        ).onEach { similars ->
+        ).onEach { similarShows ->
             sendAction(
-                PerformanceDetailEvent.SimilarShowList(
-                    similars.filter { it.id != uiState.value.showDetailModel.id }
+                ShowDetailEvent.SimilarShowList(
+                    similarShows.filter { it.id != uiState.value.showDetailModel.id }
                 )
             )
         }.launchIn(viewModelScope)
-    }
-
-    fun requestShowReviewList(showId: String) {
-        reviewItems = reviewRepository
-            .fetchShowReviewList(showId)
-            .cachedIn(viewModelScope)
     }
 
     fun requestLostItemList(
@@ -137,22 +127,14 @@ class ShowDetailViewModel @Inject constructor(
         )
     }
 
-    fun changeTabType(tabType: ShowDetailMenuTab) {
-        sendAction(
-            PerformanceDetailEvent.ChangeTabType(
-                tabType = tabType
-            )
-        )
-    }
-
     fun checkFavoriteShows(showId: String) {
         favoriteRepository.checkFavoriteShows(listOf(showId))
             .onEach { checkFavoriteShows ->
                 sendAction(
                     if (checkFavoriteShows.first().favorite) {
-                        PerformanceDetailEvent.FavoriteShow
+                        ShowDetailEvent.FavoriteShow
                     } else {
-                        PerformanceDetailEvent.DeleteFavoriteShow
+                        ShowDetailEvent.DeleteFavoriteShow
                     }
                 )
             }.launchIn(viewModelScope)
@@ -160,19 +142,13 @@ class ShowDetailViewModel @Inject constructor(
 
     fun requestFavoriteShow(showId: String) {
         favoriteRepository.requestFavoriteShow(showId)
-            .onEach { sendAction(PerformanceDetailEvent.FavoriteShow) }
+            .onEach { sendAction(ShowDetailEvent.FavoriteShow) }
             .launchIn(viewModelScope)
     }
 
     fun deleteFavoriteShow(showId: String) {
         favoriteRepository.deleteFavoriteShow(showId)
-            .onEach { sendAction(PerformanceDetailEvent.DeleteFavoriteShow) }
-            .launchIn(viewModelScope)
-    }
-
-    private fun getMemberId() {
-        memberRepository.getMemberId()
-            .onEach { sendAction(PerformanceDetailEvent.GetMemberId(it)) }
+            .onEach { sendAction(ShowDetailEvent.DeleteFavoriteShow) }
             .launchIn(viewModelScope)
     }
 }

@@ -68,7 +68,6 @@ internal fun ShowDetailScreen(
     LaunchedEffect(Unit) {
         showDetailViewModel.requestShowDetail(showId)
         showDetailViewModel.checkFavoriteShows(showId)
-        showDetailViewModel.requestShowReviewList(showId)
     }
 
     val scrollState = rememberScrollState()

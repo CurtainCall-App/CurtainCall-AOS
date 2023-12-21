@@ -1,10 +1,24 @@
 package com.cmc.curtaincall.feature.show.review
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -23,56 +37,56 @@ import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallMultiLineTextField
 import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallRoundedTextButton
+import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.designsystem.component.custom.RatingBar
 import com.cmc.curtaincall.common.designsystem.extensions.toSp
-import com.cmc.curtaincall.common.designsystem.theme.*
+import com.cmc.curtaincall.common.designsystem.theme.Black
+import com.cmc.curtaincall.common.designsystem.theme.Cetacean_Blue
+import com.cmc.curtaincall.common.designsystem.theme.Chinese_Black
+import com.cmc.curtaincall.common.designsystem.theme.Cultured
+import com.cmc.curtaincall.common.designsystem.theme.Me_Pink
+import com.cmc.curtaincall.common.designsystem.theme.Nero
+import com.cmc.curtaincall.common.designsystem.theme.Roman_Silver
+import com.cmc.curtaincall.common.designsystem.theme.Silver_Sand
+import com.cmc.curtaincall.common.designsystem.theme.White
+import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
 import com.cmc.curtaincall.common.navigation.destination.DEFAULT_REVIEW_ID
 import com.cmc.curtaincall.feature.show.detail.ShowDetailViewModel
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.flow.collectLatest
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun PerformanceReviewCreateScreen(
-    performanceDetailViewModel: ShowDetailViewModel = hiltViewModel(),
-    performanceReviewViewModel: PerformanceReviewViewModel = hiltViewModel(),
+internal fun ShowReviewCreateScreen(
+    showDetailViewModel: ShowDetailViewModel,
+    showReviewViewModel: ShowReviewViewModel = hiltViewModel(),
     showId: String?,
-//    fromMypage: Boolean = false,
-//    posterUrl: String? = null,
-//    genre: String = "",
-//    title: String = "",
     reviewId: Int?,
     onBack: () -> Unit
 ) {
-    val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(Black)
+    requireNotNull(showId)
 
-    LaunchedEffect(Unit) {
-        showId?.let { performanceDetailViewModel.requestShowDetail(it) }
-    }
+    val showDetailState by showDetailViewModel.uiState.collectAsStateWithLifecycle()
 
-    val performanceDetailUiState by performanceDetailViewModel.uiState.collectAsStateWithLifecycle()
+    SystemUiStatusBar(Black)
     Column(Modifier.fillMaxSize()) {
-        PerformanceReviewCreateHeader(
+        ShowReviewCreateHeader(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(331.dp)
                 .background(Cetacean_Blue.copy(0.8f)),
-            fromMypage = reviewId == DEFAULT_REVIEW_ID,
-            posterUrl = performanceDetailUiState.showDetailModel.poster,
-            genre = performanceDetailUiState.showDetailModel.genre,
-            title = performanceDetailUiState.showDetailModel.name,
+            fromMyPage = reviewId == DEFAULT_REVIEW_ID,
+            posterUrl = showDetailState.showDetailModel.poster,
+            genre = showDetailState.showDetailModel.genre,
+            title = showDetailState.showDetailModel.name,
             onBack = onBack
         )
-        PerformanceReviewCreateBody(
-            performanceReviewViewModel = performanceReviewViewModel,
+        ShowReviewCreateBody(
+            showReviewViewModel = showReviewViewModel,
             modifier = Modifier.fillMaxSize(),
             showId = showId,
-            // fromMypage = fromMypage,
             reviewId = reviewId,
             onBack = {
-                showId?.let { performanceDetailViewModel.requestShowReviewList(it) }
+                showReviewViewModel.requestShowReviewList(showId)
                 onBack()
             }
         )
@@ -80,9 +94,9 @@ internal fun PerformanceReviewCreateScreen(
 }
 
 @Composable
-private fun PerformanceReviewCreateHeader(
+private fun ShowReviewCreateHeader(
     modifier: Modifier = Modifier,
-    fromMypage: Boolean,
+    fromMyPage: Boolean = false,
     posterUrl: String? = null,
     genre: String = "",
     title: String = "",
@@ -100,7 +114,7 @@ private fun PerformanceReviewCreateHeader(
             contentScale = ContentScale.FillBounds
         )
         TopAppBarWithBack(
-            title = if (fromMypage) {
+            title = if (fromMyPage) {
                 stringResource(R.string.mypage_writing_review_edit)
             } else {
                 stringResource(R.string.performance_review)
@@ -157,19 +171,19 @@ private fun PerformanceReviewCreateHeader(
 }
 
 @Composable
-private fun PerformanceReviewCreateBody(
-    performanceReviewViewModel: PerformanceReviewViewModel,
+private fun ShowReviewCreateBody(
+    showReviewViewModel: ShowReviewViewModel,
     modifier: Modifier = Modifier,
     showId: String?,
     reviewId: Int?,
     onBack: () -> Unit,
 ) {
-    LaunchedEffect(performanceReviewViewModel) {
-        performanceReviewViewModel.effect.collectLatest {
+    LaunchedEffect(showReviewViewModel) {
+        showReviewViewModel.effects.collectLatest {
             when (it) {
-                PerformanceReviewSideEffect.CreateSuccess,
-                PerformanceReviewSideEffect.UpdateSuccess,
-                PerformanceReviewSideEffect.DeleteSuccess -> {
+                ShowReviewSideEffect.CreateSuccess,
+                ShowReviewSideEffect.UpdateSuccess,
+                ShowReviewSideEffect.DeleteSuccess -> {
                     onBack()
                 }
             }
@@ -178,8 +192,9 @@ private fun PerformanceReviewCreateBody(
 
     var rating by remember { mutableIntStateOf(0) }
     var review by remember { mutableStateOf("") }
+
     Column(modifier) {
-        ReviewCreateBody(
+        ShowReviewCreateBodyContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 30.dp)
@@ -192,9 +207,9 @@ private fun PerformanceReviewCreateBody(
         CurtainCallRoundedTextButton(
             onClick = {
                 reviewId?.let { reviewId ->
-                    performanceReviewViewModel.updateShowReview(reviewId, review, rating)
+                    showReviewViewModel.updateShowReview(reviewId, review, rating)
                 } ?: kotlin.run {
-                    showId?.let { performanceReviewViewModel.createShowReview(it, rating, review) }
+                    showId?.let { showReviewViewModel.createShowReview(it, rating, review) }
                 }
             },
             modifier = Modifier
@@ -212,7 +227,7 @@ private fun PerformanceReviewCreateBody(
 }
 
 @Composable
-private fun ReviewCreateBody(
+private fun ShowReviewCreateBodyContent(
     modifier: Modifier = Modifier,
     rating: Int,
     review: String,

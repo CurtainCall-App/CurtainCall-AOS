@@ -15,32 +15,31 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import com.cmc.curtaincall.common.designsystem.R
+import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarWithBack
-import com.cmc.curtaincall.common.designsystem.component.dialog.CurtainCallBasicDialog
 import com.cmc.curtaincall.common.designsystem.component.content.empty.EmptyContent
+import com.cmc.curtaincall.common.designsystem.component.dialog.CurtainCallBasicDialog
 import com.cmc.curtaincall.common.designsystem.component.item.ReviewDetailItem
 import com.cmc.curtaincall.common.designsystem.theme.*
 import com.cmc.curtaincall.common.navigation.destination.DEFAULT_REVIEW_ID
 import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
-import com.cmc.curtaincall.feature.show.detail.ShowDetailViewModel
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun PerformanceReviewScreen(
-    performanceDetailViewModel: ShowDetailViewModel = hiltViewModel(),
+internal fun ShowReviewScreen(
+    showReviewViewModel: ShowReviewViewModel = hiltViewModel(),
     showId: String?,
     onNavigateReport: (Int, String) -> Unit,
     onNavigateReviewCreate: (Int) -> Unit,
     onBack: () -> Unit
 ) {
-    val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(White)
+    requireNotNull(showId)
 
     LaunchedEffect(Unit) {
-        showId?.let { performanceDetailViewModel.requestShowReviewList(it) }
+        showReviewViewModel.requestShowReviewList(showId)
     }
 
+    SystemUiStatusBar(White)
     Scaffold(
         topBar = {
             TopAppBarWithBack(
@@ -52,16 +51,7 @@ internal fun PerformanceReviewScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {
-                    onNavigateReviewCreate(DEFAULT_REVIEW_ID)
-//                    onNavigateReviewCreate(
-//                        performanceDetailViewModel.uiState.value.showDetailModel.poster,
-//                        performanceDetailViewModel.uiState.value.showDetailModel.genre,
-//                        performanceDetailViewModel.uiState.value.showDetailModel.name,
-//                        false,
-//                        Int.MIN_VALUE
-//                    )
-                },
+                onClick = { onNavigateReviewCreate(DEFAULT_REVIEW_ID) },
                 modifier = Modifier
                     .padding(bottom = 40.dp)
                     .size(58.dp),
@@ -77,8 +67,7 @@ internal fun PerformanceReviewScreen(
             }
         }
     ) { paddingValues ->
-        PerformanceReviewContent(
-            performanceDetailViewModel = performanceDetailViewModel,
+        ShowReviewContent(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
@@ -91,18 +80,18 @@ internal fun PerformanceReviewScreen(
 }
 
 @Composable
-private fun PerformanceReviewContent(
-    performanceReviewViewModel: PerformanceReviewViewModel = hiltViewModel(),
-    performanceDetailViewModel: ShowDetailViewModel,
+private fun ShowReviewContent(
     modifier: Modifier = Modifier,
-    showId: String?,
+    showReviewViewModel: ShowReviewViewModel = hiltViewModel(),
+    showId: String,
     onNavigateReport: (Int, String) -> Unit,
     onNavigateReviewCreate: (Int) -> Unit
 ) {
-    val reviewItems = performanceDetailViewModel.reviewItems.collectAsLazyPagingItems()
+    val reviewItems = showReviewViewModel.reviewItems.collectAsLazyPagingItems()
     var isShowRemoveDialog by remember { mutableStateOf(false) }
     var removeReviewId by remember { mutableIntStateOf(0) }
     var clickIndex by remember { mutableIntStateOf(-1) }
+
     if (isShowRemoveDialog) {
         CurtainCallBasicDialog(
             title = stringResource(R.string.dialog_performance_review_remove_title),
@@ -111,8 +100,8 @@ private fun PerformanceReviewContent(
             positiveText = stringResource(R.string.dialog_performance_review_remove_positive),
             onDismiss = { isShowRemoveDialog = false },
             onPositive = {
-                performanceReviewViewModel.deleteShowReview(removeReviewId)
-                showId?.let { performanceDetailViewModel.requestShowReviewList(it) }
+                showReviewViewModel.deleteShowReview(removeReviewId)
+                showReviewViewModel.requestShowReviewList(showId)
                 isShowRemoveDialog = false
             }
         )
@@ -142,37 +131,21 @@ private fun PerformanceReviewContent(
                         numberOfLike = reviewItem.likeCount,
                         isFavorite = reviewItem.isFavortie,
                         isClickMoreVert = clickIndex == index,
-                        onClickMoreVert = { check ->
-                            clickIndex = if (check) index else -1
-                        },
+                        onClickMoreVert = { check -> clickIndex = if (check) index else -1 },
                         onFavoriteChange = { check ->
                             if (check) {
-                                performanceReviewViewModel.requestLikeReview(reviewItem.id)
+                                showReviewViewModel.requestLikeReview(reviewItem.id)
                             } else {
-                                performanceReviewViewModel.requestDislikeReview(reviewItem.id)
+                                showReviewViewModel.requestDislikeReview(reviewItem.id)
                             }
                         },
-                        isMyWriting = performanceDetailViewModel.uiState.value.memberId == reviewItem.creatorId,
-                        onChangeWriting = {
-                            onNavigateReviewCreate(reviewItem.id)
-//                            onNavigateReviewCreate(
-//                                performanceDetailViewModel.uiState.value.showDetailModel.poster,
-//                                performanceDetailViewModel.uiState.value.showDetailModel.genre,
-//                                performanceDetailViewModel.uiState.value.showDetailModel.name,
-//                                true,
-//                                reviewItem.id
-//                            )
-                        },
+                        isMyWriting = showReviewViewModel.memberId.value == reviewItem.creatorId,
+                        onChangeWriting = { onNavigateReviewCreate(reviewItem.id) },
                         onRemoveWriting = {
                             removeReviewId = reviewItem.id
                             isShowRemoveDialog = true
                         },
-                        onReport = {
-                            onNavigateReport(
-                                reviewItem.id,
-                                "SHOW_REVIEW"
-                            )
-                        }
+                        onReport = { onNavigateReport(reviewItem.id, "SHOW_REVIEW") }
                     )
                     if (index < reviewItems.itemCount - 1) {
                         Spacer(

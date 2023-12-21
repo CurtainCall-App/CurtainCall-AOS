@@ -8,36 +8,36 @@ import com.cmc.curtaincall.domain.model.show.FacilityDetailModel
 import com.cmc.curtaincall.domain.model.show.ShowDetailModel
 import com.cmc.curtaincall.domain.model.show.SimilarShowInfoModel
 
-sealed class PerformanceDetailEvent : BaseEvent {
+sealed class ShowDetailEvent : BaseEvent {
 
     data class GetMemberId(
         val memberId: Int
-    ) : PerformanceDetailEvent()
+    ) : ShowDetailEvent()
 
     data class ShowDetail(
         val showDetailModel: ShowDetailModel
-    ) : PerformanceDetailEvent()
+    ) : ShowDetailEvent()
 
     data class FacilityDetail(
         val facilityDetailModel: FacilityDetailModel
-    ) : PerformanceDetailEvent()
+    ) : ShowDetailEvent()
 
     data class ShowReviewList(
         val showReviews: List<ShowReviewModel>
-    ) : PerformanceDetailEvent()
+    ) : ShowDetailEvent()
 
     data class LostItemList(
         val lostItems: List<LostItemModel>
-    ) : PerformanceDetailEvent()
+    ) : ShowDetailEvent()
 
     data class ChangeTabType(
         val tabType: ShowDetailMenuTab
-    ) : PerformanceDetailEvent()
+    ) : ShowDetailEvent()
 
     data class SimilarShowList(
         val similarShows: List<SimilarShowInfoModel>
-    ) : PerformanceDetailEvent()
+    ) : ShowDetailEvent()
 
-    object FavoriteShow : PerformanceDetailEvent()
-    object DeleteFavoriteShow : PerformanceDetailEvent()
+    object FavoriteShow : ShowDetailEvent()
+    object DeleteFavoriteShow : ShowDetailEvent()
 }
