@@ -38,6 +38,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.designsystem.R
+import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.designsystem.extensions.toSp
 import com.cmc.curtaincall.common.designsystem.theme.Black
@@ -49,61 +50,45 @@ import com.cmc.curtaincall.common.designsystem.theme.White
 import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
 import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
 import com.cmc.curtaincall.common.utility.extensions.toRunningTime
+import com.cmc.curtaincall.domain.enum.ShowDetailMenuTab
+import com.cmc.curtaincall.domain.model.show.ShowDetailModel
 import com.cmc.curtaincall.feature.show.lostitem.screen.PerformanceLostItemTabScreen
-import com.cmc.curtaincall.feature.show.review.PerformanceReviewTabScreen
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
-
-enum class TabType(val label: String) {
-    DETAIL("상세 정보"), REVIEW("한 줄 리뷰"), LOST_ITEM("분실물")
-}
+import com.cmc.curtaincall.feature.show.review.ShowReviewMenuScreen
 
 @Composable
-internal fun PerformanceDetailScreen(
-    // performanceViewModel: PerformanceSearchViewModel = hiltViewModel(),
-    performanceDetailViewModel: PerformanceDetailViewModel = hiltViewModel(),
+internal fun ShowDetailScreen(
+    showDetailViewModel: ShowDetailViewModel = hiltViewModel(),
     showId: String?,
     onNavigateReview: (String) -> Unit = {},
     onNavigateLostProperty: (String) -> Unit = {},
     onNavigateDetail: (String) -> Unit = {},
-    onBack: () -> Unit
+    onBack: () -> Unit = {}
 ) {
-    val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(Black)
-
+    requireNotNull(showId)
     LaunchedEffect(Unit) {
-        showId?.let { showId ->
-            performanceDetailViewModel.requestShowDetail(showId)
-            performanceDetailViewModel.checkFavoriteShows(showId)
-            performanceDetailViewModel.requestShowReviewList(showId)
-        }
+        showDetailViewModel.requestShowDetail(showId)
+        showDetailViewModel.checkFavoriteShows(showId)
+        showDetailViewModel.requestShowReviewList(showId)
     }
 
     val scrollState = rememberScrollState()
-    val performanceDetailUiState by performanceDetailViewModel.uiState.collectAsStateWithLifecycle()
-    val ticketPrices = performanceDetailUiState.showDetailModel.ticketPrice.split(", ")
+    val showDetailState by showDetailViewModel.uiState.collectAsStateWithLifecycle()
+    val ticketPrices = showDetailState.showDetailModel.ticketPrice.split(", ")
+
+    SystemUiStatusBar(Black)
     Box(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(scrollState),
         contentAlignment = Alignment.TopCenter
     ) {
-        PerformanceDetailContent(
-            // performanceViewModel = performanceViewModel,
-            performanceDetailViewModel = performanceDetailViewModel,
+        ShowDetailContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .height((666 + if (ticketPrices.size > 2) (22 * (ticketPrices.size - 2)) else 0).dp)
                 .background(Cetacean_Blue.copy(0.8f)),
-            posterUrl = performanceDetailUiState.showDetailModel.poster,
-            title = performanceDetailUiState.showDetailModel.name,
-            genre = performanceDetailUiState.showDetailModel.genre,
-            reviewCount = performanceDetailUiState.showDetailModel.reviewCount,
-            reviewGradeSum = performanceDetailUiState.showDetailModel.reviewGradeSum,
-            date = "${performanceDetailUiState.showDetailModel.startDate.toChangeFullDate()} - ${performanceDetailUiState.showDetailModel.endDate.toChangeFullDate()}",
-            runningTime = if (performanceDetailUiState.showDetailModel.runtime.isEmpty()) "해당 정보 없음" else "${performanceDetailUiState.showDetailModel.runtime.toRunningTime()}분",
-            age = performanceDetailUiState.showDetailModel.age,
-            ticketPrice = if (performanceDetailUiState.showDetailModel.ticketPrice.isEmpty()) "해당 정보 없음" else ticketPrices.joinToString("\n"),
-            facilityName = performanceDetailUiState.showDetailModel.facilityName,
+            showDetailModel = showDetailState.showDetailModel,
+            ticketPrices = ticketPrices,
             onBack = onBack
         )
         Column(
@@ -112,8 +97,8 @@ internal fun PerformanceDetailScreen(
                 .fillMaxSize()
                 .background(White, RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
         ) {
-            PerformanceDetailTab(
-                performanceDetailViewModel = performanceDetailViewModel,
+            ShowDetailMenuTab(
+                performanceDetailViewModel = showDetailViewModel,
                 modifier = Modifier.padding(top = 26.dp),
                 showId = showId,
                 onNavigateReview = onNavigateReview,
@@ -125,15 +110,16 @@ internal fun PerformanceDetailScreen(
 }
 
 @Composable
-private fun PerformanceDetailTab(
-    performanceDetailViewModel: PerformanceDetailViewModel,
+private fun ShowDetailMenuTab(
+    performanceDetailViewModel: ShowDetailViewModel,
     modifier: Modifier = Modifier,
-    showId: String?,
-    onNavigateReview: (String) -> Unit,
-    onNavigateLostProperty: (String) -> Unit,
-    onNavigateDetail: (String) -> Unit
+    showId: String,
+    onNavigateReview: (String) -> Unit = {},
+    onNavigateLostProperty: (String) -> Unit = {},
+    onNavigateDetail: (String) -> Unit = {}
 ) {
     val performanceDetailUiState by performanceDetailViewModel.uiState.collectAsStateWithLifecycle()
+    val menuTabType = performanceDetailUiState.menuTabType
     Column(modifier) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -141,30 +127,24 @@ private fun PerformanceDetailTab(
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 IconButton(
-                    onClick = { performanceDetailViewModel.changeTabType(TabType.DETAIL) },
+                    onClick = { performanceDetailViewModel.changeTabType(ShowDetailMenuTab.DETAIL) },
                     modifier = Modifier
                         .size(58.dp)
                         .clip(CircleShape),
                     colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = if (performanceDetailUiState.tabType == TabType.DETAIL) Cetacean_Blue else Bright_Gray
+                        containerColor = if (menuTabType == ShowDetailMenuTab.DETAIL) Cetacean_Blue else Bright_Gray
                     )
                 ) {
                     Icon(
-                        painter = painterResource(
-                            if (performanceDetailUiState.tabType == TabType.DETAIL) {
-                                R.drawable.ic_detail_home_sel
-                            } else {
-                                R.drawable.ic_detail_home
-                            }
-                        ),
+                        painter = painterResource(if (menuTabType == ShowDetailMenuTab.DETAIL) R.drawable.ic_detail_home_sel else R.drawable.ic_detail_home),
                         contentDescription = null,
                         tint = Color.Unspecified
                     )
                 }
                 Text(
-                    text = TabType.DETAIL.label,
+                    text = ShowDetailMenuTab.DETAIL.label,
                     modifier = Modifier.padding(top = 10.dp),
-                    color = if (performanceDetailUiState.tabType == TabType.DETAIL) Cetacean_Blue else Bright_Gray,
+                    color = if (menuTabType == ShowDetailMenuTab.DETAIL) Cetacean_Blue else Bright_Gray,
                     fontSize = 15.dp.toSp(),
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo
@@ -172,26 +152,26 @@ private fun PerformanceDetailTab(
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 IconButton(
-                    onClick = { performanceDetailViewModel.changeTabType(TabType.REVIEW) },
+                    onClick = { performanceDetailViewModel.changeTabType(ShowDetailMenuTab.REVIEW) },
                     modifier = Modifier
                         .size(58.dp)
                         .clip(CircleShape),
                     colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = if (performanceDetailUiState.tabType == TabType.REVIEW) Cetacean_Blue else Bright_Gray
+                        containerColor = if (menuTabType == ShowDetailMenuTab.REVIEW) Cetacean_Blue else Bright_Gray
                     )
                 ) {
                     Icon(
                         painter = painterResource(
-                            if (performanceDetailUiState.tabType == TabType.REVIEW) R.drawable.ic_review_sel else R.drawable.ic_review
+                            if (menuTabType == ShowDetailMenuTab.REVIEW) R.drawable.ic_review_sel else R.drawable.ic_review
                         ),
                         contentDescription = null,
                         tint = Color.Unspecified
                     )
                 }
                 Text(
-                    text = TabType.REVIEW.label,
+                    text = ShowDetailMenuTab.REVIEW.label,
                     modifier = Modifier.padding(top = 10.dp),
-                    color = if (performanceDetailUiState.tabType == TabType.REVIEW) Cetacean_Blue else Bright_Gray,
+                    color = if (menuTabType == ShowDetailMenuTab.REVIEW) Cetacean_Blue else Bright_Gray,
                     fontSize = 15.dp.toSp(),
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo
@@ -199,26 +179,26 @@ private fun PerformanceDetailTab(
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 IconButton(
-                    onClick = { performanceDetailViewModel.changeTabType(TabType.LOST_ITEM) },
+                    onClick = { performanceDetailViewModel.changeTabType(ShowDetailMenuTab.LOST_ITEM) },
                     modifier = Modifier
                         .size(58.dp)
                         .clip(CircleShape),
                     colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = if (performanceDetailUiState.tabType == TabType.LOST_ITEM) Cetacean_Blue else Bright_Gray
+                        containerColor = if (menuTabType == ShowDetailMenuTab.LOST_ITEM) Cetacean_Blue else Bright_Gray
                     )
                 ) {
                     Icon(
                         painter = painterResource(
-                            if (performanceDetailUiState.tabType == TabType.LOST_ITEM) R.drawable.ic_lost_item_sel else R.drawable.ic_lost_item
+                            if (menuTabType == ShowDetailMenuTab.LOST_ITEM) R.drawable.ic_lost_item_sel else R.drawable.ic_lost_item
                         ),
                         contentDescription = null,
                         tint = Color.Unspecified
                     )
                 }
                 Text(
-                    text = TabType.LOST_ITEM.label,
+                    text = ShowDetailMenuTab.LOST_ITEM.label,
                     modifier = Modifier.padding(top = 10.dp),
-                    color = if (performanceDetailUiState.tabType == TabType.LOST_ITEM) Cetacean_Blue else Bright_Gray,
+                    color = if (menuTabType == ShowDetailMenuTab.LOST_ITEM) Cetacean_Blue else Bright_Gray,
                     fontSize = 15.dp.toSp(),
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo
@@ -226,9 +206,9 @@ private fun PerformanceDetailTab(
             }
         }
 
-        when (performanceDetailUiState.tabType) {
-            TabType.DETAIL -> {
-                PerformanceDetailTabScreen(
+        when (menuTabType) {
+            ShowDetailMenuTab.DETAIL -> {
+                ShowDetailMenuScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 50.dp),
@@ -240,19 +220,20 @@ private fun PerformanceDetailTab(
                 )
             }
 
-            TabType.REVIEW -> {
-                PerformanceReviewTabScreen(
+            ShowDetailMenuTab.REVIEW -> {
+                ShowReviewMenuScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 50.dp),
                     showId = showId,
                     reviewCount = performanceDetailUiState.showDetailModel.reviewCount,
-                    showReviews = performanceDetailUiState.showReviews,
-                    onNavigateReview = onNavigateReview
-                )
+                    showReviews = performanceDetailUiState.showReviews
+                ) {
+                    onNavigateReview(it)
+                }
             }
 
-            TabType.LOST_ITEM -> {
+            ShowDetailMenuTab.LOST_ITEM -> {
                 PerformanceLostItemTabScreen(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -267,25 +248,19 @@ private fun PerformanceDetailTab(
 }
 
 @Composable
-private fun PerformanceDetailContent(
-    // performanceViewModel: PerformanceSearchViewModel,
-    performanceDetailViewModel: PerformanceDetailViewModel,
+private fun ShowDetailContent(
     modifier: Modifier = Modifier,
-    posterUrl: String? = null,
-    genre: String,
-    title: String,
-    reviewCount: Int,
-    reviewGradeSum: Int,
-    date: String,
-    runningTime: String,
-    age: String,
-    ticketPrice: String,
-    facilityName: String,
-    onBack: () -> Unit
+    showDetailViewModel: ShowDetailViewModel = hiltViewModel(),
+    showDetailModel: ShowDetailModel = ShowDetailModel(),
+    ticketPrices: List<String> = listOf(),
+    onBack: () -> Unit = {}
 ) {
+    val date = "${showDetailModel.startDate.toChangeFullDate()} - ${showDetailModel.endDate.toChangeFullDate()}"
+    val runningTime = if (showDetailModel.runtime.isEmpty()) "해당 정보 없음" else "${showDetailModel.runtime.toRunningTime()}분"
+    val ticketPrice = if (showDetailModel.ticketPrice.isEmpty()) "해당 정보 없음" else ticketPrices.joinToString("\n")
     Box(modifier) {
         AsyncImage(
-            model = posterUrl,
+            model = showDetailModel.poster,
             error = painterResource(R.drawable.ic_error_poster),
             contentDescription = null,
             modifier = Modifier
@@ -295,94 +270,66 @@ private fun PerformanceDetailContent(
             contentScale = ContentScale.FillBounds
         )
         TopAppBarWithBack(
-            title = title,
+            title = showDetailModel.name,
             containerColor = Color.Transparent,
             contentColor = White,
             textModifier = Modifier.width(160.dp),
-            onClick = {
-                // performanceViewModel.loadPlayItems()
-                // performanceViewModel.loadMusicalItems()
-                onBack()
-            }
-        )
-        PerformanceDetailInfoContent(
-            performanceDetailViewModel = performanceDetailViewModel,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 54.dp),
-            posterUrl = posterUrl,
-            genre = genre,
-            title = title,
-            reviewCount = reviewCount,
-            reviewGradeSum = reviewGradeSum,
-            date = date,
-            runningTime = runningTime,
-            age = age,
-            ticketPrice = ticketPrice,
-            facilityName = facilityName
-        )
-    }
-}
-
-@Composable
-private fun PerformanceDetailInfoContent(
-    performanceDetailViewModel: PerformanceDetailViewModel,
-    modifier: Modifier = Modifier,
-    posterUrl: String? = null,
-    genre: String,
-    title: String,
-    reviewCount: Int,
-    reviewGradeSum: Int,
-    date: String,
-    runningTime: String,
-    age: String,
-    ticketPrice: String,
-    facilityName: String
-) {
-    Column(
-        modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        AsyncImage(
-            model = posterUrl,
-            error = painterResource(R.drawable.ic_error_poster),
-            contentDescription = null,
-            modifier = Modifier
-                .padding(top = 43.dp)
-                .size(160.dp, 212.dp)
-                .clip(RoundedCornerShape(15.dp)),
-            contentScale = ContentScale.FillBounds
+            onClick = onBack
         )
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-                .padding(top = 30.dp)
+                .fillMaxSize()
+                .padding(top = 54.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            PerformanceDetailHeader(
-                performanceDetailViewModel = performanceDetailViewModel,
-                modifier = Modifier.fillMaxWidth(),
-                genre = genre,
-                title = title,
-                reviewCount = reviewCount,
-                reviewGradeSum = reviewGradeSum
+            AsyncImage(
+                model = showDetailModel.poster,
+                error = painterResource(R.drawable.ic_error_poster),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(top = 43.dp)
+                    .size(160.dp, 212.dp)
+                    .clip(RoundedCornerShape(15.dp)),
+                contentScale = ContentScale.FillBounds
             )
-            PerformanceDetailBody(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 30.dp),
-                date = date,
-                runningTime = runningTime,
-                age = age,
-                ticketPrice = ticketPrice,
-                facilityName = facilityName
-            )
+                    .padding(horizontal = 20.dp)
+                    .padding(top = 30.dp)
+            ) {
+                ShowDetailHeader(
+                    modifier = Modifier.fillMaxWidth(),
+                    genre = showDetailModel.genre,
+                    title = showDetailModel.name,
+                    reviewCount = showDetailModel.reviewCount,
+                    reviewGradeSum = showDetailModel.reviewGradeSum,
+                    isFavorite = showDetailModel.isFavorite,
+                    onFavorite = { isFavorite ->
+                        if (isFavorite) {
+                            showDetailViewModel.deleteFavoriteShow(showDetailModel.id)
+                        } else {
+                            showDetailViewModel.requestFavoriteShow(showDetailModel.id)
+                        }
+                    }
+                )
+                ShowDetailBody(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 30.dp),
+                    date = date,
+                    runningTime = runningTime,
+                    age = showDetailModel.age,
+                    ticketPrice = ticketPrice,
+                    facilityName = showDetailModel.facilityName
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun PerformanceDetailBody(
+private fun ShowDetailBody(
     modifier: Modifier = Modifier,
     date: String,
     runningTime: String,
@@ -481,15 +428,15 @@ private fun PerformanceDetailBody(
 }
 
 @Composable
-private fun PerformanceDetailHeader(
-    performanceDetailViewModel: PerformanceDetailViewModel,
+private fun ShowDetailHeader(
     modifier: Modifier = Modifier,
     genre: String,
     title: String,
     reviewCount: Int,
-    reviewGradeSum: Int
+    reviewGradeSum: Int,
+    isFavorite: Boolean,
+    onFavorite: (Boolean) -> Unit = {}
 ) {
-    val performanceDetailUiState by performanceDetailViewModel.uiState.collectAsStateWithLifecycle()
     Column(modifier) {
         Box(
             modifier = Modifier
@@ -545,23 +492,15 @@ private fun PerformanceDetailHeader(
                 }
             }
             IconButton(
-                onClick = {
-                    if (performanceDetailUiState.isFavorite) {
-                        performanceDetailViewModel.deleteFavoriteShow(performanceDetailUiState.showDetailModel.id)
-                    } else {
-                        performanceDetailViewModel.requestFavoriteShow(performanceDetailUiState.showDetailModel.id)
-                    }
-                },
+                onClick = { onFavorite(isFavorite) },
                 modifier = Modifier
                     .clip(CircleShape)
                     .padding(start = 6.dp)
                     .size(30.dp),
-                colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = if (performanceDetailUiState.isFavorite) Cetacean_Blue else Bright_Gray
-                )
+                colors = IconButtonDefaults.iconButtonColors(containerColor = if (isFavorite) Cetacean_Blue else Bright_Gray)
             ) {
                 Icon(
-                    painter = painterResource(if (performanceDetailUiState.isFavorite) R.drawable.ic_bookmark_sel else R.drawable.ic_bookmark),
+                    painter = painterResource(if (isFavorite) R.drawable.ic_bookmark_sel else R.drawable.ic_bookmark),
                     contentDescription = null,
                     tint = Color.Unspecified
                 )

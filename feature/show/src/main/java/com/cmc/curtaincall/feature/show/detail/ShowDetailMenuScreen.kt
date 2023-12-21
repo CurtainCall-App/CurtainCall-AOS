@@ -36,24 +36,24 @@ import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.compose.*
 
 @Composable
-internal fun PerformanceDetailTabScreen(
+internal fun ShowDetailMenuScreen(
     modifier: Modifier = Modifier,
     introductionImage: String? = null,
     showTimes: List<ShowTimeModel> = listOf(),
     similarShows: List<SimilarShowInfoModel> = listOf(),
-    facilityDetailModel: FacilityDetailModel,
+    facilityDetailModel: FacilityDetailModel = FacilityDetailModel(),
     onNavigateDetail: (String) -> Unit = {}
 ) {
     Column(modifier) {
         if (introductionImage != null) {
-            PerformanceNotice(
+            ShowDetailNotice(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 40.dp),
                 introductionImage = introductionImage
             )
         }
-        PerformanceTimeRow(
+        ShowDetailTime(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
@@ -66,7 +66,7 @@ internal fun PerformanceDetailTabScreen(
                 .background(Ghost_White)
                 .height(7.dp)
         )
-        PerformancePlace(
+        ShowDetailFacility(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
@@ -82,7 +82,7 @@ internal fun PerformanceDetailTabScreen(
         )
 
         if (similarShows.isNotEmpty()) {
-            PerformanceSimilarContent(
+            ShowDetailSimilarRow(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 30.dp, bottom = 50.dp),
@@ -94,7 +94,7 @@ internal fun PerformanceDetailTabScreen(
 }
 
 @Composable
-private fun PerformanceSimilarContent(
+private fun ShowDetailSimilarRow(
     modifier: Modifier = Modifier,
     similarShows: List<SimilarShowInfoModel> = listOf(),
     onNavigateDetail: (String) -> Unit = {}
@@ -133,7 +133,7 @@ private fun PerformanceSimilarContent(
 }
 
 @Composable
-private fun PerformanceNotice(
+private fun ShowDetailNotice(
     modifier: Modifier = Modifier,
     introductionImage: String
 ) {
@@ -178,7 +178,7 @@ private fun PerformanceNotice(
 
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
-private fun PerformancePlace(
+private fun ShowDetailFacility(
     modifier: Modifier = Modifier,
     facilityDetailModel: FacilityDetailModel
 ) {
@@ -288,7 +288,7 @@ private fun PerformancePlace(
 }
 
 @Composable
-private fun PerformanceTimeRow(
+private fun ShowDetailTime(
     modifier: Modifier = Modifier,
     showTimes: List<ShowTimeModel>
 ) {

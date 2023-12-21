@@ -8,7 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.cmc.curtaincall.common.navigation.NavGraphLabel
 import com.cmc.curtaincall.common.navigation.destination.ShowDestination
-import com.cmc.curtaincall.feature.show.detail.PerformanceDetailScreen
+import com.cmc.curtaincall.feature.show.detail.ShowDetailScreen
 import com.cmc.curtaincall.feature.show.lostitem.create.PerformanceLostItemCreateScreen
 import com.cmc.curtaincall.feature.show.lostitem.screen.PerformanceLostItemDetailScreen
 import com.cmc.curtaincall.feature.show.lostitem.screen.PerformanceLostItemScreen
@@ -35,7 +35,7 @@ fun NavGraphBuilder.showNavGraph(
             arguments = ShowDestination.Detail.arguments
         ) { entry ->
             val showIdArg = entry.arguments?.getString(ShowDestination.Detail.showIdArg)
-            PerformanceDetailScreen(
+            ShowDetailScreen(
                 showId = showIdArg,
                 onNavigateReview = { showId ->
                     navHostController.navigate("${ShowDestination.Review.route}/$showId")

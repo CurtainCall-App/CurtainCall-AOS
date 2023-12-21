@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.cmc.curtaincall.core.base.BaseViewModel
+import com.cmc.curtaincall.domain.enum.ShowDetailMenuTab
 import com.cmc.curtaincall.domain.model.lostItem.LostItemModel
 import com.cmc.curtaincall.domain.model.review.ShowReviewModel
 import com.cmc.curtaincall.domain.repository.FavoriteRepository
@@ -20,14 +21,14 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
-class PerformanceDetailViewModel @Inject constructor(
+class ShowDetailViewModel @Inject constructor(
     private val memberRepository: MemberRepository,
     private val showRepository: ShowRepository,
     private val reviewRepository: ReviewRepository,
     private val favoriteRepository: FavoriteRepository,
     private val lostItemRepository: LostItemRepository
-) : BaseViewModel<PerformanceDetailState, PerformanceDetailEvent, Nothing>(
-    initialState = PerformanceDetailState()
+) : BaseViewModel<ShowDetailState, PerformanceDetailEvent, Nothing>(
+    initialState = ShowDetailState()
 ) {
     init {
         getMemberId()
@@ -41,7 +42,7 @@ class PerformanceDetailViewModel @Inject constructor(
         .fetchLostItemList("", "", "", "")
         .cachedIn(viewModelScope)
 
-    override fun reduceState(currentState: PerformanceDetailState, event: PerformanceDetailEvent): PerformanceDetailState =
+    override fun reduceState(currentState: ShowDetailState, event: PerformanceDetailEvent): ShowDetailState =
         when (event) {
             is PerformanceDetailEvent.GetMemberId -> {
                 currentState.copy(memberId = event.memberId)
@@ -72,7 +73,7 @@ class PerformanceDetailViewModel @Inject constructor(
             }
 
             is PerformanceDetailEvent.ChangeTabType -> {
-                currentState.copy(tabType = event.tabType)
+                currentState.copy(menuTabType = event.tabType)
             }
 
             is PerformanceDetailEvent.SimilarShowList -> {
@@ -136,7 +137,7 @@ class PerformanceDetailViewModel @Inject constructor(
         )
     }
 
-    fun changeTabType(tabType: TabType) {
+    fun changeTabType(tabType: ShowDetailMenuTab) {
         sendAction(
             PerformanceDetailEvent.ChangeTabType(
                 tabType = tabType

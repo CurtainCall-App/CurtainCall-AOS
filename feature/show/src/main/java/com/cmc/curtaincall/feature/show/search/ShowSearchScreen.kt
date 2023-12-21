@@ -185,20 +185,20 @@ private fun ShowSearchContent(
         } else {
             if (isDoneSearch) {
                 itemsIndexed(showSearchItems) { index, showInfoModel ->
-                    showInfoModel?.let { showInfoModel ->
+                    showInfoModel?.let { model ->
                         PerformanceDetailCard(
                             modifier = Modifier
                                 .padding(horizontal = 20.dp)
                                 .fillMaxWidth()
                                 .padding(vertical = 12.dp),
-                            imageUrl = showInfoModel.poster,
+                            imageUrl = model.poster,
                             painter = painterResource(R.drawable.ic_error_poster),
-                            title = showInfoModel.name,
-                            rate = if (showInfoModel.reviewCount == 0) 0.0f else (showInfoModel.reviewGradeSum / showInfoModel.reviewCount.toFloat()),
-                            numberOfTotal = showInfoModel.reviewCount,
-                            period = "${showInfoModel.startDate.toChangeDate()}-${showInfoModel.endDate.toChangeDate()}",
-                            runningTime = if (showInfoModel.runtime.isEmpty()) "해당 정보 없음" else "${showInfoModel.runtime.toRunningTime()}분",
-                            date = showInfoModel.showTimes.map {
+                            title = model.name,
+                            rate = if (model.reviewCount == 0) 0.0f else (model.reviewGradeSum / model.reviewCount.toFloat()),
+                            numberOfTotal = model.reviewCount,
+                            period = "${model.startDate.toChangeDate()}-${model.endDate.toChangeDate()}",
+                            runningTime = if (model.runtime.isEmpty()) "해당 정보 없음" else "${model.runtime.toRunningTime()}분",
+                            date = model.showTimes.map {
                                 when (it.dayOfWeek) {
                                     ShowDay.Monday.dayOfWeek -> ShowDay.Monday
                                     ShowDay.Tuesday.dayOfWeek -> ShowDay.Tuesday
@@ -209,11 +209,11 @@ private fun ShowSearchContent(
                                     else -> ShowDay.Sunday
                                 }
                             }.sortedBy { it.id }.toSet().joinToString(", ") { it.label },
-                            location = showInfoModel.facilityName,
-                            onClick = { onNavigateDetail(showInfoModel.id) },
-                            isFavorite = showInfoModel.favorite,
-                            onFavorite = { showSearchViewModel.requestFavoriteShow(showInfoModel.id) },
-                            onDisFavorite = { showSearchViewModel.deleteFavoriteShow(showInfoModel.id) }
+                            location = model.facilityName,
+                            onClick = { onNavigateDetail(model.id) },
+                            isFavorite = model.favorite,
+                            onFavorite = { showSearchViewModel.requestFavoriteShow(model.id) },
+                            onDisFavorite = { showSearchViewModel.deleteFavoriteShow(model.id) }
                         )
                         if (index != showSearchItems.itemCount) {
                             Spacer(

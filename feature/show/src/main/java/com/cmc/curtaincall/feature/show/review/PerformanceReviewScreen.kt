@@ -22,13 +22,13 @@ import com.cmc.curtaincall.common.designsystem.component.item.ReviewDetailItem
 import com.cmc.curtaincall.common.designsystem.theme.*
 import com.cmc.curtaincall.common.navigation.destination.DEFAULT_REVIEW_ID
 import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
-import com.cmc.curtaincall.feature.show.detail.PerformanceDetailViewModel
+import com.cmc.curtaincall.feature.show.detail.ShowDetailViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PerformanceReviewScreen(
-    performanceDetailViewModel: PerformanceDetailViewModel = hiltViewModel(),
+    performanceDetailViewModel: ShowDetailViewModel = hiltViewModel(),
     showId: String?,
     onNavigateReport: (Int, String) -> Unit,
     onNavigateReviewCreate: (Int) -> Unit,
@@ -93,7 +93,7 @@ internal fun PerformanceReviewScreen(
 @Composable
 private fun PerformanceReviewContent(
     performanceReviewViewModel: PerformanceReviewViewModel = hiltViewModel(),
-    performanceDetailViewModel: PerformanceDetailViewModel,
+    performanceDetailViewModel: ShowDetailViewModel,
     modifier: Modifier = Modifier,
     showId: String?,
     onNavigateReport: (Int, String) -> Unit,

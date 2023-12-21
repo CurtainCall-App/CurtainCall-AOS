@@ -122,15 +122,11 @@ class ShowSearchViewModel @Inject constructor(
     }
 
     fun requestFavoriteShow(showId: String) {
-        favoriteRepository.requestFavoriteShow(showId)
-            .onEach {
-            }.launchIn(viewModelScope)
+        favoriteRepository.requestFavoriteShow(showId).launchIn(viewModelScope)
     }
 
     fun deleteFavoriteShow(showId: String) {
-        favoriteRepository.deleteFavoriteShow(showId)
-            .onEach {
-            }.launchIn(viewModelScope)
+        favoriteRepository.deleteFavoriteShow(showId).launchIn(viewModelScope)
     }
 
     private fun requestShowSearchWords() {

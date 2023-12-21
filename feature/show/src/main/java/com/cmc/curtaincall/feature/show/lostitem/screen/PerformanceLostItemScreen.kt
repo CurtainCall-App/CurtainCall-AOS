@@ -33,7 +33,7 @@ import com.cmc.curtaincall.common.designsystem.component.show.lostproperty.LostP
 import com.cmc.curtaincall.common.designsystem.component.show.lostproperty.LostPropertyTypeItem
 import com.cmc.curtaincall.common.designsystem.extensions.toSp
 import com.cmc.curtaincall.common.designsystem.theme.*
-import com.cmc.curtaincall.feature.show.detail.PerformanceDetailViewModel
+import com.cmc.curtaincall.feature.show.detail.ShowDetailViewModel
 import com.cmc.curtaincall.feature.show.lostitem.PerformanceLostItemViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
@@ -41,7 +41,7 @@ import com.google.accompanist.systemuicontroller.rememberSystemUiController
 @Composable
 internal fun PerformanceLostItemScreen(
     performanceLostItemViewModel: PerformanceLostItemViewModel = hiltViewModel(),
-    performanceDetailViewModel: PerformanceDetailViewModel,
+    performanceDetailViewModel: ShowDetailViewModel,
     facilityName: String?,
     onNavigateLostItemDetail: (Int) -> Unit,
     onNavigateLostItemCreate: (String, String) -> Unit,
@@ -254,7 +254,7 @@ private fun PerformanceLostItemSearchContent(
 @Composable
 private fun PerformanceLostItemContent(
     performanceLostItemViewModel: PerformanceLostItemViewModel,
-    performanceDetailViewModel: PerformanceDetailViewModel,
+    performanceDetailViewModel: ShowDetailViewModel,
     modifier: Modifier = Modifier,
     facilityName: String,
     onNavigateLostItemDetail: (Int) -> Unit

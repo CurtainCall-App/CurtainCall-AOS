@@ -28,14 +28,14 @@ import com.cmc.curtaincall.common.designsystem.component.custom.RatingBar
 import com.cmc.curtaincall.common.designsystem.extensions.toSp
 import com.cmc.curtaincall.common.designsystem.theme.*
 import com.cmc.curtaincall.common.navigation.destination.DEFAULT_REVIEW_ID
-import com.cmc.curtaincall.feature.show.detail.PerformanceDetailViewModel
+import com.cmc.curtaincall.feature.show.detail.ShowDetailViewModel
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.flow.collectLatest
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun PerformanceReviewCreateScreen(
-    performanceDetailViewModel: PerformanceDetailViewModel = hiltViewModel(),
+    performanceDetailViewModel: ShowDetailViewModel = hiltViewModel(),
     performanceReviewViewModel: PerformanceReviewViewModel = hiltViewModel(),
     showId: String?,
 //    fromMypage: Boolean = false,

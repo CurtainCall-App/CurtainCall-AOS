@@ -30,9 +30,9 @@ import com.cmc.curtaincall.common.utility.extensions.toChangeDate
 import com.cmc.curtaincall.domain.model.review.ShowReviewModel
 
 @Composable
-internal fun PerformanceReviewTabScreen(
+internal fun ShowReviewMenuScreen(
     modifier: Modifier = Modifier,
-    showId: String?,
+    showId: String = "",
     reviewCount: Int = 0,
     showReviews: List<ShowReviewModel> = listOf(),
     onNavigateReview: (String) -> Unit
@@ -40,7 +40,7 @@ internal fun PerformanceReviewTabScreen(
     Column(modifier.padding(horizontal = 20.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = "총 ${reviewCount}개의 한 줄 리뷰",
+                text = String.format(stringResource(R.string.show_detail_tab_menu_title_format), reviewCount),
                 modifier = Modifier.weight(1f),
                 color = Chinese_Black,
                 fontSize = 17.dp.toSp(),
@@ -51,7 +51,7 @@ internal fun PerformanceReviewTabScreen(
                 modifier = Modifier
                     .border(BorderStroke(1.dp, Me_Pink), RoundedCornerShape(14.dp))
                     .padding(vertical = 6.dp, horizontal = 10.dp)
-                    .clickable { showId?.let(onNavigateReview) },
+                    .clickable { onNavigateReview(showId) },
                 contentAlignment = Alignment.Center
             ) {
                 Text(
