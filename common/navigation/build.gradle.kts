@@ -8,6 +8,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":common:designsystem"))
     implementation(project(":core:base"))
 
     // androidx

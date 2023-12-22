@@ -10,10 +10,11 @@ android {
 
 dependencies {
     implementation(project(":common:designsystem"))
+    implementation(project(":common:navigation"))
     implementation(project(":common:utility"))
     implementation(project(":core:base"))
     implementation(project(":domain"))
-    implementation(project(":feature:performance"))
+    implementation(project(":feature:show"))
     implementation(project(":feature:livetalk"))
     implementation(project(":feature:partymember"))
     implementation(project(":feature:mypage"))
