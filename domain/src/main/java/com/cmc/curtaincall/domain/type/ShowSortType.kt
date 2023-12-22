@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.domain.enum
+package com.cmc.curtaincall.domain.type
 
 enum class ShowSortType(
     val value: String,

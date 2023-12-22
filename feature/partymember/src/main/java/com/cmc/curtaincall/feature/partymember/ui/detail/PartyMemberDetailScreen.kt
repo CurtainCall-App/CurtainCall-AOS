@@ -60,6 +60,7 @@ import com.cmc.curtaincall.common.designsystem.theme.White
 import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
 import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
 import com.cmc.curtaincall.common.utility.extensions.toTime
+import com.cmc.curtaincall.domain.type.ReportType
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.flow.collectLatest
 
@@ -71,7 +72,7 @@ fun PartyMemberDetailScreen(
     fromRecruitment: Boolean = false,
     fromParticipation: Boolean = false,
     partyType: PartyType,
-    onNavigateReport: (Int, String) -> Unit,
+    onNavigateReport: (Int, ReportType) -> Unit,
     onNavigateLiveTalk: () -> Unit,
     onBack: () -> Unit
 ) {
@@ -171,12 +172,7 @@ fun PartyMemberDetailScreen(
                     containerColor = White,
                     contentColor = Nero,
                     onBack = onBack,
-                    onAction = {
-                        onNavigateReport(
-                            partyId,
-                            "PARTY"
-                        )
-                    }
+                    onAction = { onNavigateReport(partyId, ReportType.PARTY) }
                 )
             }
         },

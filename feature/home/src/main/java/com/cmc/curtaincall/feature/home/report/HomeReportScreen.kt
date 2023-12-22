@@ -51,16 +51,20 @@ import com.cmc.curtaincall.common.designsystem.theme.Roman_Silver
 import com.cmc.curtaincall.common.designsystem.theme.Silver_Sand
 import com.cmc.curtaincall.common.designsystem.theme.White
 import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
+import com.cmc.curtaincall.domain.type.ReportType
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun HomeReportScreen(
     homeReportViewModel: HomeReportViewModel = hiltViewModel(),
-    reportId: Int,
-    reportType: String,
+    reportId: Int?,
+    reportType: ReportType?,
     onNavigateHome: () -> Unit,
     onBack: () -> Unit
 ) {
+    requireNotNull(reportId)
+    requireNotNull(reportType)
+
     var step by remember { mutableIntStateOf(0) }
     val reportReason by homeReportViewModel.reportReason.collectAsStateWithLifecycle()
 

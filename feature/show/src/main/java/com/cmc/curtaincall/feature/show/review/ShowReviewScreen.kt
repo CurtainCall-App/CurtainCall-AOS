@@ -23,14 +23,15 @@ import com.cmc.curtaincall.common.designsystem.component.item.ReviewDetailItem
 import com.cmc.curtaincall.common.designsystem.theme.*
 import com.cmc.curtaincall.common.navigation.destination.DEFAULT_REVIEW_ID
 import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
+import com.cmc.curtaincall.domain.type.ReportType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ShowReviewScreen(
     showReviewViewModel: ShowReviewViewModel = hiltViewModel(),
     showId: String?,
-    onNavigateReport: (Int, String) -> Unit,
     onNavigateReviewCreate: (Int) -> Unit,
+    onNavigateReport: (Int, ReportType) -> Unit,
     onBack: () -> Unit
 ) {
     requireNotNull(showId)
@@ -84,7 +85,7 @@ private fun ShowReviewContent(
     modifier: Modifier = Modifier,
     showReviewViewModel: ShowReviewViewModel = hiltViewModel(),
     showId: String,
-    onNavigateReport: (Int, String) -> Unit,
+    onNavigateReport: (Int, ReportType) -> Unit,
     onNavigateReviewCreate: (Int) -> Unit
 ) {
     val reviewItems = showReviewViewModel.reviewItems.collectAsLazyPagingItems()
@@ -145,7 +146,7 @@ private fun ShowReviewContent(
                             removeReviewId = reviewItem.id
                             isShowRemoveDialog = true
                         },
-                        onReport = { onNavigateReport(reviewItem.id, "SHOW_REVIEW") }
+                        onReport = { onNavigateReport(reviewItem.id, ReportType.SHOW_REVIEW) }
                     )
                     if (index < reviewItems.itemCount - 1) {
                         Spacer(

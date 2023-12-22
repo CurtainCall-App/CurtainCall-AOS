@@ -25,14 +25,14 @@ import com.cmc.curtaincall.common.designsystem.theme.Cultured
 import com.cmc.curtaincall.common.designsystem.theme.Me_Pink
 import com.cmc.curtaincall.common.designsystem.theme.White
 import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
-import com.cmc.curtaincall.feature.home.guide.GuideConstants.audience_words
-import com.cmc.curtaincall.feature.home.guide.GuideConstants.etc_words
-import com.cmc.curtaincall.feature.home.guide.GuideConstants.performance_words
-import com.cmc.curtaincall.feature.home.guide.GuideConstants.theater_words
-import com.cmc.curtaincall.feature.home.guide.GuideConstants.ticketing_words
+import com.cmc.curtaincall.feature.home.guide.HomeGuideConstants.audience_words
+import com.cmc.curtaincall.feature.home.guide.HomeGuideConstants.etc_words
+import com.cmc.curtaincall.feature.home.guide.HomeGuideConstants.performance_words
+import com.cmc.curtaincall.feature.home.guide.HomeGuideConstants.theater_words
+import com.cmc.curtaincall.feature.home.guide.HomeGuideConstants.ticketing_words
 
 @Composable
-internal fun GuideTotalExpressionContent() {
+internal fun HomeGuideTotalExpressionContent() {
     Column(Modifier.fillMaxSize()) {
         val totalList = (ticketing_words + performance_words + theater_words + audience_words + etc_words)
         totalList.keys.toList().forEachIndexed { index, key ->
@@ -56,7 +56,7 @@ internal fun GuideTotalExpressionContent() {
 }
 
 @Composable
-internal fun GuideTicketingExpressionContent() {
+internal fun HomeGuideTicketingExpressionContent() {
     Column(Modifier.fillMaxSize()) {
         ticketing_words.keys.toList().forEachIndexed { index, key ->
             GuidExpression(
@@ -79,7 +79,7 @@ internal fun GuideTicketingExpressionContent() {
 }
 
 @Composable
-internal fun GuidePerformanceExpressionContent() {
+internal fun HomeGuidePerformanceExpressionContent() {
     Column(Modifier.fillMaxSize()) {
         performance_words.keys.toList().forEachIndexed { index, key ->
             GuidExpression(
@@ -102,7 +102,7 @@ internal fun GuidePerformanceExpressionContent() {
 }
 
 @Composable
-internal fun GuideTheaterExpressionContent() {
+internal fun HomeGuideTheaterExpressionContent() {
     Column(Modifier.fillMaxSize()) {
         theater_words.keys.toList().forEachIndexed { index, key ->
             GuidExpression(
@@ -125,7 +125,7 @@ internal fun GuideTheaterExpressionContent() {
 }
 
 @Composable
-internal fun GuideAudienceExpressionContent() {
+internal fun HomeGuideAudienceExpressionContent() {
     Column(Modifier.fillMaxSize()) {
         audience_words.keys.toList().forEachIndexed { index, key ->
             GuidExpression(
@@ -148,7 +148,7 @@ internal fun GuideAudienceExpressionContent() {
 }
 
 @Composable
-internal fun GuideEtcExpressionContent() {
+internal fun HomeGuideEtcExpressionContent() {
     Column(Modifier.fillMaxSize()) {
         etc_words.keys.toList().forEachIndexed { index, key ->
             GuidExpression(

@@ -50,7 +50,7 @@ import com.cmc.curtaincall.common.designsystem.theme.White
 import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
 import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
 import com.cmc.curtaincall.common.utility.extensions.toRunningTime
-import com.cmc.curtaincall.domain.enum.ShowDetailMenuTab
+import com.cmc.curtaincall.domain.type.ShowDetailMenuTab
 import com.cmc.curtaincall.domain.model.show.ShowDetailModel
 import com.cmc.curtaincall.feature.show.lostproperty.ShowLostPropertyMenuScreen
 import com.cmc.curtaincall.feature.show.review.ShowReviewMenuScreen

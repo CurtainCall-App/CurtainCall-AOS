@@ -25,14 +25,14 @@ import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.card.LiveTalkContentCard
 import com.cmc.curtaincall.common.designsystem.component.card.MyContentCard
 import com.cmc.curtaincall.common.designsystem.component.card.PerformanceCard
-import com.cmc.curtaincall.common.designsystem.component.row.ContentTitleRow
 import com.cmc.curtaincall.common.designsystem.component.lib.pager.DynamicHorizontalPagerIndicator
+import com.cmc.curtaincall.common.designsystem.component.row.ContentTitleRow
 import com.cmc.curtaincall.common.designsystem.extensions.toSp
 import com.cmc.curtaincall.common.designsystem.theme.*
 import com.cmc.curtaincall.common.utility.extensions.toDateWithDay
 import com.cmc.curtaincall.common.utility.extensions.toDday
 import com.cmc.curtaincall.common.utility.extensions.toTime
-import com.cmc.curtaincall.feature.home.guide.GuideType
+import com.cmc.curtaincall.domain.type.HomeGuideMenu
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import io.getstream.chat.android.client.ChatClient
 
@@ -41,11 +41,11 @@ import io.getstream.chat.android.client.ChatClient
 fun HomeScreen(
     homeViewModel: HomeViewModel = hiltViewModel(),
     chatClient: ChatClient,
-    onNavigateGuide: (GuideType) -> Unit,
+    onNavigateGuide: (HomeGuideMenu) -> Unit,
     onNavigatePerformanceDetail: (String) -> Unit,
-    onNavigateLiveTalk: () -> Unit,
-    onNavigatePartyMember: () -> Unit,
-    onNavigateMyPage: () -> Unit
+    onNavigateLiveTalk: () -> Unit = {},
+    onNavigatePartyMember: () -> Unit = {},
+    onNavigateMyPage: () -> Unit = {}
 ) {
     val systemUiController = rememberSystemUiController()
     systemUiController.setStatusBarColor(Cetacean_Blue)
@@ -118,7 +118,7 @@ private fun HomeSearchContent(
 private fun HomeContent(
     homeViewModel: HomeViewModel,
     modifier: Modifier = Modifier,
-    onNavigateGuide: (GuideType) -> Unit,
+    onNavigateGuide: (HomeGuideMenu) -> Unit,
     onNavigatePerformanceDetail: (String) -> Unit
 ) {
     val scrollState = rememberScrollState()
@@ -386,7 +386,7 @@ private data class BannerItem(
 internal fun HomeBanner(
     modifier: Modifier = Modifier,
     nickname: String,
-    onNavigateGuide: (GuideType) -> Unit
+    onNavigateGuide: (HomeGuideMenu) -> Unit
 ) {
     val bannerItems = listOf(
         BannerItem(title = stringResource(R.string.home_banner_word_dictionary_title), description = stringResource(R.string.home_banner_word_dictionary_description), color = Navajo_White, content = {
@@ -397,7 +397,7 @@ internal fun HomeBanner(
                     .align(Alignment.BottomEnd)
                     .padding(end = 17.dp, bottom = (15.27).dp)
             )
-        }, onClick = { onNavigateGuide(GuideType.DICTIONARY) }),
+        }, onClick = { onNavigateGuide(HomeGuideMenu.DICTIONARY) }),
         BannerItem(title = stringResource(R.string.home_banner_ticketing_guide_title), description = stringResource(R.string.home_banner_ticketing_guide_description), color = Pale_Lavendar, content = {
             Image(
                 painter = painterResource(R.drawable.ic_ticket),
@@ -406,7 +406,7 @@ internal fun HomeBanner(
                     .align(Alignment.BottomEnd)
                     .padding(end = 20.dp, bottom = (18.37).dp)
             )
-        }, onClick = { onNavigateGuide(GuideType.TICKETING) }),
+        }, onClick = { onNavigateGuide(HomeGuideMenu.TICKETING) }),
         BannerItem(title = stringResource(R.string.home_banner_gift_title), description = stringResource(R.string.home_banner_gift_description), color = Water, content = {
             Image(
                 painter = painterResource(R.drawable.ic_gift),
@@ -415,7 +415,7 @@ internal fun HomeBanner(
                     .align(Alignment.BottomEnd)
                     .padding(end = (13.5).dp, bottom = (9.79).dp)
             )
-        }, onClick = { onNavigateGuide(GuideType.DISCOUNT) })
+        }, onClick = { onNavigateGuide(HomeGuideMenu.DISCOUNT) })
     )
 
     val pagerState = rememberPagerState { bannerItems.size }

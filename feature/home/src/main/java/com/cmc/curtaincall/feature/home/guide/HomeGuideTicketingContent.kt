@@ -25,11 +25,11 @@ import com.cmc.curtaincall.common.designsystem.theme.Cultured
 import com.cmc.curtaincall.common.designsystem.theme.Me_Pink
 import com.cmc.curtaincall.common.designsystem.theme.White
 import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
-import com.cmc.curtaincall.feature.home.guide.GuideConstants.after_ticketing_words
-import com.cmc.curtaincall.feature.home.guide.GuideConstants.before_ticketing_words
+import com.cmc.curtaincall.feature.home.guide.HomeGuideConstants.after_ticketing_words
+import com.cmc.curtaincall.feature.home.guide.HomeGuideConstants.before_ticketing_words
 
 @Composable
-internal fun GuideBeforeTicketingContent() {
+internal fun HomeGuideBeforeTicketingContent() {
     Column(Modifier.fillMaxSize()) {
         before_ticketing_words.keys.toList().forEachIndexed { index, key ->
             GuideTicketing(
@@ -52,7 +52,7 @@ internal fun GuideBeforeTicketingContent() {
 }
 
 @Composable
-internal fun GuideAfterTicketingContent() {
+internal fun HomeGuideAfterTicketingContent() {
     Column(Modifier.fillMaxSize()) {
         after_ticketing_words.keys.toList().forEachIndexed { index, key ->
             GuideTicketing(

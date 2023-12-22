@@ -1,7 +1,7 @@
 package com.cmc.curtaincall.feature.show.detail
 
 import com.cmc.curtaincall.core.base.BaseEvent
-import com.cmc.curtaincall.domain.enum.ShowDetailMenuTab
+import com.cmc.curtaincall.domain.type.ShowDetailMenuTab
 import com.cmc.curtaincall.domain.model.lostproperty.LostPropertyModel
 import com.cmc.curtaincall.domain.model.review.ShowReviewModel
 import com.cmc.curtaincall.domain.model.show.FacilityDetailModel

@@ -26,7 +26,7 @@ import com.cmc.curtaincall.common.designsystem.theme.White
 import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
 
 @Composable
-internal fun GuideMenuTab(
+internal fun HomeGuideMenuTab(
     modifier: Modifier = Modifier,
     menus: List<Pair<String, @Composable () -> Unit>>
 ) {

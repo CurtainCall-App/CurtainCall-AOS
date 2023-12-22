@@ -28,7 +28,7 @@ import com.cmc.curtaincall.common.designsystem.theme.White
 import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
 
 @Composable
-internal fun GuideDiscountContent(
+internal fun HomeGuideDiscountContent(
     modifier: Modifier = Modifier
 ) {
     Column(modifier.background(White, RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))) {

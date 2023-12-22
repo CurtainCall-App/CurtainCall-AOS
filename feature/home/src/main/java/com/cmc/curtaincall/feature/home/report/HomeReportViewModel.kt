@@ -3,6 +3,7 @@ package com.cmc.curtaincall.feature.home.report
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cmc.curtaincall.domain.repository.ReportRepository
+import com.cmc.curtaincall.domain.type.ReportType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -45,11 +46,11 @@ class HomeReportViewModel @Inject constructor(
 
     fun requestReport(
         reportId: Int,
-        type: String
+        type: ReportType
     ) {
         reportRepository.requestReport(
             reportId = reportId,
-            type = type,
+            type = type.name,
             reason = reportReason.value.name,
             content = content.value
         ).onEach { check ->
