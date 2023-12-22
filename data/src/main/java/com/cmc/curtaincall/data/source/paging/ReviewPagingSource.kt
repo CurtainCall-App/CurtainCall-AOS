@@ -28,6 +28,7 @@ class ReviewPagingSource @Inject constructor(
                 page = pageKey,
                 size = REVIEW_PAGE_SIZE
             )
+
             val favoriteReviews = reviewService.checkLikeReviews(response.showReviews.map { it.id })
             val result = response.showReviews.map { showReview ->
                 showReview.toModel().copy(
