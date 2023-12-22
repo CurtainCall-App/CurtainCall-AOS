@@ -1,7 +1,7 @@
 package com.cmc.curtaincall.feature.home.report
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.cmc.curtaincall.core.base.BaseViewModel
 import com.cmc.curtaincall.domain.repository.ReportRepository
 import com.cmc.curtaincall.domain.type.ReportType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,23 +14,34 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeReportViewModel @Inject constructor(
     private val reportRepository: ReportRepository
-) : ViewModel() {
+) : BaseViewModel<HomeReportUiState, HomeReportEvent, Nothing>(
+    initialState = HomeReportUiState()
+) {
+    override fun reduceState(currentState: HomeReportUiState, event: HomeReportEvent): HomeReportUiState =
+        when (event) {
+            HomeReportEvent.NextStep -> currentState.copy(step = currentState.step + 1)
+            HomeReportEvent.PrevStep -> currentState.copy(step = currentState.step - 1)
+            is HomeReportEvent.InputContent -> currentState.copy(content = event.content)
+            is HomeReportEvent.SelectReportReason -> currentState.copy(reportReason = event.reportReason)
+        }
 
-    private val _reportReason = MutableStateFlow(HomeReportReason.NONE)
-    val reportReason = _reportReason.asStateFlow()
+    private val _isCompleted = MutableStateFlow(false)
+    val isCompleted = _isCompleted.asStateFlow()
 
-    private val _content = MutableStateFlow("")
-    val content = _content.asStateFlow()
+    fun goNextStep() {
+        sendAction(HomeReportEvent.NextStep)
+    }
 
-    private val _isSuccessReport = MutableStateFlow(false)
-    val isSuccessReport = _isSuccessReport.asStateFlow()
+    fun goPrevStep() {
+        sendAction(HomeReportEvent.PrevStep)
+    }
 
     fun changeReportReason(reportReason: HomeReportReason) {
-        _reportReason.value = reportReason
+        sendAction(HomeReportEvent.SelectReportReason(reportReason))
     }
 
     fun setContent(content: String) {
-        _content.value = content
+        sendAction(HomeReportEvent.InputContent(content))
     }
 
     fun requestReport(
@@ -40,10 +51,10 @@ class HomeReportViewModel @Inject constructor(
         reportRepository.requestReport(
             reportId = reportId,
             type = type.name,
-            reason = reportReason.value.name,
-            content = content.value
+            reason = uiState.value.reportReason.name,
+            content = uiState.value.content
         ).onEach { check ->
-            _isSuccessReport.value = check
+            _isCompleted.value = check
         }.launchIn(viewModelScope)
     }
 }

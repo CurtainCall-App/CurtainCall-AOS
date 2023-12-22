@@ -23,9 +23,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -65,27 +62,28 @@ fun HomeReportScreen(
     requireNotNull(reportId)
     requireNotNull(reportType)
 
-    var step by remember { mutableIntStateOf(0) }
-    val reportReason by homeReportViewModel.reportReason.collectAsStateWithLifecycle()
-
+    val homeReportUiState by homeReportViewModel.uiState.collectAsStateWithLifecycle()
+    val currentStep = homeReportUiState.step
     LaunchedEffect(homeReportViewModel) {
-        homeReportViewModel.isSuccessReport.collectLatest { isSuccessReport ->
-            if (isSuccessReport) step++
+        homeReportViewModel.isCompleted.collectLatest { isCompleted ->
+            if (isCompleted) {
+                homeReportViewModel.goNextStep()
+            }
         }
     }
 
     Scaffold(
         topBar = {
-            if (step < 2) {
+            if (currentStep < 2) {
                 TopAppBarWithClose(
                     title = stringResource(R.string.appbar_report_title),
                     containerColor = White,
                     contentColor = Nero,
                     onClose = {
-                        if (step == 0) {
+                        if (currentStep == 0) {
                             onBack()
                         } else {
-                            step--
+                            homeReportViewModel.goPrevStep()
                         }
                     }
                 )
@@ -95,9 +93,9 @@ fun HomeReportScreen(
         floatingActionButton = {
             CurtainCallRoundedTextButton(
                 onClick = {
-                    if (step == 0) {
-                        step++
-                    } else if (step == 1) {
+                    if (currentStep == 0) {
+                        homeReportViewModel.goNextStep()
+                    } else if (currentStep == 1) {
                         homeReportViewModel.requestReport(
                             reportId = reportId,
                             type = reportType
@@ -110,36 +108,36 @@ fun HomeReportScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
                     .height(52.dp),
-                title = when (step) {
+                title = when (currentStep) {
                     0 -> "다음"
                     1 -> "신고하기"
                     else -> "홈으로 이동"
                 },
                 fontSize = 16.dp.toSp(),
-                enabled = when (step) {
-                    0 -> reportReason != HomeReportReason.NONE
+                enabled = when (currentStep) {
+                    0 -> homeReportUiState.reportReason != HomeReportReason.NONE
                     else -> true
                 },
-                containerColor = when (step) {
-                    0 -> if (reportReason == HomeReportReason.NONE) Bright_Gray else Me_Pink
+                containerColor = when (currentStep) {
+                    0 -> if (homeReportUiState.reportReason == HomeReportReason.NONE) Bright_Gray else Me_Pink
                     else -> Me_Pink
                 },
-                contentColor = when (step) {
-                    0 -> if (reportReason == HomeReportReason.NONE) Silver_Sand else White
+                contentColor = when (currentStep) {
+                    0 -> if (homeReportUiState.reportReason == HomeReportReason.NONE) Silver_Sand else White
                     else -> White
                 }
             )
         }
     ) { paddingValues ->
-        if (step < 2) {
+        if (currentStep < 2) {
             HomeReportContent(
-                homeReportViewModel = homeReportViewModel,
                 modifier = Modifier
                     .padding(paddingValues)
                     .fillMaxSize()
                     .background(White),
-                reportReason = reportReason,
-                step = step
+                content = homeReportUiState.content,
+                reportReason = homeReportUiState.reportReason,
+                step = currentStep
             )
         } else {
             Column(
@@ -172,13 +170,13 @@ fun HomeReportScreen(
 
 @Composable
 private fun HomeReportContent(
-    homeReportViewModel: HomeReportViewModel,
+    homeReportViewModel: HomeReportViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
+    content: String,
     reportReason: HomeReportReason,
     step: Int
 ) {
     val verticalScrollState = rememberScrollState()
-    val content by homeReportViewModel.content.collectAsStateWithLifecycle()
     Column(modifier.verticalScroll(verticalScrollState)) {
         if (step == 0) {
             Column(
