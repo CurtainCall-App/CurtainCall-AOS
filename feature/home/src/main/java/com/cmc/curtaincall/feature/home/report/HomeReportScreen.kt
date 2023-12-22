@@ -23,9 +23,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,37 +48,42 @@ import com.cmc.curtaincall.common.designsystem.theme.Roman_Silver
 import com.cmc.curtaincall.common.designsystem.theme.Silver_Sand
 import com.cmc.curtaincall.common.designsystem.theme.White
 import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
+import com.cmc.curtaincall.domain.type.ReportType
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun HomeReportScreen(
     homeReportViewModel: HomeReportViewModel = hiltViewModel(),
-    reportId: Int,
-    reportType: String,
+    reportId: Int?,
+    reportType: ReportType?,
     onNavigateHome: () -> Unit,
     onBack: () -> Unit
 ) {
-    var step by remember { mutableIntStateOf(0) }
-    val reportReason by homeReportViewModel.reportReason.collectAsStateWithLifecycle()
+    requireNotNull(reportId)
+    requireNotNull(reportType)
 
+    val homeReportUiState by homeReportViewModel.uiState.collectAsStateWithLifecycle()
+    val currentStep = homeReportUiState.step
     LaunchedEffect(homeReportViewModel) {
-        homeReportViewModel.isSuccessReport.collectLatest { isSuccessReport ->
-            if (isSuccessReport) step++
+        homeReportViewModel.isCompleted.collectLatest { isCompleted ->
+            if (isCompleted) {
+                homeReportViewModel.goNextStep()
+            }
         }
     }
 
     Scaffold(
         topBar = {
-            if (step < 2) {
+            if (currentStep < 2) {
                 TopAppBarWithClose(
                     title = stringResource(R.string.appbar_report_title),
                     containerColor = White,
                     contentColor = Nero,
                     onClose = {
-                        if (step == 0) {
+                        if (currentStep == 0) {
                             onBack()
                         } else {
-                            step--
+                            homeReportViewModel.goPrevStep()
                         }
                     }
                 )
@@ -91,9 +93,9 @@ fun HomeReportScreen(
         floatingActionButton = {
             CurtainCallRoundedTextButton(
                 onClick = {
-                    if (step == 0) {
-                        step++
-                    } else if (step == 1) {
+                    if (currentStep == 0) {
+                        homeReportViewModel.goNextStep()
+                    } else if (currentStep == 1) {
                         homeReportViewModel.requestReport(
                             reportId = reportId,
                             type = reportType
@@ -106,36 +108,36 @@ fun HomeReportScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
                     .height(52.dp),
-                title = when (step) {
+                title = when (currentStep) {
                     0 -> "다음"
                     1 -> "신고하기"
                     else -> "홈으로 이동"
                 },
                 fontSize = 16.dp.toSp(),
-                enabled = when (step) {
-                    0 -> reportReason != ReportReason.NONE
+                enabled = when (currentStep) {
+                    0 -> homeReportUiState.reportReason != HomeReportReason.NONE
                     else -> true
                 },
-                containerColor = when (step) {
-                    0 -> if (reportReason == ReportReason.NONE) Bright_Gray else Me_Pink
+                containerColor = when (currentStep) {
+                    0 -> if (homeReportUiState.reportReason == HomeReportReason.NONE) Bright_Gray else Me_Pink
                     else -> Me_Pink
                 },
-                contentColor = when (step) {
-                    0 -> if (reportReason == ReportReason.NONE) Silver_Sand else White
+                contentColor = when (currentStep) {
+                    0 -> if (homeReportUiState.reportReason == HomeReportReason.NONE) Silver_Sand else White
                     else -> White
                 }
             )
         }
     ) { paddingValues ->
-        if (step < 2) {
+        if (currentStep < 2) {
             HomeReportContent(
-                homeReportViewModel = homeReportViewModel,
                 modifier = Modifier
                     .padding(paddingValues)
                     .fillMaxSize()
                     .background(White),
-                reportReason = reportReason,
-                step = step
+                content = homeReportUiState.content,
+                reportReason = homeReportUiState.reportReason,
+                step = currentStep
             )
         } else {
             Column(
@@ -168,13 +170,13 @@ fun HomeReportScreen(
 
 @Composable
 private fun HomeReportContent(
-    homeReportViewModel: HomeReportViewModel,
+    homeReportViewModel: HomeReportViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
-    reportReason: ReportReason,
+    content: String,
+    reportReason: HomeReportReason,
     step: Int
 ) {
     val verticalScrollState = rememberScrollState()
-    val content by homeReportViewModel.content.collectAsStateWithLifecycle()
     Column(modifier.verticalScroll(verticalScrollState)) {
         if (step == 0) {
             Column(
@@ -195,13 +197,13 @@ private fun HomeReportContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 25.dp)
-                        .clickable { homeReportViewModel.changeReportReason(ReportReason.SPAM) },
+                        .clickable { homeReportViewModel.changeReportReason(HomeReportReason.SPAM) },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(
-                        onClick = { homeReportViewModel.changeReportReason(ReportReason.SPAM) },
+                        onClick = { homeReportViewModel.changeReportReason(HomeReportReason.SPAM) },
                         modifier = Modifier
-                            .background(if (reportReason == ReportReason.SPAM) Me_Pink else Bright_Gray, CircleShape)
+                            .background(if (reportReason == HomeReportReason.SPAM) Me_Pink else Bright_Gray, CircleShape)
                             .size(20.dp)
                     ) {
                         Icon(
@@ -212,7 +214,7 @@ private fun HomeReportContent(
                         )
                     }
                     Text(
-                        text = ReportReason.SPAM.value,
+                        text = HomeReportReason.SPAM.value,
                         modifier = Modifier.padding(start = 10.dp),
                         color = Black_Coral,
                         fontSize = 15.dp.toSp(),
@@ -224,13 +226,13 @@ private fun HomeReportContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 19.dp)
-                        .clickable { homeReportViewModel.changeReportReason(ReportReason.HATE_SPEECH) },
+                        .clickable { homeReportViewModel.changeReportReason(HomeReportReason.HATE_SPEECH) },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(
-                        onClick = { homeReportViewModel.changeReportReason(ReportReason.HATE_SPEECH) },
+                        onClick = { homeReportViewModel.changeReportReason(HomeReportReason.HATE_SPEECH) },
                         modifier = Modifier
-                            .background(if (reportReason == ReportReason.HATE_SPEECH) Me_Pink else Bright_Gray, CircleShape)
+                            .background(if (reportReason == HomeReportReason.HATE_SPEECH) Me_Pink else Bright_Gray, CircleShape)
                             .size(20.dp)
                     ) {
                         Icon(
@@ -241,7 +243,7 @@ private fun HomeReportContent(
                         )
                     }
                     Text(
-                        text = ReportReason.HATE_SPEECH.value,
+                        text = HomeReportReason.HATE_SPEECH.value,
                         modifier = Modifier.padding(start = 10.dp),
                         color = Black_Coral,
                         fontSize = 15.dp.toSp(),
@@ -253,13 +255,13 @@ private fun HomeReportContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 19.dp)
-                        .clickable { homeReportViewModel.changeReportReason(ReportReason.ILLEGAL) },
+                        .clickable { homeReportViewModel.changeReportReason(HomeReportReason.ILLEGAL) },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(
-                        onClick = { homeReportViewModel.changeReportReason(ReportReason.ILLEGAL) },
+                        onClick = { homeReportViewModel.changeReportReason(HomeReportReason.ILLEGAL) },
                         modifier = Modifier
-                            .background(if (reportReason == ReportReason.ILLEGAL) Me_Pink else Bright_Gray, CircleShape)
+                            .background(if (reportReason == HomeReportReason.ILLEGAL) Me_Pink else Bright_Gray, CircleShape)
                             .size(20.dp)
                     ) {
                         Icon(
@@ -270,7 +272,7 @@ private fun HomeReportContent(
                         )
                     }
                     Text(
-                        text = ReportReason.ILLEGAL.value,
+                        text = HomeReportReason.ILLEGAL.value,
                         modifier = Modifier.padding(start = 10.dp),
                         color = Black_Coral,
                         fontSize = 15.dp.toSp(),
@@ -282,13 +284,13 @@ private fun HomeReportContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 19.dp)
-                        .clickable { homeReportViewModel.changeReportReason(ReportReason.BAD_MANNERS) },
+                        .clickable { homeReportViewModel.changeReportReason(HomeReportReason.BAD_MANNERS) },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(
-                        onClick = { homeReportViewModel.changeReportReason(ReportReason.BAD_MANNERS) },
+                        onClick = { homeReportViewModel.changeReportReason(HomeReportReason.BAD_MANNERS) },
                         modifier = Modifier
-                            .background(if (reportReason == ReportReason.BAD_MANNERS) Me_Pink else Bright_Gray, CircleShape)
+                            .background(if (reportReason == HomeReportReason.BAD_MANNERS) Me_Pink else Bright_Gray, CircleShape)
                             .size(20.dp)
                     ) {
                         Icon(
@@ -299,7 +301,7 @@ private fun HomeReportContent(
                         )
                     }
                     Text(
-                        text = ReportReason.BAD_MANNERS.value,
+                        text = HomeReportReason.BAD_MANNERS.value,
                         modifier = Modifier.padding(start = 10.dp),
                         color = Black_Coral,
                         fontSize = 15.dp.toSp(),
@@ -311,13 +313,13 @@ private fun HomeReportContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 19.dp)
-                        .clickable { homeReportViewModel.changeReportReason(ReportReason.HARMFUL_TO_TEENAGER) },
+                        .clickable { homeReportViewModel.changeReportReason(HomeReportReason.HARMFUL_TO_TEENAGER) },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(
-                        onClick = { homeReportViewModel.changeReportReason(ReportReason.HARMFUL_TO_TEENAGER) },
+                        onClick = { homeReportViewModel.changeReportReason(HomeReportReason.HARMFUL_TO_TEENAGER) },
                         modifier = Modifier
-                            .background(if (reportReason == ReportReason.HARMFUL_TO_TEENAGER) Me_Pink else Bright_Gray, CircleShape)
+                            .background(if (reportReason == HomeReportReason.HARMFUL_TO_TEENAGER) Me_Pink else Bright_Gray, CircleShape)
                             .size(20.dp)
                     ) {
                         Icon(
@@ -328,7 +330,7 @@ private fun HomeReportContent(
                         )
                     }
                     Text(
-                        text = ReportReason.HARMFUL_TO_TEENAGER.value,
+                        text = HomeReportReason.HARMFUL_TO_TEENAGER.value,
                         modifier = Modifier.padding(start = 10.dp),
                         color = Black_Coral,
                         fontSize = 15.dp.toSp(),
@@ -340,13 +342,13 @@ private fun HomeReportContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 19.dp)
-                        .clickable { homeReportViewModel.changeReportReason(ReportReason.PERSONAL_INFORMATION_DISCLOSURE) },
+                        .clickable { homeReportViewModel.changeReportReason(HomeReportReason.PERSONAL_INFORMATION_DISCLOSURE) },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(
-                        onClick = { homeReportViewModel.changeReportReason(ReportReason.PERSONAL_INFORMATION_DISCLOSURE) },
+                        onClick = { homeReportViewModel.changeReportReason(HomeReportReason.PERSONAL_INFORMATION_DISCLOSURE) },
                         modifier = Modifier
-                            .background(if (reportReason == ReportReason.PERSONAL_INFORMATION_DISCLOSURE) Me_Pink else Bright_Gray, CircleShape)
+                            .background(if (reportReason == HomeReportReason.PERSONAL_INFORMATION_DISCLOSURE) Me_Pink else Bright_Gray, CircleShape)
                             .size(20.dp)
                     ) {
                         Icon(
@@ -357,7 +359,7 @@ private fun HomeReportContent(
                         )
                     }
                     Text(
-                        text = ReportReason.PERSONAL_INFORMATION_DISCLOSURE.value,
+                        text = HomeReportReason.PERSONAL_INFORMATION_DISCLOSURE.value,
                         modifier = Modifier.padding(start = 10.dp),
                         color = Black_Coral,
                         fontSize = 15.dp.toSp(),
@@ -369,13 +371,13 @@ private fun HomeReportContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 19.dp)
-                        .clickable { homeReportViewModel.changeReportReason(ReportReason.ETC) },
+                        .clickable { homeReportViewModel.changeReportReason(HomeReportReason.ETC) },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(
-                        onClick = { homeReportViewModel.changeReportReason(ReportReason.ETC) },
+                        onClick = { homeReportViewModel.changeReportReason(HomeReportReason.ETC) },
                         modifier = Modifier
-                            .background(if (reportReason == ReportReason.ETC) Me_Pink else Bright_Gray, CircleShape)
+                            .background(if (reportReason == HomeReportReason.ETC) Me_Pink else Bright_Gray, CircleShape)
                             .size(20.dp)
                     ) {
                         Icon(
@@ -386,7 +388,7 @@ private fun HomeReportContent(
                         )
                     }
                     Text(
-                        text = ReportReason.ETC.value,
+                        text = HomeReportReason.ETC.value,
                         modifier = Modifier.padding(start = 10.dp),
                         color = Black_Coral,
                         fontSize = 15.dp.toSp(),

@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.designsystem.R
+import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.designsystem.extensions.toSp
 import com.cmc.curtaincall.common.designsystem.theme.Chinese_Black
@@ -31,21 +32,16 @@ import com.cmc.curtaincall.common.designsystem.theme.Cultured
 import com.cmc.curtaincall.common.designsystem.theme.Nero
 import com.cmc.curtaincall.common.designsystem.theme.White
 import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
-
-enum class GuideType {
-    DICTIONARY, TICKETING, DISCOUNT
-}
+import com.cmc.curtaincall.domain.type.HomeGuideMenu
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun GuideScreen(
-    guideType: GuideType,
+internal fun HomeGuideScreen(
+    homeGuideMenu: HomeGuideMenu?,
     onBack: () -> Unit
 ) {
-    val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(Cultured)
-
+    requireNotNull(homeGuideMenu)
+    SystemUiStatusBar(Cultured)
     Scaffold(
         topBar = {
             TopAppBarWithBack(
@@ -59,64 +55,64 @@ internal fun GuideScreen(
             )
         }
     ) { paddingValues ->
-        GuideContent(
+        HomeGuideContent(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
                 .background(White),
-            guideType = guideType
+            homeGuideMenu = homeGuideMenu
         )
     }
 }
 
 @Composable
-private fun GuideContent(
+private fun HomeGuideContent(
     modifier: Modifier = Modifier,
-    guideType: GuideType
+    homeGuideMenu: HomeGuideMenu
 ) {
     val verticalScrollState = rememberScrollState()
     Column(modifier.verticalScroll(verticalScrollState)) {
-        GuideHeader(
+        HomeGuideHeader(
             modifier = Modifier
                 .background(Cultured)
                 .fillMaxWidth()
                 .padding(top = 27.dp, start = 19.dp),
-            icon = painterResource(getGuideIcon(guideType)),
-            title = stringResource(getGuideTitle(guideType))
+            icon = painterResource(getGuideIcon(homeGuideMenu)),
+            title = stringResource(getGuideTitle(homeGuideMenu))
         )
-        when (guideType) {
-            GuideType.DICTIONARY -> {
-                GuideMenuTab(
+        when (homeGuideMenu) {
+            HomeGuideMenu.DICTIONARY -> {
+                HomeGuideMenuTab(
                     modifier = Modifier
                         .background(Cultured)
                         .fillMaxWidth()
                         .padding(top = 10.dp),
                     menus = listOf(
-                        stringResource(R.string.home_guide_total_menu) to { GuideTotalExpressionContent() },
-                        stringResource(R.string.home_guide_ticketing_menu) to { GuideTicketingExpressionContent() },
-                        stringResource(R.string.home_guide_performance_menu) to { GuidePerformanceExpressionContent() },
-                        stringResource(R.string.home_guide_theater_menu) to { GuideTheaterExpressionContent() },
-                        stringResource(R.string.home_guide_audience_menu) to { GuideAudienceExpressionContent() },
-                        stringResource(R.string.home_guide_etc_menu) to { GuideEtcExpressionContent() }
+                        stringResource(R.string.home_guide_total_menu) to { HomeGuideTotalExpressionContent() },
+                        stringResource(R.string.home_guide_ticketing_menu) to { HomeGuideTicketingExpressionContent() },
+                        stringResource(R.string.home_guide_performance_menu) to { HomeGuidePerformanceExpressionContent() },
+                        stringResource(R.string.home_guide_theater_menu) to { HomeGuideTheaterExpressionContent() },
+                        stringResource(R.string.home_guide_audience_menu) to { HomeGuideAudienceExpressionContent() },
+                        stringResource(R.string.home_guide_etc_menu) to { HomeGuideEtcExpressionContent() }
                     )
                 )
             }
 
-            GuideType.TICKETING -> {
-                GuideMenuTab(
+            HomeGuideMenu.TICKETING -> {
+                HomeGuideMenuTab(
                     modifier = Modifier
                         .background(Cultured)
                         .fillMaxWidth()
                         .padding(top = 10.dp),
                     menus = listOf(
-                        stringResource(R.string.home_guide_before_ticketing) to { GuideBeforeTicketingContent() },
-                        stringResource(R.string.home_guide_after_tickketing) to { GuideAfterTicketingContent() }
+                        stringResource(R.string.home_guide_before_ticketing) to { HomeGuideBeforeTicketingContent() },
+                        stringResource(R.string.home_guide_after_tickketing) to { HomeGuideAfterTicketingContent() }
                     )
                 )
             }
 
-            GuideType.DISCOUNT -> {
-                GuideDiscountContent(
+            HomeGuideMenu.DISCOUNT -> {
+                HomeGuideDiscountContent(
                     modifier = Modifier
                         .background(Cultured)
                         .padding(top = 10.dp)
@@ -128,7 +124,7 @@ private fun GuideContent(
 }
 
 @Composable
-private fun GuideHeader(
+private fun HomeGuideHeader(
     modifier: Modifier = Modifier,
     icon: Painter,
     title: String
@@ -154,14 +150,14 @@ private fun GuideHeader(
     }
 }
 
-private fun getGuideTitle(guideType: GuideType) = when (guideType) {
-    GuideType.DICTIONARY -> R.string.home_banner_word_dictionary_title
-    GuideType.TICKETING -> R.string.home_banner_ticketing_guide_title
-    GuideType.DISCOUNT -> R.string.home_banner_gift_title
+private fun getGuideTitle(homeGuideMenu: HomeGuideMenu) = when (homeGuideMenu) {
+    HomeGuideMenu.DICTIONARY -> R.string.home_banner_word_dictionary_title
+    HomeGuideMenu.TICKETING -> R.string.home_banner_ticketing_guide_title
+    HomeGuideMenu.DISCOUNT -> R.string.home_banner_gift_title
 }
 
-private fun getGuideIcon(guideType: GuideType) = when (guideType) {
-    GuideType.DICTIONARY -> R.drawable.ic_dictionary_guide
-    GuideType.TICKETING -> R.drawable.ic_ticketing_guide
-    GuideType.DISCOUNT -> R.drawable.ic_gift_guide
+private fun getGuideIcon(homeGuideMenu: HomeGuideMenu) = when (homeGuideMenu) {
+    HomeGuideMenu.DICTIONARY -> R.drawable.ic_dictionary_guide
+    HomeGuideMenu.TICKETING -> R.drawable.ic_ticketing_guide
+    HomeGuideMenu.DISCOUNT -> R.drawable.ic_gift_guide
 }

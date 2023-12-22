@@ -17,9 +17,8 @@ import retrofit2.http.Query
 
 interface ReviewService {
 
-    @POST("shows/{showId}/reviews")
+    @POST("review")
     suspend fun createShowReview(
-        @Path("showId") showId: String,
         @Body createShowReviewRequest: CreateShowReviewRequest
     ): CreateReviewResponse
 

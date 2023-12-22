@@ -64,6 +64,7 @@ internal fun ShowReviewCreateScreen(
     onBack: () -> Unit
 ) {
     requireNotNull(showId)
+    requireNotNull(reviewId)
 
     val showDetailState by showDetailViewModel.uiState.collectAsStateWithLifecycle()
 
@@ -174,8 +175,8 @@ private fun ShowReviewCreateHeader(
 private fun ShowReviewCreateBody(
     showReviewViewModel: ShowReviewViewModel,
     modifier: Modifier = Modifier,
-    showId: String?,
-    reviewId: Int?,
+    showId: String,
+    reviewId: Int,
     onBack: () -> Unit,
 ) {
     LaunchedEffect(showReviewViewModel) {
@@ -206,10 +207,10 @@ private fun ShowReviewCreateBody(
         )
         CurtainCallRoundedTextButton(
             onClick = {
-                reviewId?.let { reviewId ->
+                if (reviewId == DEFAULT_REVIEW_ID) {
+                    showReviewViewModel.createShowReview(showId, rating, review)
+                } else {
                     showReviewViewModel.updateShowReview(reviewId, review, rating)
-                } ?: kotlin.run {
-                    showId?.let { showReviewViewModel.createShowReview(it, rating, review) }
                 }
             },
             modifier = Modifier

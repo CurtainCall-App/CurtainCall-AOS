@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.cmc.curtaincall.core.base.BaseViewModel
-import com.cmc.curtaincall.domain.enum.ShowDetailMenuTab
+import com.cmc.curtaincall.domain.type.ShowDetailMenuTab
 import com.cmc.curtaincall.domain.model.lostproperty.LostPropertyModel
 import com.cmc.curtaincall.domain.repository.FavoriteRepository
 import com.cmc.curtaincall.domain.repository.LostPropertyRepository

@@ -4,8 +4,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.cmc.curtaincall.core.base.BaseViewModel
-import com.cmc.curtaincall.domain.enum.ShowGenreType
-import com.cmc.curtaincall.domain.enum.ShowSortType
+import com.cmc.curtaincall.domain.type.ShowGenreType
+import com.cmc.curtaincall.domain.type.ShowSortType
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import com.cmc.curtaincall.domain.model.show.ShowSearchWordModel
 import com.cmc.curtaincall.domain.repository.FavoriteRepository

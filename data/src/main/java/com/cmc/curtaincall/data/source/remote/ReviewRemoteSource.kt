@@ -20,8 +20,8 @@ class ReviewRemoteSource @Inject constructor(
     ): Flow<CreateReviewResponse> = flow {
         emit(
             reviewService.createShowReview(
-                showId = showId,
                 createShowReviewRequest = CreateShowReviewRequest(
+                    showId = showId,
                     grade = grade,
                     content = content
                 )

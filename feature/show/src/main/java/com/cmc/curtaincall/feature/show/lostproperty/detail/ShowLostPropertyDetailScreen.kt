@@ -47,6 +47,7 @@ import com.cmc.curtaincall.common.designsystem.theme.Granite_Gray
 import com.cmc.curtaincall.common.designsystem.theme.Nero
 import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
 import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
+import com.cmc.curtaincall.domain.type.ReportType
 import kotlinx.coroutines.launch
 
 @Composable
@@ -54,7 +55,7 @@ internal fun ShowLostPropertyDetailScreen(
     showLostPropertyDetailViewModel: ShowLostPropertyDetailViewModel = hiltViewModel(),
     lostPropertyId: Int?,
     fromCreate: Boolean?,
-    onNavigateReport: (Int, String) -> Unit = { _, _ -> },
+    onNavigateReport: (Int, ReportType) -> Unit = { _, _ -> },
     onBack: () -> Unit = {}
 ) {
     requireNotNull(lostPropertyId)
@@ -91,7 +92,7 @@ internal fun ShowLostPropertyDetailScreen(
                 containerColor = Cultured,
                 contentColor = Nero,
                 onBack = onBack,
-                onAction = { onNavigateReport(lostPropertyId, "LOST_ITEM") }
+                onAction = { onNavigateReport(lostPropertyId, ReportType.LOST_ITEM) }
             )
         }
     ) { paddingValues ->

@@ -14,6 +14,7 @@ import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.card.PartyType
 import com.cmc.curtaincall.core.navigation.BottomDestination
 import com.cmc.curtaincall.core.navigation.CurtainCallDestination
+import com.cmc.curtaincall.domain.type.ReportType
 import com.cmc.curtaincall.feature.partymember.ui.PartyMemberScreen
 import com.cmc.curtaincall.feature.partymember.ui.create.screen.PartyMemberCreateScreen
 import com.cmc.curtaincall.feature.partymember.ui.detail.PartyMemberDetailScreen
@@ -103,7 +104,7 @@ sealed interface PartyMemberDestination : CurtainCallDestination {
 fun NavGraphBuilder.partymemberNavGraph(
     navHostController: NavHostController,
     chatClient: ChatClient,
-    onNavigateReport: (Int, String) -> Unit
+    onNavigateReport: (Int, ReportType) -> Unit
 ) {
     navigation(startDestination = PartyMemberDestination.PartyMember.route, route = PARTYMEMBER_GRAPH) {
         composable(route = PartyMemberDestination.PartyMember.route) {

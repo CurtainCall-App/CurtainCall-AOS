@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.cmc.curtaincall.common.navigation.NavGraphLabel
 import com.cmc.curtaincall.common.navigation.destination.ShowDestination
+import com.cmc.curtaincall.domain.type.ReportType
 import com.cmc.curtaincall.feature.show.detail.ShowDetailScreen
 import com.cmc.curtaincall.feature.show.lostproperty.ShowLostPropertyScreen
 import com.cmc.curtaincall.feature.show.lostproperty.create.ShowLostPropertyCreateScreen
@@ -18,7 +19,7 @@ import com.cmc.curtaincall.feature.show.search.ShowSearchScreen
 
 fun NavGraphBuilder.showNavGraph(
     navHostController: NavHostController,
-    onNavigateReport: (Int, String) -> Unit
+    onNavigateReport: (Int, ReportType) -> Unit
 ) {
     navigation(
         startDestination = ShowDestination.Search.route,
@@ -59,10 +60,10 @@ fun NavGraphBuilder.showNavGraph(
             val showIdArg = entry.arguments?.getString(ShowDestination.Review.showIdArg)
             ShowReviewScreen(
                 showId = showIdArg,
-                onNavigateReport = onNavigateReport,
                 onNavigateReviewCreate = { reviewId ->
                     navHostController.navigate("${ShowDestination.ReviewCreate.route}/$showIdArg/$reviewId")
                 },
+                onNavigateReport = onNavigateReport,
                 onBack = {
                     navHostController.popBackStack()
                 }

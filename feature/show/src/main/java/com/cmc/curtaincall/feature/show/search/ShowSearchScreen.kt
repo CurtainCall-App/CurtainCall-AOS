@@ -31,8 +31,8 @@ import com.cmc.curtaincall.common.designsystem.theme.*
 import com.cmc.curtaincall.common.utility.extensions.ShowDay
 import com.cmc.curtaincall.common.utility.extensions.toChangeDate
 import com.cmc.curtaincall.common.utility.extensions.toRunningTime
-import com.cmc.curtaincall.domain.enum.ShowGenreType
-import com.cmc.curtaincall.domain.enum.ShowSortType
+import com.cmc.curtaincall.domain.type.ShowGenreType
+import com.cmc.curtaincall.domain.type.ShowSortType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

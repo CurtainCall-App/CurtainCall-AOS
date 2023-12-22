@@ -1,6 +1,6 @@
 package com.cmc.curtaincall.feature.home.guide
 
-object GuideConstants {
+object HomeGuideConstants {
     val ticketing_words = linkedMapOf(
         "고속도로" to "극장 좌석 사이에 가로로 넓은 통로",
         "공원/파크(park)" to "대표적인 티켓 예매처인 인터파크(interpark)를 뜻하는 말",

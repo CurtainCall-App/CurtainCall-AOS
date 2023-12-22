@@ -1,7 +1,8 @@
 package com.cmc.curtaincall.common.navigation
 
 object NavGraphLabel {
-    const val ROOT = "root"
-    const val AUTH = "auth"
-    const val SHOW = "show"
+    const val ROOT = "root_graph"
+    const val AUTH = "auth_graph"
+    const val SHOW = "show_graph"
+    const val HOME = "home_graph"
 }
