@@ -52,7 +52,7 @@ import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
 import com.cmc.curtaincall.common.utility.extensions.toRunningTime
 import com.cmc.curtaincall.domain.enum.ShowDetailMenuTab
 import com.cmc.curtaincall.domain.model.show.ShowDetailModel
-import com.cmc.curtaincall.feature.show.lostitem.screen.PerformanceLostItemTabScreen
+import com.cmc.curtaincall.feature.show.lostproperty.ShowLostPropertyMenuScreen
 import com.cmc.curtaincall.feature.show.review.ShowReviewMenuScreen
 
 @Composable
@@ -60,7 +60,7 @@ internal fun ShowDetailScreen(
     showDetailViewModel: ShowDetailViewModel = hiltViewModel(),
     showId: String?,
     onNavigateReview: (String) -> Unit = {},
-    onNavigateLostProperty: (String) -> Unit = {},
+    onNavigateLostProperty: (String, String) -> Unit = { _, _ -> },
     onNavigateDetail: (String) -> Unit = {},
     onBack: () -> Unit = {}
 ) {
@@ -114,7 +114,7 @@ private fun ShowDetailMenuTab(
     modifier: Modifier = Modifier,
     showId: String,
     onNavigateReview: (String) -> Unit = {},
-    onNavigateLostProperty: (String) -> Unit = {},
+    onNavigateLostProperty: (String, String) -> Unit = { _, _ -> },
     onNavigateDetail: (String) -> Unit = {}
 ) {
     val performanceDetailUiState by performanceDetailViewModel.uiState.collectAsStateWithLifecycle()
@@ -178,26 +178,26 @@ private fun ShowDetailMenuTab(
             }
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 IconButton(
-                    onClick = { performanceDetailViewModel.changeTabType(ShowDetailMenuTab.LOST_ITEM) },
+                    onClick = { performanceDetailViewModel.changeTabType(ShowDetailMenuTab.LOST_PROPERTY) },
                     modifier = Modifier
                         .size(58.dp)
                         .clip(CircleShape),
                     colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = if (menuTabType == ShowDetailMenuTab.LOST_ITEM) Cetacean_Blue else Bright_Gray
+                        containerColor = if (menuTabType == ShowDetailMenuTab.LOST_PROPERTY) Cetacean_Blue else Bright_Gray
                     )
                 ) {
                     Icon(
                         painter = painterResource(
-                            if (menuTabType == ShowDetailMenuTab.LOST_ITEM) R.drawable.ic_lost_item_sel else R.drawable.ic_lost_item
+                            if (menuTabType == ShowDetailMenuTab.LOST_PROPERTY) R.drawable.ic_lost_item_sel else R.drawable.ic_lost_item
                         ),
                         contentDescription = null,
                         tint = Color.Unspecified
                     )
                 }
                 Text(
-                    text = ShowDetailMenuTab.LOST_ITEM.label,
+                    text = ShowDetailMenuTab.LOST_PROPERTY.label,
                     modifier = Modifier.padding(top = 10.dp),
-                    color = if (menuTabType == ShowDetailMenuTab.LOST_ITEM) Cetacean_Blue else Bright_Gray,
+                    color = if (menuTabType == ShowDetailMenuTab.LOST_PROPERTY) Cetacean_Blue else Bright_Gray,
                     fontSize = 15.dp.toSp(),
                     fontWeight = FontWeight.Medium,
                     fontFamily = spoqahansanseeo
@@ -232,11 +232,12 @@ private fun ShowDetailMenuTab(
                 }
             }
 
-            ShowDetailMenuTab.LOST_ITEM -> {
-                PerformanceLostItemTabScreen(
+            ShowDetailMenuTab.LOST_PROPERTY -> {
+                ShowLostPropertyMenuScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 50.dp),
+                    facilityId = performanceDetailUiState.showDetailModel.facilityId,
                     facilityName = performanceDetailUiState.showDetailModel.facilityName,
                     lostItems = performanceDetailUiState.lostItems,
                     onNavigateLostProperty = onNavigateLostProperty

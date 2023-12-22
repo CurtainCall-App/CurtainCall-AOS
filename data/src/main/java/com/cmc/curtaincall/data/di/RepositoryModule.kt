@@ -4,7 +4,7 @@ import com.cmc.curtaincall.data.repository.AuthRepositoryImpl
 import com.cmc.curtaincall.data.repository.ChattingRepositoryImpl
 import com.cmc.curtaincall.data.repository.FavoriteRepositoryImpl
 import com.cmc.curtaincall.data.repository.ImageRepositoryImpl
-import com.cmc.curtaincall.data.repository.LostItemRepositoryImpl
+import com.cmc.curtaincall.data.repository.LostPropertyRepositoryImpl
 import com.cmc.curtaincall.data.repository.MemberRepositoryImpl
 import com.cmc.curtaincall.data.repository.NoticeRepositoryImpl
 import com.cmc.curtaincall.data.repository.PartyRepositoryImpl
@@ -16,7 +16,7 @@ import com.cmc.curtaincall.domain.repository.AuthRepository
 import com.cmc.curtaincall.domain.repository.ChattingRepository
 import com.cmc.curtaincall.domain.repository.FavoriteRepository
 import com.cmc.curtaincall.domain.repository.ImageRepository
-import com.cmc.curtaincall.domain.repository.LostItemRepository
+import com.cmc.curtaincall.domain.repository.LostPropertyRepository
 import com.cmc.curtaincall.domain.repository.MemberRepository
 import com.cmc.curtaincall.domain.repository.NoticeRepository
 import com.cmc.curtaincall.domain.repository.PartyRepository
@@ -90,8 +90,8 @@ interface RepositoryModule {
     @Binds
     @Singleton
     fun bindLostItemRepository(
-        lostItemRepositoryImpl: LostItemRepositoryImpl
-    ): LostItemRepository
+        lostItemRepositoryImpl: LostPropertyRepositoryImpl
+    ): LostPropertyRepository
 
     @Binds
     @Singleton

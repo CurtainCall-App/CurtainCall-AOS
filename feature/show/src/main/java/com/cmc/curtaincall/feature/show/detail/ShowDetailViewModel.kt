@@ -5,9 +5,9 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.cmc.curtaincall.core.base.BaseViewModel
 import com.cmc.curtaincall.domain.enum.ShowDetailMenuTab
-import com.cmc.curtaincall.domain.model.lostItem.LostItemModel
+import com.cmc.curtaincall.domain.model.lostproperty.LostPropertyModel
 import com.cmc.curtaincall.domain.repository.FavoriteRepository
-import com.cmc.curtaincall.domain.repository.LostItemRepository
+import com.cmc.curtaincall.domain.repository.LostPropertyRepository
 import com.cmc.curtaincall.domain.repository.ReviewRepository
 import com.cmc.curtaincall.domain.repository.ShowRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,16 +23,16 @@ class ShowDetailViewModel @Inject constructor(
     private val showRepository: ShowRepository,
     private val reviewRepository: ReviewRepository,
     private val favoriteRepository: FavoriteRepository,
-    private val lostItemRepository: LostItemRepository
-) : BaseViewModel<ShowDetailState, ShowDetailEvent, Nothing>(
-    initialState = ShowDetailState()
+    private val lostItemRepository: LostPropertyRepository
+) : BaseViewModel<ShowDetailUiState, ShowDetailEvent, Nothing>(
+    initialState = ShowDetailUiState()
 ) {
 
-    var lostItems: Flow<PagingData<LostItemModel>> = lostItemRepository
-        .fetchLostItemList("", "", "", "")
+    var lostItems: Flow<PagingData<LostPropertyModel>> = lostItemRepository
+        .fetchLostPropertyList("", "", "", "")
         .cachedIn(viewModelScope)
 
-    override fun reduceState(currentState: ShowDetailState, event: ShowDetailEvent): ShowDetailState =
+    override fun reduceState(currentState: ShowDetailUiState, event: ShowDetailEvent): ShowDetailUiState =
         when (event) {
             is ShowDetailEvent.GetMemberId -> {
                 currentState.copy(memberId = event.memberId)
@@ -82,7 +82,7 @@ class ShowDetailViewModel @Inject constructor(
             .onEach { sendAction(ShowDetailEvent.FacilityDetail(it)) }
             .flatMapConcat {
                 requestLostItemList(it.id, null, null, null)
-                lostItemRepository.requestLostItemList(0, 3, it.id, null, null, null)
+                lostItemRepository.requestLostPropertyList(0, 3, it.id, null, null, null)
             }
             .onEach { sendAction(ShowDetailEvent.LostItemList(it)) }
             .flatMapConcat { reviewRepository.requestShowReviewList(showId, 0, 3) }
@@ -119,7 +119,7 @@ class ShowDetailViewModel @Inject constructor(
         foundDate: String? = null,
         title: String? = null
     ) {
-        lostItems = lostItemRepository.fetchLostItemList(
+        lostItems = lostItemRepository.fetchLostPropertyList(
             facilityId = facilityId,
             type = type,
             foundDate = foundDate,

@@ -63,9 +63,13 @@ sealed class ShowDestination : CurtainCallDestination {
 
     object LostProperty : ShowDestination() {
         override val route = NavRouteLabel.SHOW_LOST_PROPERTY
+        const val facilityIdArg = FACILITY_ID_ARG
         const val facilityNameArg = FACILITY_NAME_ARG
-        val routeWithArgs = "$route/{$facilityNameArg}"
+        val routeWithArgs = "$route/{$facilityIdArg}/{$facilityNameArg}"
         val arguments = listOf(
+            navArgument(facilityIdArg) {
+                type = NavType.StringType
+            },
             navArgument(facilityNameArg) {
                 type = NavType.StringType
             }

@@ -12,12 +12,4 @@ sealed class ShowSearchEvent : BaseEvent {
     data class SetQueryString(val query: String) : ShowSearchEvent()
     data class ChangeGenre(val genre: ShowGenreType) : ShowSearchEvent()
     data class ChangeSort(val sortType: ShowSortType) : ShowSearchEvent()
-//
-//    data class LoadPlayItems(
-//        val playItems: Flow<PagingData<ShowInfoModel>>
-//    ) : ShowSearchEvent()
-//
-//    data class LoadMusicalItems(
-//        val musicalItems: Flow<PagingData<ShowInfoModel>>
-//    ) : ShowSearchEvent()
 }
