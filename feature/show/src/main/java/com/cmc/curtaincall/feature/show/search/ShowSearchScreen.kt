@@ -22,10 +22,10 @@ import com.cmc.curtaincall.common.designsystem.component.basic.SearchAppBar
 import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarOnlySearch
 import com.cmc.curtaincall.common.designsystem.component.card.PerformanceDetailCard
-import com.cmc.curtaincall.common.designsystem.component.row.SortTypeRow
-import com.cmc.curtaincall.common.designsystem.component.custom.SelectSortTypeBottomSheet
 import com.cmc.curtaincall.common.designsystem.component.content.empty.EmptyContent
+import com.cmc.curtaincall.common.designsystem.component.custom.SelectSortTypeBottomSheet
 import com.cmc.curtaincall.common.designsystem.component.item.search.SearchTextItem
+import com.cmc.curtaincall.common.designsystem.component.row.SortTypeRow
 import com.cmc.curtaincall.common.designsystem.extensions.toSp
 import com.cmc.curtaincall.common.designsystem.theme.*
 import com.cmc.curtaincall.common.utility.extensions.ShowDay
@@ -176,7 +176,7 @@ private fun ShowSearchContent(
                                     .padding(vertical = 10.dp),
                                 text = searchWord.word,
                                 onDelete = { showSearchViewModel.deleteShowSearchWord(searchWord) },
-                                onClick = { onSearch(searchWord.word) },
+                                onClick = { onSearch(searchWord.word) }
                             )
                         }
                     }

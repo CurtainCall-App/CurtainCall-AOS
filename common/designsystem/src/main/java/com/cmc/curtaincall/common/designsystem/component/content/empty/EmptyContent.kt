@@ -23,7 +23,7 @@ import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import com.cmc.curtaincall.common.designsystem.theme.Silver_Sand
 import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
 
-private val EmptyIconDescription = "Empty"
+private const val EmptyIconDescription = "Empty"
 
 @Composable
 fun EmptyContent(

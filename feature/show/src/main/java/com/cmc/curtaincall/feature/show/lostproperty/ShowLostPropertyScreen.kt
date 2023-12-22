@@ -41,7 +41,7 @@ internal fun ShowLostPropertyScreen(
     showLostPropertyViewModel: ShowLostPropertyViewModel = hiltViewModel(),
     facilityId: String? = null,
     facilityName: String? = null,
-    onNavigateLostPropertyDetail: (Int) -> Unit = {},
+    onNavigateLostPropertyDetail: (Int, Boolean) -> Unit = { _, _ -> },
     onNavigateLostPropertyCreate: (String, String) -> Unit = { _, _ -> },
     onBack: () -> Unit = {}
 ) {
@@ -137,7 +137,7 @@ private fun ShowLostPropertySearchContent(
     modifier: Modifier = Modifier,
     showLostPropertyViewModel: ShowLostPropertyViewModel = hiltViewModel(),
     onClick: (String) -> Unit,
-    onNavigateLostPropertyDetail: (Int) -> Unit
+    onNavigateLostPropertyDetail: (Int, Boolean) -> Unit
 ) {
     val searchWords by showLostPropertyViewModel.searchWords.collectAsStateWithLifecycle()
     val showLostPropertyUiState by showLostPropertyViewModel.uiState.collectAsStateWithLifecycle()
@@ -205,7 +205,7 @@ private fun ShowLostPropertySearchContent(
                                     .padding(vertical = 10.dp),
                                 text = searchWord.word,
                                 onDelete = { showLostPropertyViewModel.deleteLostPropertySearchWord(searchWord) },
-                                onClick = { onClick(searchWord.word) },
+                                onClick = { onClick(searchWord.word) }
                             )
                         }
                     }
@@ -223,7 +223,7 @@ private fun ShowLostPropertySearchContent(
                                 )
                                 .clickable {
                                     showLostPropertyViewModel.requestLostDetailProperty(lostItem.id)
-                                    onNavigateLostPropertyDetail(lostItem.id)
+                                    onNavigateLostPropertyDetail(lostItem.id, false)
                                 }
                                 .background(Cultured, RoundedCornerShape(10.dp))
                                 .padding(horizontal = 8.dp)
@@ -246,7 +246,7 @@ private fun ShowLostPropertyContent(
     showLostPropertyViewModel: ShowLostPropertyViewModel = hiltViewModel(),
     facilityId: String,
     facilityName: String,
-    onNavigateLostPropertyDetail: (Int) -> Unit
+    onNavigateLostPropertyDetail: (Int, Boolean) -> Unit
 ) {
     val lostPropertyItems = showLostPropertyViewModel.lostPropertySearchItems.collectAsLazyPagingItems()
     var isClickedDate by remember { mutableStateOf(false) }
@@ -333,7 +333,7 @@ private fun ShowLostPropertyContent(
                             modifier = Modifier
                                 .clickable {
                                     showLostPropertyViewModel.requestLostDetailProperty(lostItem.id)
-                                    onNavigateLostPropertyDetail(lostItem.id)
+                                    onNavigateLostPropertyDetail(lostItem.id, false)
                                 }
                                 .background(Cultured, RoundedCornerShape(10.dp))
                                 .padding(horizontal = 8.dp)

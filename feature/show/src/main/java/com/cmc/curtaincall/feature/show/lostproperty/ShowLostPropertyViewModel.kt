@@ -59,8 +59,6 @@ class ShowLostPropertyViewModel @Inject constructor(
             is ShowLostPropertyEvent.LoadLostDetailProperty -> {
                 currentState.copy(lostDetailItem = event.lostDetailItem)
             }
-
-            else -> currentState
         }
 
     fun selectLostItemDate(date: String) {

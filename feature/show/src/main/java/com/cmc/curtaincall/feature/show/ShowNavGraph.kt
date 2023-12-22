@@ -10,8 +10,8 @@ import com.cmc.curtaincall.common.navigation.NavGraphLabel
 import com.cmc.curtaincall.common.navigation.destination.ShowDestination
 import com.cmc.curtaincall.feature.show.detail.ShowDetailScreen
 import com.cmc.curtaincall.feature.show.lostproperty.ShowLostPropertyScreen
-import com.cmc.curtaincall.feature.show.lostproperty.create.PerformanceLostItemCreateScreen
-import com.cmc.curtaincall.feature.show.lostproperty.screen.PerformanceLostItemDetailScreen
+import com.cmc.curtaincall.feature.show.lostproperty.create.ShowLostPropertyCreateScreen
+import com.cmc.curtaincall.feature.show.lostproperty.detail.ShowLostPropertyDetailScreen
 import com.cmc.curtaincall.feature.show.review.ShowReviewCreateScreen
 import com.cmc.curtaincall.feature.show.review.ShowReviewScreen
 import com.cmc.curtaincall.feature.show.search.ShowSearchScreen
@@ -91,8 +91,8 @@ fun NavGraphBuilder.showNavGraph(
             ShowLostPropertyScreen(
                 facilityId = facilityIdArg,
                 facilityName = facilityNameArg,
-                onNavigateLostPropertyDetail = { lostPropertyId ->
-                    navHostController.navigate("${ShowDestination.LostPropertyDetail.route}/$lostPropertyId")
+                onNavigateLostPropertyDetail = { lostPropertyId, fromCreateArg ->
+                    navHostController.navigate("${ShowDestination.LostPropertyDetail.route}/$lostPropertyId/$fromCreateArg")
                 },
                 onNavigateLostPropertyCreate = { facilityId, facilityName ->
                     navHostController.navigate(
@@ -105,14 +105,14 @@ fun NavGraphBuilder.showNavGraph(
             )
         }
         composable(
-            route = ShowDestination.LostPropertyCreate.routeWithArg,
-            arguments = ShowDestination.LostPropertyCreate.arguments
+            route = ShowDestination.LostPropertyDetail.routeWithArg,
+            arguments = ShowDestination.LostPropertyDetail.arguments
         ) { entry ->
-            val parentEntry = remember(entry) { navHostController.getBackStackEntry(ShowDestination.LostProperty.routeWithArgs) }
             val lostPropertyIdArg = entry.arguments?.getInt(ShowDestination.LostPropertyDetail.lostPropertyIdArg)
-            PerformanceLostItemDetailScreen(
-                performanceLostItemViewModel = hiltViewModel(parentEntry),
+            val fromCreateArg = entry.arguments?.getBoolean(ShowDestination.LostPropertyDetail.fromCreateArg)
+            ShowLostPropertyDetailScreen(
                 lostPropertyId = lostPropertyIdArg,
+                fromCreate = fromCreateArg,
                 onNavigateReport = onNavigateReport,
                 onBack = { navHostController.popBackStack() }
             )
@@ -124,14 +124,14 @@ fun NavGraphBuilder.showNavGraph(
             val lostPropertyIdArg = entry.arguments?.getInt(ShowDestination.LostPropertyCreate.lostPropertyIdArg)
             val facilityIdArg = entry.arguments?.getString(ShowDestination.LostPropertyCreate.facilityIdArg)
             val facilityNameArg = entry.arguments?.getString(ShowDestination.LostPropertyCreate.facilityNameArg)
-            PerformanceLostItemCreateScreen(
+            ShowLostPropertyCreateScreen(
                 lostPropertyId = lostPropertyIdArg,
                 facilityId = facilityIdArg,
                 facilityName = facilityNameArg,
-                onNavigateDetail = {
-                    navHostController.navigate("${ShowDestination.LostPropertyDetail.route}/$it") {
+                onNavigateDetail = { lostPropertyId, fromCreateArg ->
+                    navHostController.navigate("${ShowDestination.LostPropertyDetail.route}/$lostPropertyId/$fromCreateArg") {
                         navHostController.popBackStack(
-                            route = ShowDestination.LostPropertyDetail.routeWithArg,
+                            route = ShowDestination.LostPropertyCreate.routeWithArg,
                             inclusive = true
                         )
                     }

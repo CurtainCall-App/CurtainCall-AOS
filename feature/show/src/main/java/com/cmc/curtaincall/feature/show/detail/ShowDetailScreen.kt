@@ -239,7 +239,7 @@ private fun ShowDetailMenuTab(
                         .padding(top = 50.dp),
                     facilityId = performanceDetailUiState.showDetailModel.facilityId,
                     facilityName = performanceDetailUiState.showDetailModel.facilityName,
-                    lostItems = performanceDetailUiState.lostItems,
+                    lostPropertyItems = performanceDetailUiState.lostItems,
                     onNavigateLostProperty = onNavigateLostProperty
                 )
             }

@@ -34,7 +34,7 @@ internal fun ShowLostPropertyMenuScreen(
     modifier: Modifier = Modifier,
     facilityId: String,
     facilityName: String,
-    lostItems: List<LostPropertyModel> = listOf(),
+    lostPropertyItems: List<LostPropertyModel> = listOf(),
     onNavigateLostProperty: (String, String) -> Unit = { _, _ -> }
 ) {
     Column(modifier.padding(horizontal = 20.dp)) {
@@ -68,7 +68,7 @@ internal fun ShowLostPropertyMenuScreen(
                 .padding(top = 14.dp)
                 .heightIn(min = 317.dp)
         ) {
-            if (lostItems.isEmpty()) {
+            if (lostPropertyItems.isEmpty()) {
                 EmptyContent(
                     modifier = Modifier
                         .fillMaxSize()
@@ -76,7 +76,7 @@ internal fun ShowLostPropertyMenuScreen(
                     text = stringResource(R.string.performance_lostitem_empty)
                 )
             } else {
-                lostItems.forEach { lostItem ->
+                lostPropertyItems.forEach { lostItem ->
                     LostItem(
                         modifier = Modifier
                             .fillMaxWidth()

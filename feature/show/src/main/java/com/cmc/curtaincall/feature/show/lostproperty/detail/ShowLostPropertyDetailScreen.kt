@@ -1,9 +1,16 @@
-package com.cmc.curtaincall.feature.show.lostproperty.screen
+package com.cmc.curtaincall.feature.show.lostproperty.detail
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
@@ -30,34 +37,36 @@ import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallSnackbar
 import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallSnackbarHost
+import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarWithReportAction
 import com.cmc.curtaincall.common.designsystem.component.show.lostproperty.LostPropertyType
 import com.cmc.curtaincall.common.designsystem.extensions.toSp
-import com.cmc.curtaincall.common.designsystem.theme.*
+import com.cmc.curtaincall.common.designsystem.theme.Black_Coral
+import com.cmc.curtaincall.common.designsystem.theme.Cultured
+import com.cmc.curtaincall.common.designsystem.theme.Granite_Gray
+import com.cmc.curtaincall.common.designsystem.theme.Nero
+import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
 import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
-import com.cmc.curtaincall.feature.show.lostproperty.ShowLostPropertyViewModel
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun PerformanceLostItemDetailScreen(
-    performanceLostItemViewModel: ShowLostPropertyViewModel = hiltViewModel(),
+internal fun ShowLostPropertyDetailScreen(
+    showLostPropertyDetailViewModel: ShowLostPropertyDetailViewModel = hiltViewModel(),
     lostPropertyId: Int?,
-    onNavigateReport: (Int, String) -> Unit,
-    onBack: () -> Unit
+    fromCreate: Boolean?,
+    onNavigateReport: (Int, String) -> Unit = { _, _ -> },
+    onBack: () -> Unit = {}
 ) {
-    checkNotNull(lostPropertyId)
-    val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(Cultured)
+    requireNotNull(lostPropertyId)
+    requireNotNull(fromCreate)
 
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(Unit) {
-        if (lostPropertyId != Int.MIN_VALUE) {
-            performanceLostItemViewModel.requestLostDetailProperty(lostPropertyId)
+        showLostPropertyDetailViewModel.requestLostDetailProperty(lostPropertyId)
+        if (fromCreate) {
             coroutineScope.launch {
                 snackbarHostState.showSnackbar(
                     context.getString(R.string.snackbar_upload_lostitem_complete)
@@ -66,6 +75,7 @@ internal fun PerformanceLostItemDetailScreen(
         }
     }
 
+    SystemUiStatusBar(Cultured)
     Scaffold(
         snackbarHost = {
             CurtainCallSnackbarHost(snackbarHostState = snackbarHostState) { snackbarData ->
@@ -81,17 +91,11 @@ internal fun PerformanceLostItemDetailScreen(
                 containerColor = Cultured,
                 contentColor = Nero,
                 onBack = onBack,
-                onAction = {
-                    onNavigateReport(
-                        lostPropertyId,
-                        "LOST_ITEM"
-                    )
-                }
+                onAction = { onNavigateReport(lostPropertyId, "LOST_ITEM") }
             )
         }
     ) { paddingValues ->
-        PerformanceLostItemDetailContent(
-            performanceLostItemViewModel = performanceLostItemViewModel,
+        ShowLostPropertyDetailContent(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
@@ -100,11 +104,11 @@ internal fun PerformanceLostItemDetailScreen(
 }
 
 @Composable
-private fun PerformanceLostItemDetailContent(
-    performanceLostItemViewModel: ShowLostPropertyViewModel,
+private fun ShowLostPropertyDetailContent(
+    showLostPropertyDetailViewModel: ShowLostPropertyDetailViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
-    val performanceLostItemDetailUiState by performanceLostItemViewModel.uiState.collectAsStateWithLifecycle()
+    val showLostPropertyDetailUiState by showLostPropertyDetailViewModel.lostPropertyDetailModel.collectAsStateWithLifecycle()
     Column(modifier) {
         Column(
             modifier = Modifier
@@ -113,7 +117,7 @@ private fun PerformanceLostItemDetailContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AsyncImage(
-                model = performanceLostItemDetailUiState.lostDetailItem.imageUrl,
+                model = showLostPropertyDetailUiState.imageUrl,
                 error = painterResource(R.drawable.img_poster),
                 contentDescription = null,
                 modifier = Modifier
@@ -123,30 +127,30 @@ private fun PerformanceLostItemDetailContent(
                 contentScale = ContentScale.FillBounds
             )
         }
-        PerformanceLostItemDetailBody(
+        ShowLostPropertyDetailBody(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp)
                 .padding(top = 30.dp),
-            title = performanceLostItemDetailUiState.lostDetailItem.title,
-            type = performanceLostItemDetailUiState.lostDetailItem.type,
-            facilityName = performanceLostItemDetailUiState.lostDetailItem.facilityName,
-            foundPlaceDetail = performanceLostItemDetailUiState.lostDetailItem.foundPlaceDetail,
-            foundDate = performanceLostItemDetailUiState.lostDetailItem.foundDate.toChangeFullDate(),
-            foundTime = performanceLostItemDetailUiState.lostDetailItem.foundTime,
-            particulars = performanceLostItemDetailUiState.lostDetailItem.particulars
+            title = showLostPropertyDetailUiState.title,
+            type = showLostPropertyDetailUiState.type,
+            facilityName = showLostPropertyDetailUiState.facilityName,
+            foundPlaceDetail = showLostPropertyDetailUiState.foundPlaceDetail,
+            foundDate = showLostPropertyDetailUiState.foundDate.toChangeFullDate(),
+            foundTime = showLostPropertyDetailUiState.foundTime,
+            particulars = showLostPropertyDetailUiState.particulars
         )
         Spacer(Modifier.weight(1f))
-        PerformanceLostItemDetailFooter(
+        ShowLostPropertyDetailFooter(
             modifier = Modifier.fillMaxWidth(),
-            facilityName = performanceLostItemDetailUiState.lostDetailItem.facilityName,
-            facilityPhone = performanceLostItemDetailUiState.lostDetailItem.facilityPhone
+            facilityName = showLostPropertyDetailUiState.facilityName,
+            facilityPhone = showLostPropertyDetailUiState.facilityPhone
         )
     }
 }
 
 @Composable
-private fun PerformanceLostItemDetailFooter(
+private fun ShowLostPropertyDetailFooter(
     modifier: Modifier = Modifier,
     facilityName: String,
     facilityPhone: String
@@ -206,7 +210,7 @@ private fun PerformanceLostItemDetailFooter(
 }
 
 @Composable
-private fun PerformanceLostItemDetailBody(
+private fun ShowLostPropertyDetailBody(
     modifier: Modifier = Modifier,
     title: String,
     type: String,

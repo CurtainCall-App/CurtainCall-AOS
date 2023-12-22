@@ -13,6 +13,7 @@ private const val REVIEW_ID_ARG = "reviewId"
 private const val FACILITY_ID_ARG = "facilityId"
 private const val FACILITY_NAME_ARG = "facilityName"
 private const val LOST_PROPERTY_ID_ARG = "lostPropertyId"
+private const val FROM_CREATE_ARGS = "fromCreate"
 const val DEFAULT_REVIEW_ID = Int.MIN_VALUE
 const val DEFAULT_LOST_PROPERTY_ID = Int.MIN_VALUE
 
@@ -79,10 +80,15 @@ sealed class ShowDestination : CurtainCallDestination {
     object LostPropertyDetail : ShowDestination() {
         override val route = NavRouteLabel.SHOW_LOST_PROPERTY_DETAIL
         const val lostPropertyIdArg = LOST_PROPERTY_ID_ARG
-        val routeWithArg = "$route/{$lostPropertyIdArg}"
+        const val fromCreateArg = FROM_CREATE_ARGS
+        val routeWithArg = "$route/{$lostPropertyIdArg}/{$fromCreateArg}"
         val arguments = listOf(
             navArgument(lostPropertyIdArg) {
                 type = NavType.IntType
+            },
+            navArgument(fromCreateArg) {
+                type = NavType.BoolType
+                defaultValue = false
             }
         )
     }
