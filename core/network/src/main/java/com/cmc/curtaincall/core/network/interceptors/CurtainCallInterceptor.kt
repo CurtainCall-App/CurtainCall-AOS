@@ -38,7 +38,7 @@ class CurtainCallInterceptor @Inject constructor(
         }
         val newRequest = chain.request()
             .newBuilder()
-            .addHeader("Authorization", "Bearer ${if (tokenInfo.accessToken.isEmpty()) tokenInfo.accessToken else tokenInfo.accessToken}")
+            .addHeader("Authorization", "Bearer ${tokenInfo.accessToken.ifEmpty { tokenInfo.idToken }}")
             .build()
         return chain.proceed(newRequest)
     }

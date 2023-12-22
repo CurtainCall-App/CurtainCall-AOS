@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.dp
 
 import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallRoundedTextButton
+import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.designsystem.extensions.toSp
 import com.cmc.curtaincall.common.designsystem.theme.Arsenic
@@ -44,6 +45,7 @@ import com.cmc.curtaincall.common.designsystem.theme.White
 import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
 import com.cmc.curtaincall.domain.Urls.PRIVACY_INFORMATION_TERMS_URL
 import com.cmc.curtaincall.domain.Urls.SERVICE_TERMS_URL
+import com.cmc.curtaincall.domain.model.Urls.DEFAULT_URL
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewState
 
