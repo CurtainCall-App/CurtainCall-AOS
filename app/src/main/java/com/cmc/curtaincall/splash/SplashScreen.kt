@@ -7,8 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.cmc.curtaincall.common.design.component.basic.SystemUiStatusBar
-import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
+import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
+import com.cmc.curtaincall.common.designsystem.theme.Cetacean_Blue
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable

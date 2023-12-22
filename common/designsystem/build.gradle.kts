@@ -4,10 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.cmc.curtaincall.common.design"
+    namespace = "com.cmc.curtaincall.common.designsystem"
 }
 
 dependencies {
+    implementation(project(":domain"))
     // androidx
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

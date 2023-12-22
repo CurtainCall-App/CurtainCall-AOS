@@ -28,19 +28,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.common.design.component.basic.CurtainCallBorderText
-import com.cmc.curtaincall.common.design.component.basic.CurtainCallMultiLineTextField
-import com.cmc.curtaincall.common.design.component.basic.CurtainCallSingleLineTextField
-import com.cmc.curtaincall.common.design.extensions.toSp
-import com.cmc.curtaincall.common.design.theme.Black_Pearl
-import com.cmc.curtaincall.common.design.theme.Cultured
-import com.cmc.curtaincall.common.design.theme.Me_Pink
-import com.cmc.curtaincall.common.design.theme.Nero
-import com.cmc.curtaincall.common.design.theme.Roman_Silver
-import com.cmc.curtaincall.common.design.theme.Silver_Sand
-import com.cmc.curtaincall.common.design.theme.White
-import com.cmc.curtaincall.common.design.theme.spoqahansanseeo
+import com.cmc.curtaincall.common.designsystem.R
+import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallBorderText
+import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallMultiLineTextField
+import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallSingleLineTextField
+import com.cmc.curtaincall.common.designsystem.extensions.toSp
+import com.cmc.curtaincall.common.designsystem.theme.Black_Pearl
+import com.cmc.curtaincall.common.designsystem.theme.Cultured
+import com.cmc.curtaincall.common.designsystem.theme.Me_Pink
+import com.cmc.curtaincall.common.designsystem.theme.Nero
+import com.cmc.curtaincall.common.designsystem.theme.Roman_Silver
+import com.cmc.curtaincall.common.designsystem.theme.Silver_Sand
+import com.cmc.curtaincall.common.designsystem.theme.White
+import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
 
 fun LazyGridScope.showLastStep(
     modifier: Modifier = Modifier,

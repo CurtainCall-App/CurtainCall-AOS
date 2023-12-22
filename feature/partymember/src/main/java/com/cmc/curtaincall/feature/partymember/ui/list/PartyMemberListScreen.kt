@@ -20,17 +20,17 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.items
 import androidx.paging.compose.itemsIndexed
-import com.cmc.curtaincall.common.design.R
-import com.cmc.curtaincall.common.design.component.basic.SearchAppBar
-import com.cmc.curtaincall.common.design.component.basic.SearchTopAppBarWithBack
-import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
-import com.cmc.curtaincall.common.design.component.content.card.PartyMemberEtcItemCard
-import com.cmc.curtaincall.common.design.component.content.card.PartyMemberItemCard
-import com.cmc.curtaincall.common.design.component.content.card.PartyType
-import com.cmc.curtaincall.common.design.component.items.EmptyItem
-import com.cmc.curtaincall.common.design.component.items.SearchItem
-import com.cmc.curtaincall.common.design.extensions.toSp
-import com.cmc.curtaincall.common.design.theme.*
+import com.cmc.curtaincall.common.designsystem.R
+import com.cmc.curtaincall.common.designsystem.component.basic.SearchAppBar
+import com.cmc.curtaincall.common.designsystem.component.basic.SearchTopAppBarWithBack
+import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarWithBack
+import com.cmc.curtaincall.common.designsystem.component.card.PartyMemberEtcItemCard
+import com.cmc.curtaincall.common.designsystem.component.card.PartyMemberItemCard
+import com.cmc.curtaincall.common.designsystem.component.card.PartyType
+import com.cmc.curtaincall.common.designsystem.component.content.empty.EmptyContent
+import com.cmc.curtaincall.common.designsystem.component.item.search.SearchTextItem
+import com.cmc.curtaincall.common.designsystem.extensions.toSp
+import com.cmc.curtaincall.common.designsystem.theme.*
 import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
 import com.cmc.curtaincall.common.utility.extensions.toDateWithDay
 import com.cmc.curtaincall.common.utility.extensions.toTime
@@ -190,11 +190,9 @@ private fun PartyMemberListSearchContent(
         if (partyMemberUiState.queryString.isEmpty()) {
             if (searchWords.isEmpty()) {
                 item {
-                    EmptyItem(
-                        modifier = Modifier
-                            .padding(top = 232.dp)
-                            .fillMaxWidth(),
-                        alert = stringResource(R.string.search_empty_recently_word)
+                    EmptyContent(
+                        modifier = Modifier.fillMaxSize(),
+                        text = stringResource(R.string.search_empty_recently_word)
                     )
                 }
             } else {
@@ -229,13 +227,13 @@ private fun PartyMemberListSearchContent(
                             )
                         }
                         searchWords.forEach { searchWord ->
-                            SearchItem(
+                            SearchTextItem(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(vertical = 10.dp),
-                                word = searchWord.word,
-                                onClick = { onSearchClick(searchWord.word) },
-                                onDelete = { partyMemberViewModel.deletePartySearchWord(searchWord) }
+                                text = searchWord.word,
+                                onDelete = { partyMemberViewModel.deletePartySearchWord(searchWord) },
+                                onClick = { onSearchClick(searchWord.word) }
                             )
                         }
                     }
@@ -301,17 +299,10 @@ private fun PartyMemberListContent(
 
     Column(modifier = modifier.background(Cultured)) {
         if (pagingItems.itemCount == 0) {
-            Column(
+            EmptyContent(
                 modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Spacer(Modifier.weight(252f))
-                EmptyItem(
-                    alert = stringResource(R.string.partymember_empty_text),
-                    painter = painterResource(R.drawable.ic_dark_empty_item)
-                )
-                Spacer(Modifier.weight(327f))
-            }
+                text = stringResource(R.string.partymember_empty_text)
+            )
         } else {
             LazyColumn(
                 modifier = Modifier

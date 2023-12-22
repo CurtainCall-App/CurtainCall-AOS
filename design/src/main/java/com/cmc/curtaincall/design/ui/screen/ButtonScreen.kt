@@ -11,19 +11,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.cmc.curtaincall.common.design.component.basic.CurtainCallBorderTextButton
-import com.cmc.curtaincall.common.design.component.basic.CurtainCallDropDownButton
-import com.cmc.curtaincall.common.design.component.basic.CurtainCallRoundedTextButton
-import com.cmc.curtaincall.common.design.component.basic.CurtainCallSelectTypeButton
-import com.cmc.curtaincall.common.design.component.basic.TopAppBarWithBack
-import com.cmc.curtaincall.common.design.extensions.toSp
-import com.cmc.curtaincall.common.design.theme.Bright_Gray
-import com.cmc.curtaincall.common.design.theme.Cetacean_Blue
-import com.cmc.curtaincall.common.design.theme.Cultured
-import com.cmc.curtaincall.common.design.theme.Me_Pink
-import com.cmc.curtaincall.common.design.theme.Roman_Silver
-import com.cmc.curtaincall.common.design.theme.Silver_Sand
-import com.cmc.curtaincall.common.design.theme.White
+import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallBorderTextButton
+import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallDropDownButton
+import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallRoundedTextButton
+import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallSelectTypeButton
+import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarWithBack
+import com.cmc.curtaincall.common.designsystem.extensions.toSp
+import com.cmc.curtaincall.common.designsystem.theme.Bright_Gray
+import com.cmc.curtaincall.common.designsystem.theme.Cetacean_Blue
+import com.cmc.curtaincall.common.designsystem.theme.Cultured
+import com.cmc.curtaincall.common.designsystem.theme.Me_Pink
+import com.cmc.curtaincall.common.designsystem.theme.Roman_Silver
+import com.cmc.curtaincall.common.designsystem.theme.Silver_Sand
+import com.cmc.curtaincall.common.designsystem.theme.White
 
 @Composable
 internal fun ButtonScreen(

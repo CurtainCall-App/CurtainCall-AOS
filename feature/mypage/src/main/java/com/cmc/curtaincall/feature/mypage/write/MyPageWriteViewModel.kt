@@ -6,7 +6,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.cmc.curtaincall.domain.model.member.MemberLostItemModel
 import com.cmc.curtaincall.domain.model.member.MemberReviewModel
-import com.cmc.curtaincall.domain.repository.LostItemRepository
+import com.cmc.curtaincall.domain.repository.LostPropertyRepository
 import com.cmc.curtaincall.domain.repository.MemberRepository
 import com.cmc.curtaincall.domain.repository.ReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +24,7 @@ enum class WriteType(val value: String) {
 class MyPageWriteViewModel @Inject constructor(
     private val memberRepository: MemberRepository,
     private val reviewRepository: ReviewRepository,
-    private val lostItemRepository: LostItemRepository
+    private val lostItemRepository: LostPropertyRepository
 ) : ViewModel() {
 
     private var _writeTypeState = MutableStateFlow(WriteType.REVIEW)
@@ -50,7 +50,7 @@ class MyPageWriteViewModel @Inject constructor(
 
     fun deleteLostItem(lostItemId: Int) {
         lostItemRepository
-            .deleteLostItem(lostItemId)
+            .deleteLostProperty(lostItemId)
             .launchIn(viewModelScope)
     }
 
