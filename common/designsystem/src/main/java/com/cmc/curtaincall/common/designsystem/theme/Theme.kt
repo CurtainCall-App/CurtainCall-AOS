@@ -13,10 +13,10 @@ import androidx.compose.ui.unit.dp
 private val curtainCallTypography = CurtainCallTypography(
     h1 = TextStyle.Default,
     h2 = TextStyle.Default,
-    h3 = TextStyle.Default,
     subTitle1 = TextStyle.Default,
     subTitle2 = TextStyle.Default,
     subTitle3 = TextStyle.Default,
+    subTitle4 = TextStyle.Default,
     body1 = TextStyle.Default,
     body2 = TextStyle.Default,
     body3 = TextStyle.Default,
