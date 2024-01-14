@@ -1,8 +1,8 @@
 ---
-name: Bug report
+name: Bug Report
 about: Software issues
 title: "[Bug]"
-labels: Bug
+labels: Bug, ToDo
 assignees: ows3090
 
 ---

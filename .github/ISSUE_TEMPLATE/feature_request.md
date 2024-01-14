@@ -2,7 +2,7 @@
 name: Feature request
 about: Development new feature
 title: "[Feat]"
-labels: Feat
+labels: Feat, ToDo
 assignees: ows3090
 
 ---
