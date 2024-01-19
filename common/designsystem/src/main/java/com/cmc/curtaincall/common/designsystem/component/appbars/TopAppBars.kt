@@ -21,7 +21,7 @@ import com.cmc.curtaincall.common.designsystem.theme.Black
 import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import com.cmc.curtaincall.common.designsystem.theme.avenirnext
 
-private val TopAppBarBackIconDescription = "Go Back"
+private const val TopAppBarBackIconDescription = "Go Back"
 private val TopAppBarBackIconSize = 24.dp
 private val TopAppBarBackLeftPadding = 10.dp
 private val TopAppBarBackRightPadding = 12.dp
