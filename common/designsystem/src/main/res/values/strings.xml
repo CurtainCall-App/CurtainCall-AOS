@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- design system -->
+    <string name="default_top_appbar_title">CURTAIN CALL</string>
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+
     <!-- common -->
     <string name="performance_search">작품 탐색</string>
     <string name="partymember_recruit">파티원 모집</string>
