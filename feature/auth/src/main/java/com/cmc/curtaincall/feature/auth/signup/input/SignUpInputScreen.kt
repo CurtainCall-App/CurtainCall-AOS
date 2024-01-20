@@ -1,15 +1,21 @@
 package com.cmc.curtaincall.feature.auth.signup.input
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,46 +24,47 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cmc.curtaincall.common.designsystem.R
-import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallRoundedTextButton
-import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallSingleLineTextField
-import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarWithBack
-import com.cmc.curtaincall.common.designsystem.extensions.toSp
+import com.cmc.curtaincall.common.designsystem.component.appbars.CurtainCallTopAppBarWithBack
+import com.cmc.curtaincall.common.designsystem.component.buttons.common.CurtainCallFilledButton
+import com.cmc.curtaincall.common.designsystem.dimension.Paddings
 import com.cmc.curtaincall.common.designsystem.theme.Black
-import com.cmc.curtaincall.common.designsystem.theme.Bright_Gray
-import com.cmc.curtaincall.common.designsystem.theme.Cheery_Paddle_Pop
-import com.cmc.curtaincall.common.designsystem.theme.Cultured
-import com.cmc.curtaincall.common.designsystem.theme.Green
-import com.cmc.curtaincall.common.designsystem.theme.Me_Pink
-import com.cmc.curtaincall.common.designsystem.theme.Nero
-import com.cmc.curtaincall.common.designsystem.theme.Roman_Silver
-import com.cmc.curtaincall.common.designsystem.theme.Silver_Sand
+import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
+import com.cmc.curtaincall.common.designsystem.theme.Grey4
+import com.cmc.curtaincall.common.designsystem.theme.Grey5
+import com.cmc.curtaincall.common.designsystem.theme.Grey6
+import com.cmc.curtaincall.common.designsystem.theme.Grey7
+import com.cmc.curtaincall.common.designsystem.theme.Grey9
+import com.cmc.curtaincall.common.designsystem.theme.Red
 import com.cmc.curtaincall.common.designsystem.theme.White
-import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
 import kotlinx.coroutines.flow.collectLatest
 
-private const val INPUT_REGEX = "^[ㄱ-ㅎ가-힣a-zA-Z0-9]{0,10}$"
-private const val INPUT_CHECK_REGEX = "^[ㄱ-ㅎ가-힣a-zA-Z0-9]{2,10}$"
+private const val INPUT_CHECK_REGEX = "^[ㄱ-ㅎ가-힣a-zA-Z0-9]{1,15}$"
+private const val INPUT_FIRST_CHECK = "^[^\\s]{1,15}$"
+private const val INPUT_SECOND_CHECK = "^[가-힣A-Za-z0-9]*\$"
 
 @Composable
 internal fun SignUpInputScreen(
-    onNavigateWelcome: () -> Unit = {},
-    onBack: () -> Unit
+    onNavigateToHome: () -> Unit = {},
+    onBack: () -> Unit = {}
 ) {
     Scaffold(
         topBar = {
-            TopAppBarWithBack(
-                title = stringResource(R.string.signup_setting_nickname),
-                containerColor = White,
-                contentColor = Nero,
-                onClick = onBack
+            CurtainCallTopAppBarWithBack(
+                modifier = Modifier.fillMaxWidth(),
+                title = stringResource(R.string.signup_title),
+                onBack = onBack
             )
         }
     ) { paddingValues ->
@@ -66,112 +73,160 @@ internal fun SignUpInputScreen(
                 .padding(paddingValues)
                 .fillMaxSize()
                 .background(White),
-            onNavigateWelcome = onNavigateWelcome
+            onNavigateToHome = onNavigateToHome
         )
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun SignUpInputContent(
     modifier: Modifier = Modifier,
     signUpViewModel: SignUpInputViewModel = hiltViewModel(),
-    onNavigateWelcome: () -> Unit = {}
+    onNavigateToHome: () -> Unit = {}
 ) {
-    val nickNameCheck by signUpViewModel.nickNameCheck.collectAsStateWithLifecycle()
-    var nicknameState by remember { mutableStateOf("") }
+    val validationCheckState by signUpViewModel.validationCheckState.collectAsStateWithLifecycle()
+    var userNickname by remember { mutableStateOf("") }
+    var borderColor by remember { mutableStateOf(Color.Transparent) }
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(signUpViewModel) {
-        signUpViewModel.signUpCompleted.collectLatest { isCompleted ->
-            if (isCompleted) onNavigateWelcome()
+        signUpViewModel.isComplete.collectLatest { isComplete ->
+            if (isComplete) onNavigateToHome()
         }
     }
 
     Column(modifier.padding(horizontal = 20.dp)) {
         Text(
             text = stringResource(R.string.signup_input_description),
-            modifier = Modifier.padding(top = 40.dp),
-            color = Black,
-            fontSize = 22.dp.toSp(),
-            fontWeight = FontWeight.Bold,
-            fontFamily = spoqahansanseeo,
-            lineHeight = 32.dp.toSp()
+            modifier = Modifier.padding(top = 30.dp),
+            style = CurtainCallTheme.typography.subTitle2
         )
-        Text(
-            text = stringResource(R.string.signup_input_sub_description),
-            modifier = Modifier.padding(top = 14.dp),
-            color = Roman_Silver,
-            fontSize = 14.dp.toSp(),
-            fontWeight = FontWeight.Medium,
-            fontFamily = spoqahansanseeo,
-            lineHeight = 22.dp.toSp()
-        )
-        CurtainCallSingleLineTextField(
-            value = nicknameState,
-            onValueChange = {
-                if (Regex(INPUT_REGEX).matches(it)) {
-                    nicknameState = it
-                    signUpViewModel.initNicknameCheck()
-                }
-            },
+        SignUpCheckableText(
             modifier = Modifier
-                .padding(top = 40.dp)
-                .fillMaxWidth()
-                .height(60.dp),
-            fontSize = 16.dp.toSp(),
-            shape = RoundedCornerShape(10.dp),
-            containerColor = Cultured,
-            contentColor = Roman_Silver,
-            borderColor = if (nickNameCheck == NickNameCheck.Duplicate) Cheery_Paddle_Pop else Color.Transparent,
-            contentModifier = Modifier.padding(horizontal = 20.dp),
-            placeholder = stringResource(R.string.signup_input_nickname)
+                .padding(top = 14.dp)
+                .fillMaxWidth(),
+            checked = Regex(INPUT_FIRST_CHECK).matches(userNickname),
+            text = stringResource(R.string.signup_input_nickname_rule1)
+        )
+        SignUpCheckableText(
+            modifier = Modifier
+                .padding(top = Paddings.small)
+                .fillMaxWidth(),
+            checked = Regex(INPUT_SECOND_CHECK).matches(userNickname) && userNickname.isNotEmpty(),
+            text = stringResource(R.string.signup_input_nickname_rule2)
         )
         Row(
             modifier = Modifier
+                .padding(top = 50.dp)
                 .fillMaxWidth()
-                .padding(top = 12.dp)
+                .height(44.dp)
         ) {
-            if (nickNameCheck != NickNameCheck.None) {
-                Text(
-                    text = stringResource(
-                        if (nickNameCheck == NickNameCheck.Validate) {
-                            R.string.signup_nickname_validate
-                        } else {
-                            R.string.signup_nickname_duplicate
-                        }
-                    ),
-                    color = if (nickNameCheck == NickNameCheck.Validate) Green else Cheery_Paddle_Pop,
-                    fontSize = 13.dp.toSp(),
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo,
-                    lineHeight = 16.dp.toSp()
-                )
+            BasicTextField(
+                value = userNickname,
+                onValueChange = {
+                    userNickname = it
+                    signUpViewModel.clearValidationState()
+                },
+                modifier = Modifier
+                    .width(222.dp)
+                    .fillMaxHeight()
+                    .background(Grey9, RoundedCornerShape(10.dp))
+                    .border(1.dp, if (validationCheckState == ValidationCheckState.Duplicate) Red else borderColor, RoundedCornerShape(10.dp))
+                    .onFocusChanged {
+                        borderColor = if (it.isFocused) Grey5 else Color.Transparent
+                    },
+                textStyle = CurtainCallTheme.typography.body3.copy(
+                    color = if (validationCheckState == ValidationCheckState.Duplicate) Red else Black
+                ),
+                singleLine = true,
+                maxLines = 1
+            ) { innerTextField ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 14.dp),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    innerTextField()
+                    if (userNickname.isEmpty()) {
+                        Text(
+                            text = stringResource(R.string.signup_input_nickname_placeholder),
+                            style = CurtainCallTheme.typography.body3.copy(color = Grey6)
+                        )
+                    }
+                }
             }
             Spacer(Modifier.weight(1f))
-            CurtainCallRoundedTextButton(
-                onClick = { signUpViewModel.checkDuplicateNickname(nicknameState) },
+            CurtainCallFilledButton(
                 modifier = Modifier
-                    .wrapContentWidth()
-                    .height(32.dp),
-                title = stringResource(R.string.signup_input_double_check),
-                fontSize = 13.dp.toSp(),
-                enabled = Regex(INPUT_CHECK_REGEX).matches(nicknameState) && (nickNameCheck == NickNameCheck.None),
-                containerColor = if (Regex(INPUT_CHECK_REGEX).matches(nicknameState) && (nickNameCheck == NickNameCheck.None)) Me_Pink else Bright_Gray,
-                contentColor = if (Regex(INPUT_CHECK_REGEX).matches(nicknameState) && (nickNameCheck == NickNameCheck.None)) White else Silver_Sand,
-                radiusSize = 8.dp
+                    .width(88.dp)
+                    .fillMaxHeight(),
+                text = stringResource(R.string.signup_input_duplicated_check),
+                enabled = Regex(INPUT_CHECK_REGEX).matches(userNickname) && validationCheckState == ValidationCheckState.None,
+                textStyle = CurtainCallTheme.typography.body3
+            ) {
+                signUpViewModel.checkDuplicateNickname(userNickname)
+                keyboardController?.hide()
+            }
+        }
+        if (validationCheckState != ValidationCheckState.None) {
+            Text(
+                text = stringResource(
+                    if (validationCheckState == ValidationCheckState.Validate) {
+                        R.string.signup_input_nickname_validate
+                    } else {
+                        R.string.signup_input_nickname_duplicate
+                    }
+                ),
+                modifier = Modifier.padding(top = 8.dp, start = 14.dp),
+                style = CurtainCallTheme.typography.body4.copy(
+                    color = if (validationCheckState == ValidationCheckState.Validate) {
+                        CurtainCallTheme.colors.systemGreen
+                    } else {
+                        CurtainCallTheme.colors.systemRed
+                    }
+                )
             )
         }
         Spacer(Modifier.weight(1f))
-        CurtainCallRoundedTextButton(
-            onClick = { signUpViewModel.createMember(nicknameState) },
+        CurtainCallFilledButton(
             modifier = Modifier
+                .padding(bottom = 30.dp)
                 .fillMaxWidth()
-                .padding(bottom = 19.dp)
-                .height(52.dp),
-            title = stringResource(R.string.signup_nickname_setting_complete),
-            fontSize = 16.dp.toSp(),
-            enabled = nickNameCheck == NickNameCheck.Validate,
-            containerColor = if (nickNameCheck == NickNameCheck.Validate) Me_Pink else Bright_Gray,
-            contentColor = if (nickNameCheck == NickNameCheck.Validate) White else Silver_Sand
+                .height(51.dp),
+            text = stringResource(R.string.signup_complete),
+            enabled = validationCheckState == ValidationCheckState.Validate
+        ) {
+            signUpViewModel.createMember(userNickname)
+        }
+    }
+}
+
+@Composable
+private fun SignUpCheckableText(
+    modifier: Modifier = Modifier,
+    checked: Boolean = false,
+    text: String
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_check),
+            contentDescription = text,
+            modifier = Modifier.size(14.dp),
+            tint = if (checked) {
+                CurtainCallTheme.colors.systemGreen
+            } else {
+                Grey7
+            }
+        )
+        Text(
+            text = text,
+            modifier = Modifier.padding(start = 6.dp),
+            style = CurtainCallTheme.typography.body3.copy(color = Grey4)
         )
     }
 }

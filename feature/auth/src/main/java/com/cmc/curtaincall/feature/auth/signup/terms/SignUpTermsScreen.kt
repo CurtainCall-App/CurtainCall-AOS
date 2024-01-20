@@ -2,6 +2,7 @@ package com.cmc.curtaincall.feature.auth.signup.terms
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,38 +12,29 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-
 import com.cmc.curtaincall.common.designsystem.R
-import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallRoundedTextButton
+import com.cmc.curtaincall.common.designsystem.component.appbars.CurtainCallTopAppBarWithBack
 import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
-import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarWithBack
-import com.cmc.curtaincall.common.designsystem.extensions.toSp
-import com.cmc.curtaincall.common.designsystem.theme.Arsenic
-import com.cmc.curtaincall.common.designsystem.theme.Black
-import com.cmc.curtaincall.common.designsystem.theme.Bright_Gray
-import com.cmc.curtaincall.common.designsystem.theme.Cultured
-import com.cmc.curtaincall.common.designsystem.theme.Me_Pink
-import com.cmc.curtaincall.common.designsystem.theme.Nero
-import com.cmc.curtaincall.common.designsystem.theme.Roman_Silver
-import com.cmc.curtaincall.common.designsystem.theme.Silver_Sand
+import com.cmc.curtaincall.common.designsystem.component.buttons.common.CurtainCallFilledButton
+import com.cmc.curtaincall.common.designsystem.component.divider.HorizontalDivider
+import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
+import com.cmc.curtaincall.common.designsystem.theme.Grey4
+import com.cmc.curtaincall.common.designsystem.theme.Grey5
+import com.cmc.curtaincall.common.designsystem.theme.Grey6
+import com.cmc.curtaincall.common.designsystem.theme.Grey8
 import com.cmc.curtaincall.common.designsystem.theme.White
-import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
 import com.cmc.curtaincall.domain.Urls.PRIVACY_INFORMATION_TERMS_URL
 import com.cmc.curtaincall.domain.Urls.SERVICE_TERMS_URL
 import com.cmc.curtaincall.domain.model.Urls.DEFAULT_URL
@@ -51,22 +43,21 @@ import com.google.accompanist.web.rememberWebViewState
 
 @Composable
 internal fun SignUpTermsScreen(
-    onNavigateSignUpInput: () -> Unit = {},
+    onNavigateToSignUpInput: () -> Unit = {},
     onBack: () -> Unit
 ) {
-    var webViewUrl by remember { mutableStateOf(DEFAULT_URL) }
+    val signUpTermsUiState = rememberSignUpTermsState()
     SystemUiStatusBar(White)
     Scaffold(
         topBar = {
-            TopAppBarWithBack(
-                title = stringResource(R.string.signup_terms),
-                containerColor = White,
-                contentColor = Nero,
-                onClick = {
-                    if (webViewUrl.isNotEmpty()) {
-                        webViewUrl = DEFAULT_URL
-                    } else {
+            CurtainCallTopAppBarWithBack(
+                modifier = Modifier.fillMaxWidth(),
+                title = stringResource(R.string.signup_terms_title),
+                onBack = {
+                    if (signUpTermsUiState.webUrl == DEFAULT_URL) {
                         onBack()
+                    } else {
+                        signUpTermsUiState.webUrl = DEFAULT_URL
                     }
                 }
             )
@@ -77,19 +68,25 @@ internal fun SignUpTermsScreen(
                 .padding(paddingValues)
                 .fillMaxSize()
                 .background(White),
-            webViewUrl = webViewUrl,
-            onNavigateSignUpInput = onNavigateSignUpInput,
-            onNavigateSignUpTermsWebView = {
-                webViewUrl = it
+            signUpTermsState = signUpTermsUiState,
+            onStateChange = {
+                signUpTermsUiState.webUrl = it.webUrl
+                signUpTermsUiState.serviceUseTerms = it.serviceUseTerms
+                signUpTermsUiState.privacyInfoTerms = it.privacyInfoTerms
+                signUpTermsUiState.userAgreeTerms = it.userAgreeTerms
+            },
+            onNavigateToSignUpInput = onNavigateToSignUpInput,
+            onNavigateToSignUpTermsWebView = {
+                signUpTermsUiState.webUrl = it
             }
         )
     }
 
     BackHandler {
-        if (webViewUrl.isNotEmpty()) {
-            webViewUrl = DEFAULT_URL
-        } else {
+        if (signUpTermsUiState.webUrl == DEFAULT_URL) {
             onBack()
+        } else {
+            signUpTermsUiState.webUrl = DEFAULT_URL
         }
     }
 }
@@ -97,12 +94,12 @@ internal fun SignUpTermsScreen(
 @Composable
 private fun SignUpTermsContent(
     modifier: Modifier = Modifier,
-    webViewUrl: String = DEFAULT_URL,
-    onNavigateSignUpInput: () -> Unit = {},
-    onNavigateSignUpTermsWebView: (String) -> Unit = {}
+    signUpTermsState: SignUpTermsState,
+    onStateChange: (SignUpTermsState) -> Unit = {},
+    onNavigateToSignUpInput: () -> Unit = {},
+    onNavigateToSignUpTermsWebView: (String) -> Unit = {}
 ) {
-    val webViewState = rememberWebViewState(url = webViewUrl)
-    val signUpTermsState by remember { mutableStateOf(SignUpTermsState()) }
+    val webViewState = rememberWebViewState(url = signUpTermsState.webUrl)
     Box(modifier) {
         Column(
             modifier = Modifier
@@ -112,92 +109,76 @@ private fun SignUpTermsContent(
             Text(
                 text = stringResource(R.string.signup_terms_description),
                 modifier = Modifier.padding(top = 40.dp),
-                color = Black,
-                fontSize = 22.dp.toSp(),
-                fontWeight = FontWeight.Bold,
-                fontFamily = spoqahansanseeo,
-                lineHeight = 32.dp.toSp()
+                style = CurtainCallTheme.typography.subTitle2
             )
             Text(
                 text = stringResource(R.string.signup_terms_sub_description),
                 modifier = Modifier.padding(top = 14.dp),
-                color = Roman_Silver,
-                fontSize = 14.dp.toSp(),
-                fontWeight = FontWeight.Medium,
-                fontFamily = spoqahansanseeo,
-                lineHeight = 22.dp.toSp()
+                style = CurtainCallTheme.typography.body3.copy(color = Grey4)
             )
             SignUpTermsCheckBox(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 40.dp),
-                description = stringResource(R.string.signup_terms_all_agree),
-                isChecked = signUpTermsState.isAllChecked(),
-                isBold = true,
+                text = stringResource(R.string.signup_terms_all_agree),
+                isChecked = signUpTermsState.isQualified(),
                 onCheckedChange = {
-                    signUpTermsState.clickedAllTerms()
+                    onStateChange(
+                        signUpTermsState.apply {
+                            serviceUseTerms = it
+                            privacyInfoTerms = it
+                            userAgreeTerms = it
+                        }
+                    )
                 }
             )
-            Spacer(
+            HorizontalDivider(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 24.dp)
-                    .height(1.dp)
-                    .background(Cultured)
+                    .padding(top = 18.dp),
+                background = Grey8
             )
             SignUpTermsCheckBox(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 25.dp),
-                description = stringResource(R.string.signup_terms_service),
-                isChecked = signUpTermsState.serviceTerms.value,
+                    .padding(top = 18.dp),
+                text = stringResource(R.string.signup_terms_service_use_agree),
+                isChecked = signUpTermsState.serviceUseTerms,
                 hasMore = true,
-                onCheckedChange = {
-                    signUpTermsState.clickedServiceTerms()
-                },
-                onNavigateTermsDetail = {
-                    onNavigateSignUpTermsWebView(SERVICE_TERMS_URL)
-                }
+                onCheckedChange = { onStateChange(signUpTermsState.apply { serviceUseTerms = it }) },
+                onNavigateToSignUpTermsWebView = { onNavigateToSignUpTermsWebView(SERVICE_TERMS_URL) }
             )
             SignUpTermsCheckBox(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 25.dp),
-                description = stringResource(R.string.signup_terms_privacy_information_agree),
-                isChecked = signUpTermsState.privacyInfoTerms.value,
+                    .padding(top = 18.dp),
+                text = stringResource(R.string.signup_terms_privacy_information_agree),
+                isChecked = signUpTermsState.privacyInfoTerms,
                 hasMore = true,
-                onCheckedChange = {
-                    signUpTermsState.clickedPrivacyInfoTerms()
-                },
-                onNavigateTermsDetail = {
-                    onNavigateSignUpTermsWebView(PRIVACY_INFORMATION_TERMS_URL)
-                }
+                onCheckedChange = { onStateChange(signUpTermsState.apply { privacyInfoTerms = it }) },
+                onNavigateToSignUpTermsWebView = { onNavigateToSignUpTermsWebView(PRIVACY_INFORMATION_TERMS_URL) }
             )
             SignUpTermsCheckBox(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 25.dp),
-                description = stringResource(R.string.signup_terms_age_agree),
-                isChecked = signUpTermsState.ageTerms.value,
-                onCheckedChange = {
-                    signUpTermsState.clickedAgeTerms()
-                }
+                    .padding(top = 18.dp),
+                text = stringResource(R.string.signup_terms_user_agree),
+                isChecked = signUpTermsState.userAgreeTerms,
+                onCheckedChange = { onStateChange(signUpTermsState.apply { userAgreeTerms = it }) }
             )
             Spacer(Modifier.weight(1f))
-            CurtainCallRoundedTextButton(
-                onClick = onNavigateSignUpInput,
+            CurtainCallFilledButton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 19.dp)
-                    .height(52.dp),
-                title = stringResource(R.string.signup_next),
-                fontSize = 16.dp.toSp(),
-                enabled = signUpTermsState.isAllChecked(),
-                containerColor = if (signUpTermsState.isAllChecked()) Me_Pink else Bright_Gray,
-                contentColor = if (signUpTermsState.isAllChecked()) White else Silver_Sand
+                    .padding(bottom = 30.dp)
+                    .height(51.dp),
+                text = stringResource(R.string.next),
+                containerColor = if (signUpTermsState.isQualified()) CurtainCallTheme.colors.primary else Grey8,
+                contentColor = if (signUpTermsState.isQualified()) CurtainCallTheme.colors.onPrimary else Grey6,
+                onClick = onNavigateToSignUpInput
             )
         }
-        if (webViewUrl != DEFAULT_URL) {
+        if (signUpTermsState.webUrl != DEFAULT_URL) {
             WebView(
                 state = webViewState,
                 modifier = Modifier
@@ -211,51 +192,45 @@ private fun SignUpTermsContent(
 @Composable
 private fun SignUpTermsCheckBox(
     modifier: Modifier = Modifier,
+    text: String,
     isChecked: Boolean = false,
-    description: String,
-    isBold: Boolean = false,
     hasMore: Boolean = false,
-    onCheckedChange: () -> Unit = {},
-    onNavigateTermsDetail: () -> Unit = {}
+    onCheckedChange: (Boolean) -> Unit = {},
+    onNavigateToSignUpTermsWebView: () -> Unit = {}
 ) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
-            onClick = onCheckedChange,
+            onClick = { onCheckedChange(!isChecked) },
             modifier = Modifier
-                .background(if (isChecked) Me_Pink else Bright_Gray, CircleShape)
-                .size(20.dp)
+                .background(
+                    color = if (isChecked) CurtainCallTheme.colors.primary else Grey8,
+                    shape = RoundedCornerShape(6.dp)
+                ).size(20.dp)
         ) {
             Icon(
                 painter = painterResource(R.drawable.ic_check),
-                contentDescription = description,
+                contentDescription = text,
                 modifier = Modifier.size(14.dp),
                 tint = White
             )
         }
         Text(
-            text = description,
+            text = text,
             modifier = Modifier.padding(start = 10.dp),
-            color = if (isBold) Nero else Arsenic,
-            fontSize = 16.dp.toSp(),
-            fontWeight = if (isBold) FontWeight.Bold else FontWeight.Medium,
-            fontFamily = spoqahansanseeo
+            style = CurtainCallTheme.typography.body3.copy(
+                fontWeight = FontWeight.SemiBold
+            )
         )
         Spacer(Modifier.weight(1f))
         if (hasMore) {
-            IconButton(
-                onClick = onNavigateTermsDetail,
-                modifier = Modifier.size(20.dp)
-            ) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_arrow_right_pink),
-                    contentDescription = description,
-                    modifier = Modifier.size(12.dp),
-                    tint = Arsenic
-                )
-            }
+            Text(
+                text = stringResource(R.string.view),
+                modifier = Modifier.clickable { onNavigateToSignUpTermsWebView() },
+                style = CurtainCallTheme.typography.body5.copy(color = Grey5)
+            )
         }
     }
 }

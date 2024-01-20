@@ -1,5 +1,6 @@
 package com.cmc.curtaincall.common.designsystem.component.appbars
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -7,6 +8,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,7 +29,8 @@ private val TopAppBarBackLeftPadding = 10.dp
 private val TopAppBarBackRightPadding = 12.dp
 
 private sealed class TopAppBarType(
-    open val title: String
+    open val title: String,
+    open val onBack: (() -> Unit)? = null
 ) {
     data class Default(
         override val title: String
@@ -35,8 +38,8 @@ private sealed class TopAppBarType(
 
     data class Back(
         override val title: String,
-        val onBack: () -> Unit = {}
-    ) : TopAppBarType(title)
+        override val onBack: (() -> Unit)?
+    ) : TopAppBarType(title, onBack)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,7 +60,10 @@ private fun BaseTopAppBar(
                 )
             },
             modifier = modifier,
-            windowInsets = WindowInsets(left = Paddings.small)
+            windowInsets = WindowInsets(left = Paddings.small),
+            colors = TopAppBarDefaults.mediumTopAppBarColors(
+                containerColor = CurtainCallTheme.colors.background
+            )
         )
     } else {
         CenterAlignedTopAppBar(
@@ -72,7 +78,9 @@ private fun BaseTopAppBar(
                 Icon(
                     painter = painterResource(R.drawable.ic_arrow_back),
                     contentDescription = TopAppBarBackIconDescription,
-                    modifier = Modifier.size(TopAppBarBackIconSize),
+                    modifier = Modifier
+                        .size(TopAppBarBackIconSize)
+                        .clickable { type.onBack?.invoke() },
                     tint = Color.Unspecified
                 )
             },
@@ -80,13 +88,16 @@ private fun BaseTopAppBar(
             windowInsets = WindowInsets(
                 left = TopAppBarBackLeftPadding,
                 right = TopAppBarBackRightPadding
+            ),
+            colors = TopAppBarDefaults.mediumTopAppBarColors(
+                containerColor = CurtainCallTheme.colors.background
             )
         )
     }
 }
 
 @Composable
-fun DefaultTopAppBar(
+fun CurtainCallDefaultTopAppBar(
     modifier: Modifier = Modifier
 ) {
     BaseTopAppBar(
@@ -98,7 +109,7 @@ fun DefaultTopAppBar(
 }
 
 @Composable
-fun TopAppBarWithBack(
+fun CurtainCallTopAppBarWithBack(
     modifier: Modifier = Modifier,
     title: String,
     onBack: () -> Unit = {}

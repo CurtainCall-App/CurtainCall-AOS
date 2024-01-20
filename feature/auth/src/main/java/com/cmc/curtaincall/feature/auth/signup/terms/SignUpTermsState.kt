@@ -1,43 +1,21 @@
 package com.cmc.curtaincall.feature.auth.signup.terms
 
-import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import com.cmc.curtaincall.domain.model.Urls.DEFAULT_URL
 
-internal data class SignUpTermsState(
-    val serviceTerms: MutableState<Boolean> = mutableStateOf(false),
-    val privacyInfoTerms: MutableState<Boolean> = mutableStateOf(false),
-    val ageTerms: MutableState<Boolean> = mutableStateOf(false)
-) {
-    fun isAllChecked() = serviceTerms.value && privacyInfoTerms.value && ageTerms.value
-    fun clickedAllTerms() {
-        if (isAllChecked()) {
-            disagreeAllTerms()
-        } else {
-            agreeAllTerms()
-        }
-    }
-
-    fun clickedServiceTerms() {
-        serviceTerms.value = serviceTerms.value.not()
-    }
-
-    fun clickedPrivacyInfoTerms() {
-        privacyInfoTerms.value = privacyInfoTerms.value.not()
-    }
-
-    fun clickedAgeTerms() {
-        ageTerms.value = ageTerms.value.not()
-    }
-
-    private fun agreeAllTerms() {
-        serviceTerms.value = true
-        privacyInfoTerms.value = true
-        ageTerms.value = true
-    }
-
-    private fun disagreeAllTerms() {
-        serviceTerms.value = false
-        privacyInfoTerms.value = false
-        ageTerms.value = false
-    }
+@Stable
+internal class SignUpTermsState {
+    var webUrl: String by mutableStateOf(DEFAULT_URL)
+    var serviceUseTerms: Boolean by mutableStateOf(false)
+    var privacyInfoTerms: Boolean by mutableStateOf(false)
+    var userAgreeTerms: Boolean by mutableStateOf(false)
+    fun isQualified() = serviceUseTerms && privacyInfoTerms && userAgreeTerms
 }
+
+@Composable
+internal fun rememberSignUpTermsState(): SignUpTermsState = remember { SignUpTermsState() }

@@ -169,7 +169,7 @@ private fun MyPageNickName(
             contentColor = Nero,
             borderColor = if (validate == CheckState.Duplicate) Cheery_Paddle_Pop else Color.Transparent,
             contentModifier = Modifier.padding(horizontal = 20.dp),
-            placeholder = stringResource(R.string.signup_input_nickname)
+            placeholder = stringResource(R.string.signup_input_nickname_placeholder)
         )
         Row(
             modifier = Modifier
@@ -180,9 +180,9 @@ private fun MyPageNickName(
                 Text(
                     text = stringResource(
                         if (validate == CheckState.Validate) {
-                            R.string.signup_nickname_validate
+                            R.string.signup_input_nickname_validate
                         } else {
-                            R.string.signup_nickname_duplicate
+                            R.string.signup_input_nickname_duplicate
                         }
                     ),
                     color = if (validate == CheckState.Validate) Green else Cheery_Paddle_Pop,
@@ -198,7 +198,7 @@ private fun MyPageNickName(
                 modifier = Modifier
                     .wrapContentWidth()
                     .height(32.dp),
-                title = stringResource(R.string.signup_input_double_check),
+                title = stringResource(R.string.signup_input_duplicated_check),
                 fontSize = 13.dp.toSp(),
                 enabled = Regex(INPUT_CHECK_REGEX).matches(nickname) && (validate == CheckState.None),
                 containerColor = if (Regex(INPUT_CHECK_REGEX).matches(nickname) && (validate == CheckState.None)) Me_Pink else Bright_Gray,

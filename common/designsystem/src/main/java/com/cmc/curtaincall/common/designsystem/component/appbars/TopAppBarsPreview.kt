@@ -10,7 +10,7 @@ import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 @Composable
 private fun DefaultTopAppBarPreview() {
     CurtainCallTheme {
-        DefaultTopAppBar(
+        CurtainCallDefaultTopAppBar(
             modifier = Modifier.fillMaxWidth()
         )
     }
@@ -20,7 +20,7 @@ private fun DefaultTopAppBarPreview() {
 @Composable
 private fun TopAppBarWithBackPreview() {
     CurtainCallTheme {
-        TopAppBarWithBack(
+        CurtainCallTopAppBarWithBack(
             title = "타이틀",
             modifier = Modifier.fillMaxWidth()
         )
