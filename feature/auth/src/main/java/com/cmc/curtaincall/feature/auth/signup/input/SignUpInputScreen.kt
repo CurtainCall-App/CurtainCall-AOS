@@ -196,7 +196,7 @@ private fun SignUpInputContent(
                 .fillMaxWidth()
                 .height(51.dp),
             text = stringResource(R.string.signup_complete),
-            enabled = validationCheckState == ValidationCheckState.Validate,
+            enabled = validationCheckState == ValidationCheckState.Validate
         ) {
             signUpViewModel.createMember(userNickname)
         }
