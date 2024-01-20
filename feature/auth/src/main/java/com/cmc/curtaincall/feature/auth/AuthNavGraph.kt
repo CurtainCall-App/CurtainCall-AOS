@@ -45,9 +45,9 @@ fun NavGraphBuilder.authNavGraph(navHostController: NavHostController) {
 
         composable(route = AuthDestination.SignUpInput.route) {
             SignUpInputScreen(
-                onNavigateWelcome = {
-                    navHostController.navigate(AuthDestination.Welcome.route) {
-                        popUpTo(AuthDestination.SignUpInput.route) {
+                onNavigateToHome = {
+                    navHostController.navigate(HomeDestination.Home.route) {
+                        popUpTo(AuthDestination.Login.route) {
                             inclusive = true
                         }
                     }

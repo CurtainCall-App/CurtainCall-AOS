@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
-enum class NickNameCheck {
+enum class ValidationCheckState {
     None, Validate, Duplicate
 }
 
@@ -23,20 +23,24 @@ class SignUpInputViewModel @Inject constructor(
     private val memberRepository: MemberRepository
 ) : RootViewModel<Nothing>() {
 
-    private val _nickNameCheck = MutableStateFlow(NickNameCheck.None)
-    val nickNameCheck = _nickNameCheck.asStateFlow()
+    private val _validationCheckState = MutableStateFlow(ValidationCheckState.None)
+    val validationCheckState = _validationCheckState.asStateFlow()
 
-    private val _signUpCompleted = MutableSharedFlow<Boolean>()
-    val signUpCompleted = _signUpCompleted.asSharedFlow()
+    private val _isComplete = MutableSharedFlow<Boolean>()
+    val isComplete = _isComplete.asSharedFlow()
 
-    fun initNicknameCheck() {
-        _nickNameCheck.value = NickNameCheck.None
+    fun clearValidationState() {
+        _validationCheckState.value = ValidationCheckState.None
     }
 
     fun checkDuplicateNickname(nickname: String) {
         authRepository.checkDuplicateNickname(nickname)
             .onEach { isDuplicate ->
-                _nickNameCheck.value = if (isDuplicate) NickNameCheck.Duplicate else NickNameCheck.Validate
+                _validationCheckState.value = if (isDuplicate) {
+                    ValidationCheckState.Duplicate
+                } else {
+                    ValidationCheckState.Validate
+                }
             }.launchIn(viewModelScope)
     }
 
@@ -45,7 +49,7 @@ class SignUpInputViewModel @Inject constructor(
             .onEach { memberId ->
                 memberRepository.saveMemberId(memberId)
                 memberRepository.saveMemberNickname(nickname)
-                _signUpCompleted.emit(true)
+                _isComplete.emit(true)
             }.launchIn(viewModelScope)
     }
 }
