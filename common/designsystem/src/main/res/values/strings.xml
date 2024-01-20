@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- common -->
+    <string name="view">보기</string>
+    <string name="next">다음</string>
+
     <!-- design system -->
     <string name="default_top_appbar_title">CURTAIN CALL</string>
+
+    <!-- auth -->
+    <string name="signup_terms_title">약관 동의</string>
+    <string name="signup_terms_description">커튼콜 서비스 이용을 위해\n약관 동의가 필요해요.</string>
+    <string name="signup_terms_sub_description">아래 약관 내용에 동의 후 서비스 이용이 가능합니다.</string>
+    <string name="signup_terms_all_agree">전체 동의</string>
+    <string name="signup_terms_service_use_agree">[필수] 서비스 이용약관 동의</string>
+    <string name="signup_terms_privacy_information_agree">[필수] 개인정보 수집·이용 동의</string>
+    <string name="signup_terms_user_agree">[필수] 만 14세 이상 회원입니다.</string>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -34,14 +47,6 @@
     <string name="appbar_report_title">신고하기</string>
 
     <!-- signup -->
-    <string name="signup_terms">약관 동의</string>
-    <string name="signup_terms_description">커튼콜 서비스 이용을 위해\n약관 동의가 필요해요.</string>
-    <string name="signup_terms_sub_description">아래 약관 내용에 동의 후 서비스 이용이 가능합니다.</string>
-    <string name="signup_terms_all_agree">전체 동의(선택 포함)</string>
-    <string name="signup_terms_service">[필수] 서비스 이용약관 동의</string>
-    <string name="signup_terms_privacy_information_agree">[필수] 개인정보 수집·이용 동의</string>
-    <string name="signup_terms_age_agree">[필수] 만 14세 이상 회원입니다.</string>
-    <string name="signup_next">다음</string>
     <string name="signup_setting_nickname">닉네임 설정</string>
     <string name="signup_input_description">커튼콜에서 사용할\n닉네임을 설정해 주세요.</string>
     <string name="signup_input_sub_description">닉네임은 공백없이 최소 2자에서 최대 10자 이하로\n한글, 영문, 숫자를 자유롭게 조합해주세요.</string>
