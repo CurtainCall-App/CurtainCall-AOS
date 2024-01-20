@@ -18,9 +18,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -49,7 +46,7 @@ internal fun SignUpTermsScreen(
     onNavigateToSignUpInput: () -> Unit = {},
     onBack: () -> Unit
 ) {
-    val signUpTermsUiState by remember { mutableStateOf(SignUpTermsUiState()) }
+    val signUpTermsUiState = rememberSignUpTermsState()
     SystemUiStatusBar(White)
     Scaffold(
         topBar = {
@@ -71,7 +68,7 @@ internal fun SignUpTermsScreen(
                 .padding(paddingValues)
                 .fillMaxSize()
                 .background(White),
-            signUpTermsUiState = signUpTermsUiState,
+            signUpTermsState = signUpTermsUiState,
             onStateChange = {
                 signUpTermsUiState.webUrl = it.webUrl
                 signUpTermsUiState.serviceUseTerms = it.serviceUseTerms
@@ -97,12 +94,12 @@ internal fun SignUpTermsScreen(
 @Composable
 private fun SignUpTermsContent(
     modifier: Modifier = Modifier,
-    signUpTermsUiState: SignUpTermsUiState,
-    onStateChange: (SignUpTermsUiState) -> Unit = {},
+    signUpTermsState: SignUpTermsState,
+    onStateChange: (SignUpTermsState) -> Unit = {},
     onNavigateToSignUpInput: () -> Unit = {},
     onNavigateToSignUpTermsWebView: (String) -> Unit = {}
 ) {
-    val webViewState = rememberWebViewState(url = signUpTermsUiState.webUrl)
+    val webViewState = rememberWebViewState(url = signUpTermsState.webUrl)
     Box(modifier) {
         Column(
             modifier = Modifier
@@ -124,10 +121,10 @@ private fun SignUpTermsContent(
                     .fillMaxWidth()
                     .padding(top = 40.dp),
                 text = stringResource(R.string.signup_terms_all_agree),
-                isChecked = signUpTermsUiState.isQualified(),
+                isChecked = signUpTermsState.isQualified(),
                 onCheckedChange = {
                     onStateChange(
-                        signUpTermsUiState.apply {
+                        signUpTermsState.apply {
                             serviceUseTerms = it
                             privacyInfoTerms = it
                             userAgreeTerms = it
@@ -146,9 +143,9 @@ private fun SignUpTermsContent(
                     .fillMaxWidth()
                     .padding(top = 18.dp),
                 text = stringResource(R.string.signup_terms_service_use_agree),
-                isChecked = signUpTermsUiState.serviceUseTerms,
+                isChecked = signUpTermsState.serviceUseTerms,
                 hasMore = true,
-                onCheckedChange = { onStateChange(signUpTermsUiState.apply { serviceUseTerms = it }) },
+                onCheckedChange = { onStateChange(signUpTermsState.apply { serviceUseTerms = it }) },
                 onNavigateToSignUpTermsWebView = { onNavigateToSignUpTermsWebView(SERVICE_TERMS_URL) }
             )
             SignUpTermsCheckBox(
@@ -156,9 +153,9 @@ private fun SignUpTermsContent(
                     .fillMaxWidth()
                     .padding(top = 18.dp),
                 text = stringResource(R.string.signup_terms_privacy_information_agree),
-                isChecked = signUpTermsUiState.privacyInfoTerms,
+                isChecked = signUpTermsState.privacyInfoTerms,
                 hasMore = true,
-                onCheckedChange = { onStateChange(signUpTermsUiState.apply { privacyInfoTerms = it }) },
+                onCheckedChange = { onStateChange(signUpTermsState.apply { privacyInfoTerms = it }) },
                 onNavigateToSignUpTermsWebView = { onNavigateToSignUpTermsWebView(PRIVACY_INFORMATION_TERMS_URL) }
             )
             SignUpTermsCheckBox(
@@ -166,8 +163,8 @@ private fun SignUpTermsContent(
                     .fillMaxWidth()
                     .padding(top = 18.dp),
                 text = stringResource(R.string.signup_terms_user_agree),
-                isChecked = signUpTermsUiState.userAgreeTerms,
-                onCheckedChange = { onStateChange(signUpTermsUiState.apply { userAgreeTerms = it }) }
+                isChecked = signUpTermsState.userAgreeTerms,
+                onCheckedChange = { onStateChange(signUpTermsState.apply { userAgreeTerms = it }) }
             )
             Spacer(Modifier.weight(1f))
             CurtainCallFilledButton(
@@ -176,12 +173,12 @@ private fun SignUpTermsContent(
                     .padding(bottom = 30.dp)
                     .height(51.dp),
                 text = stringResource(R.string.next),
-                containerColor = if (signUpTermsUiState.isQualified()) CurtainCallTheme.colors.primary else Grey8,
-                contentColor = if (signUpTermsUiState.isQualified()) CurtainCallTheme.colors.onPrimary else Grey6,
+                containerColor = if (signUpTermsState.isQualified()) CurtainCallTheme.colors.primary else Grey8,
+                contentColor = if (signUpTermsState.isQualified()) CurtainCallTheme.colors.onPrimary else Grey6,
                 onClick = onNavigateToSignUpInput
             )
         }
-        if (signUpTermsUiState.webUrl != DEFAULT_URL) {
+        if (signUpTermsState.webUrl != DEFAULT_URL) {
             WebView(
                 state = webViewState,
                 modifier = Modifier

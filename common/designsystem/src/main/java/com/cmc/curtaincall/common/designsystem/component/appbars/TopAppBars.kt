@@ -1,5 +1,6 @@
 package com.cmc.curtaincall.common.designsystem.component.appbars
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -28,7 +29,8 @@ private val TopAppBarBackLeftPadding = 10.dp
 private val TopAppBarBackRightPadding = 12.dp
 
 private sealed class TopAppBarType(
-    open val title: String
+    open val title: String,
+    open val onBack: (() -> Unit)? = null
 ) {
     data class Default(
         override val title: String
@@ -36,8 +38,8 @@ private sealed class TopAppBarType(
 
     data class Back(
         override val title: String,
-        val onBack: () -> Unit = {}
-    ) : TopAppBarType(title)
+        override val onBack: (() -> Unit)?
+    ) : TopAppBarType(title, onBack)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -76,7 +78,9 @@ private fun BaseTopAppBar(
                 Icon(
                     painter = painterResource(R.drawable.ic_arrow_back),
                     contentDescription = TopAppBarBackIconDescription,
-                    modifier = Modifier.size(TopAppBarBackIconSize),
+                    modifier = Modifier
+                        .size(TopAppBarBackIconSize)
+                        .clickable { type.onBack?.invoke() },
                     tint = Color.Unspecified
                 )
             },
