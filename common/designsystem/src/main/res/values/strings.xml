@@ -15,6 +15,15 @@
     <string name="signup_terms_service_use_agree">[필수] 서비스 이용약관 동의</string>
     <string name="signup_terms_privacy_information_agree">[필수] 개인정보 수집·이용 동의</string>
     <string name="signup_terms_user_agree">[필수] 만 14세 이상 회원입니다.</string>
+    <string name="signup_title">회원 가입</string>
+    <string name="signup_input_description">커튼콜에서 사용할 닉네임을\n설정해 주세요.</string>
+    <string name="signup_input_nickname_rule1">공백없이 1자~15자 사이로 작성</string>
+    <string name="signup_input_nickname_rule2">한글, 영문, 숫자 자유롭게 사용 가능</string>
+    <string name="signup_input_nickname_placeholder">닉네임을 입력해주세요.</string>
+    <string name="signup_input_duplicated_check">중복 확인</string>
+    <string name="signup_input_nickname_validate">사용 가능한 닉네임입니다.</string>
+    <string name="signup_input_nickname_duplicate">이미 동일한 닉네임이 있습니다.\n다른 닉네임을 입력해주세요.</string>
+    <string name="signup_complete">회원가입 완료</string>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -47,13 +56,6 @@
     <string name="appbar_report_title">신고하기</string>
 
     <!-- signup -->
-    <string name="signup_setting_nickname">닉네임 설정</string>
-    <string name="signup_input_description">커튼콜에서 사용할\n닉네임을 설정해 주세요.</string>
-    <string name="signup_input_sub_description">닉네임은 공백없이 최소 2자에서 최대 10자 이하로\n한글, 영문, 숫자를 자유롭게 조합해주세요.</string>
-    <string name="signup_input_nickname">닉네임을 입력해주세요.</string>
-    <string name="signup_input_double_check">중복 확인</string>
-    <string name="signup_nickname_validate">사용 가능한 닉네임입니다.</string>
-    <string name="signup_nickname_duplicate">이미 동일한 닉네임이 있습니다.\n다른 닉네임을 입력해주세요.</string>
     <string name="signup_nickname_setting_complete">닉네임 설정 완료</string>
     <string name="signup_welcome_description">이제 커튼콜 이용을\n시작해볼까요?</string>기
     <string name="signup_welcome_start">시작하기</string>
