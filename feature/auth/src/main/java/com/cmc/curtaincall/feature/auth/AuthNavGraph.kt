@@ -34,7 +34,7 @@ fun NavGraphBuilder.authNavGraph(navHostController: NavHostController) {
 
         composable(route = AuthDestination.SignUpTerms.route) {
             SignUpTermsScreen(
-                onNavigateSignUpInput = {
+                onNavigateToSignUpInput = {
                     navHostController.navigate(AuthDestination.SignUpInput.route)
                 },
                 onBack = {
