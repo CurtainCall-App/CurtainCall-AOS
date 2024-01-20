@@ -7,6 +7,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -57,7 +58,10 @@ private fun BaseTopAppBar(
                 )
             },
             modifier = modifier,
-            windowInsets = WindowInsets(left = Paddings.small)
+            windowInsets = WindowInsets(left = Paddings.small),
+            colors = TopAppBarDefaults.mediumTopAppBarColors(
+                containerColor = CurtainCallTheme.colors.background
+            )
         )
     } else {
         CenterAlignedTopAppBar(
@@ -80,13 +84,16 @@ private fun BaseTopAppBar(
             windowInsets = WindowInsets(
                 left = TopAppBarBackLeftPadding,
                 right = TopAppBarBackRightPadding
+            ),
+            colors = TopAppBarDefaults.mediumTopAppBarColors(
+                containerColor = CurtainCallTheme.colors.background
             )
         )
     }
 }
 
 @Composable
-fun DefaultTopAppBar(
+fun CurtainCallDefaultTopAppBar(
     modifier: Modifier = Modifier
 ) {
     BaseTopAppBar(
@@ -98,7 +105,7 @@ fun DefaultTopAppBar(
 }
 
 @Composable
-fun TopAppBarWithBack(
+fun CurtainCallTopAppBarWithBack(
     modifier: Modifier = Modifier,
     title: String,
     onBack: () -> Unit = {}
