@@ -10,7 +10,6 @@ import com.cmc.curtaincall.common.navigation.destination.HomeDestination
 import com.cmc.curtaincall.feature.auth.login.LoginScreen
 import com.cmc.curtaincall.feature.auth.signup.input.SignUpInputScreen
 import com.cmc.curtaincall.feature.auth.signup.terms.SignUpTermsScreen
-import com.cmc.curtaincall.feature.auth.welcome.WelComeScreen
 
 fun NavGraphBuilder.authNavGraph(navHostController: NavHostController) {
     navigation(
@@ -56,16 +55,6 @@ fun NavGraphBuilder.authNavGraph(navHostController: NavHostController) {
                     navHostController.popBackStack()
                 }
             )
-        }
-
-        composable(route = AuthDestination.Welcome.route) {
-            WelComeScreen {
-                navHostController.navigate(HomeDestination.Home.route) {
-                    popUpTo(AuthDestination.Login.route) {
-                        inclusive = true
-                    }
-                }
-            }
         }
     }
 }
