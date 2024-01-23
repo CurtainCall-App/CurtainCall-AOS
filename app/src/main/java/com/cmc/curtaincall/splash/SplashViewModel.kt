@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import com.cmc.curtaincall.common.utility.extensions.getTodayDate
 import com.cmc.curtaincall.core.base.RootViewModel
 import com.cmc.curtaincall.domain.model.auth.LoginResultModel
-import com.cmc.curtaincall.domain.repository.AuthRepository
 import com.cmc.curtaincall.domain.repository.MemberRepository
 import com.cmc.curtaincall.domain.repository.TokenRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +15,6 @@ import javax.inject.Inject
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val tokenRepository: TokenRepository,
-    private val authRepository: AuthRepository,
     private val memberRepository: MemberRepository
 ) : RootViewModel<SplashSideEffect>() {
 

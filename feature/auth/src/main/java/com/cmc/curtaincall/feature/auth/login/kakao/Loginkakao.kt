@@ -24,6 +24,7 @@ import timber.log.Timber
 import kotlin.coroutines.resume
 
 private const val LOGIN_KAKAO_BUTTON = "LOGIN_KAKAO_BUTTON"
+private const val KAKAO_PROVIDER = "kakao"
 
 @Composable
 fun LoginKaKaoButton(
@@ -42,7 +43,7 @@ fun LoginKaKaoButton(
                 coroutineScope.launch {
                     when (val result = loginKaKao(context)) {
                         is LoginResponse.Success -> {
-                            loginViewModel.fetchLogin(result.idToken)
+                            loginViewModel.fetchLogin(KAKAO_PROVIDER, result.token)
                         }
 
                         is LoginResponse.Failure -> {

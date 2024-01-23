@@ -125,7 +125,7 @@ private fun HomeContent(
     val homeUiState by homeViewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(homeViewModel) {
-        homeViewModel.requestLiveTalks()
+        // homeViewModel.requestLiveTalks()
         // homeViewModel.requestMyRecruitments()
         // homeViewModel.requestMyParticipations()
         homeViewModel.requestPopularShowList()

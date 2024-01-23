@@ -10,15 +10,12 @@ import javax.inject.Inject
 class AuthRepositoryImpl @Inject constructor(
     private val authRemoteSource: AuthRemoteSource
 ) : AuthRepository {
-    override fun requestLogin(authorization: String): Flow<LoginResultModel> =
-        authRemoteSource.requestLogin(authorization = authorization).map { it.toModel() }
+    override fun requestLogin(provider: String, token: String): Flow<LoginResultModel> =
+        authRemoteSource.requestLogin(provider, token).map { it.toModel() }
 
     override fun requestReissue(refreshToken: String): Flow<LoginResultModel> =
         authRemoteSource.requestReissue(refreshToken).map { it.toModel() }
 
     override fun requestLogout(accessToken: String): Flow<Boolean> =
         authRemoteSource.requestLogout(accessToken)
-
-    override fun checkDuplicateNickname(nickname: String): Flow<Boolean> =
-        authRemoteSource.checkDuplicateNickname(nickname)
 }

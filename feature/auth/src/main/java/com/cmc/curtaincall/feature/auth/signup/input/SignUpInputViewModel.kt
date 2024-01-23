@@ -2,7 +2,6 @@ package com.cmc.curtaincall.feature.auth.signup.input
 
 import androidx.lifecycle.viewModelScope
 import com.cmc.curtaincall.core.base.RootViewModel
-import com.cmc.curtaincall.domain.repository.AuthRepository
 import com.cmc.curtaincall.domain.repository.MemberRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -19,7 +18,6 @@ enum class ValidationCheckState {
 
 @HiltViewModel
 class SignUpInputViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
     private val memberRepository: MemberRepository
 ) : RootViewModel<Nothing>() {
 
@@ -34,7 +32,7 @@ class SignUpInputViewModel @Inject constructor(
     }
 
     fun checkDuplicateNickname(nickname: String) {
-        authRepository.checkDuplicateNickname(nickname)
+        memberRepository.checkDuplicateNickname(nickname)
             .onEach { isDuplicate ->
                 _validationCheckState.value = if (isDuplicate) {
                     ValidationCheckState.Duplicate

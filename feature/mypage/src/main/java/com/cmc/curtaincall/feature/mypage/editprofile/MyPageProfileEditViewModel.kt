@@ -2,7 +2,6 @@ package com.cmc.curtaincall.feature.mypage.editprofile
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cmc.curtaincall.domain.repository.AuthRepository
 import com.cmc.curtaincall.domain.repository.ImageRepository
 import com.cmc.curtaincall.domain.repository.MemberRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +19,6 @@ enum class CheckState {
 
 @HiltViewModel
 class MyPageProfileEditViewModel @Inject constructor(
-    private val authRepository: AuthRepository,
     private val memberRepository: MemberRepository,
     private val imageRepository: ImageRepository
 ) : ViewModel() {
@@ -52,7 +50,7 @@ class MyPageProfileEditViewModel @Inject constructor(
     }
 
     fun checkDuplicateNickname(nickname: String) {
-        authRepository.checkDuplicateNickname(nickname)
+        memberRepository.checkDuplicateNickname(nickname)
             .onEach { check ->
                 _validateState.value = if (check) CheckState.Duplicate else CheckState.Validate
             }.launchIn(viewModelScope)
