@@ -15,8 +15,4 @@ sealed class AuthDestination : CurtainCallDestination {
     object SignUpInput : AuthDestination() {
         override val route = NavRouteLabel.SIGNUP_INPUT
     }
-
-    object Welcome : AuthDestination() {
-        override val route = NavRouteLabel.WELCOME
-    }
 }
