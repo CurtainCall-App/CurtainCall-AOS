@@ -31,6 +31,9 @@ class MemberRepositoryImpl @Inject constructor(
     private val memberService: MemberService
 ) : MemberRepository {
 
+    override fun checkDuplicateNickname(nickname: String): Flow<Boolean> =
+        memberRemoteSource.checkDuplicateNickname(nickname)
+
     override fun fetchMyRecruitments(memberId: Int, category: String): Flow<PagingData<MyRecruitmentModel>> {
         return Pager(
             config = PagingConfig(pageSize = RECRUITMENT_PAGE_SIZE),

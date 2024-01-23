@@ -1,17 +1,18 @@
 package com.cmc.curtaincall.core.network.service.auth
 
+import com.cmc.curtaincall.core.network.service.auth.request.LoginRequest
 import com.cmc.curtaincall.core.network.service.auth.response.LoginResponse
 import com.cmc.curtaincall.core.network.service.auth.response.LogoutResponse
-import com.cmc.curtaincall.core.network.service.member.response.MemberDuplicateNickNameResponse
-import retrofit2.http.GET
+import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.Path
 
 interface AuthService {
-    @POST("login")
+    @POST("login/oauth2/token/{provider}")
     suspend fun requestLogin(
-        @Header("Authorization") authorization: String
+        @Path("provider") provider: String,
+        @Body loginRequest: LoginRequest
     ): LoginResponse
 
     @POST("login/reissue")
@@ -23,9 +24,4 @@ interface AuthService {
     suspend fun requestLogout(
         @Header("Authorization") accessToken: String
     ): LogoutResponse
-
-    @GET("members/duplicate/nickname")
-    suspend fun checkDuplicateNickname(
-        @Query("nickname") nickname: String
-    ): MemberDuplicateNickNameResponse
 }
