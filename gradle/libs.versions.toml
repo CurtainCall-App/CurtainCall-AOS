@@ -58,6 +58,7 @@ timber = "5.0.1"
 # auth
 kakao-user = "2.14.0"
 facebook-login = "16.0.0"
+naver-login = "5.9.0"
 
 # CI/CD
 firebase-bom = "32.1.1"
@@ -159,6 +160,7 @@ firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-firestore-
 # auth
 kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao-user" }
 facebook-login = { group = "com.facebook.android", name = "facebook-login", version.ref = "facebook-login" }
+naver-login = { group = "com.navercorp.nid", name="oauth", version.ref = "naver-login" }
 play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "play-services-auth" }
 
 # default
