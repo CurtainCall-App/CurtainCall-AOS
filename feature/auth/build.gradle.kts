@@ -11,8 +11,6 @@ android {
 
     defaultConfig {
         resValue("string", "KAKAO_REDIRECT_SCHEME", "kakao${gradleLocalProperties(rootDir).getProperty("KAKAO_APP_KEY")}")
-        resValue("string", "FACEBOOK_CLIENT_ID", gradleLocalProperties(rootDir).getProperty("FACEBOOK_CLIENT_ID"))
-        resValue("string", "FACEBOOK_CLIENT_TOKEN", gradleLocalProperties(rootDir).getProperty("FACEBOOK_CLIENT_TOKEN"))
     }
 }
 
@@ -32,15 +30,9 @@ dependencies {
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.accompanist.webview)
 
-    // firebase
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.auth.ktx)
-    implementation(libs.play.services.auth)
-
     // logging
     implementation(libs.timber)
 
     // auth
     implementation(libs.kakao.user)
-    implementation(libs.facebook.login)
 }
