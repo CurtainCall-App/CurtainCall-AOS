@@ -28,6 +28,7 @@ private const val KAKAO_PROVIDER = "kakao"
 
 @Composable
 fun LoginKaKaoButton(
+    modifier: Modifier = Modifier,
     loginViewModel: LoginViewModel = hiltViewModel(),
     onNavigateSignUpTerms: () -> Unit = {},
     onNavigateHome: () -> Unit = {}
@@ -37,7 +38,7 @@ fun LoginKaKaoButton(
     Image(
         painter = painterResource(R.drawable.ic_kakao_login),
         contentDescription = LOGIN_KAKAO_BUTTON,
-        modifier = Modifier
+        modifier = modifier
             .size(50.dp)
             .clickable {
                 coroutineScope.launch {

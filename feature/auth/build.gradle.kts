@@ -35,4 +35,5 @@ dependencies {
 
     // auth
     implementation(libs.kakao.user)
+    implementation(libs.naver.login)
 }

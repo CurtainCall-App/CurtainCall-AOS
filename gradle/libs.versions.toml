@@ -58,7 +58,7 @@ timber = "5.0.1"
 # auth
 kakao-user = "2.14.0"
 facebook-login = "16.0.0"
-naver-login = "5.9.0"
+naver-login = "5.8.0"
 
 # CI/CD
 firebase-bom = "32.1.1"
