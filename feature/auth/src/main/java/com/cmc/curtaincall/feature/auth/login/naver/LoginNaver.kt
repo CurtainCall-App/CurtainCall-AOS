@@ -19,6 +19,7 @@ import com.navercorp.nid.NaverIdLoginSDK
 import timber.log.Timber
 
 private const val LOGIN_NAVER_BUTTON = "LOGIN_NAVER_BUTTON"
+private const val NAVER_PROVIDER = "naver"
 
 @Composable
 fun LoginNaverButton(
@@ -34,6 +35,9 @@ fun LoginNaverButton(
         when (result.resultCode) {
             RESULT_OK -> {
                 Timber.d("Naver Login Success Token: ${NaverIdLoginSDK.getAccessToken()}")
+                NaverIdLoginSDK.getAccessToken()?.let { token ->
+                    loginViewModel.fetchLogin(NAVER_PROVIDER, token)
+                }
             }
 
             RESULT_CANCELED -> {
