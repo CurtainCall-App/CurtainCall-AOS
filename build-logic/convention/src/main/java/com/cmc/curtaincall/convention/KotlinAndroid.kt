@@ -32,6 +32,8 @@ internal fun Project.configureKotlinAndroidApplication(
 
             buildConfigField("String", "GET_STREAM_API_KEY", gradleLocalProperties(rootDir).getProperty("GET_STREAM_API_KEY"))
             buildConfigField("String", "KAKAO_APP_KEY", gradleLocalProperties(rootDir).getProperty("KAKAO_APP_KEY"))
+            buildConfigField("String", "NAVER_CLIENT_ID", gradleLocalProperties(rootDir).getProperty("NAVER_CLIENT_ID"))
+            buildConfigField("String", "NAVER_CLIENT_SECRET", gradleLocalProperties(rootDir).getProperty("NAVER_CLIENT_SECRET"))
             resValue("string", "NAVER_API_MAP_KEY", gradleLocalProperties(rootDir).getProperty("NAVER_API_MAP_KEY"))
             vectorDrawables {
                 useSupportLibrary = true

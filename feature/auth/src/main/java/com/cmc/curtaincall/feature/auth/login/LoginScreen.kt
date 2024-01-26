@@ -28,6 +28,7 @@ import com.cmc.curtaincall.common.designsystem.dimension.Paddings
 import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import com.cmc.curtaincall.common.designsystem.theme.Eerie_Black
 import com.cmc.curtaincall.feature.auth.login.kakao.LoginKaKaoButton
+import com.cmc.curtaincall.feature.auth.login.naver.LoginNaverButton
 import kotlinx.coroutines.flow.collectLatest
 
 private const val CURTAINCALL_LOGO = "CURTAINCALL_LOGO"
@@ -81,6 +82,12 @@ fun LoginScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             LoginKaKaoButton(
+                loginViewModel = loginViewModel,
+                onNavigateSignUpTerms = onNavigateSignUpTerms,
+                onNavigateHome = onNavigateHome
+            )
+            LoginNaverButton(
+                modifier = Modifier.padding(start = Paddings.xlarge),
                 loginViewModel = loginViewModel,
                 onNavigateSignUpTerms = onNavigateSignUpTerms,
                 onNavigateHome = onNavigateHome

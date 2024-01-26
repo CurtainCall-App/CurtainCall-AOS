@@ -45,6 +45,7 @@ dependencies {
 
     // auth
     implementation(libs.kakao.user)
+    implementation(libs.naver.login)
 
     // test
     debugImplementation(libs.androidx.compose.ui.tooling)
