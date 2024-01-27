@@ -6,6 +6,7 @@ import com.cmc.curtaincall.core.network.service.show.response.LiveTalkShowRespon
 import com.cmc.curtaincall.core.network.service.show.response.ShowDetailResponse
 import com.cmc.curtaincall.core.network.service.show.response.ShowInfoResponse
 import com.cmc.curtaincall.core.network.service.show.response.ShowRankResponse
+import com.cmc.curtaincall.core.network.service.show.response.ShowRecommendationResponse
 import com.cmc.curtaincall.core.network.service.show.response.SimilarShowInfoResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -132,5 +133,9 @@ class ShowRemoteSource @Inject constructor(
                 baseDateTime = baseDateTime
             ).liveTalks
         )
+    }
+
+    fun requestShowRecommendations(): Flow<List<ShowRecommendationResponse>> = flow {
+        emit(showService.requestShowRecommendations().showRecommendations)
     }
 }

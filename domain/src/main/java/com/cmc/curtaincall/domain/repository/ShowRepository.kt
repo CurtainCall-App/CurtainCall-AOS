@@ -6,6 +6,7 @@ import com.cmc.curtaincall.domain.model.show.LiveTalkShowModel
 import com.cmc.curtaincall.domain.model.show.ShowDetailModel
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import com.cmc.curtaincall.domain.model.show.ShowRankModel
+import com.cmc.curtaincall.domain.model.show.ShowRecommendationModel
 import com.cmc.curtaincall.domain.model.show.ShowSearchWordModel
 import com.cmc.curtaincall.domain.model.show.SimilarShowInfoModel
 import kotlinx.coroutines.flow.Flow
@@ -81,4 +82,6 @@ interface ShowRepository {
         size: Int?,
         baseDateTime: String
     ): Flow<List<LiveTalkShowModel>>
+
+    fun requestShowRecommendation(): Flow<List<ShowRecommendationModel>>
 }

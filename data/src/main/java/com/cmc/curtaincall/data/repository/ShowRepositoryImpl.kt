@@ -3,7 +3,6 @@ package com.cmc.curtaincall.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.paging.map
 import com.cmc.curtaincall.core.network.service.favorite.FavoriteService
 import com.cmc.curtaincall.core.network.service.show.ShowService
 import com.cmc.curtaincall.data.source.local.ShowLocalSource
@@ -17,6 +16,7 @@ import com.cmc.curtaincall.domain.model.show.LiveTalkShowModel
 import com.cmc.curtaincall.domain.model.show.ShowDetailModel
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import com.cmc.curtaincall.domain.model.show.ShowRankModel
+import com.cmc.curtaincall.domain.model.show.ShowRecommendationModel
 import com.cmc.curtaincall.domain.model.show.ShowSearchWordModel
 import com.cmc.curtaincall.domain.model.show.SimilarShowInfoModel
 import com.cmc.curtaincall.domain.repository.ShowRepository
@@ -109,6 +109,12 @@ class ShowRepositoryImpl @Inject constructor(
             size = size,
             baseDateTime = baseDateTime
         ).map { response ->
+            response.map { it.toModel() }
+        }
+    }
+
+    override fun requestShowRecommendation(): Flow<List<ShowRecommendationModel>> {
+        return showRemoteSource.requestShowRecommendations().map { response ->
             response.map { it.toModel() }
         }
     }

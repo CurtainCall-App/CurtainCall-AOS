@@ -5,6 +5,7 @@ import com.cmc.curtaincall.core.network.service.show.response.LiveTalkShowsRespo
 import com.cmc.curtaincall.core.network.service.show.response.ShowDetailResponse
 import com.cmc.curtaincall.core.network.service.show.response.ShowInfosResponse
 import com.cmc.curtaincall.core.network.service.show.response.ShowRanksResponse
+import com.cmc.curtaincall.core.network.service.show.response.ShowRecommendationsResponse
 import com.cmc.curtaincall.core.network.service.show.response.SimilarShowInfosResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -73,4 +74,7 @@ interface ShowService {
         @Query("size") size: Int?,
         @Query("baseDateTime") baseDateTime: String
     ): LiveTalkShowsResponse
+
+    @GET("show-recommendations")
+    suspend fun requestShowRecommendations(): ShowRecommendationsResponse
 }
