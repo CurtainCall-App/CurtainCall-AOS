@@ -13,26 +13,33 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.designsystem.R
+import com.cmc.curtaincall.common.designsystem.component.appbars.CurtainCallDefaultTopAppBar
 import com.cmc.curtaincall.common.designsystem.component.card.LiveTalkContentCard
 import com.cmc.curtaincall.common.designsystem.component.card.MyContentCard
 import com.cmc.curtaincall.common.designsystem.component.card.PerformanceCard
-import com.cmc.curtaincall.common.designsystem.component.lib.pager.DynamicHorizontalPagerIndicator
 import com.cmc.curtaincall.common.designsystem.component.row.ContentTitleRow
-import com.cmc.curtaincall.common.designsystem.extensions.toSp
+import com.cmc.curtaincall.common.designsystem.dimension.Paddings
 import com.cmc.curtaincall.common.designsystem.theme.*
+import com.cmc.curtaincall.common.utility.extensions.toChangeDate
 import com.cmc.curtaincall.common.utility.extensions.toDateWithDay
 import com.cmc.curtaincall.common.utility.extensions.toDday
 import com.cmc.curtaincall.common.utility.extensions.toTime
+import com.cmc.curtaincall.domain.model.show.ShowRecommendationModel
 import com.cmc.curtaincall.domain.type.HomeGuideMenu
+import com.cmc.curtaincall.domain.type.translateShowGenreType
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import io.getstream.chat.android.client.ChatClient
 
@@ -48,32 +55,17 @@ fun HomeScreen(
     onNavigateMyPage: () -> Unit = {}
 ) {
     val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(Cetacean_Blue)
+    systemUiController.setStatusBarColor(CurtainCallTheme.colors.background)
 
     LaunchedEffect(Unit) {
         homeViewModel.connectChattingClient(chatClient)
     }
 
-    Scaffold(topBar = {
-        TopAppBar(
-            title = {
-                Text(
-                    text = stringResource(R.string.home_appbar_title),
-                    color = White,
-                    fontSize = 18.dp.toSp(),
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = avenirnext
-                )
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(54.dp)
-                .background(Cetacean_Blue)
-                .padding(top = 20.dp, bottom = 10.dp),
-            actions = {},
-            colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = Cetacean_Blue)
-        )
-    }) { paddingValues ->
+    Scaffold(
+        topBar = {
+            CurtainCallDefaultTopAppBar()
+        }
+    ) { paddingValues ->
         HomeContent(
             homeViewModel = homeViewModel,
             modifier = Modifier
@@ -83,34 +75,6 @@ fun HomeScreen(
             onNavigateGuide = onNavigateGuide,
             onNavigatePerformanceDetail = onNavigatePerformanceDetail
         )
-    }
-}
-
-@Composable
-private fun HomeSearchContent(
-    homeViewModel: HomeViewModel,
-    modifier: Modifier = Modifier
-) {
-    val scrollState = rememberScrollState()
-    val searchWords = homeViewModel.uiState.collectAsStateWithLifecycle().value.searchWords
-    Column(modifier.verticalScroll(scrollState)) {
-        searchWords.forEach { searchWord ->
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 6.dp, horizontal = 20.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = searchWord.word,
-                    modifier = Modifier.weight(1f)
-                )
-                Icon(
-                    painter = painterResource(R.drawable.ic_close),
-                    contentDescription = null
-                )
-            }
-        }
     }
 }
 
@@ -128,18 +92,19 @@ private fun HomeContent(
         // homeViewModel.requestLiveTalks()
         // homeViewModel.requestMyRecruitments()
         // homeViewModel.requestMyParticipations()
+        homeViewModel.requestShowRecommendations()
         homeViewModel.requestPopularShowList()
         homeViewModel.requestOpenShowList()
         homeViewModel.requestEndShowList()
     }
 
     Column(modifier.verticalScroll(scrollState)) {
-        HomeBanner(
+        HomeBannerScreen(
             modifier = Modifier
-                .height(275.dp)
-                .background(Cetacean_Blue),
-            nickname = homeUiState.nickname,
-            onNavigateGuide = onNavigateGuide
+                .padding(horizontal = 20.dp)
+                .fillMaxWidth()
+                .height(346.dp),
+            showRecommendations = homeUiState.showRecommendations
         )
         Column(
             modifier = Modifier
@@ -373,149 +338,168 @@ internal fun HomeContentRow(
     }
 }
 
-private data class BannerItem(
-    val title: String,
-    val description: String,
-    val color: Color,
-    val content: @Composable BoxScope.() -> Unit,
-    val onClick: () -> Unit
-)
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-internal fun HomeBanner(
+internal fun HomeBannerScreen(
     modifier: Modifier = Modifier,
-    nickname: String,
-    onNavigateGuide: (HomeGuideMenu) -> Unit
+    showRecommendations: List<ShowRecommendationModel>,
+    onNavigatePerformanceDetail: (String) -> Unit = {}
 ) {
-    val bannerItems = listOf(
-        BannerItem(title = stringResource(R.string.home_banner_word_dictionary_title), description = stringResource(R.string.home_banner_word_dictionary_description), color = Navajo_White, content = {
-            Image(
-                painter = painterResource(R.drawable.ic_dictionary),
-                contentDescription = null,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 17.dp, bottom = (15.27).dp)
-            )
-        }, onClick = { onNavigateGuide(HomeGuideMenu.DICTIONARY) }),
-        BannerItem(title = stringResource(R.string.home_banner_ticketing_guide_title), description = stringResource(R.string.home_banner_ticketing_guide_description), color = Pale_Lavendar, content = {
-            Image(
-                painter = painterResource(R.drawable.ic_ticket),
-                contentDescription = null,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = 20.dp, bottom = (18.37).dp)
-            )
-        }, onClick = { onNavigateGuide(HomeGuideMenu.TICKETING) }),
-        BannerItem(title = stringResource(R.string.home_banner_gift_title), description = stringResource(R.string.home_banner_gift_description), color = Water, content = {
-            Image(
-                painter = painterResource(R.drawable.ic_gift),
-                contentDescription = null,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(end = (13.5).dp, bottom = (9.79).dp)
-            )
-        }, onClick = { onNavigateGuide(HomeGuideMenu.DISCOUNT) })
-    )
-
-    val pagerState = rememberPagerState { bannerItems.size }
-    Column(modifier) {
-        Text(
-            text = "안녕하세요 ${nickname}님 :)",
-            modifier = Modifier.padding(
-                top = 22.dp,
-                start = 20.dp
-            ),
-            color = White,
-            fontSize = 18.dp.toSp(),
-            fontWeight = FontWeight.Bold,
-            fontFamily = spoqahansanseeo
-        )
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 14.dp)
-                .height(170.dp)
-        ) { position ->
-            HomeBannerPagerItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .background(bannerItems[position].color, RoundedCornerShape(12.dp)),
-                title = bannerItems[position].title,
-                description = bannerItems[position].description,
-                content = bannerItems[position].content,
-                onClick = bannerItems[position].onClick
-            )
-        }
-        DynamicHorizontalPagerIndicator(
-            pagerState = pagerState,
-            pageCount = bannerItems.size,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(top = 14.dp),
-            activeColor = White,
-            activeIndicatorWidth = 14.dp,
-            activeIndicatorHeight = 6.dp,
-            inactiveColor = White.copy(0.2f),
-            inactiveIndicatorWidth = 6.dp,
-            spacing = 6.dp
-        )
-    }
-}
-
-@Composable
-private fun HomeBannerPagerItem(
-    modifier: Modifier = Modifier,
-    title: String,
-    description: String,
-    content: @Composable BoxScope.() -> Unit = {},
-    onClick: () -> Unit = {},
-) {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Box(modifier.clickable { onClick() }) {
+    val pagerState = rememberPagerState { showRecommendations.size + 1 }
+    HorizontalPager(
+        state = pagerState,
+        modifier = modifier.clip(RoundedCornerShape(14.dp))
+    ) { position ->
+        if (position == 0) {
             Column(
                 modifier = Modifier
-                    .padding(start = 16.dp)
-                    .padding(top = 18.dp, bottom = 16.dp)
+                    .fillMaxSize()
+                    .background(CurtainCallTheme.colors.primary)
+                    .padding(top = 20.dp, bottom = 30.dp, start = 24.dp, end = 20.dp)
             ) {
-                Text(
-                    text = title,
-                    color = Cetacean_Blue,
-                    fontSize = 20.dp.toSp(),
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = spoqahansanseeo
-                )
-                Text(
-                    text = description,
-                    modifier = Modifier.padding(top = 10.dp),
-                    color = Cetacean_Blue,
-                    fontSize = 13.dp.toSp(),
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo,
-                    lineHeight = 17.dp.toSp()
-                )
+                Row(Modifier.fillMaxWidth()) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_logo),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(top = 10.dp)
+                            .size(56.dp)
+                    )
+                    Spacer(Modifier.weight(1f))
+                    Box(
+                        modifier = Modifier
+                            .background(CurtainCallTheme.colors.background.copy(alpha = 0.2f), RoundedCornerShape(20.dp))
+                            .padding(vertical = 2.dp, horizontal = 8.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = String.format("%d/%d", 1, pagerState.pageCount),
+                            style = CurtainCallTheme.typography.body5.copy(
+                                color = White
+                            )
+                        )
+                    }
+                }
                 Spacer(Modifier.weight(1f))
+                Text(
+                    text = stringResource(R.string.home_banner_renewal_description),
+                    style = CurtainCallTheme.typography.body4.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        color = White
+                    )
+                )
+                Text(
+                    text = stringResource(R.string.home_banner_renewal),
+                    modifier = Modifier.padding(top = 20.dp),
+                    style = CurtainCallTheme.typography.h2.copy(
+                        color = CurtainCallTheme.colors.secondary
+                    )
+                )
+            }
+        } else {
+            val brush = Brush.verticalGradient(listOf(Black.copy(alpha = 0f), Black.copy(alpha = 0.4f)))
+            val showRecommendation = showRecommendations[position - 1]
+            Box(Modifier.fillMaxSize()) {
+                Canvas(
+                    modifier = Modifier.fillMaxSize(),
+                    onDraw = {
+                        drawRect(brush)
+                    }
+                )
+                AsyncImage(
+                    model = "https://www.kopis.or.kr/upload/pfmPoster/PF_PF121682_210322_143051.gif",
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .blur(80.dp),
+                    contentScale = ContentScale.FillBounds
+                )
                 Box(
                     modifier = Modifier
-                        .background(Cetacean_Blue, RoundedCornerShape(16.dp))
-                        .padding(horizontal = 12.dp, vertical = 4.dp),
+                        .align(Alignment.TopEnd)
+                        .padding(top = 20.dp, end = 20.dp)
+                        .background(CurtainCallTheme.colors.background.copy(alpha = 0.2f), RoundedCornerShape(20.dp))
+                        .padding(vertical = 2.dp, horizontal = 8.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
-                        text = stringResource(R.string.home_banner_showing),
-                        color = White,
-                        fontSize = 14.dp.toSp(),
-                        fontWeight = FontWeight.Medium,
-                        fontFamily = spoqahansanseeo
+                        text = String.format("%d/%d", position + 1, pagerState.pageCount),
+                        style = CurtainCallTheme.typography.body5.copy(
+                            color = White
+                        )
+                    )
+                }
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(20.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    AsyncImage(
+                        model = "https://www.kopis.or.kr/upload/pfmPoster/PF_PF121682_210322_143051.gif",
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(137.dp, 182.dp)
+                            .clip(RoundedCornerShape(10.dp)),
+                        contentScale = ContentScale.FillBounds
+                    )
+                    Row(
+                        modifier = Modifier.padding(top = 16.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .background(CurtainCallTheme.colors.secondary, RoundedCornerShape(20.dp))
+                                .padding(vertical = 2.dp, horizontal = 8.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = stringResource(R.string.home_banner_recommendation),
+                                style = CurtainCallTheme.typography.caption.copy(
+                                    color = CurtainCallTheme.colors.primary
+                                )
+                            )
+                        }
+                        Box(
+                            modifier = Modifier
+                                .padding(start = 4.dp)
+                                .background(CurtainCallTheme.colors.primary, RoundedCornerShape(20.dp))
+                                .padding(vertical = 2.dp, horizontal = 8.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = translateShowGenreType(showRecommendation.genre).value,
+                                style = CurtainCallTheme.typography.caption.copy(
+                                    color = CurtainCallTheme.colors.onPrimary
+                                )
+                            )
+                        }
+                    }
+                    Text(
+                        text = showRecommendation.description,
+                        modifier = Modifier.padding(top = Paddings.xlarge),
+                        style = CurtainCallTheme.typography.body5.copy(
+                            color = White
+                        ),
+                        maxLines = 1
+                    )
+                    Text(
+                        text = showRecommendation.name,
+                        modifier = Modifier.padding(top = Paddings.xsmall),
+                        style = CurtainCallTheme.typography.subTitle2.copy(
+                            color = White
+                        ),
+                        maxLines = 1
+                    )
+                    Spacer(Modifier.weight(1f))
+                    Text(
+                        text = String.format("%s - %s", showRecommendation.startDate.toChangeDate(), showRecommendation.endDate.toChangeDate()),
+                        style = CurtainCallTheme.typography.caption.copy(
+                            color = White
+                        ),
+                        maxLines = 1
                     )
                 }
             }
-            content()
         }
     }
 }
