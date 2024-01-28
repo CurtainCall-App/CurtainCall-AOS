@@ -48,7 +48,8 @@ private sealed class TopAppBarType(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BaseTopAppBar(
-    type: TopAppBarType
+    type: TopAppBarType,
+    containerColor: Color
 ) {
     if (type is TopAppBarType.Default) {
         TopAppBar(
@@ -69,7 +70,7 @@ private fun BaseTopAppBar(
             },
             windowInsets = WindowInsets(left = Paddings.small),
             colors = TopAppBarDefaults.mediumTopAppBarColors(
-                containerColor = CurtainCallTheme.colors.background
+                containerColor = containerColor
             )
         )
     } else {
@@ -103,30 +104,35 @@ private fun BaseTopAppBar(
                 right = TopAppBarBackRightPadding
             ),
             colors = TopAppBarDefaults.mediumTopAppBarColors(
-                containerColor = CurtainCallTheme.colors.background
+                containerColor = containerColor
             )
         )
     }
 }
 
 @Composable
-fun CurtainCallDefaultTopAppBar() {
+fun CurtainCallDefaultTopAppBar(
+    containerColor: Color = CurtainCallTheme.colors.background
+) {
     BaseTopAppBar(
         type = TopAppBarType.Default(
             title = stringResource(R.string.default_top_appbar_title)
-        )
+        ),
+        containerColor = containerColor
     )
 }
 
 @Composable
 fun CurtainCallTopAppBarWithBack(
     title: String,
+    containerColor: Color = CurtainCallTheme.colors.background,
     onBack: () -> Unit = {}
 ) {
     BaseTopAppBar(
         type = TopAppBarType.Back(
             title = title,
             onBack = onBack
-        )
+        ),
+        containerColor = containerColor
     )
 }

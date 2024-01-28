@@ -27,6 +27,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.appbars.CurtainCallDefaultTopAppBar
+import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.designsystem.component.card.LiveTalkContentCard
 import com.cmc.curtaincall.common.designsystem.component.card.MyContentCard
 import com.cmc.curtaincall.common.designsystem.component.card.PerformanceCard
@@ -38,9 +39,7 @@ import com.cmc.curtaincall.common.utility.extensions.toDateWithDay
 import com.cmc.curtaincall.common.utility.extensions.toDday
 import com.cmc.curtaincall.common.utility.extensions.toTime
 import com.cmc.curtaincall.domain.model.show.ShowRecommendationModel
-import com.cmc.curtaincall.domain.type.HomeGuideMenu
 import com.cmc.curtaincall.domain.type.translateShowGenreType
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import io.getstream.chat.android.client.ChatClient
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -48,22 +47,21 @@ import io.getstream.chat.android.client.ChatClient
 fun HomeScreen(
     homeViewModel: HomeViewModel = hiltViewModel(),
     chatClient: ChatClient,
-    onNavigateGuide: (HomeGuideMenu) -> Unit,
     onNavigatePerformanceDetail: (String) -> Unit,
     onNavigateLiveTalk: () -> Unit = {},
     onNavigatePartyMember: () -> Unit = {},
     onNavigateMyPage: () -> Unit = {}
 ) {
-    val systemUiController = rememberSystemUiController()
-    systemUiController.setStatusBarColor(CurtainCallTheme.colors.background)
-
     LaunchedEffect(Unit) {
         homeViewModel.connectChattingClient(chatClient)
     }
 
+    SystemUiStatusBar(Grey8)
     Scaffold(
         topBar = {
-            CurtainCallDefaultTopAppBar()
+            CurtainCallDefaultTopAppBar(
+                containerColor = Grey8
+            )
         }
     ) { paddingValues ->
         HomeContent(
@@ -71,8 +69,7 @@ fun HomeScreen(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
-                .background(White),
-            onNavigateGuide = onNavigateGuide,
+                .background(CurtainCallTheme.colors.background),
             onNavigatePerformanceDetail = onNavigatePerformanceDetail
         )
     }
@@ -82,7 +79,6 @@ fun HomeScreen(
 private fun HomeContent(
     homeViewModel: HomeViewModel,
     modifier: Modifier = Modifier,
-    onNavigateGuide: (HomeGuideMenu) -> Unit,
     onNavigatePerformanceDetail: (String) -> Unit
 ) {
     val scrollState = rememberScrollState()
@@ -101,9 +97,9 @@ private fun HomeContent(
     Column(modifier.verticalScroll(scrollState)) {
         HomeBannerScreen(
             modifier = Modifier
-                .padding(horizontal = 20.dp)
                 .fillMaxWidth()
-                .height(346.dp),
+                .height(366.dp)
+                .background(Grey8),
             showRecommendations = homeUiState.showRecommendations
         )
         Column(
@@ -348,12 +344,15 @@ internal fun HomeBannerScreen(
     val pagerState = rememberPagerState { showRecommendations.size + 1 }
     HorizontalPager(
         state = pagerState,
-        modifier = modifier.clip(RoundedCornerShape(14.dp))
+        modifier = modifier
     ) { position ->
         if (position == 0) {
             Column(
                 modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .padding(bottom = 20.dp)
                     .fillMaxSize()
+                    .clip(RoundedCornerShape(14.dp))
                     .background(CurtainCallTheme.colors.primary)
                     .padding(top = 20.dp, bottom = 30.dp, start = 24.dp, end = 20.dp)
             ) {
@@ -399,7 +398,13 @@ internal fun HomeBannerScreen(
         } else {
             val brush = Brush.verticalGradient(listOf(Black.copy(alpha = 0f), Black.copy(alpha = 0.4f)))
             val showRecommendation = showRecommendations[position - 1]
-            Box(Modifier.fillMaxSize()) {
+            Box(
+                modifier = Modifier
+                    .padding(horizontal = 20.dp)
+                    .padding(bottom = 20.dp)
+                    .clip(RoundedCornerShape(14.dp))
+                    .fillMaxSize()
+            ) {
                 Canvas(
                     modifier = Modifier.fillMaxSize(),
                     onDraw = {
