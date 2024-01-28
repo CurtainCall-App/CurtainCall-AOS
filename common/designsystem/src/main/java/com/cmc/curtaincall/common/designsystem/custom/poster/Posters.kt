@@ -1,6 +1,7 @@
 package com.cmc.curtaincall.common.designsystem.custom.poster
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -24,18 +25,22 @@ import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.dimension.Paddings
 import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import com.cmc.curtaincall.common.designsystem.theme.Grey1
+import com.cmc.curtaincall.common.designsystem.theme.Grey5
 import com.cmc.curtaincall.domain.type.ShowGenreType
 
-// 120 x 221
 @Composable
 fun CurtainCallPopularPoster(
-    modifier: Modifier = Modifier,
     model: Any?,
     text: String,
     rank: Int = 1,
-    genreType: ShowGenreType = ShowGenreType.PLAY
+    genreType: ShowGenreType = ShowGenreType.PLAY,
+    onClick: () -> Unit = {}
 ) {
-    Column(modifier.size(120.dp, 221.dp)) {
+    Column(
+        modifier = Modifier
+            .size(120.dp, 221.dp)
+            .clickable { onClick() }
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -48,12 +53,12 @@ fun CurtainCallPopularPoster(
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(RoundedCornerShape(10.dp)),
-                contentScale = ContentScale.FillBounds
+                contentScale = ContentScale.FillWidth
             )
             Box(
                 modifier = Modifier
                     .background(Grey1.copy(alpha = 0.6f), RoundedCornerShape(topStart = 10.dp, bottomEnd = 5.dp))
-                    .padding(horizontal = 8.dp, vertical = 4.dp),
+                    .padding(horizontal = Paddings.medium, vertical = Paddings.small),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
@@ -69,7 +74,7 @@ fun CurtainCallPopularPoster(
             modifier = Modifier
                 .padding(top = 10.dp)
                 .background(CurtainCallTheme.colors.primary, RoundedCornerShape(20.dp))
-                .padding(horizontal = 8.dp, vertical = 4.dp),
+                .padding(horizontal = Paddings.medium, vertical = Paddings.small),
             contentAlignment = Alignment.Center
         ) {
             Text(
@@ -81,12 +86,164 @@ fun CurtainCallPopularPoster(
         }
         Text(
             text = text,
-            modifier = Modifier.padding(top = Paddings.medium),
+            modifier = Modifier.padding(top = 6.dp),
             style = CurtainCallTheme.typography.body3.copy(
                 fontWeight = FontWeight.SemiBold
             ),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
+        )
+    }
+}
+
+@Composable
+fun CurtainCallOpenShowPoster(
+    model: Any?,
+    text: String,
+    dDay: String,
+    openDate: String,
+    genreType: ShowGenreType = ShowGenreType.PLAY,
+    onClick: () -> Unit = {}
+) {
+    Column(
+        modifier = Modifier
+            .size(120.dp, 238.dp)
+            .clickable { onClick() }
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(120 / 160f)
+        ) {
+            AsyncImage(
+                model = model,
+                contentDescription = text,
+                error = painterResource(R.drawable.ic_error_poster),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(10.dp)),
+                contentScale = ContentScale.FillWidth
+            )
+            Box(
+                modifier = Modifier
+                    .padding(top = Paddings.medium, start = Paddings.medium)
+                    .background(Grey1.copy(alpha = 0.6f), RoundedCornerShape(6.dp))
+                    .padding(horizontal = Paddings.medium, vertical = 3.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = dDay,
+                    style = CurtainCallTheme.typography.body4.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        color = CurtainCallTheme.colors.onPrimary
+                    )
+                )
+            }
+        }
+        Box(
+            modifier = Modifier
+                .padding(top = 10.dp)
+                .background(CurtainCallTheme.colors.primary, RoundedCornerShape(20.dp))
+                .padding(horizontal = Paddings.medium, vertical = Paddings.small),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = genreType.value,
+                style = CurtainCallTheme.typography.caption.copy(
+                    color = CurtainCallTheme.colors.onPrimary
+                )
+            )
+        }
+        Text(
+            text = text,
+            modifier = Modifier.padding(top = 6.dp),
+            style = CurtainCallTheme.typography.body3.copy(
+                fontWeight = FontWeight.SemiBold
+            ),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+        Text(
+            text = "$openDate~",
+            style = CurtainCallTheme.typography.body5.copy(
+                color = Grey5
+            )
+        )
+    }
+}
+
+@Composable
+fun CurtainCallEndShowPoster(
+    model: Any?,
+    text: String,
+    dDay: String,
+    endDate: String,
+    genreType: ShowGenreType = ShowGenreType.PLAY,
+    onClick: () -> Unit = {}
+) {
+    Column(
+        modifier = Modifier
+            .size(120.dp, 238.dp)
+            .clickable { onClick() }
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(120 / 160f)
+        ) {
+            AsyncImage(
+                model = model,
+                contentDescription = text,
+                error = painterResource(R.drawable.ic_error_poster),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(10.dp)),
+                contentScale = ContentScale.FillWidth
+            )
+            Box(
+                modifier = Modifier
+                    .padding(top = Paddings.medium, start = Paddings.medium)
+                    .background(Grey1.copy(alpha = 0.6f), RoundedCornerShape(6.dp))
+                    .padding(horizontal = Paddings.medium, vertical = 3.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = dDay,
+                    style = CurtainCallTheme.typography.body4.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        color = CurtainCallTheme.colors.onPrimary
+                    )
+                )
+            }
+        }
+        Box(
+            modifier = Modifier
+                .padding(top = 10.dp)
+                .background(CurtainCallTheme.colors.primary, RoundedCornerShape(20.dp))
+                .padding(horizontal = Paddings.medium, vertical = Paddings.small),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = genreType.value,
+                style = CurtainCallTheme.typography.caption.copy(
+                    color = CurtainCallTheme.colors.onPrimary
+                )
+            )
+        }
+        Text(
+            text = text,
+            modifier = Modifier.padding(top = 6.dp),
+            style = CurtainCallTheme.typography.body3.copy(
+                fontWeight = FontWeight.SemiBold
+            ),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+        Text(
+            text = "~$endDate",
+            style = CurtainCallTheme.typography.body5.copy(
+                color = Grey5
+            )
         )
     }
 }

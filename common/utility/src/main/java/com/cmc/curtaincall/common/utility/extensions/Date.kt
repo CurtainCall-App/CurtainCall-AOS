@@ -5,7 +5,9 @@ import java.util.Calendar
 import java.util.Locale
 import java.util.TimeZone
 
+private const val DEFAULT_DATE_PATTERN = "yyyy-MM-dd"
 private const val DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss"
+private const val SIMPLE_DATE_PATTERN = "yy.MM.dd(E)"
 fun getTodayDate(): String {
     return SimpleDateFormat(DATE_PATTERN, Locale.KOREA).format(Calendar.getInstance().time)
 }
@@ -43,17 +45,30 @@ fun String.toTime(): String {
     return SimpleDateFormat("HH:mm").format(date)
 }
 
-fun String.toDday(): Long {
+fun String.convertDDay(): Long {
     if (isEmpty()) return 0L
-    val date = SimpleDateFormat("yyyy-MM-dd").parse(this)
-    val today = Calendar.getInstance().apply {
-        set(Calendar.HOUR, 0)
-        set(Calendar.MINUTE, 0)
-        set(Calendar.SECOND, 0)
-        set(Calendar.MILLISECOND, 0)
+    val date = SimpleDateFormat(DEFAULT_DATE_PATTERN, Locale.KOREA).parse(this)
+    date?.let { date ->
+        val today = Calendar.getInstance().apply {
+            set(Calendar.HOUR, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        return (today.time.time - date.time) / (60 * 60 * 24 * 1000L)
+    } ?: kotlin.run {
+        return 0L
     }
-    val dday = (today.time.time - date.time) / (60 * 60 * 24 * 1000)
-    return dday
+}
+
+fun String.convertSimpleDate(): String {
+    if (isEmpty()) return ""
+    val date = SimpleDateFormat(DEFAULT_DATE_PATTERN, Locale.KOREA).parse(this)
+    date?.let { date ->
+        return SimpleDateFormat(SIMPLE_DATE_PATTERN, Locale.KOREA).format(date)
+    } ?: kotlin.run {
+        return ""
+    }
 }
 
 fun String.toChangeDate(): String {
