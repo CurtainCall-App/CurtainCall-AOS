@@ -6,6 +6,7 @@ import com.cmc.curtaincall.domain.model.member.MyRecruitmentModel
 import com.cmc.curtaincall.domain.model.show.LiveTalkShowModel
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import com.cmc.curtaincall.domain.model.show.ShowRankModel
+import com.cmc.curtaincall.domain.model.show.ShowRecommendationModel
 import com.cmc.curtaincall.domain.model.show.ShowSearchWordModel
 
 sealed class HomeEvent : BaseEvent {
@@ -39,5 +40,9 @@ sealed class HomeEvent : BaseEvent {
 
     data class RequestShowSearchWords(
         val searchWords: List<ShowSearchWordModel>
+    ) : HomeEvent()
+
+    data class RequestShowRecommendations(
+        val showRecommendations: List<ShowRecommendationModel>
     ) : HomeEvent()
 }

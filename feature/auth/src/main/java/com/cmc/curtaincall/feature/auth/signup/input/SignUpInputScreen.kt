@@ -62,7 +62,6 @@ internal fun SignUpInputScreen(
     Scaffold(
         topBar = {
             CurtainCallTopAppBarWithBack(
-                modifier = Modifier.fillMaxWidth(),
                 title = stringResource(R.string.signup_title),
                 onBack = onBack
             )

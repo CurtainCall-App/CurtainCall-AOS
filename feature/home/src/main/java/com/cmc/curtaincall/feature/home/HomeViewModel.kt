@@ -71,6 +71,10 @@ class HomeViewModel @Inject constructor(
                 currentState.copy(liveTalks = event.liveTalks)
             }
 
+            is HomeEvent.RequestShowRecommendations -> {
+                currentState.copy(showRecommendations = event.showRecommendations)
+            }
+
             else -> currentState
         }
 
@@ -178,5 +182,11 @@ class HomeViewModel @Inject constructor(
                 Timber.d("chatClient connect User ${it.isSuccess}")
             }
         }.launchIn(viewModelScope)
+    }
+
+    fun requestShowRecommendations() {
+        showRepository.requestShowRecommendation()
+            .onEach { sendAction(HomeEvent.RequestShowRecommendations(it)) }
+            .launchIn(viewModelScope)
     }
 }

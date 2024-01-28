@@ -6,6 +6,7 @@ import com.cmc.curtaincall.domain.model.member.MyRecruitmentModel
 import com.cmc.curtaincall.domain.model.show.LiveTalkShowModel
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import com.cmc.curtaincall.domain.model.show.ShowRankModel
+import com.cmc.curtaincall.domain.model.show.ShowRecommendationModel
 import com.cmc.curtaincall.domain.model.show.ShowSearchWordModel
 
 data class HomeState(
@@ -16,5 +17,6 @@ data class HomeState(
     val showRanks: List<ShowRankModel> = listOf(),
     val openShowInfos: List<ShowInfoModel> = listOf(),
     val endShowInfos: List<ShowInfoModel> = listOf(),
-    val searchWords: List<ShowSearchWordModel> = listOf()
+    val searchWords: List<ShowSearchWordModel> = listOf(),
+    val showRecommendations: List<ShowRecommendationModel> = listOf()
 ) : BaseState

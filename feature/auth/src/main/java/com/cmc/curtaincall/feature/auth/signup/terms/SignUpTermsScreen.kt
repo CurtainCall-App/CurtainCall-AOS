@@ -51,7 +51,6 @@ internal fun SignUpTermsScreen(
     Scaffold(
         topBar = {
             CurtainCallTopAppBarWithBack(
-                modifier = Modifier.fillMaxWidth(),
                 title = stringResource(R.string.signup_terms_title),
                 onBack = {
                     if (signUpTermsUiState.webUrl == DEFAULT_URL) {

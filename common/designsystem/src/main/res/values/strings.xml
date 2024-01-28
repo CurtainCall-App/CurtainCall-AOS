@@ -25,6 +25,11 @@
     <string name="signup_input_nickname_duplicate">이미 동일한 닉네임이 있습니다.\n다른 닉네임을 입력해주세요.</string>
     <string name="signup_complete">회원가입 완료</string>
 
+    <!-- home -->
+    <string name="home_banner_renewal_description">새롭게 바뀐 커튼콜을 확인해보세요!</string>
+    <string name="home_banner_renewal">CURTAIN CALL\nRENEWAL</string>
+    <string name="home_banner_recommendation">추천</string>
+
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
     <!-- common -->
