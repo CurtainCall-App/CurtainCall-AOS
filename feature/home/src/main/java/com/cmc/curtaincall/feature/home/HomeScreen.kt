@@ -2,6 +2,7 @@ package com.cmc.curtaincall.feature.home
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.pager.HorizontalPager
@@ -16,7 +17,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -28,16 +28,14 @@ import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.appbars.CurtainCallDefaultTopAppBar
 import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
-import com.cmc.curtaincall.common.designsystem.component.card.LiveTalkContentCard
-import com.cmc.curtaincall.common.designsystem.component.card.MyContentCard
-import com.cmc.curtaincall.common.designsystem.component.card.PerformanceCard
-import com.cmc.curtaincall.common.designsystem.component.row.ContentTitleRow
+import com.cmc.curtaincall.common.designsystem.custom.poster.CurtainCallEndShowPoster
+import com.cmc.curtaincall.common.designsystem.custom.poster.CurtainCallOpenShowPoster
+import com.cmc.curtaincall.common.designsystem.custom.poster.CurtainCallPopularPoster
 import com.cmc.curtaincall.common.designsystem.dimension.Paddings
 import com.cmc.curtaincall.common.designsystem.theme.*
+import com.cmc.curtaincall.common.utility.extensions.convertDDay
+import com.cmc.curtaincall.common.utility.extensions.convertSimpleDate
 import com.cmc.curtaincall.common.utility.extensions.toChangeDate
-import com.cmc.curtaincall.common.utility.extensions.toDateWithDay
-import com.cmc.curtaincall.common.utility.extensions.toDday
-import com.cmc.curtaincall.common.utility.extensions.toTime
 import com.cmc.curtaincall.domain.model.show.ShowRecommendationModel
 import com.cmc.curtaincall.domain.type.translateShowGenreType
 import io.getstream.chat.android.client.ChatClient
@@ -47,7 +45,7 @@ import io.getstream.chat.android.client.ChatClient
 fun HomeScreen(
     homeViewModel: HomeViewModel = hiltViewModel(),
     chatClient: ChatClient,
-    onNavigatePerformanceDetail: (String) -> Unit,
+    onNavigateToPerformanceDetail: (String) -> Unit,
     onNavigateLiveTalk: () -> Unit = {},
     onNavigatePartyMember: () -> Unit = {},
     onNavigateMyPage: () -> Unit = {}
@@ -70,7 +68,7 @@ fun HomeScreen(
                 .padding(paddingValues)
                 .fillMaxSize()
                 .background(CurtainCallTheme.colors.background),
-            onNavigatePerformanceDetail = onNavigatePerformanceDetail
+            onNavigateToPerformanceDetail = onNavigateToPerformanceDetail
         )
     }
 }
@@ -79,15 +77,12 @@ fun HomeScreen(
 private fun HomeContent(
     homeViewModel: HomeViewModel,
     modifier: Modifier = Modifier,
-    onNavigatePerformanceDetail: (String) -> Unit
+    onNavigateToPerformanceDetail: (String) -> Unit
 ) {
     val scrollState = rememberScrollState()
     val homeUiState by homeViewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(homeViewModel) {
-        // homeViewModel.requestLiveTalks()
-        // homeViewModel.requestMyRecruitments()
-        // homeViewModel.requestMyParticipations()
         homeViewModel.requestShowRecommendations()
         homeViewModel.requestPopularShowList()
         homeViewModel.requestOpenShowList()
@@ -100,237 +95,97 @@ private fun HomeContent(
                 .fillMaxWidth()
                 .height(366.dp)
                 .background(Grey8),
-            showRecommendations = homeUiState.showRecommendations
+            showRecommendations = homeUiState.showRecommendations,
+            onNavigateToPerformanceDetail = onNavigateToPerformanceDetail
         )
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(White)
         ) {
-            if (homeUiState.myRecruitments.isNotEmpty()) {
-                HomeContentRow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
-                        .padding(top = 40.dp),
-                    painter = painterResource(R.drawable.ic_gather),
-                    title = stringResource(R.string.home_my_gathering_tab)
-                ) {
-                    homeUiState.myRecruitments.forEach { myRecruitment ->
-                        MyContentCard(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 12.dp),
-                            category = myRecruitment.category,
-                            title = myRecruitment.title,
-                            numberOfPartyMember = myRecruitment.curMemberNum,
-                            numberOfTotalMember = myRecruitment.maxMemberNum,
-                            description = myRecruitment.content,
-                            date = myRecruitment.showAt?.toDateWithDay(),
-                            imageUrl = myRecruitment.showPoster,
-                            showName = myRecruitment.showName ?: "",
-                            time = myRecruitment.showAt?.toTime()
-                        )
-                    }
-                }
-            }
-            if (homeUiState.myParticipations.isNotEmpty()) {
-                HomeContentRow(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
-                        .padding(top = 40.dp),
-                    painter = painterResource(R.drawable.ic_my_participation),
-                    title = stringResource(R.string.home_my_participation_tab)
-                ) {
-                    homeUiState.myParticipations.forEach { myParticipation ->
-                        MyContentCard(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 12.dp),
-                            category = myParticipation.category,
-                            title = myParticipation.title,
-                            numberOfPartyMember = myParticipation.curMemberNum,
-                            numberOfTotalMember = myParticipation.maxMemberNum,
-                            description = myParticipation.content,
-                            date = myParticipation.showAt.toDateWithDay(),
-                            imageUrl = myParticipation.showPoster,
-                            showName = myParticipation.showName ?: "",
-                            time = myParticipation.showAt.toTime()
-                        )
-                    }
-                }
-            }
-            if (homeUiState.liveTalks.isNotEmpty()) {
-                Box(
-                    modifier = Modifier
-                        .padding(
-                            top = if (homeUiState.myRecruitments.isEmpty() && homeUiState.myParticipations.isEmpty()) {
-                                0.dp
-                            } else {
-                                40.dp
-                            }
-                        )
-                        .background(Cultured)
-                ) {
-                    HomeContentRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(
-                                top = if (homeUiState.myRecruitments.isEmpty() && homeUiState.myParticipations.isEmpty()) {
-                                    40.dp
-                                } else {
-                                    20.dp
-                                },
-                                bottom = 20.dp
-                            ),
-                        painter = painterResource(R.drawable.ic_chatting),
-                        titleModifier = Modifier.padding(start = 20.dp),
-                        title = stringResource(R.string.home_coming_livetalk)
-                    ) {
-                        LazyRow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 12.dp)
-                        ) {
-                            itemsIndexed(homeUiState.liveTalks) { index, liveTalk ->
-                                if (index == 0) Spacer(Modifier.size(20.dp))
-                                Row {
-                                    LiveTalkContentCard(
-                                        modifier = Modifier.width(72.dp),
-                                        title = liveTalk.name,
-                                        posterUrl = liveTalk.poster,
-                                        time = liveTalk.showAt.toTime()
-                                    )
-                                    Spacer(Modifier.size(12.dp))
-                                }
-                            }
-                        }
-                    }
-                }
-            }
             if (homeUiState.showRanks.isNotEmpty()) {
-                HomeContentRow(
+                HomeContentsLazyRow(
                     modifier = Modifier
                         .padding(top = 40.dp)
                         .fillMaxWidth(),
-                    titleModifier = Modifier.padding(start = 20.dp),
-                    painter = painterResource(R.drawable.ic_fire),
-                    title = stringResource(R.string.home_top10_popular_performance)
+                    text = stringResource(R.string.home_contents_popular_show)
                 ) {
-                    LazyRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 12.dp)
-                    ) {
-                        itemsIndexed(homeUiState.showRanks) { index, showRank ->
-                            if (index == 0) Spacer(Modifier.size(20.dp))
-                            Row {
-                                PerformanceCard(
-                                    modifier = Modifier.width(120.dp),
-                                    title = showRank.name,
-                                    painter = painterResource(R.drawable.ic_error_poster),
-                                    imageUrl = showRank.poster,
-                                    rate = if (showRank.reviewCount == 0) 0.0f else showRank.reviewGradeSum / showRank.reviewCount.toFloat(),
-                                    numberOfTotal = showRank.reviewCount,
-                                    isShowMetadata = true,
-                                    meta = (index + 1).toString(),
-                                    onClick = { onNavigatePerformanceDetail(showRank.id) }
-                                )
-                                Spacer(Modifier.size(12.dp))
-                            }
-                        }
+                    itemsIndexed(homeUiState.showRanks) { index, showRank ->
+                        CurtainCallPopularPoster(
+                            model = showRank.poster,
+                            text = showRank.name,
+                            rank = index + 1,
+                            genreType = translateShowGenreType(showRank.genre),
+                            onClick = { onNavigateToPerformanceDetail(showRank.id) }
+                        )
                     }
                 }
             }
             if (homeUiState.openShowInfos.isNotEmpty()) {
-                HomeContentRow(
+                HomeContentsLazyRow(
                     modifier = Modifier
-                        .padding(top = 40.dp)
+                        .padding(top = 50.dp)
                         .fillMaxWidth(),
-                    titleModifier = Modifier.padding(start = 20.dp),
-                    painter = painterResource(R.drawable.ic_open_clock),
-                    title = stringResource(R.string.home_scheduled_open_performance)
+                    text = stringResource(R.string.home_contents_open_show)
                 ) {
-                    LazyRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 12.dp)
-                    ) {
-                        itemsIndexed(homeUiState.openShowInfos) { index, openShowInfo ->
-                            if (index == 0) Spacer(Modifier.size(20.dp))
-                            Row {
-                                PerformanceCard(
-                                    modifier = Modifier.width(120.dp),
-                                    title = openShowInfo.name,
-                                    imageUrl = openShowInfo.poster,
-                                    painter = painterResource(R.drawable.ic_error_poster),
-                                    rate = if (openShowInfo.reviewCount == 0) 0.0f else openShowInfo.reviewGradeSum / openShowInfo.reviewCount.toFloat(),
-                                    numberOfTotal = openShowInfo.reviewCount,
-                                    isShowMetadata = true,
-                                    meta = if (openShowInfo.startDate.toDday() == 0L) "D-DAY" else "D${openShowInfo.startDate.toDday()}",
-                                    onClick = { onNavigatePerformanceDetail(openShowInfo.id) }
-                                )
-                                Spacer(Modifier.size(12.dp))
-                            }
-                        }
-                    }
-                }
-                if (homeUiState.endShowInfos.isNotEmpty()) {
-                    HomeContentRow(
-                        modifier = Modifier
-                            .padding(top = 40.dp)
-                            .fillMaxWidth(),
-                        titleModifier = Modifier.padding(start = 20.dp),
-                        painter = painterResource(R.drawable.ic_end_clock),
-                        title = stringResource(R.string.home_scheduled_end_performance)
-                    ) {
-                        LazyRow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 12.dp)
-                        ) {
-                            itemsIndexed(homeUiState.endShowInfos) { index, endShowInfo ->
-                                if (index == 0) Spacer(Modifier.size(20.dp))
-                                Row {
-                                    PerformanceCard(
-                                        modifier = Modifier.width(120.dp),
-                                        title = endShowInfo.name,
-                                        imageUrl = endShowInfo.poster,
-                                        painter = painterResource(R.drawable.ic_error_poster),
-                                        rate = if (endShowInfo.reviewCount == 0) 0.0f else endShowInfo.reviewGradeSum / endShowInfo.reviewCount.toFloat(),
-                                        numberOfTotal = endShowInfo.reviewCount,
-                                        isShowMetadata = true,
-                                        meta = if (endShowInfo.endDate.toDday() == 0L) "D-DAY" else "D${endShowInfo.endDate.toDday()}",
-                                        onClick = { onNavigatePerformanceDetail(endShowInfo.id) }
-                                    )
-                                    Spacer(Modifier.size(12.dp))
-                                }
-                            }
-                        }
+                    itemsIndexed(homeUiState.openShowInfos) { index, openShowInfo ->
+                        CurtainCallOpenShowPoster(
+                            model = openShowInfo.poster,
+                            text = openShowInfo.name,
+                            dDay = if (openShowInfo.startDate.convertDDay() == 0L) "D-Day" else "D${openShowInfo.startDate.convertDDay()}",
+                            openDate = openShowInfo.startDate.convertSimpleDate(),
+                            genreType = translateShowGenreType(openShowInfo.genre),
+                            onClick = { onNavigateToPerformanceDetail(openShowInfo.id) }
+                        )
                     }
                 }
             }
-            Spacer(modifier = Modifier.height(68.dp))
+            if (homeUiState.endShowInfos.isNotEmpty()) {
+                HomeContentsLazyRow(
+                    modifier = Modifier
+                        .padding(top = 50.dp)
+                        .fillMaxWidth(),
+                    text = stringResource(R.string.home_contents_end_show)
+                ) {
+                    itemsIndexed(homeUiState.endShowInfos) { index, endShowInfo ->
+                        CurtainCallEndShowPoster(
+                            model = endShowInfo.poster,
+                            text = endShowInfo.name,
+                            dDay = if (endShowInfo.endDate.convertDDay() == 0L) "D-Day" else "D${endShowInfo.endDate.convertDDay()}",
+                            endDate = endShowInfo.endDate.convertSimpleDate(),
+                            genreType = translateShowGenreType(endShowInfo.genre),
+                            onClick = { onNavigateToPerformanceDetail(endShowInfo.id) }
+                        )
+                    }
+                }
+            }
+            Spacer(modifier = Modifier.height(42.dp))
         }
     }
 }
 
 @Composable
-internal fun HomeContentRow(
+private fun HomeContentsLazyRow(
     modifier: Modifier = Modifier,
-    titleModifier: Modifier = Modifier,
-    painter: Painter,
-    title: String,
-    content: @Composable () -> Unit
+    text: String,
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.spacedBy(12.dp),
+    content: LazyListScope.() -> Unit = {}
 ) {
     Column(modifier) {
-        ContentTitleRow(
-            modifier = titleModifier,
-            painter = painter,
-            title = title
+        Text(
+            text = text,
+            modifier = Modifier.padding(start = 20.dp),
+            style = CurtainCallTheme.typography.subTitle3
         )
-        content()
+        LazyRow(
+            modifier = Modifier
+                .padding(top = 12.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = horizontalArrangement,
+            contentPadding = PaddingValues(horizontal = 20.dp)
+        ) {
+            content()
+        }
     }
 }
 
@@ -339,7 +194,7 @@ internal fun HomeContentRow(
 internal fun HomeBannerScreen(
     modifier: Modifier = Modifier,
     showRecommendations: List<ShowRecommendationModel>,
-    onNavigatePerformanceDetail: (String) -> Unit = {}
+    onNavigateToPerformanceDetail: (String) -> Unit = {}
 ) {
     val pagerState = rememberPagerState { showRecommendations.size + 1 }
     HorizontalPager(
@@ -400,6 +255,7 @@ internal fun HomeBannerScreen(
             val showRecommendation = showRecommendations[position - 1]
             Box(
                 modifier = Modifier
+                    .clickable { onNavigateToPerformanceDetail(showRecommendations[position - 1].showId) }
                     .padding(horizontal = 20.dp)
                     .padding(bottom = 20.dp)
                     .clip(RoundedCornerShape(14.dp))
