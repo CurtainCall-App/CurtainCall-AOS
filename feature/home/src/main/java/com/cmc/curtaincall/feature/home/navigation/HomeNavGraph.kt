@@ -49,7 +49,7 @@ fun HomeNavHost(
             composable(route = HomeDestination.Home.route) {
                 HomeScreen(
                     chatClient = chatClient,
-                    onNavigatePerformanceDetail = {
+                    onNavigateToPerformanceDetail = {
                         navHostController.navigate("${ShowDestination.Detail.route}/$it")
                     }
                 )

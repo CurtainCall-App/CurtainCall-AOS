@@ -1,7 +1,7 @@
 package com.cmc.curtaincall.feature.home
 
 import androidx.lifecycle.viewModelScope
-import com.cmc.curtaincall.common.utility.extensions.toDday
+import com.cmc.curtaincall.common.utility.extensions.convertDDay
 import com.cmc.curtaincall.core.base.BaseViewModel
 import com.cmc.curtaincall.domain.repository.ChattingRepository
 import com.cmc.curtaincall.domain.repository.MemberRepository
@@ -147,7 +147,7 @@ class HomeViewModel @Inject constructor(
         val today = SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().time)
         showRepository.requestOpenShowList(page = 0, size = 10, startDate = today)
             .onEach {
-                sendAction(HomeEvent.RequestOpenShowList(it.shuffled().take(10).sortedByDescending { it.startDate.toDday() }))
+                sendAction(HomeEvent.RequestOpenShowList(it.shuffled().take(10).sortedByDescending { it.startDate.convertDDay() }))
             }
             .launchIn(viewModelScope)
     }
@@ -156,7 +156,7 @@ class HomeViewModel @Inject constructor(
         val today = SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().time)
         showRepository.requestEndShowList(page = 0, size = 10, endDate = today, genre = null)
             .onEach {
-                sendAction(HomeEvent.RequestEndShowList(it.shuffled().take(10).sortedByDescending { it.endDate.toDday() }))
+                sendAction(HomeEvent.RequestEndShowList(it.shuffled().take(10).sortedByDescending { it.endDate.convertDDay() }))
             }
             .launchIn(viewModelScope)
     }
