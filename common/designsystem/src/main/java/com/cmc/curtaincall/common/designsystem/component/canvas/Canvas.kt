@@ -26,10 +26,11 @@ import com.cmc.curtaincall.common.designsystem.theme.Grey1
 
 @Composable
 fun CurtainCallCoachMark(
+    modifier: Modifier = Modifier,
     text: String,
     onClick: () -> Unit = {}
 ) {
-    Column(Modifier.width(277.dp)) {
+    Column(modifier.width(277.dp)) {
         Canvas(
             modifier = Modifier
                 .padding(start = 240.dp)

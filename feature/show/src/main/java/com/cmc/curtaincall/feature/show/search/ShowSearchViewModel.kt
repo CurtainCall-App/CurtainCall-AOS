@@ -4,12 +4,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.cmc.curtaincall.core.base.BaseViewModel
-import com.cmc.curtaincall.domain.type.ShowGenreType
-import com.cmc.curtaincall.domain.type.ShowSortType
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import com.cmc.curtaincall.domain.model.show.ShowSearchWordModel
 import com.cmc.curtaincall.domain.repository.FavoriteRepository
 import com.cmc.curtaincall.domain.repository.ShowRepository
+import com.cmc.curtaincall.domain.type.ShowGenreType
+import com.cmc.curtaincall.domain.type.ShowSortType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,6 +25,11 @@ class ShowSearchViewModel @Inject constructor(
 ) : BaseViewModel<ShowSearchUiState, ShowSearchEvent, Nothing>(
     initialState = ShowSearchUiState()
 ) {
+    private val _sortType = MutableStateFlow(ShowSortType.REVIEW_GRADE)
+    val sortType = _sortType.asStateFlow()
+
+    private val _genreType = MutableStateFlow(ShowGenreType.PLAY)
+    val genreType = _genreType.asStateFlow()
 
     private var _searchWords = MutableStateFlow<List<ShowSearchWordModel>>(listOf())
     val searchWords = _searchWords.asStateFlow()
@@ -41,6 +46,10 @@ class ShowSearchViewModel @Inject constructor(
             ShowGenreType.PLAY -> loadPlayItems()
             ShowGenreType.MUSICAL -> loadMusicalItems()
         }
+    }
+
+    fun selectGenreType(genre: ShowGenreType) {
+        _genreType.value = genre
     }
 
     override fun reduceState(currentState: ShowSearchUiState, event: ShowSearchEvent): ShowSearchUiState =
