@@ -1,138 +1,205 @@
 package com.cmc.curtaincall.common.designsystem.component.appbars
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.designsystem.R
-import com.cmc.curtaincall.common.designsystem.dimension.Paddings
 import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
+import com.cmc.curtaincall.common.designsystem.theme.Grey2
+import com.cmc.curtaincall.common.designsystem.theme.Grey6
+import com.cmc.curtaincall.common.designsystem.theme.Grey9
 import com.cmc.curtaincall.common.designsystem.theme.avenirnext
 
 private const val TopAppBarBackIconDescription = "Go Back"
+private const val TopAppBarSearchActionDescription = "Search"
+private const val TopAppBarClearActionDescription = "Clear"
 private val TopAppBarBackIconSize = 24.dp
-private val TopAppBarBackLeftPadding = 10.dp
-private val TopAppBarBackRightPadding = 12.dp
 private val TopAppBarHeight = 56.dp
 
-private sealed class TopAppBarType(
-    open val title: String,
-    open val onBack: (() -> Unit)? = null
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CurtainCallTitleTopAppBar(
+    containerColor: Color = CurtainCallTheme.colors.background
 ) {
-    data class Default(
-        override val title: String
-    ) : TopAppBarType(title)
-
-    data class Back(
-        override val title: String,
-        override val onBack: (() -> Unit)?
-    ) : TopAppBarType(title, onBack)
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(TopAppBarHeight),
+        color = containerColor
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = stringResource(R.string.default_top_appbar_title),
+                modifier = Modifier.padding(start = 20.dp),
+                style = CurtainCallTheme.typography.subTitle3.copy(
+                    fontFamily = avenirnext
+                )
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun BaseTopAppBar(
-    type: TopAppBarType,
-    containerColor: Color
-) {
-    if (type is TopAppBarType.Default) {
-        TopAppBar(
-            title = {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(TopAppBarHeight),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = type.title,
-                        style = CurtainCallTheme.typography.subTitle3.copy(
-                            fontFamily = avenirnext
-                        )
-                    )
-                }
-            },
-            windowInsets = WindowInsets(left = Paddings.small),
-            colors = TopAppBarDefaults.mediumTopAppBarColors(
-                containerColor = containerColor
-            )
-        )
-    } else {
-        CenterAlignedTopAppBar(
-            title = {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(TopAppBarHeight),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = type.title,
-                        style = CurtainCallTheme.typography.subTitle3
-                    )
-                }
-            },
-            navigationIcon = {
-                Icon(
-                    painter = painterResource(R.drawable.ic_arrow_back),
-                    contentDescription = TopAppBarBackIconDescription,
-                    modifier = Modifier
-                        .size(TopAppBarBackIconSize)
-                        .clickable { type.onBack?.invoke() },
-                    tint = Color.Unspecified
-                )
-            },
-            actions = {},
-            windowInsets = WindowInsets(
-                left = TopAppBarBackLeftPadding,
-                right = TopAppBarBackRightPadding
-            ),
-            colors = TopAppBarDefaults.mediumTopAppBarColors(
-                containerColor = containerColor
-            )
-        )
-    }
-}
-
-@Composable
-fun CurtainCallDefaultTopAppBar(
-    containerColor: Color = CurtainCallTheme.colors.background
-) {
-    BaseTopAppBar(
-        type = TopAppBarType.Default(
-            title = stringResource(R.string.default_top_appbar_title)
-        ),
-        containerColor = containerColor
-    )
-}
-
-@Composable
-fun CurtainCallTopAppBarWithBack(
+fun CurtainCallCenterTopAppBarWithBack(
     title: String,
     containerColor: Color = CurtainCallTheme.colors.background,
     onBack: () -> Unit = {}
 ) {
-    BaseTopAppBar(
-        type = TopAppBarType.Back(
-            title = title,
-            onBack = onBack
-        ),
-        containerColor = containerColor
-    )
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(TopAppBarHeight),
+        color = containerColor
+    ) {
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.ic_arrow_back),
+                contentDescription = TopAppBarBackIconDescription,
+                modifier = Modifier
+                    .align(Alignment.CenterStart)
+                    .padding(start = 14.dp)
+                    .size(TopAppBarBackIconSize)
+                    .clickable { onBack() },
+                tint = Color.Unspecified
+            )
+            Text(
+                text = title,
+                style = CurtainCallTheme.typography.subTitle4
+            )
+        }
+    }
+}
+
+@Stable
+data class SearchAppBarType(
+    var isSearchMode: MutableState<Boolean> = mutableStateOf(false),
+    var searchText: MutableState<String> = mutableStateOf(""),
+    val onTextChange: (String) -> Unit = { searchText.value = it },
+    val onSearch: () -> Unit = { isSearchMode.value = true },
+    val onClear: () -> Unit = { searchText.value = "" },
+    val onCancel: () -> Unit = { isSearchMode.value = false }
+)
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CurtainCallSearchTitleTopAppBar(
+    title: String,
+    searchAppBarType: SearchAppBarType = SearchAppBarType(),
+    containerColor: Color = CurtainCallTheme.colors.background
+) {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(TopAppBarHeight),
+        color = containerColor
+    ) {
+        if (searchAppBarType.isSearchMode.value) {
+            Row(
+                modifier = Modifier
+                    .padding(start = 14.dp, end = 18.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                BasicTextField(
+                    value = searchAppBarType.searchText.value,
+                    onValueChange = searchAppBarType.onTextChange,
+                    modifier = Modifier
+                        .weight(1f)
+                        .background(Grey9, RoundedCornerShape(30.dp))
+                        .padding(start = 14.dp, end = 11.dp)
+                        .padding(vertical = 10.dp),
+                    textStyle = CurtainCallTheme.typography.body3.copy(fontWeight = FontWeight.SemiBold),
+                    singleLine = true,
+                    maxLines = 1
+                ) { innerTextField ->
+                    Box(
+                        modifier = Modifier.fillMaxWidth(),
+                        contentAlignment = Alignment.CenterStart
+                    ) {
+                        if (searchAppBarType.searchText.value.isEmpty()) {
+                            Text(
+                                text = stringResource(R.string.search_appbar_hint),
+                                style = CurtainCallTheme.typography.body3.copy(
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Grey6
+                                )
+                            )
+                        }
+                        innerTextField()
+                        Icon(
+                            painter = painterResource(R.drawable.ic_close),
+                            contentDescription = TopAppBarClearActionDescription,
+                            modifier = Modifier
+                                .align(Alignment.CenterEnd)
+                                .padding(horizontal = 11.dp)
+                                .size(18.dp)
+                                .clickable { searchAppBarType.onClear() },
+                            tint = Color.Unspecified
+                        )
+                    }
+                }
+                Text(
+                    text = stringResource(R.string.cancel),
+                    modifier = Modifier
+                        .padding(start = 10.dp)
+                        .clickable { searchAppBarType.onCancel() },
+                    style = CurtainCallTheme.typography.body3.copy(
+                        color = Grey2,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                )
+            }
+        } else {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = title,
+                    modifier = Modifier.padding(start = 18.dp),
+                    style = CurtainCallTheme.typography.h2
+                )
+                Spacer(Modifier.weight(1f))
+                Icon(
+                    painter = painterResource(R.drawable.ic_search),
+                    contentDescription = TopAppBarSearchActionDescription,
+                    modifier = Modifier
+                        .padding(end = 16.dp)
+                        .size(TopAppBarBackIconSize)
+                        .clickable { searchAppBarType.onSearch() },
+                    tint = Color.Unspecified
+                )
+            }
+        }
+    }
 }
