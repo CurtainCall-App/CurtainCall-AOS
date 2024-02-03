@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cmc.curtaincall.common.designsystem.R
-import com.cmc.curtaincall.common.designsystem.component.appbars.CurtainCallTopAppBarWithBack
+import com.cmc.curtaincall.common.designsystem.component.appbars.CurtainCallCenterTopAppBarWithBack
 import com.cmc.curtaincall.common.designsystem.component.buttons.common.CurtainCallFilledButton
 import com.cmc.curtaincall.common.designsystem.dimension.Paddings
 import com.cmc.curtaincall.common.designsystem.theme.Black
@@ -61,7 +61,7 @@ internal fun SignUpInputScreen(
 ) {
     Scaffold(
         topBar = {
-            CurtainCallTopAppBarWithBack(
+            CurtainCallCenterTopAppBarWithBack(
                 title = stringResource(R.string.signup_title),
                 onBack = onBack
             )

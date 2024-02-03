@@ -26,7 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.designsystem.R
-import com.cmc.curtaincall.common.designsystem.component.appbars.CurtainCallDefaultTopAppBar
+import com.cmc.curtaincall.common.designsystem.component.appbars.CurtainCallTitleTopAppBar
 import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.designsystem.custom.poster.CurtainCallEndShowPoster
 import com.cmc.curtaincall.common.designsystem.custom.poster.CurtainCallOpenShowPoster
@@ -57,9 +57,7 @@ fun HomeScreen(
     SystemUiStatusBar(Grey8)
     Scaffold(
         topBar = {
-            CurtainCallDefaultTopAppBar(
-                containerColor = Grey8
-            )
+            CurtainCallTitleTopAppBar(containerColor = Grey8)
         }
     ) { paddingValues ->
         HomeContent(
