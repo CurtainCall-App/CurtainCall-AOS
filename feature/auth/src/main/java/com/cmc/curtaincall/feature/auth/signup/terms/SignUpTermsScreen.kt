@@ -35,9 +35,9 @@ import com.cmc.curtaincall.common.designsystem.theme.Grey5
 import com.cmc.curtaincall.common.designsystem.theme.Grey6
 import com.cmc.curtaincall.common.designsystem.theme.Grey8
 import com.cmc.curtaincall.common.designsystem.theme.White
+import com.cmc.curtaincall.domain.Urls.DEFAULT_URL
 import com.cmc.curtaincall.domain.Urls.PRIVACY_INFORMATION_TERMS_URL
 import com.cmc.curtaincall.domain.Urls.SERVICE_TERMS_URL
-import com.cmc.curtaincall.domain.model.Urls.DEFAULT_URL
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewState
 
