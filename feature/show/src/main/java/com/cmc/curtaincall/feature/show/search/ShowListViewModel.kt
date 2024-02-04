@@ -7,6 +7,7 @@ import com.cmc.curtaincall.core.base.BaseViewModel
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import com.cmc.curtaincall.domain.model.show.ShowSearchWordModel
 import com.cmc.curtaincall.domain.repository.FavoriteRepository
+import com.cmc.curtaincall.domain.repository.LaunchRepository
 import com.cmc.curtaincall.domain.repository.ShowRepository
 import com.cmc.curtaincall.domain.type.ShowGenreType
 import com.cmc.curtaincall.domain.type.ShowSortType
@@ -24,7 +25,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ShowListViewModel @Inject constructor(
     private val showRepository: ShowRepository,
-    private val favoriteRepository: FavoriteRepository
+    private val favoriteRepository: FavoriteRepository,
+    private val launchRepository: LaunchRepository
 ) : BaseViewModel<ShowSearchUiState, ShowSearchEvent, Nothing>(
     initialState = ShowSearchUiState()
 ) {
@@ -37,8 +39,13 @@ class ShowListViewModel @Inject constructor(
     private var _showInfoModels = MutableStateFlow<PagingData<ShowInfoModel>>(PagingData.empty())
     val showInfoModels = _showInfoModels.asStateFlow()
 
+    // PagingData 갱신 여부
     private val _isRefresh = MutableSharedFlow<Boolean>()
     val isRefresh = _isRefresh.asSharedFlow()
+
+    // 최초 작품 진입 여부
+    private val _isFirstEntry = MutableStateFlow(false)
+    val isFirstEntry = _isFirstEntry.asStateFlow()
 
     // //
 
@@ -49,10 +56,23 @@ class ShowListViewModel @Inject constructor(
     val showSearchItems = _showSearchItems.asStateFlow()
 
     init {
+        checkIsFirstEntry()
         requestShowSearchWords()
         when (uiState.value.genre) {
             ShowGenreType.PLAY -> loadPlayItems()
             ShowGenreType.MUSICAL -> loadMusicalItems()
+        }
+    }
+
+    private fun checkIsFirstEntry() {
+        launchRepository.getIsFirstEntryShowList()
+            .onEach { _isFirstEntry.value = it }
+            .launchIn(viewModelScope)
+    }
+
+    fun setFirstEntry() {
+        viewModelScope.launch {
+            launchRepository.setIsFirstEntryShowList()
         }
     }
 

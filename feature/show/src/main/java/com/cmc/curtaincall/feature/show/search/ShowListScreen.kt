@@ -248,6 +248,7 @@ private fun ShowListContent(
     val sortType by showListViewModel.sortType.collectAsStateWithLifecycle()
     val genreType by showListViewModel.genreType.collectAsStateWithLifecycle()
     val showInfoModels = showListViewModel.showInfoModels.collectAsLazyPagingItems()
+    val isFirstEntry by showListViewModel.isFirstEntry.collectAsStateWithLifecycle()
 
     LaunchedEffect(showListViewModel) {
         showListViewModel.isRefresh.collect { isRefresh ->
@@ -314,13 +315,16 @@ private fun ShowListContent(
                 }
             }
         }
-        CurtainCallCoachMark(
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(top = 51.dp)
-                .zIndex(1f),
-            text = stringResource(R.string.show_coach_mark)
-        )
+        if (isFirstEntry) {
+            CurtainCallCoachMark(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(top = 51.dp)
+                    .zIndex(1f),
+                text = stringResource(R.string.show_coach_mark),
+                onClick = { showListViewModel.setFirstEntry() }
+            )
+        }
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             modifier = Modifier

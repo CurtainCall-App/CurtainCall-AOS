@@ -9,3 +9,7 @@ annotation class TokenDataStore
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class MemberDataStore
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class LaunchDataStore
