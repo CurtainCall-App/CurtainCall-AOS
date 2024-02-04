@@ -25,7 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.designsystem.R
-import com.cmc.curtaincall.common.designsystem.component.appbars.CurtainCallTopAppBarWithBack
+import com.cmc.curtaincall.common.designsystem.component.appbars.CurtainCallCenterTopAppBarWithBack
 import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.designsystem.component.buttons.common.CurtainCallFilledButton
 import com.cmc.curtaincall.common.designsystem.component.divider.HorizontalDivider
@@ -35,9 +35,9 @@ import com.cmc.curtaincall.common.designsystem.theme.Grey5
 import com.cmc.curtaincall.common.designsystem.theme.Grey6
 import com.cmc.curtaincall.common.designsystem.theme.Grey8
 import com.cmc.curtaincall.common.designsystem.theme.White
+import com.cmc.curtaincall.domain.Urls.DEFAULT_URL
 import com.cmc.curtaincall.domain.Urls.PRIVACY_INFORMATION_TERMS_URL
 import com.cmc.curtaincall.domain.Urls.SERVICE_TERMS_URL
-import com.cmc.curtaincall.domain.model.Urls.DEFAULT_URL
 import com.google.accompanist.web.WebView
 import com.google.accompanist.web.rememberWebViewState
 
@@ -50,7 +50,7 @@ internal fun SignUpTermsScreen(
     SystemUiStatusBar(White)
     Scaffold(
         topBar = {
-            CurtainCallTopAppBarWithBack(
+            CurtainCallCenterTopAppBarWithBack(
                 title = stringResource(R.string.signup_terms_title),
                 onBack = {
                     if (signUpTermsUiState.webUrl == DEFAULT_URL) {

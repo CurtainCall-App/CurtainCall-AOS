@@ -5,6 +5,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
+import com.cmc.curtaincall.core.local.qualifiers.LaunchDataStore
 import com.cmc.curtaincall.core.local.qualifiers.MemberDataStore
 import com.cmc.curtaincall.core.local.qualifiers.TokenDataStore
 import dagger.Module
@@ -20,6 +21,7 @@ object DataStoreModule {
 
     private const val TOKEN_DATASTORE = "TOKEN_DATASTORE"
     private const val MEMBER_DATASTORE = "MEMBER_DATASTORE"
+    private const val LAUNCH_DATASTORE = "LAUNCH_DATASTORE"
 
     @Provides
     @Singleton
@@ -39,5 +41,15 @@ object DataStoreModule {
     ): DataStore<Preferences> =
         PreferenceDataStoreFactory.create {
             context.preferencesDataStoreFile(MEMBER_DATASTORE)
+        }
+
+    @Provides
+    @Singleton
+    @LaunchDataStore
+    fun provideLocalDataStore(
+        @ApplicationContext context: Context
+    ): DataStore<Preferences> =
+        PreferenceDataStoreFactory.create {
+            context.preferencesDataStoreFile(LAUNCH_DATASTORE)
         }
 }

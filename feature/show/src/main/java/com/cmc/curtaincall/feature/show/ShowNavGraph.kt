@@ -15,7 +15,7 @@ import com.cmc.curtaincall.feature.show.lostproperty.create.ShowLostPropertyCrea
 import com.cmc.curtaincall.feature.show.lostproperty.detail.ShowLostPropertyDetailScreen
 import com.cmc.curtaincall.feature.show.review.ShowReviewCreateScreen
 import com.cmc.curtaincall.feature.show.review.ShowReviewScreen
-import com.cmc.curtaincall.feature.show.search.ShowSearchScreen
+import com.cmc.curtaincall.feature.show.search.ShowListScreen
 
 fun NavGraphBuilder.showNavGraph(
     navHostController: NavHostController,
@@ -26,7 +26,7 @@ fun NavGraphBuilder.showNavGraph(
         route = NavGraphLabel.SHOW
     ) {
         composable(route = ShowDestination.Search.route) {
-            ShowSearchScreen { showId ->
+            ShowListScreen { showId ->
                 navHostController.navigate("${ShowDestination.Detail.route}/$showId")
             }
         }

@@ -1,5 +1,6 @@
 package com.cmc.curtaincall.core.local
 
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 
@@ -10,4 +11,6 @@ object PreferenceKeys {
 
     val MEMBER_ID = intPreferencesKey("MEMBER_ID")
     val MEMBER_NICKNAME = stringPreferencesKey("MEMBER_NICKNAME")
+
+    val IS_FIRST_ENTRY_SHOW_LIST = booleanPreferencesKey("IS_FIRST_ENTRY_SHOW_LIST")
 }

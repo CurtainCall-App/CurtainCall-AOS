@@ -6,7 +6,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import com.cmc.curtaincall.domain.model.Urls.DEFAULT_URL
+import com.cmc.curtaincall.domain.Urls.DEFAULT_URL
 
 @Stable
 internal class SignUpTermsState {

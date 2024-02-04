@@ -12,16 +12,22 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.designsystem.R
+import com.cmc.curtaincall.common.designsystem.component.buttons.like.CurtainCallLikeButton
 import com.cmc.curtaincall.common.designsystem.dimension.Paddings
 import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import com.cmc.curtaincall.common.designsystem.theme.Grey1
@@ -244,6 +250,59 @@ fun CurtainCallEndShowPoster(
             style = CurtainCallTheme.typography.body5.copy(
                 color = Grey5
             )
+        )
+    }
+}
+
+@Composable
+fun CurtainCallShowPoster(
+    model: Any?,
+    text: String,
+    isLike: Boolean = false,
+    onLikeClick: () -> Unit = {},
+    onClick: () -> Unit = {}
+) {
+    var updateLike by remember { mutableStateOf(isLike) }
+    Column(
+        modifier = Modifier
+            .size(153.dp, 250.dp)
+            .clickable { onClick() }
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(153 / 219f)
+                .clip(RoundedCornerShape(12.dp))
+        ) {
+            AsyncImage(
+                model = model,
+                contentDescription = null,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.FillBounds
+            )
+            CurtainCallLikeButton(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(bottom = 10.dp, end = 10.dp)
+                    .size(28.dp),
+                isSelected = updateLike,
+                onClick = {
+                    onLikeClick()
+                    updateLike = !isLike
+                }
+            )
+        }
+        Text(
+            text = text,
+            modifier = Modifier
+                .padding(top = 10.dp)
+                .fillMaxWidth(),
+            style = CurtainCallTheme.typography.body2.copy(
+                fontWeight = FontWeight.SemiBold
+            ),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            textAlign = TextAlign.Center
         )
     }
 }

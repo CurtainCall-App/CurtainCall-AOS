@@ -4,6 +4,7 @@ import com.cmc.curtaincall.data.repository.AuthRepositoryImpl
 import com.cmc.curtaincall.data.repository.ChattingRepositoryImpl
 import com.cmc.curtaincall.data.repository.FavoriteRepositoryImpl
 import com.cmc.curtaincall.data.repository.ImageRepositoryImpl
+import com.cmc.curtaincall.data.repository.LaunchRepositoryImpl
 import com.cmc.curtaincall.data.repository.LostPropertyRepositoryImpl
 import com.cmc.curtaincall.data.repository.MemberRepositoryImpl
 import com.cmc.curtaincall.data.repository.NoticeRepositoryImpl
@@ -16,6 +17,7 @@ import com.cmc.curtaincall.domain.repository.AuthRepository
 import com.cmc.curtaincall.domain.repository.ChattingRepository
 import com.cmc.curtaincall.domain.repository.FavoriteRepository
 import com.cmc.curtaincall.domain.repository.ImageRepository
+import com.cmc.curtaincall.domain.repository.LaunchRepository
 import com.cmc.curtaincall.domain.repository.LostPropertyRepository
 import com.cmc.curtaincall.domain.repository.MemberRepository
 import com.cmc.curtaincall.domain.repository.NoticeRepository
@@ -104,4 +106,10 @@ interface RepositoryModule {
     fun bindChattingRepository(
         chattingRepositoryImpl: ChattingRepositoryImpl
     ): ChattingRepository
+
+    @Binds
+    @Singleton
+    fun bindLaunchRepository(
+        launchRepositoryImpl: LaunchRepositoryImpl
+    ): LaunchRepository
 }

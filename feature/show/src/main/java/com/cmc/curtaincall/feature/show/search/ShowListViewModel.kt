@@ -4,27 +4,50 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.cmc.curtaincall.core.base.BaseViewModel
-import com.cmc.curtaincall.domain.type.ShowGenreType
-import com.cmc.curtaincall.domain.type.ShowSortType
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import com.cmc.curtaincall.domain.model.show.ShowSearchWordModel
 import com.cmc.curtaincall.domain.repository.FavoriteRepository
+import com.cmc.curtaincall.domain.repository.LaunchRepository
 import com.cmc.curtaincall.domain.repository.ShowRepository
+import com.cmc.curtaincall.domain.type.ShowGenreType
+import com.cmc.curtaincall.domain.type.ShowSortType
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ShowSearchViewModel @Inject constructor(
+class ShowListViewModel @Inject constructor(
     private val showRepository: ShowRepository,
-    private val favoriteRepository: FavoriteRepository
+    private val favoriteRepository: FavoriteRepository,
+    private val launchRepository: LaunchRepository
 ) : BaseViewModel<ShowSearchUiState, ShowSearchEvent, Nothing>(
     initialState = ShowSearchUiState()
 ) {
+    private val _sortType = MutableStateFlow(ShowSortType.REVIEW_GRADE)
+    val sortType = _sortType.asStateFlow()
+
+    private val _genreType = MutableStateFlow(ShowGenreType.PLAY)
+    val genreType = _genreType.asStateFlow()
+
+    private var _showInfoModels = MutableStateFlow<PagingData<ShowInfoModel>>(PagingData.empty())
+    val showInfoModels = _showInfoModels.asStateFlow()
+
+    // PagingData 갱신 여부
+    private val _isRefresh = MutableSharedFlow<Boolean>()
+    val isRefresh = _isRefresh.asSharedFlow()
+
+    // 최초 작품 진입 여부
+    private val _isFirstEntry = MutableStateFlow(false)
+    val isFirstEntry = _isFirstEntry.asStateFlow()
+
+    // //
 
     private var _searchWords = MutableStateFlow<List<ShowSearchWordModel>>(listOf())
     val searchWords = _searchWords.asStateFlow()
@@ -32,15 +55,75 @@ class ShowSearchViewModel @Inject constructor(
     private var _showSearchItems = MutableStateFlow<PagingData<ShowInfoModel>>(PagingData.empty())
     val showSearchItems = _showSearchItems.asStateFlow()
 
-    private var _showItems = MutableStateFlow<PagingData<ShowInfoModel>>(PagingData.empty())
-    val showItems = _showItems.asStateFlow()
-
     init {
+        checkIsFirstEntry()
         requestShowSearchWords()
         when (uiState.value.genre) {
             ShowGenreType.PLAY -> loadPlayItems()
             ShowGenreType.MUSICAL -> loadMusicalItems()
         }
+    }
+
+    private fun checkIsFirstEntry() {
+        launchRepository.getIsFirstEntryShowList()
+            .onEach { _isFirstEntry.value = it }
+            .launchIn(viewModelScope)
+    }
+
+    fun setFirstEntry() {
+        viewModelScope.launch {
+            launchRepository.setIsFirstEntryShowList()
+        }
+    }
+
+    fun selectGenreType(genre: ShowGenreType) {
+        if (_genreType.value != genre) {
+            _genreType.value = genre
+            if (genre == ShowGenreType.PLAY) {
+                fetchPlayPagingData()
+            } else {
+                fetchMusicalPagingData()
+            }
+        }
+    }
+
+    fun checkShowLike(
+        showId: String,
+        isLike: Boolean
+    ) {
+        if (isLike) {
+            favoriteRepository.requestFavoriteShow(showId)
+                .onEach { _isRefresh.emit(true) }
+                .launchIn(viewModelScope)
+        } else {
+            favoriteRepository.deleteFavoriteShow(showId)
+                .onEach { _isRefresh.emit(true) }
+                .launchIn(viewModelScope)
+        }
+    }
+
+    fun fetchShowList() {
+        showRepository.fetchShowList(genreType.value.name, sortType.value.code)
+            .distinctUntilChanged()
+            .cachedIn(viewModelScope)
+            .onEach { _showInfoModels.value = it }
+            .launchIn(viewModelScope)
+    }
+
+    private fun fetchPlayPagingData() {
+        showRepository.fetchShowList(ShowGenreType.PLAY.name, sortType.value.code)
+            .distinctUntilChanged()
+            .cachedIn(viewModelScope)
+            .onEach { _showInfoModels.value = it }
+            .launchIn(viewModelScope)
+    }
+
+    private fun fetchMusicalPagingData() {
+        showRepository.fetchShowList(ShowGenreType.MUSICAL.name, sortType.value.code)
+            .distinctUntilChanged()
+            .cachedIn(viewModelScope)
+            .onEach { _showInfoModels.value = it }
+            .launchIn(viewModelScope)
     }
 
     override fun reduceState(currentState: ShowSearchUiState, event: ShowSearchEvent): ShowSearchUiState =
@@ -110,14 +193,14 @@ class ShowSearchViewModel @Inject constructor(
     private fun loadPlayItems() {
         showRepository.fetchShowList(ShowGenreType.PLAY.name, uiState.value.sortType.code)
             .cachedIn(viewModelScope)
-            .onEach { _showItems.value = it }
+            .onEach { _showInfoModels.value = it }
             .launchIn(viewModelScope)
     }
 
     private fun loadMusicalItems() {
         showRepository.fetchShowList(ShowGenreType.MUSICAL.name, uiState.value.sortType.code)
             .cachedIn(viewModelScope)
-            .onEach { _showItems.value = it }
+            .onEach { _showInfoModels.value = it }
             .launchIn(viewModelScope)
     }
 
