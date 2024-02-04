@@ -12,6 +12,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -257,6 +261,7 @@ fun CurtainCallShowPoster(
     onLikeClick: () -> Unit = {},
     onClick: () -> Unit = {}
 ) {
+    var updateLike by remember { mutableStateOf(isLike) }
     Column(
         modifier = Modifier
             .size(153.dp, 250.dp)
@@ -279,8 +284,11 @@ fun CurtainCallShowPoster(
                     .align(Alignment.BottomEnd)
                     .padding(bottom = 10.dp, end = 10.dp)
                     .size(28.dp),
-                isSelected = isLike,
-                onClick = onLikeClick
+                isSelected = updateLike,
+                onClick = {
+                    onLikeClick()
+                    updateLike = !isLike
+                }
             )
         }
         Text(

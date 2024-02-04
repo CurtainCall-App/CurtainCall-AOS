@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -43,10 +42,10 @@ import com.cmc.curtaincall.domain.type.ShowGenreType
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShowListScreen(
-    showSearchViewModel: ShowSearchViewModel = hiltViewModel(),
+    showListViewModel: ShowListViewModel = hiltViewModel(),
     onNavigateDetail: (String) -> Unit
 ) {
-    val showSearchUiState by showSearchViewModel.uiState.collectAsStateWithLifecycle()
+    val showSearchUiState by showListViewModel.uiState.collectAsStateWithLifecycle()
     val searchAppBarType = rememberSearchAppBarType()
     SystemUiStatusBar(White)
     Scaffold(
@@ -96,10 +95,10 @@ fun ShowListScreen(
                 queryString = showSearchUiState.queryString,
                 isDoneSearch = showSearchUiState.isDoneSearch,
                 onSearch = {
-                    showSearchViewModel.setQueryString(it)
-                    showSearchViewModel.searchShowList(it)
-                    showSearchViewModel.insertShowSearchWord(it)
-                    showSearchViewModel.onDoneSearch()
+                    showListViewModel.setQueryString(it)
+                    showListViewModel.searchShowList(it)
+                    showListViewModel.insertShowSearchWord(it)
+                    showListViewModel.onDoneSearch()
                 },
                 onNavigateDetail = onNavigateDetail
             )
@@ -118,14 +117,14 @@ fun ShowListScreen(
 @Composable
 private fun ShowSearchContent(
     modifier: Modifier = Modifier,
-    showSearchViewModel: ShowSearchViewModel = hiltViewModel(),
+    showListViewModel: ShowListViewModel = hiltViewModel(),
     queryString: String = "",
     isDoneSearch: Boolean = true,
     onSearch: (String) -> Unit = {},
     onNavigateDetail: (String) -> Unit = {}
 ) {
-    val searchWords by showSearchViewModel.searchWords.collectAsStateWithLifecycle()
-    val showSearchItems = showSearchViewModel.showSearchItems.collectAsLazyPagingItems()
+    val searchWords by showListViewModel.searchWords.collectAsStateWithLifecycle()
+    val showSearchItems = showListViewModel.showSearchItems.collectAsLazyPagingItems()
     LazyColumn(modifier) {
         item {
             Spacer(
@@ -171,7 +170,7 @@ private fun ShowSearchContent(
                             )
                             Text(
                                 text = stringResource(R.string.search_delete_recentyl_word),
-                                modifier = Modifier.clickable { showSearchViewModel.deleteShowSearchWordList() },
+                                modifier = Modifier.clickable { showListViewModel.deleteShowSearchWordList() },
                                 color = Roman_Silver,
                                 fontSize = 14.dp.toSp(),
                                 fontWeight = FontWeight.Medium,
@@ -184,7 +183,7 @@ private fun ShowSearchContent(
                                     .fillMaxWidth()
                                     .padding(vertical = 10.dp),
                                 text = searchWord.word,
-                                onDelete = { showSearchViewModel.deleteShowSearchWord(searchWord) },
+                                onDelete = { showListViewModel.deleteShowSearchWord(searchWord) },
                                 onClick = { onSearch(searchWord.word) }
                             )
                         }
@@ -221,8 +220,8 @@ private fun ShowSearchContent(
                             location = model.facilityName,
                             onClick = { onNavigateDetail(model.id) },
                             isFavorite = model.favorite,
-                            onFavorite = { showSearchViewModel.requestFavoriteShow(model.id) },
-                            onDisFavorite = { showSearchViewModel.deleteFavoriteShow(model.id) }
+                            onFavorite = { showListViewModel.requestFavoriteShow(model.id) },
+                            onDisFavorite = { showListViewModel.deleteFavoriteShow(model.id) }
                         )
                         if (index != showSearchItems.itemCount) {
                             Spacer(
@@ -243,21 +242,27 @@ private fun ShowSearchContent(
 @Composable
 private fun ShowListContent(
     modifier: Modifier = Modifier,
-    showSearchViewModel: ShowSearchViewModel = hiltViewModel(),
+    showListViewModel: ShowListViewModel = hiltViewModel(),
     onNavigateDetail: (String) -> Unit
 ) {
-    val sortType by showSearchViewModel.sortType.collectAsStateWithLifecycle()
-    val genreType by showSearchViewModel.genreType.collectAsStateWithLifecycle()
+    val sortType by showListViewModel.sortType.collectAsStateWithLifecycle()
+    val genreType by showListViewModel.genreType.collectAsStateWithLifecycle()
+    val showInfoModels = showListViewModel.showInfoModels.collectAsLazyPagingItems()
+
+    LaunchedEffect(showListViewModel) {
+        showListViewModel.isRefresh.collect { isRefresh ->
+            if (isRefresh) showInfoModels.refresh()
+        }
+    }
 
     var isShowDialog by remember { mutableStateOf(false) }
-    val performanceUiState by showSearchViewModel.uiState.collectAsStateWithLifecycle()
-    val showItems = showSearchViewModel.showItems.collectAsLazyPagingItems()
+    val performanceUiState by showListViewModel.uiState.collectAsStateWithLifecycle()
 
     if (isShowDialog) {
         SelectSortTypeBottomSheet(
             sortType = sortType,
             onSelectSortType = {
-                showSearchViewModel.changeSortType(it)
+                showListViewModel.changeSortType(it)
                 isShowDialog = false
             },
             onDismissRequest = { isShowDialog = false }
@@ -280,14 +285,14 @@ private fun ShowListContent(
                     text = ShowGenreType.PLAY.value,
                     textStyle = CurtainCallTheme.typography.body2,
                     isSelect = genreType == ShowGenreType.PLAY,
-                    onClick = { showSearchViewModel.selectGenreType(ShowGenreType.PLAY) }
+                    onClick = { showListViewModel.selectGenreType(ShowGenreType.PLAY) }
                 )
                 CurtainCallBasicChip(
                     modifier = Modifier.padding(start = Paddings.medium),
                     text = ShowGenreType.MUSICAL.value,
                     textStyle = CurtainCallTheme.typography.body2,
                     isSelect = genreType == ShowGenreType.MUSICAL,
-                    onClick = { showSearchViewModel.selectGenreType(ShowGenreType.MUSICAL) }
+                    onClick = { showListViewModel.selectGenreType(ShowGenreType.MUSICAL) }
                 )
                 Spacer(Modifier.weight(1f))
                 Row(
@@ -324,93 +329,22 @@ private fun ShowListContent(
             verticalArrangement = Arrangement.spacedBy(26.dp),
             horizontalArrangement = Arrangement.spacedBy(14.dp)
         ) {
-            items(showItems.itemCount) { index ->
-                showItems[index]?.let { showItem ->
+            items(showInfoModels.itemCount) { index ->
+                showInfoModels[index]?.let { showItem ->
                     CurtainCallShowPoster(
                         model = showItem.poster,
-                        text = showItem.name
+                        text = showItem.name,
+                        isLike = showItem.favorite,
+                        onLikeClick = {
+                            showListViewModel.checkShowLike(
+                                showId = showItem.id,
+                                isLike = !showItem.favorite
+                            )
+                        },
+                        onClick = { onNavigateDetail(showItem.id) }
                     )
                 }
             }
         }
-//        LazyColumn(
-//            modifier = modifier
-//                .padding(top = 67.dp)
-//                .fillMaxSize(),
-//            verticalArrangement = Arrangement.spacedBy(26.dp),
-//
-//        ) {
-//            item {
-//                Column {
-//                    Text(
-//                        text = stringResource(R.string.performance_search),
-//                        color = Black,
-//                        fontSize = 24.dp.toSp(),
-//                        fontWeight = FontWeight.Bold,
-//                        fontFamily = spoqahansanseeo
-//                    )
-//                    CurtainCallSelectTypeButton(
-//                        modifier = Modifier
-//                            .padding(top = 16.dp)
-//                            .fillMaxWidth()
-//                            .height(45.dp),
-//                        firstType = stringResource(R.string.partymember_create_classification_theater),
-//                        lastType = stringResource(R.string.partymember_create_classification_musical),
-//                        isCheckFirstType = genreType == ShowGenreType.PLAY,
-//                        onTypeChange = { check ->
-//                            showSearchViewModel.changeGenre(if (check) ShowGenreType.PLAY else ShowGenreType.MUSICAL)
-//                        }
-//                    )
-//                    SortTypeRow(
-//                        modifier = Modifier.padding(top = 28.dp),
-//                        sortType = sortType,
-//                        onClick = { isShowDialog = true }
-//                    )
-//                }
-//            }
-
-//            itemsIndexed(showItems) { index, showInfoModel ->
-//                showInfoModel?.let { showInfoModel ->
-//                    PerformanceDetailCard(
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .padding(vertical = 12.dp),
-//                        imageUrl = showInfoModel.poster,
-//                        painter = painterResource(R.drawable.ic_error_poster),
-//                        title = showInfoModel.name,
-//                        rate = if (showInfoModel.reviewCount == 0) 0.0f else (showInfoModel.reviewGradeSum / showInfoModel.reviewCount.toFloat()),
-//                        numberOfTotal = showInfoModel.reviewCount,
-//                        period = "${showInfoModel.startDate.toChangeDate()}-${showInfoModel.endDate.toChangeDate()}",
-//                        runningTime = if (showInfoModel.runtime.isEmpty()) "해당 정보 없음" else "${showInfoModel.runtime.toRunningTime()}분",
-//                        date = showInfoModel.showTimes.map {
-//                            when (it.dayOfWeek) {
-//                                ShowDay.Monday.dayOfWeek -> ShowDay.Monday
-//                                ShowDay.Tuesday.dayOfWeek -> ShowDay.Tuesday
-//                                ShowDay.Wednesday.dayOfWeek -> ShowDay.Wednesday
-//                                ShowDay.Thursday.dayOfWeek -> ShowDay.Thursday
-//                                ShowDay.Friday.dayOfWeek -> ShowDay.Friday
-//                                ShowDay.Saturday.dayOfWeek -> ShowDay.Saturday
-//                                else -> ShowDay.Sunday
-//                            }
-//                        }.sortedBy { it.id }.toSet().joinToString(", ") { it.label },
-//                        location = showInfoModel.facilityName,
-//                        onClick = {
-//                            onNavigateDetail(showInfoModel.id)
-//                        },
-//                        isFavorite = showInfoModel.favorite,
-//                        onFavorite = { showSearchViewModel.requestFavoriteShow(showInfoModel.id) },
-//                        onDisFavorite = { showSearchViewModel.deleteFavoriteShow(showInfoModel.id) }
-//                    )
-//                    if (index != showItems.itemCount) {
-//                        Spacer(
-//                            modifier = Modifier
-//                                .padding(vertical = 16.dp)
-//                                .fillMaxWidth()
-//                                .height(1.dp)
-//                                .background(Cultured)
-//                        )
-//                    }
-//                }
-//            }
     }
 }

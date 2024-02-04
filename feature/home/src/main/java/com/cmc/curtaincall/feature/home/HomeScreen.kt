@@ -82,7 +82,7 @@ private fun HomeContent(
 
     LaunchedEffect(homeViewModel) {
         homeViewModel.requestShowRecommendations()
-        homeViewModel.requestPopularShowList()
+        // homeViewModel.requestPopularShowList()
         homeViewModel.requestOpenShowList()
         homeViewModel.requestEndShowList()
     }
