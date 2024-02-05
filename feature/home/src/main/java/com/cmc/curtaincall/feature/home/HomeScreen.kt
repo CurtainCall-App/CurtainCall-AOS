@@ -249,7 +249,7 @@ internal fun HomeBannerScreen(
                 )
             }
         } else {
-            val brush = Brush.verticalGradient(listOf(Black.copy(alpha = 0f), Black.copy(alpha = 0.4f)))
+            val brush = Brush.verticalGradient(listOf(Black.copy(alpha = 0f), Black.copy(alpha = 0.2f)))
             val showRecommendation = showRecommendations[position - 1]
             Box(
                 modifier = Modifier
@@ -259,12 +259,6 @@ internal fun HomeBannerScreen(
                     .clip(RoundedCornerShape(14.dp))
                     .fillMaxSize()
             ) {
-                Canvas(
-                    modifier = Modifier.fillMaxSize(),
-                    onDraw = {
-                        drawRect(brush)
-                    }
-                )
                 AsyncImage(
                     model = showRecommendation.poster,
                     contentDescription = null,
@@ -272,6 +266,12 @@ internal fun HomeBannerScreen(
                         .fillMaxSize()
                         .blur(80.dp),
                     contentScale = ContentScale.FillBounds
+                )
+                Canvas(
+                    modifier = Modifier.fillMaxSize(),
+                    onDraw = {
+                        drawRect(brush)
+                    }
                 )
                 Box(
                     modifier = Modifier
