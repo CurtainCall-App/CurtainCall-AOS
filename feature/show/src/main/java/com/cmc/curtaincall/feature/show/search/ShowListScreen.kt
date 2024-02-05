@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -28,8 +29,8 @@ import com.cmc.curtaincall.common.designsystem.component.canvas.CurtainCallCoach
 import com.cmc.curtaincall.common.designsystem.component.card.PerformanceDetailCard
 import com.cmc.curtaincall.common.designsystem.component.chips.CurtainCallBasicChip
 import com.cmc.curtaincall.common.designsystem.component.content.empty.EmptyContent
-import com.cmc.curtaincall.common.designsystem.component.custom.SelectSortTypeBottomSheet
 import com.cmc.curtaincall.common.designsystem.component.item.search.SearchTextItem
+import com.cmc.curtaincall.common.designsystem.component.sheets.bottom.CurtainCallShowSortBottomSheet
 import com.cmc.curtaincall.common.designsystem.custom.poster.CurtainCallShowPoster
 import com.cmc.curtaincall.common.designsystem.dimension.Paddings
 import com.cmc.curtaincall.common.designsystem.extensions.toSp
@@ -38,6 +39,7 @@ import com.cmc.curtaincall.common.utility.extensions.ShowDay
 import com.cmc.curtaincall.common.utility.extensions.toChangeDate
 import com.cmc.curtaincall.common.utility.extensions.toRunningTime
 import com.cmc.curtaincall.domain.type.ShowGenreType
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -249,24 +251,32 @@ private fun ShowListContent(
     val genreType by showListViewModel.genreType.collectAsStateWithLifecycle()
     val showInfoModels = showListViewModel.showInfoModels.collectAsLazyPagingItems()
     val isFirstEntry by showListViewModel.isFirstEntry.collectAsStateWithLifecycle()
+    var isShowBottomSheet by remember { mutableStateOf(false) }
+    val lazyGridState = rememberLazyGridState()
 
     LaunchedEffect(showListViewModel) {
         showListViewModel.isRefresh.collect { isRefresh ->
+            Timber.d("ShowListContent isRefresh: $isRefresh")
             if (isRefresh) showInfoModels.refresh()
         }
     }
 
-    var isShowDialog by remember { mutableStateOf(false) }
+    LaunchedEffect(showListViewModel) {
+        showListViewModel.isChange.collect { isChange ->
+            Timber.d("ShowListContent isChange: $isChange")
+            if (isChange) lazyGridState.animateScrollToItem(0)
+        }
+    }
     val performanceUiState by showListViewModel.uiState.collectAsStateWithLifecycle()
 
-    if (isShowDialog) {
-        SelectSortTypeBottomSheet(
-            sortType = sortType,
+    if (isShowBottomSheet) {
+        CurtainCallShowSortBottomSheet(
+            showSortType = sortType,
             onSelectSortType = {
-                showListViewModel.changeSortType(it)
-                isShowDialog = false
+                showListViewModel.selectSortType(it)
+                isShowBottomSheet = false
             },
-            onDismissRequest = { isShowDialog = false }
+            onDismissRequest = { isShowBottomSheet = false }
         )
     }
 
@@ -297,7 +307,7 @@ private fun ShowListContent(
                 )
                 Spacer(Modifier.weight(1f))
                 Row(
-                    modifier = Modifier.clickable { },
+                    modifier = Modifier.clickable { isShowBottomSheet = true },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
@@ -330,6 +340,7 @@ private fun ShowListContent(
             modifier = Modifier
                 .padding(top = 67.dp)
                 .fillMaxSize(),
+            state = lazyGridState,
             verticalArrangement = Arrangement.spacedBy(26.dp),
             horizontalArrangement = Arrangement.spacedBy(14.dp)
         ) {
