@@ -266,7 +266,7 @@ internal fun HomeBannerScreen(
                     }
                 )
                 AsyncImage(
-                    model = "https://www.kopis.or.kr/upload/pfmPoster/PF_PF121682_210322_143051.gif",
+                    model = showRecommendation.poster,
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxSize()
@@ -295,7 +295,7 @@ internal fun HomeBannerScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     AsyncImage(
-                        model = "https://www.kopis.or.kr/upload/pfmPoster/PF_PF121682_210322_143051.gif",
+                        model = showRecommendation.poster,
                         contentDescription = null,
                         modifier = Modifier
                             .size(137.dp, 182.dp)

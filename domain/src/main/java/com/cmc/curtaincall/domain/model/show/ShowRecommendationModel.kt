@@ -7,5 +7,6 @@ data class ShowRecommendationModel(
     val name: String = "",
     val genre: String = "",
     val startDate: String = "",
-    val endDate: String = ""
+    val endDate: String = "",
+    val poster: String? = null
 )
