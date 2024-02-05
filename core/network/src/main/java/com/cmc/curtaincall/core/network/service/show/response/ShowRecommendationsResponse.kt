@@ -14,7 +14,8 @@ data class ShowRecommendationResponse(
     val name: String,
     val genre: String,
     val startDate: String,
-    val endDate: String
+    val endDate: String,
+    val poster: String?
 ) {
     fun toModel() = ShowRecommendationModel(
         id = id,
@@ -23,6 +24,7 @@ data class ShowRecommendationResponse(
         name = name,
         genre = genre,
         startDate = startDate,
-        endDate = endDate
+        endDate = endDate,
+        poster = poster
     )
 }

@@ -249,7 +249,7 @@ internal fun HomeBannerScreen(
                 )
             }
         } else {
-            val brush = Brush.verticalGradient(listOf(Black.copy(alpha = 0f), Black.copy(alpha = 0.4f)))
+            val brush = Brush.verticalGradient(listOf(Black.copy(alpha = 0f), Black.copy(alpha = 0.2f)))
             val showRecommendation = showRecommendations[position - 1]
             Box(
                 modifier = Modifier
@@ -259,19 +259,19 @@ internal fun HomeBannerScreen(
                     .clip(RoundedCornerShape(14.dp))
                     .fillMaxSize()
             ) {
-                Canvas(
-                    modifier = Modifier.fillMaxSize(),
-                    onDraw = {
-                        drawRect(brush)
-                    }
-                )
                 AsyncImage(
-                    model = "https://www.kopis.or.kr/upload/pfmPoster/PF_PF121682_210322_143051.gif",
+                    model = showRecommendation.poster,
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxSize()
                         .blur(80.dp),
                     contentScale = ContentScale.FillBounds
+                )
+                Canvas(
+                    modifier = Modifier.fillMaxSize(),
+                    onDraw = {
+                        drawRect(brush)
+                    }
                 )
                 Box(
                     modifier = Modifier
@@ -295,7 +295,7 @@ internal fun HomeBannerScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     AsyncImage(
-                        model = "https://www.kopis.or.kr/upload/pfmPoster/PF_PF121682_210322_143051.gif",
+                        model = showRecommendation.poster,
                         contentDescription = null,
                         modifier = Modifier
                             .size(137.dp, 182.dp)

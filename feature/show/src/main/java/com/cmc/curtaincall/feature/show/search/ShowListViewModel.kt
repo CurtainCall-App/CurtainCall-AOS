@@ -30,7 +30,7 @@ class ShowListViewModel @Inject constructor(
 ) : BaseViewModel<ShowSearchUiState, ShowSearchEvent, Nothing>(
     initialState = ShowSearchUiState()
 ) {
-    private val _sortType = MutableStateFlow(ShowSortType.REVIEW_GRADE)
+    private val _sortType = MutableStateFlow(ShowSortType.POPULAR)
     val sortType = _sortType.asStateFlow()
 
     private val _genreType = MutableStateFlow(ShowGenreType.PLAY)
@@ -47,7 +47,10 @@ class ShowListViewModel @Inject constructor(
     private val _isFirstEntry = MutableStateFlow(false)
     val isFirstEntry = _isFirstEntry.asStateFlow()
 
-    // //
+    private val _isChange = MutableSharedFlow<Boolean>()
+    val isChange = _isChange.asSharedFlow()
+
+    // ///////////////////////////////////////////////////////////////////////////////
 
     private var _searchWords = MutableStateFlow<List<ShowSearchWordModel>>(listOf())
     val searchWords = _searchWords.asStateFlow()
@@ -58,10 +61,7 @@ class ShowListViewModel @Inject constructor(
     init {
         checkIsFirstEntry()
         requestShowSearchWords()
-        when (uiState.value.genre) {
-            ShowGenreType.PLAY -> loadPlayItems()
-            ShowGenreType.MUSICAL -> loadMusicalItems()
-        }
+        fetchShowList()
     }
 
     private fun checkIsFirstEntry() {
@@ -76,14 +76,17 @@ class ShowListViewModel @Inject constructor(
         }
     }
 
+    fun selectSortType(sort: ShowSortType) {
+        if (_sortType.value != sort) {
+            _sortType.value = sort
+            fetchShowList()
+        }
+    }
+
     fun selectGenreType(genre: ShowGenreType) {
         if (_genreType.value != genre) {
             _genreType.value = genre
-            if (genre == ShowGenreType.PLAY) {
-                fetchPlayPagingData()
-            } else {
-                fetchMusicalPagingData()
-            }
+            fetchShowList()
         }
     }
 
@@ -102,28 +105,16 @@ class ShowListViewModel @Inject constructor(
         }
     }
 
-    fun fetchShowList() {
+    private fun fetchShowList() {
         showRepository.fetchShowList(genreType.value.name, sortType.value.code)
             .distinctUntilChanged()
             .cachedIn(viewModelScope)
             .onEach { _showInfoModels.value = it }
             .launchIn(viewModelScope)
-    }
 
-    private fun fetchPlayPagingData() {
-        showRepository.fetchShowList(ShowGenreType.PLAY.name, sortType.value.code)
-            .distinctUntilChanged()
-            .cachedIn(viewModelScope)
-            .onEach { _showInfoModels.value = it }
-            .launchIn(viewModelScope)
-    }
-
-    private fun fetchMusicalPagingData() {
-        showRepository.fetchShowList(ShowGenreType.MUSICAL.name, sortType.value.code)
-            .distinctUntilChanged()
-            .cachedIn(viewModelScope)
-            .onEach { _showInfoModels.value = it }
-            .launchIn(viewModelScope)
+        viewModelScope.launch {
+            _isChange.emit(true)
+        }
     }
 
     override fun reduceState(currentState: ShowSearchUiState, event: ShowSearchEvent): ShowSearchUiState =
