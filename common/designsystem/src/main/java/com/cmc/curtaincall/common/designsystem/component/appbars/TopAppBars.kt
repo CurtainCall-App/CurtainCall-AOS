@@ -102,7 +102,7 @@ fun CurtainCallCenterTopAppBarWithBack(
 }
 
 @Stable
-data class SearchAppBarType(
+data class SearchAppBarState(
     var isSearchMode: MutableState<Boolean> = mutableStateOf(false),
     var searchText: MutableState<String> = mutableStateOf(""),
     val onTextChange: (String) -> Unit = { searchText.value = it },
@@ -112,13 +112,13 @@ data class SearchAppBarType(
 )
 
 @Composable
-fun rememberSearchAppBarType() = remember { SearchAppBarType() }
+fun rememberSearchAppBarState() = remember { SearchAppBarState() }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CurtainCallSearchTitleTopAppBar(
     title: String,
-    searchAppBarType: SearchAppBarType = SearchAppBarType(),
+    searchAppBarState: SearchAppBarState = SearchAppBarState(),
     containerColor: Color = CurtainCallTheme.colors.background
 ) {
     Surface(
@@ -127,7 +127,7 @@ fun CurtainCallSearchTitleTopAppBar(
             .height(TopAppBarHeight),
         color = containerColor
     ) {
-        if (searchAppBarType.isSearchMode.value) {
+        if (searchAppBarState.isSearchMode.value) {
             Row(
                 modifier = Modifier
                     .padding(start = 14.dp, end = 18.dp)
@@ -135,8 +135,8 @@ fun CurtainCallSearchTitleTopAppBar(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 BasicTextField(
-                    value = searchAppBarType.searchText.value,
-                    onValueChange = searchAppBarType.onTextChange,
+                    value = searchAppBarState.searchText.value,
+                    onValueChange = searchAppBarState.onTextChange,
                     modifier = Modifier
                         .weight(1f)
                         .background(Grey9, RoundedCornerShape(30.dp))
@@ -150,7 +150,7 @@ fun CurtainCallSearchTitleTopAppBar(
                         modifier = Modifier.fillMaxWidth(),
                         contentAlignment = Alignment.CenterStart
                     ) {
-                        if (searchAppBarType.searchText.value.isEmpty()) {
+                        if (searchAppBarState.searchText.value.isEmpty()) {
                             Text(
                                 text = stringResource(R.string.search_appbar_hint),
                                 style = CurtainCallTheme.typography.body3.copy(
@@ -167,7 +167,7 @@ fun CurtainCallSearchTitleTopAppBar(
                                 .align(Alignment.CenterEnd)
                                 .padding(horizontal = 11.dp)
                                 .size(18.dp)
-                                .clickable { searchAppBarType.onClear() },
+                                .clickable { searchAppBarState.onClear() },
                             tint = Color.Unspecified
                         )
                     }
@@ -176,7 +176,7 @@ fun CurtainCallSearchTitleTopAppBar(
                     text = stringResource(R.string.cancel),
                     modifier = Modifier
                         .padding(start = 10.dp)
-                        .clickable { searchAppBarType.onCancel() },
+                        .clickable { searchAppBarState.onCancel() },
                     style = CurtainCallTheme.typography.body3.copy(
                         color = Grey2,
                         fontWeight = FontWeight.SemiBold
@@ -200,7 +200,7 @@ fun CurtainCallSearchTitleTopAppBar(
                     modifier = Modifier
                         .padding(end = 16.dp)
                         .size(TopAppBarBackIconSize)
-                        .clickable { searchAppBarType.onSearch() },
+                        .clickable { searchAppBarState.onSearch() },
                     tint = Color.Unspecified
                 )
             }

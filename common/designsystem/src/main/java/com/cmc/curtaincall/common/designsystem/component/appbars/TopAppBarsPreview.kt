@@ -1,10 +1,8 @@
 package com.cmc.curtaincall.common.designsystem.component.appbars
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
 import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 
@@ -31,7 +29,7 @@ private fun CurtainCallSearchTitleTopAppBarPreview() {
     CurtainCallTheme {
         CurtainCallSearchTitleTopAppBar(
             title = "작품",
-            searchAppBarType = SearchAppBarType(
+            searchAppBarState = SearchAppBarState(
                 searchText = text,
                 onTextChange = { text.value = it }
             )
