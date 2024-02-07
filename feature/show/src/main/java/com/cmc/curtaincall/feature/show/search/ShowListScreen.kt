@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -23,7 +24,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemsIndexed
 import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.appbars.CurtainCallSearchTitleTopAppBar
-import com.cmc.curtaincall.common.designsystem.component.appbars.rememberSearchAppBarType
+import com.cmc.curtaincall.common.designsystem.component.appbars.SearchAppBarState
 import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.designsystem.component.canvas.CurtainCallCoachMark
 import com.cmc.curtaincall.common.designsystem.component.card.PerformanceDetailCard
@@ -32,6 +33,8 @@ import com.cmc.curtaincall.common.designsystem.component.content.empty.EmptyCont
 import com.cmc.curtaincall.common.designsystem.component.item.search.SearchTextItem
 import com.cmc.curtaincall.common.designsystem.component.sheets.bottom.CurtainCallShowSortBottomSheet
 import com.cmc.curtaincall.common.designsystem.custom.poster.CurtainCallShowPoster
+import com.cmc.curtaincall.common.designsystem.custom.search.SearchWordContent
+import com.cmc.curtaincall.common.designsystem.custom.search.SearchWordEmptyContent
 import com.cmc.curtaincall.common.designsystem.dimension.Paddings
 import com.cmc.curtaincall.common.designsystem.extensions.toSp
 import com.cmc.curtaincall.common.designsystem.theme.*
@@ -48,60 +51,24 @@ fun ShowListScreen(
     onNavigateDetail: (String) -> Unit
 ) {
     val showSearchUiState by showListViewModel.uiState.collectAsStateWithLifecycle()
-    val searchAppBarType = rememberSearchAppBarType()
+    val searchAppBarState by showListViewModel.searchAppBarState.collectAsStateWithLifecycle()
+
     SystemUiStatusBar(White)
     Scaffold(
         topBar = {
             CurtainCallSearchTitleTopAppBar(
                 title = stringResource(R.string.show),
-                searchAppBarType = searchAppBarType
+                searchAppBarState = searchAppBarState
             )
-//            if (showSearchUiState.isActiveSearch) {
-//                SearchAppBar(
-//                    value = showSearchUiState.queryString,
-//                    onValueChange = {
-//                        showSearchViewModel.setQueryString(it)
-//                        showSearchViewModel.onSearching()
-//                    },
-//                    containerColor = White,
-//                    contentColor = Nero,
-//                    placeholder = stringResource(R.string.search_performance_title),
-//                    onDone = {
-//                        if (showSearchUiState.queryString.trim().isNotEmpty()) {
-//                            showSearchViewModel.searchShowList(showSearchUiState.queryString)
-//                            showSearchViewModel.insertShowSearchWord(showSearchUiState.queryString)
-//                        }
-//                        showSearchViewModel.onDoneSearch()
-//                    },
-//                    onClick = {
-//                        showSearchViewModel.onDeActiveSearch()
-//                        showSearchViewModel.setQueryString()
-//                    },
-//                    onAction = { showSearchViewModel.setQueryString() }
-//                )
-//            } else {
-//                TopAppBarOnlySearch(
-//                    containerColor = White,
-//                    contentColor = Roman_Silver,
-//                    onClick = { showSearchViewModel.onActiveSearch() }
-//                )
-//            }
         }
     ) { paddingValues ->
-        if (searchAppBarType.isSearchMode.value) {
+        if (searchAppBarState.isSearchMode.value) {
             ShowSearchContent(
                 modifier = Modifier
                     .padding(paddingValues)
                     .fillMaxSize()
-                    .background(White),
-                queryString = showSearchUiState.queryString,
-                isDoneSearch = showSearchUiState.isDoneSearch,
-                onSearch = {
-                    showListViewModel.setQueryString(it)
-                    showListViewModel.searchShowList(it)
-                    showListViewModel.insertShowSearchWord(it)
-                    showListViewModel.onDoneSearch()
-                },
+                    .background(CurtainCallTheme.colors.background),
+                searchAppBarState = searchAppBarState,
                 onNavigateDetail = onNavigateDetail
             )
         } else {
@@ -109,9 +76,116 @@ fun ShowListScreen(
                 modifier = Modifier
                     .padding(paddingValues)
                     .fillMaxSize()
-                    .background(White),
+                    .background(CurtainCallTheme.colors.background),
                 onNavigateDetail = onNavigateDetail
             )
+        }
+    }
+}
+
+@Composable
+private fun ShowSearchContent(
+    modifier: Modifier = Modifier,
+    showListViewModel: ShowListViewModel = hiltViewModel(),
+    searchAppBarState: SearchAppBarState = SearchAppBarState(),
+    onNavigateDetail: (String) -> Unit = {}
+) {
+    val showSearchWords by showListViewModel.showSearchWords.collectAsStateWithLifecycle()
+    val searchShowInfoModels = showListViewModel.searchShowInfoModels.collectAsLazyPagingItems()
+
+    LaunchedEffect(showListViewModel) {
+        showListViewModel.isRefresh.collect { isRefresh ->
+            if (isRefresh) searchShowInfoModels.refresh()
+        }
+    }
+
+    if (searchAppBarState.isDoneSearch.value) {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = modifier
+                .padding(top = 30.dp)
+                .padding(horizontal = 20.dp)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(26.dp),
+            horizontalArrangement = Arrangement.spacedBy(14.dp)
+        ) {
+            items(searchShowInfoModels.itemCount) { index ->
+                searchShowInfoModels[index]?.let { searchShowInfoModel ->
+                    CurtainCallShowPoster(
+                        model = searchShowInfoModel.poster,
+                        text = searchShowInfoModel.name,
+                        isLike = searchShowInfoModel.favorite,
+                        onLikeClick = {
+                            showListViewModel.checkShowLike(
+                                showId = searchShowInfoModel.id,
+                                isLike = !searchShowInfoModel.favorite
+                            )
+                        },
+                        onClick = { onNavigateDetail(searchShowInfoModel.id) }
+                    )
+                }
+            }
+        }
+    } else {
+        if (showSearchWords.isEmpty()) {
+            Column(
+                modifier = modifier
+                    .padding(top = 30.dp)
+                    .padding(horizontal = 20.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.recently_search_word),
+                    style = CurtainCallTheme.typography.body2.copy(
+                        fontWeight = FontWeight.SemiBold
+                    )
+                )
+                Spacer(Modifier.weight(190f))
+                SearchWordEmptyContent(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.CenterHorizontally)
+                )
+                Spacer(Modifier.weight(339f))
+            }
+        } else {
+            LazyColumn(
+                modifier = modifier
+                    .padding(top = 30.dp)
+                    .padding(horizontal = 20.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                item {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = stringResource(R.string.recently_search_word),
+                            modifier = Modifier.weight(1f),
+                            style = CurtainCallTheme.typography.body2.copy(
+                                fontWeight = FontWeight.SemiBold
+                            )
+                        )
+                        if (showSearchWords.isNotEmpty()) {
+                            Text(
+                                text = stringResource(R.string.delete_all_search_word),
+                                modifier = Modifier.clickable { showListViewModel.deleteAllShowSearchWord() },
+                                style = CurtainCallTheme.typography.body3.copy(
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = Grey6
+                                )
+                            )
+                        }
+                    }
+                }
+                items(showSearchWords) { showSearchWord ->
+                    SearchWordContent(
+                        text = showSearchWord.word,
+                        onClose = { showListViewModel.deleteShowSearchWord(showSearchWord) },
+                        onClick = { showListViewModel.searchRecentlyWord(showSearchWord) }
+                    )
+                }
+            }
         }
     }
 }
