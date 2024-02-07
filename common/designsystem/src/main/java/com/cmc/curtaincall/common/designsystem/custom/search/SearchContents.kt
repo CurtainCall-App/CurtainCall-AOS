@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.designsystem.R
@@ -27,10 +28,12 @@ import com.cmc.curtaincall.common.designsystem.theme.Grey9
 fun SearchWordContent(
     modifier: Modifier = Modifier,
     text: String,
-    onClose: (String) -> Unit = {}
+    onClose: (String) -> Unit = {},
+    onClick: () -> Unit = {}
 ) {
     Row(
         modifier = modifier
+            .clickable { onClick() }
             .background(Grey9, RoundedCornerShape(30.dp))
             .padding(horizontal = 12.dp)
             .padding(vertical = 6.dp),
@@ -38,10 +41,13 @@ fun SearchWordContent(
     ) {
         Text(
             text = text,
+            modifier = Modifier.weight(1f, false),
             style = CurtainCallTheme.typography.body3.copy(
                 fontWeight = FontWeight.SemiBold,
                 color = Grey2
-            )
+            ),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
         Icon(
             painter = painterResource(R.drawable.ic_search_close),
