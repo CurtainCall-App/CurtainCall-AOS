@@ -4,7 +4,6 @@ import android.os.Build
 import android.os.Bundle
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -12,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.cmc.curtaincall.common.designsystem.component.navigation.CurtainCallNavigationBar
 import com.cmc.curtaincall.common.navigation.NavGraphLabel
 import com.cmc.curtaincall.common.navigation.destination.HomeDestination
 import com.cmc.curtaincall.common.navigation.destination.ShowDestination
@@ -21,7 +21,9 @@ import com.cmc.curtaincall.feature.home.HomeScreen
 import com.cmc.curtaincall.feature.home.guide.HomeGuideScreen
 import com.cmc.curtaincall.feature.home.report.HomeReportScreen
 import com.cmc.curtaincall.feature.livetalk.livetalkNavGraph
+import com.cmc.curtaincall.feature.mypage.MyPageDestination
 import com.cmc.curtaincall.feature.mypage.mypageNavGraph
+import com.cmc.curtaincall.feature.partymember.PartyMemberDestination
 import com.cmc.curtaincall.feature.partymember.partymemberNavGraph
 import com.cmc.curtaincall.feature.show.showNavGraph
 import io.getstream.chat.android.client.ChatClient
@@ -34,9 +36,17 @@ fun HomeNavHost(
     onDeleteMember: () -> Unit = {}
 ) {
     Scaffold(
-        bottomBar = { HomeBottomBar(navHostController) },
-        floatingActionButton = { HomeFloatingButton(navHostController) },
-        floatingActionButtonPosition = FabPosition.Center
+        bottomBar = {
+            CurtainCallNavigationBar(
+                navHostController = navHostController,
+                bottomDestinations = listOf(
+                    HomeDestination.Home,
+                    ShowDestination.Search,
+                    PartyMemberDestination.PartyMember,
+                    MyPageDestination.MyPage
+                )
+            )
+        }
     ) { innerPadding ->
         NavHost(
             navController = navHostController,
