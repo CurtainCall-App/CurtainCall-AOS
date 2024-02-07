@@ -3,6 +3,7 @@ package com.cmc.curtaincall.feature.show.search
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.cmc.curtaincall.common.designsystem.component.appbars.SearchAppBarState
 import com.cmc.curtaincall.core.base.BaseViewModel
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import com.cmc.curtaincall.domain.model.show.ShowSearchWordModel
@@ -50,6 +51,15 @@ class ShowListViewModel @Inject constructor(
     private val _isChange = MutableSharedFlow<Boolean>()
     val isChange = _isChange.asSharedFlow()
 
+    private val _showSearchWords = MutableStateFlow<List<ShowSearchWordModel>>(listOf())
+    val showSearchWords = _showSearchWords.asStateFlow()
+
+    private val _searchShowInfoModels = MutableStateFlow<PagingData<ShowInfoModel>>(PagingData.empty())
+    val searchShowInfoModels = _searchShowInfoModels.asStateFlow()
+
+    private val _searchAppBarState = MutableStateFlow(SearchAppBarState())
+    val searchAppBarState = _searchAppBarState.asStateFlow()
+
     // ///////////////////////////////////////////////////////////////////////////////
 
     private var _searchWords = MutableStateFlow<List<ShowSearchWordModel>>(listOf())
@@ -60,8 +70,14 @@ class ShowListViewModel @Inject constructor(
 
     init {
         checkIsFirstEntry()
-        requestShowSearchWords()
+        queryShowSearchWords()
         fetchShowList()
+        _searchAppBarState.value = _searchAppBarState.value.copy(
+            onDone = {
+                _searchAppBarState.value.isDoneSearch.value = true
+                insertShowSearchWord(it)
+            }
+        )
     }
 
     private fun checkIsFirstEntry() {
@@ -117,6 +133,49 @@ class ShowListViewModel @Inject constructor(
         }
     }
 
+    private fun queryShowSearchWords() {
+        showRepository.getShowSearchWordList()
+            .distinctUntilChanged()
+            .onEach { _showSearchWords.value = it }
+            .launchIn(viewModelScope)
+    }
+
+    private fun insertShowSearchWord(query: String) {
+        viewModelScope.launch {
+            showRepository.insertShowSearchWord(ShowSearchWordModel(query, System.currentTimeMillis()))
+            requestShowSearchWords()
+            fetchSearchShowList(query)
+        }
+    }
+
+    fun deleteShowSearchWord(searchWordModel: ShowSearchWordModel) {
+        viewModelScope.launch {
+            showRepository.deleteShowSearchWord(searchWordModel)
+            requestShowSearchWords()
+        }
+    }
+
+    fun deleteAllShowSearchWord() {
+        viewModelScope.launch {
+            showRepository.deleteShowSearchWordList()
+            requestShowSearchWords()
+        }
+    }
+
+    private fun fetchSearchShowList(query: String) {
+        showRepository.fetchSearchShowList(query.trim())
+            .cachedIn(viewModelScope)
+            .onEach { _searchShowInfoModels.value = it }
+            .launchIn(viewModelScope)
+    }
+
+    fun searchRecentlyWord(searchWordModel: ShowSearchWordModel) {
+        _searchAppBarState.value.searchText.value = searchWordModel.word
+        _searchAppBarState.value.onDone(searchWordModel.word)
+    }
+
+    // //////////////////////////////////////////////////////////////////////////////////
+
     override fun reduceState(currentState: ShowSearchUiState, event: ShowSearchEvent): ShowSearchUiState =
         when (event) {
             ShowSearchEvent.ActivateSearch -> currentState.copy(isActiveSearch = true)
@@ -147,54 +206,6 @@ class ShowListViewModel @Inject constructor(
         sendAction(ShowSearchEvent.DoneSearch)
     }
 
-    fun onSearching() {
-        sendAction(ShowSearchEvent.Searching)
-    }
-
-    fun setQueryString(query: String = "") {
-        sendAction(ShowSearchEvent.SetQueryString(query))
-    }
-
-    fun changeGenre(genre: ShowGenreType) {
-        sendAction(ShowSearchEvent.ChangeGenre(genre))
-        if (genre == ShowGenreType.PLAY) {
-            loadPlayItems()
-        } else {
-            loadMusicalItems()
-        }
-    }
-
-    fun changeSortType(sortType: ShowSortType) {
-        sendAction(
-            ShowSearchEvent.ChangeSort(
-                sortType = sortType
-            )
-        )
-        when (uiState.value.genre) {
-            ShowGenreType.PLAY -> {
-                loadPlayItems()
-            }
-
-            ShowGenreType.MUSICAL -> {
-                loadMusicalItems()
-            }
-        }
-    }
-
-    private fun loadPlayItems() {
-        showRepository.fetchShowList(ShowGenreType.PLAY.name, uiState.value.sortType.code)
-            .cachedIn(viewModelScope)
-            .onEach { _showInfoModels.value = it }
-            .launchIn(viewModelScope)
-    }
-
-    private fun loadMusicalItems() {
-        showRepository.fetchShowList(ShowGenreType.MUSICAL.name, uiState.value.sortType.code)
-            .cachedIn(viewModelScope)
-            .onEach { _showInfoModels.value = it }
-            .launchIn(viewModelScope)
-    }
-
     fun requestFavoriteShow(showId: String) {
         favoriteRepository.requestFavoriteShow(showId).launchIn(viewModelScope)
     }
@@ -207,22 +218,6 @@ class ShowListViewModel @Inject constructor(
         showRepository.getShowSearchWordList()
             .onEach { _searchWords.value = it }
             .launchIn(viewModelScope)
-    }
-
-    fun insertShowSearchWord(query: String) {
-        viewModelScope.launch {
-            showRepository.insertShowSearchWord(
-                showSearchWordModel = ShowSearchWordModel(query, System.currentTimeMillis())
-            )
-            requestShowSearchWords()
-        }
-    }
-
-    fun deleteShowSearchWord(searchWordModel: ShowSearchWordModel) {
-        viewModelScope.launch {
-            showRepository.deleteShowSearchWord(searchWordModel)
-            requestShowSearchWords()
-        }
     }
 
     fun deleteShowSearchWordList() {
