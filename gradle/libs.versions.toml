@@ -23,7 +23,7 @@ androidxPagingCompose = "1.0.0-alpha18"
 
 # related compose UI
 accompanist-compose = "0.31.5-beta"
-calendar-compose = "2.4.0-beta01"
+calendar-compose = "2.1.0"
 naver-map-compose = "1.2.3"
 coil-compose = "2.4.0"
 bottomsheet-dialog = "1.2.2"
@@ -61,7 +61,7 @@ facebook-login = "16.0.0"
 naver-login = "5.8.0"
 
 # CI/CD
-firebase-bom = "32.1.1"
+firebase-bom = "32.7.1"
 play-services-auth = "20.6.0"
 
 # default
@@ -88,7 +88,7 @@ curtaincall-android-application-compose = { id = "curtaincall.android.applicatio
 curtaincall-android-hilt = { id = "curtaincall.android.hilt", version = "unspecified" }
 curtaincall-android-library = { id = "curtaincall.android.library", version = "unspecified" }
 curtaincall-android-library-compose = { id = "curtaincall.android.library.compose", version = "unspecified" }
-curtaincall-android-room = { id = "curtaincall.android.room", version = "unspecified"}
+curtaincall-android-room = { id = "curtaincall.android.room", version = "unspecified" }
 
 
 
@@ -155,12 +155,12 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 
 # firebase
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
-firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-firestore-ktx" }
+firebase-analytics-ktx = { group = "com.google.firebase", name = "firebase-analytics-ktx" }
 
 # auth
 kakao-user = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao-user" }
 facebook-login = { group = "com.facebook.android", name = "facebook-login", version.ref = "facebook-login" }
-naver-login = { group = "com.navercorp.nid", name="oauth", version.ref = "naver-login" }
+naver-login = { group = "com.navercorp.nid", name = "oauth", version.ref = "naver-login" }
 play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "play-services-auth" }
 
 # default

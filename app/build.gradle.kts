@@ -47,6 +47,10 @@ dependencies {
     implementation(libs.kakao.user)
     implementation(libs.naver.login)
 
+    // firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics.ktx)
+
     // test
     debugImplementation(libs.androidx.compose.ui.tooling)
 }
