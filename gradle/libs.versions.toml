@@ -23,7 +23,7 @@ androidxPagingCompose = "1.0.0-alpha18"
 
 # related compose UI
 accompanist-compose = "0.31.5-beta"
-calendar-compose = "2.4.0-beta01"
+calendar-compose = "2.1.0"
 naver-map-compose = "1.2.3"
 coil-compose = "2.4.0"
 bottomsheet-dialog = "1.2.2"
