@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -26,8 +27,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.designsystem.R
+import com.cmc.curtaincall.common.designsystem.theme.Black
 import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import com.cmc.curtaincall.common.designsystem.theme.Grey2
 import com.cmc.curtaincall.common.designsystem.theme.Grey6
@@ -71,6 +74,7 @@ fun CurtainCallTitleTopAppBar(
 fun CurtainCallCenterTopAppBarWithBack(
     title: String,
     containerColor: Color = CurtainCallTheme.colors.background,
+    contentColor: Color = Black,
     onBack: () -> Unit = {}
 ) {
     Surface(
@@ -91,11 +95,16 @@ fun CurtainCallCenterTopAppBarWithBack(
                     .padding(start = 14.dp)
                     .size(TopAppBarBackIconSize)
                     .clickable { onBack() },
-                tint = Color.Unspecified
+                tint = contentColor
             )
             Text(
                 text = title,
-                style = CurtainCallTheme.typography.subTitle4
+                modifier = Modifier.width(180.dp),
+                style = CurtainCallTheme.typography.subTitle4.copy(
+                    color = contentColor
+                ),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
