@@ -26,7 +26,7 @@ import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.appbars.CurtainCallSearchTitleTopAppBar
 import com.cmc.curtaincall.common.designsystem.component.appbars.SearchAppBarState
 import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
-import com.cmc.curtaincall.common.designsystem.component.canvas.CurtainCallCoachMark
+import com.cmc.curtaincall.common.designsystem.component.canvas.CurtainCallShowSortCoachMark
 import com.cmc.curtaincall.common.designsystem.component.card.PerformanceDetailCard
 import com.cmc.curtaincall.common.designsystem.component.chips.CurtainCallBasicChip
 import com.cmc.curtaincall.common.designsystem.component.content.empty.EmptyContent
@@ -400,7 +400,7 @@ private fun ShowListContent(
             }
         }
         if (isFirstEntry) {
-            CurtainCallCoachMark(
+            CurtainCallShowSortCoachMark(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(top = 51.dp)

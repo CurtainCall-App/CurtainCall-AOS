@@ -38,20 +38,23 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.designsystem.R
+import com.cmc.curtaincall.common.designsystem.component.appbars.CurtainCallCenterTopAppBarWithBack
 import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarWithBack
+import com.cmc.curtaincall.common.designsystem.component.canvas.CurtainCallShowLiveTalkCoachMark
+import com.cmc.curtaincall.common.designsystem.component.cards.ShowDetailCard
 import com.cmc.curtaincall.common.designsystem.extensions.toSp
-import com.cmc.curtaincall.common.designsystem.theme.Black
 import com.cmc.curtaincall.common.designsystem.theme.Bright_Gray
 import com.cmc.curtaincall.common.designsystem.theme.Cetacean_Blue
 import com.cmc.curtaincall.common.designsystem.theme.Chinese_Black
+import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import com.cmc.curtaincall.common.designsystem.theme.Me_Pink
 import com.cmc.curtaincall.common.designsystem.theme.White
 import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
 import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
 import com.cmc.curtaincall.common.utility.extensions.toRunningTime
-import com.cmc.curtaincall.domain.type.ShowDetailMenuTab
 import com.cmc.curtaincall.domain.model.show.ShowDetailModel
+import com.cmc.curtaincall.domain.type.ShowDetailMenuTab
 import com.cmc.curtaincall.feature.show.lostproperty.ShowLostPropertyMenuScreen
 import com.cmc.curtaincall.feature.show.review.ShowReviewMenuScreen
 
@@ -61,50 +64,84 @@ internal fun ShowDetailScreen(
     showId: String?,
     onNavigateReview: (String) -> Unit = {},
     onNavigateLostProperty: (String, String) -> Unit = { _, _ -> },
-    onNavigateDetail: (String) -> Unit = {},
     onBack: () -> Unit = {}
 ) {
     requireNotNull(showId)
+
+    val scrollState = rememberScrollState()
+    val showDetailUiState by showDetailViewModel.uiState.collectAsStateWithLifecycle()
+    val ticketPrices = showDetailUiState.showDetailModel.ticketPrice.split(", ")
+
     LaunchedEffect(Unit) {
         showDetailViewModel.requestShowDetail(showId)
         showDetailViewModel.checkFavoriteShows(showId)
     }
 
-    val scrollState = rememberScrollState()
-    val showDetailState by showDetailViewModel.uiState.collectAsStateWithLifecycle()
-    val ticketPrices = showDetailState.showDetailModel.ticketPrice.split(", ")
-
-    SystemUiStatusBar(Black)
-    Box(
+    SystemUiStatusBar(CurtainCallTheme.colors.primary)
+    Column(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(scrollState),
-        contentAlignment = Alignment.TopCenter
+            .verticalScroll(scrollState)
     ) {
         ShowDetailContent(
             modifier = Modifier
                 .fillMaxWidth()
-                .height((666 + if (ticketPrices.size > 2) (22 * (ticketPrices.size - 2)) else 0).dp)
-                .background(Cetacean_Blue.copy(0.8f)),
-            showDetailModel = showDetailState.showDetailModel,
-            ticketPrices = ticketPrices,
+                .height(668.dp)
+                .background(CurtainCallTheme.colors.background),
+            showDetailModel = showDetailUiState.showDetailModel,
             onBack = onBack
         )
+//        Column(
+//            modifier = Modifier
+//                .padding(top = (644 + (-1 * (2 - ticketPrices.size) * 22)).dp)
+//                .fillMaxSize()
+//                .background(White, RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
+//        ) {
+//            ShowDetailMenuTab(
+//                performanceDetailViewModel = showDetailViewModel,
+//                modifier = Modifier.padding(top = 26.dp),
+//                showId = showId,
+//                onNavigateReview = onNavigateReview,
+//                onNavigateLostProperty = onNavigateLostProperty
+//            )
+//        }
+    }
+}
+
+@Composable
+private fun ShowDetailContent(
+    modifier: Modifier = Modifier,
+    showDetailModel: ShowDetailModel = ShowDetailModel(),
+    onBack: () -> Unit = {}
+) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.TopCenter
+    ) {
         Column(
             modifier = Modifier
-                .padding(top = (644 + (-1 * (2 - ticketPrices.size) * 22)).dp)
-                .fillMaxSize()
-                .background(White, RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
+                .fillMaxWidth()
+                .height(276.dp)
+                .background(CurtainCallTheme.colors.primary, RoundedCornerShape(bottomStart = 30.dp, bottomEnd = 30.dp))
         ) {
-            ShowDetailMenuTab(
-                performanceDetailViewModel = showDetailViewModel,
-                modifier = Modifier.padding(top = 26.dp),
-                showId = showId,
-                onNavigateReview = onNavigateReview,
-                onNavigateLostProperty = onNavigateLostProperty,
-                onNavigateDetail = onNavigateDetail
+            CurtainCallCenterTopAppBarWithBack(
+                title = showDetailModel.name,
+                containerColor = CurtainCallTheme.colors.primary,
+                contentColor = CurtainCallTheme.colors.onPrimary,
+                onBack = onBack
             )
         }
+        ShowDetailCard(
+            modifier = Modifier
+                .padding(top = 76.dp)
+                .padding(horizontal = 20.dp),
+            showDetailModel = showDetailModel
+        )
+        CurtainCallShowLiveTalkCoachMark(
+            modifier = Modifier.padding(top = 620.dp),
+            text = stringResource(R.string.livetalk_coach_mark),
+            onClick = {}
+        )
     }
 }
 
@@ -114,8 +151,7 @@ private fun ShowDetailMenuTab(
     modifier: Modifier = Modifier,
     showId: String,
     onNavigateReview: (String) -> Unit = {},
-    onNavigateLostProperty: (String, String) -> Unit = { _, _ -> },
-    onNavigateDetail: (String) -> Unit = {}
+    onNavigateLostProperty: (String, String) -> Unit = { _, _ -> }
 ) {
     val performanceDetailUiState by performanceDetailViewModel.uiState.collectAsStateWithLifecycle()
     val menuTabType = performanceDetailUiState.menuTabType
@@ -214,8 +250,7 @@ private fun ShowDetailMenuTab(
                     introductionImage = performanceDetailUiState.showDetailModel.introductionImages.firstOrNull(),
                     showTimes = performanceDetailUiState.showDetailModel.showTimes,
                     similarShows = performanceDetailUiState.similarShows,
-                    facilityDetailModel = performanceDetailUiState.facilityDetailModel,
-                    onNavigateDetail = onNavigateDetail
+                    facilityDetailModel = performanceDetailUiState.facilityDetailModel
                 )
             }
 

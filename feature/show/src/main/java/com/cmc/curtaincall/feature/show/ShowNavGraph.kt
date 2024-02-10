@@ -44,9 +44,6 @@ fun NavGraphBuilder.showNavGraph(
                 onNavigateLostProperty = { facilityId, facilityName ->
                     navHostController.navigate("${ShowDestination.LostProperty.route}/$facilityId/$facilityName")
                 },
-                onNavigateDetail = { showId ->
-                    navHostController.navigate("${ShowDestination.Detail.route}/$showId")
-                },
                 onBack = {
                     navHostController.popBackStack()
                 }

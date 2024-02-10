@@ -41,8 +41,7 @@ internal fun ShowDetailMenuScreen(
     introductionImage: String? = null,
     showTimes: List<ShowTimeModel> = listOf(),
     similarShows: List<SimilarShowInfoModel> = listOf(),
-    facilityDetailModel: FacilityDetailModel = FacilityDetailModel(),
-    onNavigateDetail: (String) -> Unit = {}
+    facilityDetailModel: FacilityDetailModel = FacilityDetailModel()
 ) {
     Column(modifier) {
         if (introductionImage != null) {
@@ -80,16 +79,6 @@ internal fun ShowDetailMenuScreen(
                 .background(Bright_Gray)
                 .height(1.dp)
         )
-
-        if (similarShows.isNotEmpty()) {
-            ShowDetailSimilarRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 30.dp, bottom = 50.dp),
-                similarShows = similarShows,
-                onNavigateDetail = onNavigateDetail
-            )
-        }
     }
 }
 
