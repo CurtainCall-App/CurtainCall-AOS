@@ -6,6 +6,7 @@ import java.util.Locale
 import java.util.TimeZone
 
 private const val DEFAULT_DATE_PATTERN = "yyyy-MM-dd"
+private const val DEFAULT_DATE_PATTERN2 = "yyyy.MM.dd"
 private const val DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss"
 private const val SIMPLE_DATE_PATTERN = "yy.MM.dd(E)"
 fun getTodayDate(): String {
@@ -45,6 +46,31 @@ fun String.toTime(): String {
     return SimpleDateFormat("HH:mm").format(date)
 }
 
+fun String.toChangeDate(): String {
+    if (isEmpty()) return ""
+    val date = SimpleDateFormat("yyyy-MM-dd").parse(this)
+    return SimpleDateFormat("yy.MM.dd").format(date)
+}
+
+fun String.toChangeFullDate(): String {
+    if (isEmpty()) return ""
+    val date = SimpleDateFormat("yyyy-MM-dd").parse(this)
+    return SimpleDateFormat("yyyy.MM.dd").format(date)
+}
+
+fun String.toChangeServerDate(): String {
+    if (isEmpty()) return ""
+    val date = SimpleDateFormat("yyyy.MM.dd").parse(this)
+    return SimpleDateFormat("yyyy-MM-dd").format(date)
+}
+
+fun changeShowAt(date: String, time: String): String {
+    val showDate = SimpleDateFormat("yyyy. MM. dd").parse(date)
+    val changeDate = SimpleDateFormat("yyyy-MM-dd").format(showDate)
+    return "${changeDate}T$time:00"
+}
+
+// ///
 fun String.convertDDay(): Long {
     if (isEmpty()) return 0L
     val date = SimpleDateFormat(DEFAULT_DATE_PATTERN, Locale.KOREA).parse(this)
@@ -71,26 +97,12 @@ fun String.convertSimpleDate(): String {
     }
 }
 
-fun String.toChangeDate(): String {
+fun String.convertDefaultDate(): String {
     if (isEmpty()) return ""
-    val date = SimpleDateFormat("yyyy-MM-dd").parse(this)
-    return SimpleDateFormat("yy.MM.dd").format(date)
-}
-
-fun String.toChangeFullDate(): String {
-    if (isEmpty()) return ""
-    val date = SimpleDateFormat("yyyy-MM-dd").parse(this)
-    return SimpleDateFormat("yyyy.MM.dd").format(date)
-}
-
-fun String.toChangeServerDate(): String {
-    if (isEmpty()) return ""
-    val date = SimpleDateFormat("yyyy.MM.dd").parse(this)
-    return SimpleDateFormat("yyyy-MM-dd").format(date)
-}
-
-fun changeShowAt(date: String, time: String): String {
-    val showDate = SimpleDateFormat("yyyy. MM. dd").parse(date)
-    val changeDate = SimpleDateFormat("yyyy-MM-dd").format(showDate)
-    return "${changeDate}T$time:00"
+    val date = SimpleDateFormat(DEFAULT_DATE_PATTERN, Locale.KOREA).parse(this)
+    date?.let { date ->
+        return SimpleDateFormat(DEFAULT_DATE_PATTERN2, Locale.KOREA).format(date)
+    } ?: kotlin.run {
+        return ""
+    }
 }

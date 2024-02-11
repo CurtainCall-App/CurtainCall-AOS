@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.common.utility.extensions
+package com.cmc.curtaincall.domain.enums
 
 import com.cmc.curtaincall.domain.model.show.ShowTimeModel
 

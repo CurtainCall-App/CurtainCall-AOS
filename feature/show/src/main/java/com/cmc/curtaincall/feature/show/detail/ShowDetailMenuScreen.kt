@@ -27,7 +27,7 @@ import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallBorder
 import com.cmc.curtaincall.common.designsystem.component.card.PerformanceCard
 import com.cmc.curtaincall.common.designsystem.extensions.toSp
 import com.cmc.curtaincall.common.designsystem.theme.*
-import com.cmc.curtaincall.common.utility.extensions.getShowTimes
+import com.cmc.curtaincall.domain.enums.getShowTimes
 import com.cmc.curtaincall.domain.model.show.FacilityDetailModel
 import com.cmc.curtaincall.domain.model.show.ShowTimeModel
 import com.cmc.curtaincall.domain.model.show.SimilarShowInfoModel

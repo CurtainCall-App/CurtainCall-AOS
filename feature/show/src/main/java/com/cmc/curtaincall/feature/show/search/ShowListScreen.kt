@@ -38,7 +38,7 @@ import com.cmc.curtaincall.common.designsystem.custom.search.SearchWordEmptyCont
 import com.cmc.curtaincall.common.designsystem.dimension.Paddings
 import com.cmc.curtaincall.common.designsystem.extensions.toSp
 import com.cmc.curtaincall.common.designsystem.theme.*
-import com.cmc.curtaincall.common.utility.extensions.ShowDay
+import com.cmc.curtaincall.domain.enums.ShowDay
 import com.cmc.curtaincall.common.utility.extensions.toChangeDate
 import com.cmc.curtaincall.common.utility.extensions.toRunningTime
 import com.cmc.curtaincall.domain.type.ShowGenreType

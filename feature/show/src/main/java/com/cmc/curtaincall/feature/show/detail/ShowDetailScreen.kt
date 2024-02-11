@@ -1,10 +1,11 @@
 package com.cmc.curtaincall.feature.show.detail
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -43,20 +44,21 @@ import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.designsystem.component.basic.TopAppBarWithBack
 import com.cmc.curtaincall.common.designsystem.component.canvas.CurtainCallShowLiveTalkCoachMark
 import com.cmc.curtaincall.common.designsystem.component.cards.ShowDetailCard
+import com.cmc.curtaincall.common.designsystem.component.divider.HorizontalDivider
 import com.cmc.curtaincall.common.designsystem.extensions.toSp
 import com.cmc.curtaincall.common.designsystem.theme.Bright_Gray
 import com.cmc.curtaincall.common.designsystem.theme.Cetacean_Blue
 import com.cmc.curtaincall.common.designsystem.theme.Chinese_Black
 import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
+import com.cmc.curtaincall.common.designsystem.theme.Grey8
 import com.cmc.curtaincall.common.designsystem.theme.Me_Pink
 import com.cmc.curtaincall.common.designsystem.theme.White
 import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
 import com.cmc.curtaincall.common.utility.extensions.toChangeFullDate
 import com.cmc.curtaincall.common.utility.extensions.toRunningTime
+import com.cmc.curtaincall.domain.enums.MenuTabType
 import com.cmc.curtaincall.domain.model.show.ShowDetailModel
-import com.cmc.curtaincall.domain.type.ShowDetailMenuTab
-import com.cmc.curtaincall.feature.show.lostproperty.ShowLostPropertyMenuScreen
-import com.cmc.curtaincall.feature.show.review.ShowReviewMenuScreen
+import com.cmc.curtaincall.feature.show.detail.menu.ShowDetailMenuTabContent
 
 @Composable
 internal fun ShowDetailScreen(
@@ -91,6 +93,9 @@ internal fun ShowDetailScreen(
             showDetailModel = showDetailUiState.showDetailModel,
             onBack = onBack
         )
+        ShowDetailMenuTab(
+            modifier = Modifier.fillMaxSize()
+        )
 //        Column(
 //            modifier = Modifier
 //                .padding(top = (644 + (-1 * (2 - ticketPrices.size) * 22)).dp)
@@ -105,6 +110,69 @@ internal fun ShowDetailScreen(
 //                onNavigateLostProperty = onNavigateLostProperty
 //            )
 //        }
+    }
+}
+
+@Composable
+private fun ShowDetailMenuTab(
+    modifier: Modifier = Modifier,
+    showDetailViewModel: ShowDetailViewModel = hiltViewModel()
+) {
+    val showDetailUiState by showDetailViewModel.uiState.collectAsStateWithLifecycle()
+    Column(modifier) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(40.dp)
+        ) {
+            MenuTabType.values().forEach { menuTabType ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .weight(1f)
+                        .clickable { showDetailViewModel.changeMenuTabType(menuTabType) },
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = menuTabType.label,
+                            style = CurtainCallTheme.typography.subTitle4.copy(
+                                color = CurtainCallTheme.colors.primary
+                            )
+                        )
+                    }
+                    HorizontalDivider(
+                        modifier = Modifier.fillMaxWidth(),
+                        height = 3.dp,
+                        background = if (showDetailUiState.menuTabType == menuTabType) {
+                            CurtainCallTheme.colors.primary
+                        } else {
+                            Grey8
+                        }
+                    )
+                }
+            }
+        }
+        when (showDetailUiState.menuTabType) {
+            MenuTabType.DETAIL -> {
+                ShowDetailMenuTabContent(
+                    modifier = Modifier.fillMaxSize(),
+                    showDetailModel = showDetailUiState.showDetailModel,
+                    facilityDetailModel = showDetailUiState.facilityDetailModel
+                )
+            }
+
+            MenuTabType.SHOW_REVIEW -> {
+            }
+
+            MenuTabType.LOST_PROPERTY -> {
+            }
+        }
     }
 }
 
@@ -145,142 +213,142 @@ private fun ShowDetailContent(
     }
 }
 
-@Composable
-private fun ShowDetailMenuTab(
-    performanceDetailViewModel: ShowDetailViewModel,
-    modifier: Modifier = Modifier,
-    showId: String,
-    onNavigateReview: (String) -> Unit = {},
-    onNavigateLostProperty: (String, String) -> Unit = { _, _ -> }
-) {
-    val performanceDetailUiState by performanceDetailViewModel.uiState.collectAsStateWithLifecycle()
-    val menuTabType = performanceDetailUiState.menuTabType
-    Column(modifier) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                IconButton(
-                    onClick = { performanceDetailViewModel.changeTabType(ShowDetailMenuTab.DETAIL) },
-                    modifier = Modifier
-                        .size(58.dp)
-                        .clip(CircleShape),
-                    colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = if (menuTabType == ShowDetailMenuTab.DETAIL) Cetacean_Blue else Bright_Gray
-                    )
-                ) {
-                    Icon(
-                        painter = painterResource(if (menuTabType == ShowDetailMenuTab.DETAIL) R.drawable.ic_detail_home_sel else R.drawable.ic_detail_home),
-                        contentDescription = null,
-                        tint = Color.Unspecified
-                    )
-                }
-                Text(
-                    text = ShowDetailMenuTab.DETAIL.label,
-                    modifier = Modifier.padding(top = 10.dp),
-                    color = if (menuTabType == ShowDetailMenuTab.DETAIL) Cetacean_Blue else Bright_Gray,
-                    fontSize = 15.dp.toSp(),
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo
-                )
-            }
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                IconButton(
-                    onClick = { performanceDetailViewModel.changeTabType(ShowDetailMenuTab.REVIEW) },
-                    modifier = Modifier
-                        .size(58.dp)
-                        .clip(CircleShape),
-                    colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = if (menuTabType == ShowDetailMenuTab.REVIEW) Cetacean_Blue else Bright_Gray
-                    )
-                ) {
-                    Icon(
-                        painter = painterResource(
-                            if (menuTabType == ShowDetailMenuTab.REVIEW) R.drawable.ic_review_sel else R.drawable.ic_review
-                        ),
-                        contentDescription = null,
-                        tint = Color.Unspecified
-                    )
-                }
-                Text(
-                    text = ShowDetailMenuTab.REVIEW.label,
-                    modifier = Modifier.padding(top = 10.dp),
-                    color = if (menuTabType == ShowDetailMenuTab.REVIEW) Cetacean_Blue else Bright_Gray,
-                    fontSize = 15.dp.toSp(),
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo
-                )
-            }
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                IconButton(
-                    onClick = { performanceDetailViewModel.changeTabType(ShowDetailMenuTab.LOST_PROPERTY) },
-                    modifier = Modifier
-                        .size(58.dp)
-                        .clip(CircleShape),
-                    colors = IconButtonDefaults.iconButtonColors(
-                        containerColor = if (menuTabType == ShowDetailMenuTab.LOST_PROPERTY) Cetacean_Blue else Bright_Gray
-                    )
-                ) {
-                    Icon(
-                        painter = painterResource(
-                            if (menuTabType == ShowDetailMenuTab.LOST_PROPERTY) R.drawable.ic_lost_item_sel else R.drawable.ic_lost_item
-                        ),
-                        contentDescription = null,
-                        tint = Color.Unspecified
-                    )
-                }
-                Text(
-                    text = ShowDetailMenuTab.LOST_PROPERTY.label,
-                    modifier = Modifier.padding(top = 10.dp),
-                    color = if (menuTabType == ShowDetailMenuTab.LOST_PROPERTY) Cetacean_Blue else Bright_Gray,
-                    fontSize = 15.dp.toSp(),
-                    fontWeight = FontWeight.Medium,
-                    fontFamily = spoqahansanseeo
-                )
-            }
-        }
-
-        when (menuTabType) {
-            ShowDetailMenuTab.DETAIL -> {
-                ShowDetailMenuScreen(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 50.dp),
-                    introductionImage = performanceDetailUiState.showDetailModel.introductionImages.firstOrNull(),
-                    showTimes = performanceDetailUiState.showDetailModel.showTimes,
-                    similarShows = performanceDetailUiState.similarShows,
-                    facilityDetailModel = performanceDetailUiState.facilityDetailModel
-                )
-            }
-
-            ShowDetailMenuTab.REVIEW -> {
-                ShowReviewMenuScreen(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 50.dp),
-                    showId = showId,
-                    reviewCount = performanceDetailUiState.showDetailModel.reviewCount,
-                    showReviews = performanceDetailUiState.showReviews
-                ) {
-                    onNavigateReview(it)
-                }
-            }
-
-            ShowDetailMenuTab.LOST_PROPERTY -> {
-                ShowLostPropertyMenuScreen(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 50.dp),
-                    facilityId = performanceDetailUiState.showDetailModel.facilityId,
-                    facilityName = performanceDetailUiState.showDetailModel.facilityName,
-                    lostPropertyItems = performanceDetailUiState.lostItems,
-                    onNavigateLostProperty = onNavigateLostProperty
-                )
-            }
-        }
-    }
-}
+// @Composable
+// private fun ShowDetailMenuTab(
+//    performanceDetailViewModel: ShowDetailViewModel,
+//    modifier: Modifier = Modifier,
+//    showId: String,
+//    onNavigateReview: (String) -> Unit = {},
+//    onNavigateLostProperty: (String, String) -> Unit = { _, _ -> }
+// ) {
+//    val performanceDetailUiState by performanceDetailViewModel.uiState.collectAsStateWithLifecycle()
+//    val menuTabType = performanceDetailUiState.menuTabType
+//    Column(modifier) {
+//        Row(
+//            modifier = Modifier.fillMaxWidth(),
+//            horizontalArrangement = Arrangement.SpaceEvenly
+//        ) {
+//            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+//                IconButton(
+//                    onClick = { performanceDetailViewModel.changeTabType(ShowDetailMenuTab.DETAIL) },
+//                    modifier = Modifier
+//                        .size(58.dp)
+//                        .clip(CircleShape),
+//                    colors = IconButtonDefaults.iconButtonColors(
+//                        containerColor = if (menuTabType == ShowDetailMenuTab.DETAIL) Cetacean_Blue else Bright_Gray
+//                    )
+//                ) {
+//                    Icon(
+//                        painter = painterResource(if (menuTabType == ShowDetailMenuTab.DETAIL) R.drawable.ic_detail_home_sel else R.drawable.ic_detail_home),
+//                        contentDescription = null,
+//                        tint = Color.Unspecified
+//                    )
+//                }
+//                Text(
+//                    text = ShowDetailMenuTab.DETAIL.label,
+//                    modifier = Modifier.padding(top = 10.dp),
+//                    color = if (menuTabType == ShowDetailMenuTab.DETAIL) Cetacean_Blue else Bright_Gray,
+//                    fontSize = 15.dp.toSp(),
+//                    fontWeight = FontWeight.Medium,
+//                    fontFamily = spoqahansanseeo
+//                )
+//            }
+//            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+//                IconButton(
+//                    onClick = { performanceDetailViewModel.changeTabType(ShowDetailMenuTab.REVIEW) },
+//                    modifier = Modifier
+//                        .size(58.dp)
+//                        .clip(CircleShape),
+//                    colors = IconButtonDefaults.iconButtonColors(
+//                        containerColor = if (menuTabType == ShowDetailMenuTab.REVIEW) Cetacean_Blue else Bright_Gray
+//                    )
+//                ) {
+//                    Icon(
+//                        painter = painterResource(
+//                            if (menuTabType == ShowDetailMenuTab.REVIEW) R.drawable.ic_review_sel else R.drawable.ic_review
+//                        ),
+//                        contentDescription = null,
+//                        tint = Color.Unspecified
+//                    )
+//                }
+//                Text(
+//                    text = ShowDetailMenuTab.REVIEW.label,
+//                    modifier = Modifier.padding(top = 10.dp),
+//                    color = if (menuTabType == ShowDetailMenuTab.REVIEW) Cetacean_Blue else Bright_Gray,
+//                    fontSize = 15.dp.toSp(),
+//                    fontWeight = FontWeight.Medium,
+//                    fontFamily = spoqahansanseeo
+//                )
+//            }
+//            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+//                IconButton(
+//                    onClick = { performanceDetailViewModel.changeTabType(ShowDetailMenuTab.LOST_PROPERTY) },
+//                    modifier = Modifier
+//                        .size(58.dp)
+//                        .clip(CircleShape),
+//                    colors = IconButtonDefaults.iconButtonColors(
+//                        containerColor = if (menuTabType == ShowDetailMenuTab.LOST_PROPERTY) Cetacean_Blue else Bright_Gray
+//                    )
+//                ) {
+//                    Icon(
+//                        painter = painterResource(
+//                            if (menuTabType == ShowDetailMenuTab.LOST_PROPERTY) R.drawable.ic_lost_item_sel else R.drawable.ic_lost_item
+//                        ),
+//                        contentDescription = null,
+//                        tint = Color.Unspecified
+//                    )
+//                }
+//                Text(
+//                    text = ShowDetailMenuTab.LOST_PROPERTY.label,
+//                    modifier = Modifier.padding(top = 10.dp),
+//                    color = if (menuTabType == ShowDetailMenuTab.LOST_PROPERTY) Cetacean_Blue else Bright_Gray,
+//                    fontSize = 15.dp.toSp(),
+//                    fontWeight = FontWeight.Medium,
+//                    fontFamily = spoqahansanseeo
+//                )
+//            }
+//        }
+//
+//        when (menuTabType) {
+//            ShowDetailMenuTab.DETAIL -> {
+//                ShowDetailMenuScreen(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(top = 50.dp),
+//                    introductionImage = performanceDetailUiState.showDetailModel.introductionImages.firstOrNull(),
+//                    showTimes = performanceDetailUiState.showDetailModel.showTimes,
+//                    similarShows = performanceDetailUiState.similarShows,
+//                    facilityDetailModel = performanceDetailUiState.facilityDetailModel
+//                )
+//            }
+//
+//            ShowDetailMenuTab.REVIEW -> {
+//                ShowReviewMenuScreen(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(top = 50.dp),
+//                    showId = showId,
+//                    reviewCount = performanceDetailUiState.showDetailModel.reviewCount,
+//                    showReviews = performanceDetailUiState.showReviews
+//                ) {
+//                    onNavigateReview(it)
+//                }
+//            }
+//
+//            ShowDetailMenuTab.LOST_PROPERTY -> {
+//                ShowLostPropertyMenuScreen(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(top = 50.dp),
+//                    facilityId = performanceDetailUiState.showDetailModel.facilityId,
+//                    facilityName = performanceDetailUiState.showDetailModel.facilityName,
+//                    lostPropertyItems = performanceDetailUiState.lostItems,
+//                    onNavigateLostProperty = onNavigateLostProperty
+//                )
+//            }
+//        }
+//    }
+// }
 
 @Composable
 private fun ShowDetailContent(

@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.cmc.curtaincall.core.base.BaseViewModel
-import com.cmc.curtaincall.domain.type.ShowDetailMenuTab
+import com.cmc.curtaincall.domain.enums.MenuTabType
 import com.cmc.curtaincall.domain.model.lostproperty.LostPropertyModel
 import com.cmc.curtaincall.domain.repository.FavoriteRepository
 import com.cmc.curtaincall.domain.repository.LostPropertyRepository
@@ -34,6 +34,10 @@ class ShowDetailViewModel @Inject constructor(
 
     override fun reduceState(currentState: ShowDetailUiState, event: ShowDetailEvent): ShowDetailUiState =
         when (event) {
+            is ShowDetailEvent.ChangeMenuTabType -> {
+                currentState.copy(menuTabType = event.menuTabType)
+            }
+
             is ShowDetailEvent.GetMemberId -> {
                 currentState.copy(memberId = event.memberId)
             }
@@ -62,14 +66,18 @@ class ShowDetailViewModel @Inject constructor(
                 currentState.copy(isFavorite = false)
             }
 
-            is ShowDetailEvent.ChangeTabType -> {
-                currentState.copy(menuTabType = event.tabType)
-            }
-
             is ShowDetailEvent.SimilarShowList -> {
                 currentState.copy(similarShows = event.similarShows)
             }
         }
+
+    fun changeMenuTabType(menuTabType: MenuTabType) {
+        sendAction(
+            ShowDetailEvent.ChangeMenuTabType(
+                menuTabType = menuTabType
+            )
+        )
+    }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun requestShowDetail(showId: String) {
@@ -90,13 +98,13 @@ class ShowDetailViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
-    fun changeTabType(tabType: ShowDetailMenuTab) {
-        sendAction(
-            ShowDetailEvent.ChangeTabType(
-                tabType = tabType
-            )
-        )
-    }
+//    fun changeTabType(tabType: ShowDetailMenuTab) {
+//        sendAction(
+//            ShowDetailEvent.ChangeTabType(
+//                tabType = tabType
+//            )
+//        )
+//    }
 
     private fun requestSimilarShowList(facilityId: String) {
         showRepository.requestSimilarShowList(

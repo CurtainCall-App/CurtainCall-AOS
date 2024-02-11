@@ -48,7 +48,7 @@ import com.cmc.curtaincall.common.designsystem.theme.Nero
 import com.cmc.curtaincall.common.designsystem.theme.Roman_Silver
 import com.cmc.curtaincall.common.designsystem.theme.White
 import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
-import com.cmc.curtaincall.common.utility.extensions.ShowDay
+import com.cmc.curtaincall.domain.enums.ShowDay
 import com.cmc.curtaincall.common.utility.extensions.toChangeDate
 import com.cmc.curtaincall.common.utility.extensions.toRunningTime
 import com.cmc.curtaincall.feature.mypage.main.MyPageViewModel
