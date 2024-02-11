@@ -67,6 +67,7 @@ internal fun ShowDetailScreen(
                 .background(CurtainCallTheme.colors.background),
             showDetailModel = showDetailUiState.showDetailModel,
             isFavorite = showDetailUiState.isFavorite,
+            isShowCoachMark = showDetailUiState.isShowCoachMark,
             onBack = onBack
         )
         ShowDetailMenuTab(
@@ -147,6 +148,7 @@ private fun ShowDetailContent(
     showDetailViewModel: ShowDetailViewModel = hiltViewModel(),
     showDetailModel: ShowDetailModel = ShowDetailModel(),
     isFavorite: Boolean = false,
+    isShowCoachMark: Boolean = false,
     onBack: () -> Unit = {}
 ) {
     Box(
@@ -179,10 +181,12 @@ private fun ShowDetailContent(
                 )
             }
         )
-        CurtainCallShowLiveTalkCoachMark(
-            modifier = Modifier.padding(top = 620.dp),
-            text = stringResource(R.string.livetalk_coach_mark),
-            onClick = {}
-        )
+        if (isShowCoachMark) {
+            CurtainCallShowLiveTalkCoachMark(
+                modifier = Modifier.padding(top = 620.dp),
+                text = stringResource(R.string.livetalk_coach_mark),
+                onClick = { showDetailViewModel.closeCoachMark() }
+            )
+        }
     }
 }

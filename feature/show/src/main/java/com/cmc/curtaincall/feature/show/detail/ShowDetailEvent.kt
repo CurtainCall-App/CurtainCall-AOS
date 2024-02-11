@@ -17,6 +17,8 @@ sealed class ShowDetailEvent : BaseEvent {
     data class SelectFavorite(
         val isFavorite: Boolean
     ) : ShowDetailEvent()
+
+    object CloseCoachMark : ShowDetailEvent()
     // ///
 
     data class GetMemberId(

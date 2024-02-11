@@ -42,6 +42,10 @@ class ShowDetailViewModel @Inject constructor(
                 currentState.copy(isFavorite = event.isFavorite)
             }
 
+            ShowDetailEvent.CloseCoachMark -> {
+                currentState.copy(isShowCoachMark = false)
+            }
+
             // //
 
             is ShowDetailEvent.GetMemberId -> {
@@ -109,6 +113,10 @@ class ShowDetailViewModel @Inject constructor(
                     )
                 )
             }.launchIn(viewModelScope)
+    }
+
+    fun closeCoachMark() {
+        sendAction(ShowDetailEvent.CloseCoachMark)
     }
 
     // //////

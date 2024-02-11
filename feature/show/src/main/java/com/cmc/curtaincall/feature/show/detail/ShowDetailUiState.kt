@@ -16,5 +16,6 @@ data class ShowDetailUiState(
     val showReviews: List<ShowReviewModel> = listOf(),
     val lostItems: List<LostPropertyModel> = listOf(),
     val similarShows: List<SimilarShowInfoModel> = listOf(),
-    val isFavorite: Boolean = false
+    val isFavorite: Boolean = false,
+    val isShowCoachMark: Boolean = true
 ) : BaseState
