@@ -1,17 +1,27 @@
 package com.cmc.curtaincall.feature.show.detail.menu
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.designsystem.R
+import com.cmc.curtaincall.common.designsystem.component.buttons.common.CurtainCallOutlinedButton
 import com.cmc.curtaincall.common.designsystem.component.divider.HorizontalDivider
 import com.cmc.curtaincall.common.designsystem.custom.show.info.ShowInfoContent
 import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
@@ -36,6 +46,7 @@ fun ShowDetailMenuTabContent(
     showDetailModel: ShowDetailModel = ShowDetailModel(),
     facilityDetailModel: FacilityDetailModel = FacilityDetailModel()
 ) {
+    var isExpanded by remember { mutableStateOf(false) }
     Column(modifier) {
         ShowDetailInfoScreen(
             modifier = Modifier
@@ -60,6 +71,40 @@ fun ShowDetailMenuTabContent(
             height = 6.dp,
             background = Grey9
         )
+        if (showDetailModel.introductionImages.isNotEmpty()) {
+            Column(Modifier.fillMaxWidth()) {
+                AsyncImage(
+                    model = showDetailModel.introductionImages.first()
+                        .replace("<styurl>", "")
+                        .split("</styurl>")
+                        .map { it.trim() }
+                        .first(),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(top = 37.dp)
+                        .fillMaxWidth()
+                        .then(if (isExpanded) Modifier else Modifier.aspectRatio(360 / 300f)),
+                    error = painterResource(R.drawable.ic_error_introduction),
+                    alignment = Alignment.TopCenter,
+                    contentScale = ContentScale.FillWidth
+                )
+                CurtainCallOutlinedButton(
+                    modifier = Modifier
+                        .padding(top = 40.dp, bottom = 30.dp)
+                        .padding(horizontal = 20.dp)
+                        .fillMaxWidth()
+                        .height(52.dp),
+                    text = stringResource(
+                        if (isExpanded) {
+                            R.string.close_show_introducation_image
+                        } else {
+                            R.string.more_view_show_introduction_image
+                        }
+                    ),
+                    onClick = { isExpanded = isExpanded.not() }
+                )
+            }
+        }
     }
 }
 
@@ -143,20 +188,24 @@ fun ShowFacilityInfoScreen(
             title = stringResource(R.string.facility_address),
             content = facilityDetailModel.address
         )
-        ShowInfoContent(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 10.dp),
-            title = stringResource(R.string.facility_phone),
-            content = facilityDetailModel.phone
-        )
-        ShowInfoContent(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 10.dp),
-            title = stringResource(R.string.facility_website),
-            content = facilityDetailModel.homepage
-        )
+        if (facilityDetailModel.phone.isNotEmpty()) {
+            ShowInfoContent(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp),
+                title = stringResource(R.string.facility_phone),
+                content = facilityDetailModel.phone
+            )
+        }
+        if (facilityDetailModel.homepage.isNotEmpty()) {
+            ShowInfoContent(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp),
+                title = stringResource(R.string.facility_website),
+                content = facilityDetailModel.homepage
+            )
+        }
         NaverMap(
             modifier = Modifier
                 .padding(top = 10.dp)

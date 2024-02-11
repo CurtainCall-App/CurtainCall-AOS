@@ -141,7 +141,7 @@ private fun ShowDetailNotice(
                         Modifier
                     }
                 ),
-            error = painterResource(R.drawable.ic_erro_introduction),
+            error = painterResource(R.drawable.ic_error_introduction),
             onLoading = { isLoading = true },
             onSuccess = { isLoading = false },
             alignment = Alignment.TopCenter,

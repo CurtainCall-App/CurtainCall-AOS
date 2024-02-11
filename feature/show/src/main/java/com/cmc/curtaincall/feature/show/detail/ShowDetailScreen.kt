@@ -130,6 +130,7 @@ private fun ShowDetailMenuTab(
                     modifier = Modifier
                         .fillMaxHeight()
                         .weight(1f)
+                        .background(CurtainCallTheme.colors.background)
                         .clickable { showDetailViewModel.changeMenuTabType(menuTabType) },
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -161,7 +162,9 @@ private fun ShowDetailMenuTab(
         when (showDetailUiState.menuTabType) {
             MenuTabType.DETAIL -> {
                 ShowDetailMenuTabContent(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(CurtainCallTheme.colors.background),
                     showDetailModel = showDetailUiState.showDetailModel,
                     facilityDetailModel = showDetailUiState.facilityDetailModel
                 )
