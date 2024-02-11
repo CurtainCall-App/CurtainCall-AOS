@@ -19,6 +19,5 @@ data class ShowDetailModel(
     val showTimes: List<ShowTimeModel> = listOf(),
     val startDate: String = "",
     val story: String = "",
-    val ticketPrice: String = "",
-    val isFavorite: Boolean = false
+    val ticketPrice: String = ""
 )

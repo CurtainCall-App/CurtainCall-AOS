@@ -38,21 +38,20 @@ import com.cmc.curtaincall.common.designsystem.custom.search.SearchWordEmptyCont
 import com.cmc.curtaincall.common.designsystem.dimension.Paddings
 import com.cmc.curtaincall.common.designsystem.extensions.toSp
 import com.cmc.curtaincall.common.designsystem.theme.*
-import com.cmc.curtaincall.domain.enums.ShowDay
 import com.cmc.curtaincall.common.utility.extensions.toChangeDate
 import com.cmc.curtaincall.common.utility.extensions.toRunningTime
+import com.cmc.curtaincall.domain.enums.ShowDay
 import com.cmc.curtaincall.domain.type.ShowGenreType
 import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShowListScreen(
-    showListViewModel: ShowListViewModel = hiltViewModel(),
+fun ShowSearchScreen(
+    showSearchViewModel: ShowSearchViewModel = hiltViewModel(),
     onNavigateDetail: (String) -> Unit
 ) {
-    val showSearchUiState by showListViewModel.uiState.collectAsStateWithLifecycle()
-    val searchAppBarState by showListViewModel.searchAppBarState.collectAsStateWithLifecycle()
-
+    val showSearchUiState by showSearchViewModel.uiState.collectAsStateWithLifecycle()
+    val searchAppBarState by showSearchViewModel.searchAppBarState.collectAsStateWithLifecycle()
     SystemUiStatusBar(White)
     Scaffold(
         topBar = {
@@ -86,7 +85,7 @@ fun ShowListScreen(
 @Composable
 private fun ShowSearchContent(
     modifier: Modifier = Modifier,
-    showListViewModel: ShowListViewModel = hiltViewModel(),
+    showListViewModel: ShowSearchViewModel = hiltViewModel(),
     searchAppBarState: SearchAppBarState = SearchAppBarState(),
     onNavigateDetail: (String) -> Unit = {}
 ) {
@@ -193,7 +192,7 @@ private fun ShowSearchContent(
 @Composable
 private fun ShowSearchContent(
     modifier: Modifier = Modifier,
-    showListViewModel: ShowListViewModel = hiltViewModel(),
+    showListViewModel: ShowSearchViewModel = hiltViewModel(),
     queryString: String = "",
     isDoneSearch: Boolean = true,
     onSearch: (String) -> Unit = {},
@@ -318,36 +317,40 @@ private fun ShowSearchContent(
 @Composable
 private fun ShowListContent(
     modifier: Modifier = Modifier,
-    showListViewModel: ShowListViewModel = hiltViewModel(),
+    showSearchViewModel: ShowSearchViewModel = hiltViewModel(),
     onNavigateDetail: (String) -> Unit
 ) {
-    val sortType by showListViewModel.sortType.collectAsStateWithLifecycle()
-    val genreType by showListViewModel.genreType.collectAsStateWithLifecycle()
-    val showInfoModels = showListViewModel.showInfoModels.collectAsLazyPagingItems()
-    val isFirstEntry by showListViewModel.isFirstEntry.collectAsStateWithLifecycle()
+    val sortType by showSearchViewModel.sortType.collectAsStateWithLifecycle()
+    val genreType by showSearchViewModel.genreType.collectAsStateWithLifecycle()
+    val showInfoModels = showSearchViewModel.showInfoModels.collectAsLazyPagingItems()
+    val isFirstEntry by showSearchViewModel.isFirstEntry.collectAsStateWithLifecycle()
     var isShowBottomSheet by remember { mutableStateOf(false) }
     val lazyGridState = rememberLazyGridState()
 
-    LaunchedEffect(showListViewModel) {
-        showListViewModel.isRefresh.collect { isRefresh ->
+    LaunchedEffect(Unit) {
+        showSearchViewModel.fetchShowList()
+    }
+
+    LaunchedEffect(showSearchViewModel) {
+        showSearchViewModel.isRefresh.collect { isRefresh ->
             Timber.d("ShowListContent isRefresh: $isRefresh")
             if (isRefresh) showInfoModels.refresh()
         }
     }
 
-    LaunchedEffect(showListViewModel) {
-        showListViewModel.isChange.collect { isChange ->
+    LaunchedEffect(showSearchViewModel) {
+        showSearchViewModel.isChange.collect { isChange ->
             Timber.d("ShowListContent isChange: $isChange")
             if (isChange) lazyGridState.animateScrollToItem(0)
         }
     }
-    val performanceUiState by showListViewModel.uiState.collectAsStateWithLifecycle()
+    val performanceUiState by showSearchViewModel.uiState.collectAsStateWithLifecycle()
 
     if (isShowBottomSheet) {
         CurtainCallShowSortBottomSheet(
             showSortType = sortType,
             onSelectSortType = {
-                showListViewModel.selectSortType(it)
+                showSearchViewModel.selectSortType(it)
                 isShowBottomSheet = false
             },
             onDismissRequest = { isShowBottomSheet = false }
@@ -370,14 +373,14 @@ private fun ShowListContent(
                     text = ShowGenreType.PLAY.value,
                     textStyle = CurtainCallTheme.typography.body2,
                     isSelect = genreType == ShowGenreType.PLAY,
-                    onClick = { showListViewModel.selectGenreType(ShowGenreType.PLAY) }
+                    onClick = { showSearchViewModel.selectGenreType(ShowGenreType.PLAY) }
                 )
                 CurtainCallBasicChip(
                     modifier = Modifier.padding(start = Paddings.medium),
                     text = ShowGenreType.MUSICAL.value,
                     textStyle = CurtainCallTheme.typography.body2,
                     isSelect = genreType == ShowGenreType.MUSICAL,
-                    onClick = { showListViewModel.selectGenreType(ShowGenreType.MUSICAL) }
+                    onClick = { showSearchViewModel.selectGenreType(ShowGenreType.MUSICAL) }
                 )
                 Spacer(Modifier.weight(1f))
                 Row(
@@ -406,7 +409,7 @@ private fun ShowListContent(
                     .padding(top = 51.dp)
                     .zIndex(1f),
                 text = stringResource(R.string.show_coach_mark),
-                onClick = { showListViewModel.setFirstEntry() }
+                onClick = { showSearchViewModel.setFirstEntry() }
             )
         }
         LazyVerticalGrid(
@@ -425,7 +428,7 @@ private fun ShowListContent(
                         text = showItem.name,
                         isLike = showItem.favorite,
                         onLikeClick = {
-                            showListViewModel.checkShowLike(
+                            showSearchViewModel.checkShowLike(
                                 showId = showItem.id,
                                 isLike = !showItem.favorite
                             )

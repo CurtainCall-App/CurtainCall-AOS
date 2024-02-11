@@ -38,6 +38,12 @@ class ShowDetailViewModel @Inject constructor(
                 currentState.copy(menuTabType = event.menuTabType)
             }
 
+            is ShowDetailEvent.SelectFavorite -> {
+                currentState.copy(isFavorite = event.isFavorite)
+            }
+
+            // //
+
             is ShowDetailEvent.GetMemberId -> {
                 currentState.copy(memberId = event.memberId)
             }
@@ -59,11 +65,11 @@ class ShowDetailViewModel @Inject constructor(
             }
 
             ShowDetailEvent.FavoriteShow -> {
-                currentState.copy(isFavorite = true)
+                currentState
             }
 
             ShowDetailEvent.DeleteFavoriteShow -> {
-                currentState.copy(isFavorite = false)
+                currentState
             }
 
             is ShowDetailEvent.SimilarShowList -> {
@@ -79,6 +85,33 @@ class ShowDetailViewModel @Inject constructor(
         )
     }
 
+    fun selectFavoriteShow(
+        showId: String,
+        isFavorite: Boolean
+    ) {
+        if (isFavorite) {
+            favoriteRepository.requestFavoriteShow(showId)
+                .onEach { sendAction(ShowDetailEvent.SelectFavorite(true)) }
+                .launchIn(viewModelScope)
+        } else {
+            favoriteRepository.deleteFavoriteShow(showId)
+                .onEach { sendAction(ShowDetailEvent.SelectFavorite(false)) }
+                .launchIn(viewModelScope)
+        }
+    }
+
+    fun checkFavoriteShow(showId: String) {
+        favoriteRepository.checkFavoriteShows(listOf(showId))
+            .onEach { checkFavoriteShows ->
+                sendAction(
+                    ShowDetailEvent.SelectFavorite(
+                        isFavorite = checkFavoriteShows.first().favorite
+                    )
+                )
+            }.launchIn(viewModelScope)
+    }
+
+    // //////
     @OptIn(ExperimentalCoroutinesApi::class)
     fun requestShowDetail(showId: String) {
         showRepository.requestShowDetail(showId)
@@ -97,14 +130,6 @@ class ShowDetailViewModel @Inject constructor(
             .onEach { sendAction(ShowDetailEvent.ShowReviewList(it)) }
             .launchIn(viewModelScope)
     }
-
-//    fun changeTabType(tabType: ShowDetailMenuTab) {
-//        sendAction(
-//            ShowDetailEvent.ChangeTabType(
-//                tabType = tabType
-//            )
-//        )
-//    }
 
     private fun requestSimilarShowList(facilityId: String) {
         showRepository.requestSimilarShowList(
@@ -133,30 +158,5 @@ class ShowDetailViewModel @Inject constructor(
             foundDate = foundDate,
             title = title
         )
-    }
-
-    fun checkFavoriteShows(showId: String) {
-        favoriteRepository.checkFavoriteShows(listOf(showId))
-            .onEach { checkFavoriteShows ->
-                sendAction(
-                    if (checkFavoriteShows.first().favorite) {
-                        ShowDetailEvent.FavoriteShow
-                    } else {
-                        ShowDetailEvent.DeleteFavoriteShow
-                    }
-                )
-            }.launchIn(viewModelScope)
-    }
-
-    fun requestFavoriteShow(showId: String) {
-        favoriteRepository.requestFavoriteShow(showId)
-            .onEach { sendAction(ShowDetailEvent.FavoriteShow) }
-            .launchIn(viewModelScope)
-    }
-
-    fun deleteFavoriteShow(showId: String) {
-        favoriteRepository.deleteFavoriteShow(showId)
-            .onEach { sendAction(ShowDetailEvent.DeleteFavoriteShow) }
-            .launchIn(viewModelScope)
     }
 }

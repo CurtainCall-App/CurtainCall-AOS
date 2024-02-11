@@ -14,6 +14,11 @@ sealed class ShowDetailEvent : BaseEvent {
         val menuTabType: MenuTabType
     ) : ShowDetailEvent()
 
+    data class SelectFavorite(
+        val isFavorite: Boolean
+    ) : ShowDetailEvent()
+    // ///
+
     data class GetMemberId(
         val memberId: Int
     ) : ShowDetailEvent()

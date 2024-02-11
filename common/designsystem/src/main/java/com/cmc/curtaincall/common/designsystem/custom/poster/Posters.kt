@@ -262,7 +262,7 @@ fun CurtainCallShowPoster(
     onLikeClick: () -> Unit = {},
     onClick: () -> Unit = {}
 ) {
-    var updateLike by remember { mutableStateOf(isLike) }
+    var updateLike by remember(isLike) { mutableStateOf(isLike) }
     Column(
         modifier = Modifier
             .size(153.dp, 250.dp)
