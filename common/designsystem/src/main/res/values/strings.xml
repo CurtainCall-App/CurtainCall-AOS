@@ -8,6 +8,9 @@
     <string name="recently_search_word">최근 검색어</string>
     <string name="delete_all_search_word">전체 삭제</string>
     <string name="empty_search_word">검색 내역이 없어요</string>
+    <string name="review_grade_format">%.1f</string>
+    <string name="review_grade_sum_format">(%d개 리뷰)</string>
+    <string name="live_talk">LIVE TALK</string>
 
     <!-- design system -->
     <string name="default_top_appbar_title">CURTAIN CALL</string>
@@ -41,6 +44,20 @@
 
     <!-- show-->
     <string name="show_coach_mark">인기순은 현재 상영 중인 작품 50개만 볼 수 있어요!</string>
+    <string name="livetalk_coach_mark">실시간으로 공연에 대한 기대감&amp;후기를 공유해봐요!</string>
+    <string name="show_info">공연 정보</string>
+    <string name="show_date">공연기간</string>
+    <string name="show_time">공연시간</string>
+    <string name="show_runtime">러닝타임</string>
+    <string name="show_age">관람연령</string>
+    <string name="show_ticket_price">티켓가격</string>
+    <string name="show_facility_name">공연장소</string>
+    <string name="facility_info">장소 세부 정보</string>
+    <string name="facility_address">주소</string>
+    <string name="facility_phone">전화번호</string>
+    <string name="facility_website">웹사이트</string>
+    <string name="more_view_show_introduction_image">더보기</string>
+    <string name="close_show_introducation_image">닫기</string>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 

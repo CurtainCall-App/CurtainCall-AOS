@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ShowListViewModel @Inject constructor(
+class ShowSearchViewModel @Inject constructor(
     private val showRepository: ShowRepository,
     private val favoriteRepository: FavoriteRepository,
     private val launchRepository: LaunchRepository
@@ -121,7 +121,7 @@ class ShowListViewModel @Inject constructor(
         }
     }
 
-    private fun fetchShowList() {
+    fun fetchShowList() {
         showRepository.fetchShowList(genreType.value.name, sortType.value.code)
             .distinctUntilChanged()
             .cachedIn(viewModelScope)

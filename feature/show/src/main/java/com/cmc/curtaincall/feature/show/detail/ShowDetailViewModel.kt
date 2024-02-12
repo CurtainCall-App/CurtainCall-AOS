@@ -4,7 +4,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.cmc.curtaincall.core.base.BaseViewModel
-import com.cmc.curtaincall.domain.type.ShowDetailMenuTab
+import com.cmc.curtaincall.domain.enums.MenuTabType
 import com.cmc.curtaincall.domain.model.lostproperty.LostPropertyModel
 import com.cmc.curtaincall.domain.repository.FavoriteRepository
 import com.cmc.curtaincall.domain.repository.LostPropertyRepository
@@ -34,6 +34,20 @@ class ShowDetailViewModel @Inject constructor(
 
     override fun reduceState(currentState: ShowDetailUiState, event: ShowDetailEvent): ShowDetailUiState =
         when (event) {
+            is ShowDetailEvent.ChangeMenuTabType -> {
+                currentState.copy(menuTabType = event.menuTabType)
+            }
+
+            is ShowDetailEvent.SelectFavorite -> {
+                currentState.copy(isFavorite = event.isFavorite)
+            }
+
+            ShowDetailEvent.CloseCoachMark -> {
+                currentState.copy(isShowCoachMark = false)
+            }
+
+            // //
+
             is ShowDetailEvent.GetMemberId -> {
                 currentState.copy(memberId = event.memberId)
             }
@@ -55,15 +69,11 @@ class ShowDetailViewModel @Inject constructor(
             }
 
             ShowDetailEvent.FavoriteShow -> {
-                currentState.copy(isFavorite = true)
+                currentState
             }
 
             ShowDetailEvent.DeleteFavoriteShow -> {
-                currentState.copy(isFavorite = false)
-            }
-
-            is ShowDetailEvent.ChangeTabType -> {
-                currentState.copy(menuTabType = event.tabType)
+                currentState
             }
 
             is ShowDetailEvent.SimilarShowList -> {
@@ -71,6 +81,45 @@ class ShowDetailViewModel @Inject constructor(
             }
         }
 
+    fun changeMenuTabType(menuTabType: MenuTabType) {
+        sendAction(
+            ShowDetailEvent.ChangeMenuTabType(
+                menuTabType = menuTabType
+            )
+        )
+    }
+
+    fun selectFavoriteShow(
+        showId: String,
+        isFavorite: Boolean
+    ) {
+        if (isFavorite) {
+            favoriteRepository.requestFavoriteShow(showId)
+                .onEach { sendAction(ShowDetailEvent.SelectFavorite(true)) }
+                .launchIn(viewModelScope)
+        } else {
+            favoriteRepository.deleteFavoriteShow(showId)
+                .onEach { sendAction(ShowDetailEvent.SelectFavorite(false)) }
+                .launchIn(viewModelScope)
+        }
+    }
+
+    fun checkFavoriteShow(showId: String) {
+        favoriteRepository.checkFavoriteShows(listOf(showId))
+            .onEach { checkFavoriteShows ->
+                sendAction(
+                    ShowDetailEvent.SelectFavorite(
+                        isFavorite = checkFavoriteShows.first().favorite
+                    )
+                )
+            }.launchIn(viewModelScope)
+    }
+
+    fun closeCoachMark() {
+        sendAction(ShowDetailEvent.CloseCoachMark)
+    }
+
+    // //////
     @OptIn(ExperimentalCoroutinesApi::class)
     fun requestShowDetail(showId: String) {
         showRepository.requestShowDetail(showId)
@@ -88,14 +137,6 @@ class ShowDetailViewModel @Inject constructor(
             .flatMapConcat { reviewRepository.requestShowReviewList(showId, 0, 3) }
             .onEach { sendAction(ShowDetailEvent.ShowReviewList(it)) }
             .launchIn(viewModelScope)
-    }
-
-    fun changeTabType(tabType: ShowDetailMenuTab) {
-        sendAction(
-            ShowDetailEvent.ChangeTabType(
-                tabType = tabType
-            )
-        )
     }
 
     private fun requestSimilarShowList(facilityId: String) {
@@ -125,30 +166,5 @@ class ShowDetailViewModel @Inject constructor(
             foundDate = foundDate,
             title = title
         )
-    }
-
-    fun checkFavoriteShows(showId: String) {
-        favoriteRepository.checkFavoriteShows(listOf(showId))
-            .onEach { checkFavoriteShows ->
-                sendAction(
-                    if (checkFavoriteShows.first().favorite) {
-                        ShowDetailEvent.FavoriteShow
-                    } else {
-                        ShowDetailEvent.DeleteFavoriteShow
-                    }
-                )
-            }.launchIn(viewModelScope)
-    }
-
-    fun requestFavoriteShow(showId: String) {
-        favoriteRepository.requestFavoriteShow(showId)
-            .onEach { sendAction(ShowDetailEvent.FavoriteShow) }
-            .launchIn(viewModelScope)
-    }
-
-    fun deleteFavoriteShow(showId: String) {
-        favoriteRepository.deleteFavoriteShow(showId)
-            .onEach { sendAction(ShowDetailEvent.DeleteFavoriteShow) }
-            .launchIn(viewModelScope)
     }
 }

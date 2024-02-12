@@ -27,7 +27,7 @@ import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallBorder
 import com.cmc.curtaincall.common.designsystem.component.card.PerformanceCard
 import com.cmc.curtaincall.common.designsystem.extensions.toSp
 import com.cmc.curtaincall.common.designsystem.theme.*
-import com.cmc.curtaincall.common.utility.extensions.getShowTimes
+import com.cmc.curtaincall.domain.enums.getShowTimes
 import com.cmc.curtaincall.domain.model.show.FacilityDetailModel
 import com.cmc.curtaincall.domain.model.show.ShowTimeModel
 import com.cmc.curtaincall.domain.model.show.SimilarShowInfoModel
@@ -41,8 +41,7 @@ internal fun ShowDetailMenuScreen(
     introductionImage: String? = null,
     showTimes: List<ShowTimeModel> = listOf(),
     similarShows: List<SimilarShowInfoModel> = listOf(),
-    facilityDetailModel: FacilityDetailModel = FacilityDetailModel(),
-    onNavigateDetail: (String) -> Unit = {}
+    facilityDetailModel: FacilityDetailModel = FacilityDetailModel()
 ) {
     Column(modifier) {
         if (introductionImage != null) {
@@ -80,16 +79,6 @@ internal fun ShowDetailMenuScreen(
                 .background(Bright_Gray)
                 .height(1.dp)
         )
-
-        if (similarShows.isNotEmpty()) {
-            ShowDetailSimilarRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 30.dp, bottom = 50.dp),
-                similarShows = similarShows,
-                onNavigateDetail = onNavigateDetail
-            )
-        }
     }
 }
 
@@ -152,7 +141,7 @@ private fun ShowDetailNotice(
                         Modifier
                     }
                 ),
-            error = painterResource(R.drawable.ic_erro_introduction),
+            error = painterResource(R.drawable.ic_error_introduction),
             onLoading = { isLoading = true },
             onSuccess = { isLoading = false },
             alignment = Alignment.TopCenter,
