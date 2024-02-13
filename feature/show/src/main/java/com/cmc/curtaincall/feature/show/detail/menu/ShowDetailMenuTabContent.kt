@@ -23,7 +23,7 @@ import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.buttons.common.CurtainCallOutlinedButton
 import com.cmc.curtaincall.common.designsystem.component.divider.HorizontalDivider
-import com.cmc.curtaincall.common.designsystem.custom.show.info.ShowInfoContent
+import com.cmc.curtaincall.common.designsystem.custom.show.ShowInfoContent
 import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import com.cmc.curtaincall.common.designsystem.theme.Grey9
 import com.cmc.curtaincall.common.utility.extensions.convertDefaultDate

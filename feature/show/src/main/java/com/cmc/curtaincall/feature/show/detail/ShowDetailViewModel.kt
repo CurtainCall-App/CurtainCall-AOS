@@ -61,10 +61,6 @@ class ShowDetailViewModel @Inject constructor(
             is ShowDetailEvent.RequestShowReviewList -> {
                 currentState.copy(showReviews = event.showReviews)
             }
-
-            is ShowDetailEvent.GetMemberId -> {
-                currentState.copy(memberId = event.memberId)
-            }
         }
 
     fun changeMenuTabType(menuTabType: MenuTabType) {

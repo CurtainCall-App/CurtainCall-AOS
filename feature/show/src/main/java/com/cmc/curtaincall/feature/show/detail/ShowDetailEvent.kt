@@ -34,8 +34,4 @@ sealed class ShowDetailEvent : BaseEvent {
     data class RequestShowReviewList(
         val showReviews: List<ShowReviewModel>
     ) : ShowDetailEvent()
-
-    data class GetMemberId(
-        val memberId: Int
-    ) : ShowDetailEvent()
 }

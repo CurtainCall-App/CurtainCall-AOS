@@ -11,6 +11,7 @@
     <string name="review_grade_format">%.1f</string>
     <string name="review_grade_sum_format">(%d개 리뷰)</string>
     <string name="live_talk">LIVE TALK</string>
+    <string name="empty_show_review">아직 리뷰가 없어요</string>
 
     <!-- design system -->
     <string name="default_top_appbar_title">CURTAIN CALL</string>
@@ -58,6 +59,8 @@
     <string name="facility_website">웹사이트</string>
     <string name="more_view_show_introduction_image">더보기</string>
     <string name="close_show_introducation_image">닫기</string>
+    <string name="show_review_count_format">%d개의 리뷰가 있어요</string>
+    <string name="review_all_view">리뷰 모두 보기</string>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
