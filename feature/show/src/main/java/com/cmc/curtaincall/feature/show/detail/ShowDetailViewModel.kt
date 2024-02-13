@@ -29,7 +29,7 @@ class ShowDetailViewModel @Inject constructor(
 ) {
 
     var lostItems: Flow<PagingData<LostPropertyModel>> = lostItemRepository
-        .fetchLostPropertyList("", "", "", "")
+        .fetchLostPropertyList("", "", "")
         .cachedIn(viewModelScope)
 
     override fun reduceState(currentState: ShowDetailUiState, event: ShowDetailEvent): ShowDetailUiState =
@@ -46,38 +46,24 @@ class ShowDetailViewModel @Inject constructor(
                 currentState.copy(isShowCoachMark = false)
             }
 
-            // //
-
-            is ShowDetailEvent.GetMemberId -> {
-                currentState.copy(memberId = event.memberId)
-            }
-
-            is ShowDetailEvent.ShowDetail -> {
+            is ShowDetailEvent.RequestShowDetail -> {
                 currentState.copy(showDetailModel = event.showDetailModel)
             }
 
-            is ShowDetailEvent.FacilityDetail -> {
+            is ShowDetailEvent.RequestFacilityDetail -> {
                 currentState.copy(facilityDetailModel = event.facilityDetailModel)
             }
 
-            is ShowDetailEvent.ShowReviewList -> {
+            is ShowDetailEvent.RequestLostPropertyList -> {
+                currentState.copy(lostProperties = event.lostProperties)
+            }
+
+            is ShowDetailEvent.RequestShowReviewList -> {
                 currentState.copy(showReviews = event.showReviews)
             }
 
-            is ShowDetailEvent.LostItemList -> {
-                currentState.copy(lostItems = event.lostItems)
-            }
-
-            ShowDetailEvent.FavoriteShow -> {
-                currentState
-            }
-
-            ShowDetailEvent.DeleteFavoriteShow -> {
-                currentState
-            }
-
-            is ShowDetailEvent.SimilarShowList -> {
-                currentState.copy(similarShows = event.similarShows)
+            is ShowDetailEvent.GetMemberId -> {
+                currentState.copy(memberId = event.memberId)
             }
         }
 
@@ -119,52 +105,28 @@ class ShowDetailViewModel @Inject constructor(
         sendAction(ShowDetailEvent.CloseCoachMark)
     }
 
-    // //////
     @OptIn(ExperimentalCoroutinesApi::class)
     fun requestShowDetail(showId: String) {
         showRepository.requestShowDetail(showId)
-            .onEach { sendAction(ShowDetailEvent.ShowDetail(it)) }
+            .onEach { sendAction(ShowDetailEvent.RequestShowDetail(it)) }
+            .flatMapConcat { showRepository.requestFacilityDetail(it.facilityId) }
+            .onEach { sendAction(ShowDetailEvent.RequestFacilityDetail(it)) }
             .flatMapConcat {
-                requestSimilarShowList(it.facilityId)
-                showRepository.requestFacilityDetail(it.facilityId)
-            }
-            .onEach { sendAction(ShowDetailEvent.FacilityDetail(it)) }
-            .flatMapConcat {
-                requestLostItemList(it.id, null, null, null)
-                lostItemRepository.requestLostPropertyList(0, 3, it.id, null, null, null)
-            }
-            .onEach { sendAction(ShowDetailEvent.LostItemList(it)) }
-            .flatMapConcat { reviewRepository.requestShowReviewList(showId, 0, 3) }
-            .onEach { sendAction(ShowDetailEvent.ShowReviewList(it)) }
-            .launchIn(viewModelScope)
-    }
-
-    private fun requestSimilarShowList(facilityId: String) {
-        showRepository.requestSimilarShowList(
-            facilityId = facilityId,
-            page = 0,
-            size = 10,
-            genre = null
-        ).onEach { similarShows ->
-            sendAction(
-                ShowDetailEvent.SimilarShowList(
-                    similarShows.filter { it.id != uiState.value.showDetailModel.id }
+                lostItemRepository.requestLostPropertyList(
+                    page = 0,
+                    size = 3,
+                    facilityId = it.id,
+                    type = null,
+                    foundDate = null
                 )
-            )
-        }.launchIn(viewModelScope)
-    }
-
-    fun requestLostItemList(
-        facilityId: String = uiState.value.facilityDetailModel.id,
-        type: String? = null,
-        foundDate: String? = null,
-        title: String? = null
-    ) {
-        lostItems = lostItemRepository.fetchLostPropertyList(
-            facilityId = facilityId,
-            type = type,
-            foundDate = foundDate,
-            title = title
-        )
+            }.onEach { sendAction(ShowDetailEvent.RequestLostPropertyList(it)) }
+            .flatMapConcat {
+                reviewRepository.requestShowReviewList(
+                    showId = showId,
+                    page = 0,
+                    size = 3
+                )
+            }.onEach { sendAction(ShowDetailEvent.RequestShowReviewList(it)) }
+            .launchIn(viewModelScope)
     }
 }

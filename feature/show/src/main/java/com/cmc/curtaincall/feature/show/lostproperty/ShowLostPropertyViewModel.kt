@@ -92,14 +92,12 @@ class ShowLostPropertyViewModel @Inject constructor(
     fun requestLostPropertyList(
         facilityId: String,
         type: String? = null,
-        foundData: String? = null,
-        queryString: String? = null
+        foundData: String? = null
     ) {
         lostPropertyRepository.fetchLostPropertyList(
             facilityId = facilityId,
             type = type,
-            foundDate = foundData,
-            title = queryString
+            foundDate = foundData
         ).onEach { _lostPropertySearchItems.value = it }.launchIn(viewModelScope)
     }
 

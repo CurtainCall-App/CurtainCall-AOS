@@ -27,8 +27,7 @@ interface LostPropertyService {
         @Query("size") size: Int,
         @Query("facilityId") facilityId: String,
         @Query("type") type: String?,
-        @Query("foundDate") foundDate: String?,
-        @Query("title") title: String?
+        @Query("foundDate") foundDate: String?
     ): LostItemListResponse
 
     @GET("lostItems/{lostItemId}")
