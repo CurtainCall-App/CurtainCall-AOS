@@ -23,7 +23,9 @@ import com.cmc.curtaincall.domain.model.review.ShowReviewModel
 fun ShowReviewTabContent(
     modifier: Modifier = Modifier,
     showReviews: List<ShowReviewModel> = listOf(),
-    reviewCount: Int = 0
+    reviewCount: Int = 0,
+    showId: String = "",
+    onNavigateToReview: (String) -> Unit = {}
 ) {
     Column(modifier.heightIn(min = 285.dp)) {
         if (reviewCount == 0) {
@@ -33,13 +35,13 @@ fun ShowReviewTabContent(
             )
             Spacer(Modifier.weight(60f))
             CurtainCallFilledButton(
-                text = stringResource(R.string.review_all_view),
+                text = stringResource(R.string.write_review),
                 modifier = Modifier
                     .padding(bottom = 30.dp)
                     .padding(horizontal = 20.dp)
                     .fillMaxWidth()
                     .height(52.dp),
-                onClick = {}
+                onClick = { }
             )
         } else {
             Text(
@@ -65,7 +67,7 @@ fun ShowReviewTabContent(
                     .padding(horizontal = 20.dp)
                     .fillMaxWidth()
                     .height(52.dp),
-                onClick = {}
+                onClick = { onNavigateToReview(showId) }
             )
         }
     }

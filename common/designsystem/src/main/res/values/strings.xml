@@ -62,6 +62,7 @@
     <string name="close_show_introducation_image">닫기</string>
     <string name="show_review_count_format">%d개의 리뷰가 있어요</string>
     <string name="review_all_view">리뷰 모두 보기</string>
+    <string name="write_review">리뷰 작성하기</string>
     <string name="lost_property_all_view">분실물 모두 보기</string>
     <string name="lost_property_title">분실물이 있어요</string>
 

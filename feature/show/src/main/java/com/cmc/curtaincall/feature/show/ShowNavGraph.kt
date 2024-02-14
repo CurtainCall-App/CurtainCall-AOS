@@ -38,7 +38,7 @@ fun NavGraphBuilder.showNavGraph(
             val showIdArg = entry.arguments?.getString(ShowDestination.Detail.showIdArg)
             ShowDetailScreen(
                 showId = showIdArg,
-                onNavigateReview = { showId ->
+                onNavigateToReview = { showId ->
                     navHostController.navigate("${ShowDestination.Review.route}/$showId")
                 },
                 onNavigateLostProperty = { facilityId, facilityName ->
