@@ -28,15 +28,15 @@ fun CurtainCallRatingBar(
         modifier = modifier,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        (1..5).forEach {
+        for (index in 1..5) {
             Icon(
                 painter = painterResource(R.drawable.ic_star),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxHeight()
                     .aspectRatio(1f)
-                    .clickable { onClick(it) },
-                tint = if (rating >= it) Color.Unspecified else Bright_Gray
+                    .clickable { onClick(index) },
+                tint = if (rating >= index) Color.Unspecified else Bright_Gray
             )
         }
     }
