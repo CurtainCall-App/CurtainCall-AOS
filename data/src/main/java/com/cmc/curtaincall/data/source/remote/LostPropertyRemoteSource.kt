@@ -44,8 +44,7 @@ class LostPropertyRemoteSource @Inject constructor(
         size: Int,
         facilityId: String,
         type: String?,
-        foundDate: String?,
-        title: String?
+        foundDate: String?
     ): Flow<List<LostItemResponse>> = flow {
         emit(
             lostItemService.requestLostItemList(
@@ -53,8 +52,7 @@ class LostPropertyRemoteSource @Inject constructor(
                 size = size,
                 facilityId = facilityId,
                 type = type,
-                foundDate = foundDate,
-                title = title
+                foundDate = foundDate
             ).lostItems
         )
     }

@@ -34,6 +34,7 @@ import com.cmc.curtaincall.common.designsystem.theme.Grey8
 import com.cmc.curtaincall.domain.enums.MenuTabType
 import com.cmc.curtaincall.domain.model.show.ShowDetailModel
 import com.cmc.curtaincall.feature.show.detail.menu.ShowDetailMenuTabContent
+import com.cmc.curtaincall.feature.show.detail.menu.ShowReviewTabContent
 
 @Composable
 internal fun ShowDetailScreen(
@@ -134,6 +135,13 @@ private fun ShowDetailMenuTab(
             }
 
             MenuTabType.SHOW_REVIEW -> {
+                ShowReviewTabContent(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(CurtainCallTheme.colors.background),
+                    showReviews = showDetailUiState.showReviews,
+                    reviewCount = showDetailUiState.showDetailModel.reviewCount
+                )
             }
 
             MenuTabType.LOST_PROPERTY -> {

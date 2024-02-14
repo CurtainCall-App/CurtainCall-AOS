@@ -31,8 +31,7 @@ interface LostPropertyRepository {
     fun fetchLostPropertyList(
         facilityId: String,
         type: String?,
-        foundDate: String?,
-        title: String?
+        foundDate: String?
     ): Flow<PagingData<LostPropertyModel>>
 
     fun requestLostPropertyList(
@@ -40,8 +39,7 @@ interface LostPropertyRepository {
         size: Int,
         facilityId: String,
         type: String?,
-        foundDate: String?,
-        title: String?
+        foundDate: String?
     ): Flow<List<LostPropertyModel>>
 
     fun requestLostPropertyDetail(

@@ -64,23 +64,20 @@ class LostPropertyRepositoryImpl @Inject constructor(
         size: Int,
         facilityId: String,
         type: String?,
-        foundDate: String?,
-        title: String?
+        foundDate: String?
     ): Flow<List<LostPropertyModel>> =
         lostPropertyRemoteSource.requestLostItemList(
             page = page,
             size = size,
             facilityId = facilityId,
             type = type,
-            foundDate = foundDate,
-            title = title
+            foundDate = foundDate
         ).map { it.map { it.toModel() } }
 
     override fun fetchLostPropertyList(
         facilityId: String,
         type: String?,
-        foundDate: String?,
-        title: String?
+        foundDate: String?
     ): Flow<PagingData<LostPropertyModel>> {
         return Pager(
             config = PagingConfig(pageSize = LOSTITEM_PAGE_SIZE),
@@ -89,8 +86,7 @@ class LostPropertyRepositoryImpl @Inject constructor(
                     lostItemService = lostPropertyService,
                     facilityId = facilityId,
                     type = type,
-                    foundDate = foundDate,
-                    title = title
+                    foundDate = foundDate
                 )
             }
         ).flow

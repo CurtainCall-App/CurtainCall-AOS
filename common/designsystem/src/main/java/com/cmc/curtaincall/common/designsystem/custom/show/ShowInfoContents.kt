@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.common.designsystem.custom.show.info
+package com.cmc.curtaincall.common.designsystem.custom.show
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
