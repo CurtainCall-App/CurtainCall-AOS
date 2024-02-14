@@ -70,7 +70,7 @@ fun ShowReviewContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp)
-                .padding(top = 12.dp, bottom = 10.dp),
+                .padding(top = 12.dp, bottom = 10.dp)
         ) {
             CurtainCallRatingBar(
                 modifier = Modifier.size(84.dp, 16.dp),
