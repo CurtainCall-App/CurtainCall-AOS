@@ -1,18 +1,14 @@
 package com.cmc.curtaincall.feature.show.detail
 
 import androidx.lifecycle.viewModelScope
-import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import com.cmc.curtaincall.core.base.BaseViewModel
 import com.cmc.curtaincall.domain.enums.MenuTabType
-import com.cmc.curtaincall.domain.model.lostproperty.LostPropertyModel
 import com.cmc.curtaincall.domain.repository.FavoriteRepository
 import com.cmc.curtaincall.domain.repository.LostPropertyRepository
 import com.cmc.curtaincall.domain.repository.ReviewRepository
 import com.cmc.curtaincall.domain.repository.ShowRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -27,11 +23,6 @@ class ShowDetailViewModel @Inject constructor(
 ) : BaseViewModel<ShowDetailUiState, ShowDetailEvent, Nothing>(
     initialState = ShowDetailUiState()
 ) {
-
-    var lostItems: Flow<PagingData<LostPropertyModel>> = lostItemRepository
-        .fetchLostPropertyList("", "", "")
-        .cachedIn(viewModelScope)
-
     override fun reduceState(currentState: ShowDetailUiState, event: ShowDetailEvent): ShowDetailUiState =
         when (event) {
             is ShowDetailEvent.ChangeMenuTabType -> {
@@ -110,7 +101,7 @@ class ShowDetailViewModel @Inject constructor(
             .flatMapConcat {
                 lostItemRepository.requestLostPropertyList(
                     page = 0,
-                    size = 3,
+                    size = 10,
                     facilityId = it.id,
                     type = null,
                     foundDate = null
