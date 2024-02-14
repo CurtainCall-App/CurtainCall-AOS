@@ -6,7 +6,7 @@ import java.util.Locale
 import java.util.TimeZone
 
 private const val DEFAULT_DATE_PATTERN = "yyyy-MM-dd"
-private const val DEFAULT_DATE_PATTERN2 = "yyyy.MM.dd"
+private const val DEFAULT_UI_DATE_PATTERN = "yyyy.MM.dd"
 private const val DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss"
 private const val SIMPLE_DATE_PATTERN = "yy.MM.dd(E)"
 fun getTodayDate(): String {
@@ -101,7 +101,17 @@ fun String.convertDefaultDate(): String {
     if (isEmpty()) return ""
     val date = SimpleDateFormat(DEFAULT_DATE_PATTERN, Locale.KOREA).parse(this)
     date?.let { date ->
-        return SimpleDateFormat(DEFAULT_DATE_PATTERN2, Locale.KOREA).format(date)
+        return SimpleDateFormat(DEFAULT_UI_DATE_PATTERN, Locale.KOREA).format(date)
+    } ?: kotlin.run {
+        return ""
+    }
+}
+
+fun String.convertUIDate(): String {
+    if (isEmpty()) return ""
+    val date = SimpleDateFormat(DATE_PATTERN, Locale.KOREA).parse(this)
+    date?.let { date ->
+        return SimpleDateFormat(DEFAULT_UI_DATE_PATTERN, Locale.KOREA).format(date)
     } ?: kotlin.run {
         return ""
     }
