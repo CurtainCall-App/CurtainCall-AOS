@@ -41,7 +41,7 @@ import com.cmc.curtaincall.feature.show.detail.menu.ShowReviewTabContent
 internal fun ShowDetailScreen(
     showDetailViewModel: ShowDetailViewModel = hiltViewModel(),
     showId: String?,
-    onNavigateToReview: (String) -> Unit = {},
+    onNavigateToReview: (String, Int) -> Unit = { _, _ -> },
     onNavigateLostProperty: (String, String) -> Unit = { _, _ -> },
     onBack: () -> Unit = {}
 ) {
@@ -84,7 +84,7 @@ private fun ShowDetailMenuTab(
     modifier: Modifier = Modifier,
     showDetailViewModel: ShowDetailViewModel = hiltViewModel(),
     showId: String = "",
-    onNavigateToReview: (String) -> Unit = {}
+    onNavigateToReview: (String, Int) -> Unit = { _, _ -> }
 ) {
     val showDetailUiState by showDetailViewModel.uiState.collectAsStateWithLifecycle()
     Column(modifier) {

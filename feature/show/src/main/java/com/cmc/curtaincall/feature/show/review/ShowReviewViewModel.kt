@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -20,6 +21,9 @@ class ShowReviewViewModel @Inject constructor(
     private val reviewRepository: ReviewRepository,
     private val memberRepository: MemberRepository
 ) : RootViewModel<ShowReviewSideEffect>() {
+
+    private val _showReviewModels = MutableStateFlow<PagingData<ShowReviewModel>>(PagingData.empty())
+    val showReviewModel = _showReviewModels.asStateFlow()
 
     private val _memberId = MutableStateFlow(Int.MAX_VALUE)
     val memberId = _memberId.asStateFlow()
@@ -32,6 +36,15 @@ class ShowReviewViewModel @Inject constructor(
         .fetchShowReviewList("")
         .cachedIn(viewModelScope)
 
+    fun fetchShowReviewList(showId: String) {
+        reviewRepository.fetchShowReviewList(showId)
+            .distinctUntilChanged()
+            .cachedIn(viewModelScope)
+            .onEach { _showReviewModels.value = it }
+            .launchIn(viewModelScope)
+    }
+
+    // ///
     fun requestShowReviewList(showId: String) {
         reviewItems = reviewRepository
             .fetchShowReviewList(showId)

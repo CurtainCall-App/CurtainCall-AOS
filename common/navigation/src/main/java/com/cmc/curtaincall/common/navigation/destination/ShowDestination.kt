@@ -9,6 +9,7 @@ import com.cmc.curtaincall.core.navigation.CurtainCallDestination
 
 private const val SHOW_LABEL = "작품"
 private const val SHOW_ID_ARG = "showId"
+private const val REVIEW_COUNT_ARG = "reviewCount"
 private const val REVIEW_ID_ARG = "reviewId"
 private const val FACILITY_ID_ARG = "facilityId"
 private const val FACILITY_NAME_ARG = "facilityName"
@@ -39,10 +40,14 @@ sealed class ShowDestination : CurtainCallDestination {
     object Review : ShowDestination() {
         override val route = NavRouteLabel.SHOW_REVIEW
         const val showIdArg = SHOW_ID_ARG
-        val routeWithArgs = "$route/{$showIdArg}"
+        const val reviewCountArg = REVIEW_COUNT_ARG
+        val routeWithArgs = "$route/{$showIdArg}/{$reviewCountArg}"
         val arguments = listOf(
             navArgument(showIdArg) {
                 type = NavType.StringType
+            },
+            navArgument(reviewCountArg) {
+                type = NavType.IntType
             }
         )
     }

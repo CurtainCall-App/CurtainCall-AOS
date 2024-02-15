@@ -65,6 +65,9 @@
     <string name="write_review">리뷰 작성하기</string>
     <string name="lost_property_all_view">분실물 모두 보기</string>
     <string name="lost_property_title">분실물이 있어요</string>
+    <string name="show_review_title">공연 리뷰</string>
+    <string name="show_review_empty_list">아직 공연 리뷰가 없어요</string>
+    <string name="show_review_empty_list_content">간단한 리뷰 작성으로\n감상 후기를 공유해보세요:)</string>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -181,7 +184,6 @@
     <string name="show_detail_tab_menu_title_format">총 %d개의 한 줄 리뷰</string>
     <string name="performance_review_empty">아직 한 줄 리뷰가 없어요!</string>
     <string name="performance_review_detail_empty">아직 한 줄 리뷰가 없어요!\n간단한 리뷰 작성으로 감상 후기를\n공유해보세요:)</string>
-    <string name="performance_review">한 줄 리뷰</string>
     <string name="performance_review_repot">신고</string>
     <string name="performance_review_create_satisfaction_question">공연은 만족스러우셨나요?</string>
     <string name="performance_review_create_request">한 줄 리뷰를 남겨주세요!</string>
