@@ -1,18 +1,30 @@
 package com.cmc.curtaincall.common.designsystem.custom.show
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -20,9 +32,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.designsystem.R
+import com.cmc.curtaincall.common.designsystem.component.buttons.like.CurtainCallReviewLikeButton
+import com.cmc.curtaincall.common.designsystem.component.menus.CurtainCallMenu
 import com.cmc.curtaincall.common.designsystem.custom.CurtainCallRatingBar
 import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
+import com.cmc.curtaincall.common.designsystem.theme.Grey3
+import com.cmc.curtaincall.common.designsystem.theme.Grey5
 import com.cmc.curtaincall.common.designsystem.theme.Grey6
 import com.cmc.curtaincall.common.utility.extensions.convertUIDate
 import com.cmc.curtaincall.domain.model.review.ShowReviewModel
@@ -49,6 +66,14 @@ fun ShowReviewEmptyContent(
                 color = CurtainCallTheme.colors.primary
             )
         )
+    }
+}
+
+@Preview
+@Composable
+private fun ShowReviewEmptyContentPreview() {
+    CurtainCallTheme {
+        ShowReviewEmptyContent()
     }
 }
 
@@ -128,14 +153,6 @@ fun ShowReviewContent(
 
 @Preview
 @Composable
-private fun ShowReviewEmptyContentPreview() {
-    CurtainCallTheme {
-        ShowReviewEmptyContent()
-    }
-}
-
-@Preview
-@Composable
 private fun ShowReviewContentPreview() {
     CurtainCallTheme {
         ShowReviewContent(
@@ -146,6 +163,165 @@ private fun ShowReviewContentPreview() {
                 creatorNickname = "ows3090",
                 createdAt = "2023-08-31T03:28:00"
             )
+        )
+    }
+}
+
+@Composable
+fun ShowReviewContent(
+    modifier: Modifier = Modifier,
+    showReviewModel: ShowReviewModel = ShowReviewModel(),
+    isMyReview: Boolean = false,
+    showMenus: Boolean = false,
+    isFavorite: Boolean = false,
+    onMoreClick: () -> Unit = {},
+    onLikeClick: () -> Unit = {},
+    onEditClick: () -> Unit = {},
+    onDeleteClick: () -> Unit = {},
+    onReportClick: () -> Unit = {}
+) {
+    var updateFavorite by remember(isFavorite) { mutableStateOf(isFavorite) }
+    var hasVisualOverflow by remember { mutableStateOf(false) }
+    var moreView by remember { mutableStateOf(false) }
+    Box(
+        modifier = modifier
+            .background(CurtainCallTheme.colors.background)
+            .padding(20.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            AsyncImage(
+                model = showReviewModel.creatorImageUrl,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(CircleShape),
+                error = ColorPainter(Color.LightGray),
+                contentScale = ContentScale.FillBounds
+            )
+            Column(
+                modifier = Modifier
+                    .padding(start = 12.dp)
+                    .weight(1f)
+            ) {
+                Text(
+                    text = showReviewModel.creatorNickname,
+                    style = CurtainCallTheme.typography.body3.copy(
+                        fontWeight = FontWeight.SemiBold
+                    )
+                )
+                Text(
+                    text = showReviewModel.createdAt.convertUIDate(),
+                    style = CurtainCallTheme.typography.body3.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        color = Grey5
+                    )
+                )
+            }
+            if (isMyReview) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_more_vert),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clickable { onMoreClick() },
+                    tint = Color.Unspecified
+                )
+            } else {
+                Text(
+                    text = stringResource(R.string.report),
+                    modifier.clickable { onReportClick() },
+                    style = CurtainCallTheme.typography.body4.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        color = Grey6
+                    )
+                )
+            }
+        }
+        Column(modifier = Modifier.padding(top = 60.dp)) {
+            CurtainCallRatingBar(
+                modifier = Modifier.size(84.dp, 16.dp),
+                rating = showReviewModel.grade
+            )
+            Text(
+                text = showReviewModel.content,
+                modifier = Modifier.padding(top = 10.dp),
+                style = CurtainCallTheme.typography.body3.copy(
+                    color = Grey3
+                ),
+                maxLines = if (moreView) Int.MAX_VALUE else 3,
+                overflow = TextOverflow.Ellipsis,
+                onTextLayout = { textLayoutResult ->
+                    if (textLayoutResult.hasVisualOverflow) {
+                        hasVisualOverflow = true
+                    }
+                }
+            )
+            if (hasVisualOverflow) {
+                Text(
+                    text = stringResource(
+                        if (moreView) {
+                            R.string.simple_view
+                        } else {
+                            R.string.more_view
+                        }
+                    ),
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        .clickable { moreView = !moreView },
+                    style = CurtainCallTheme.typography.body3.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        color = CurtainCallTheme.colors.primary
+                    )
+                )
+            }
+            CurtainCallReviewLikeButton(
+                modifier = Modifier.padding(top = 20.dp),
+                num = showReviewModel.likeCount,
+                isSelected = updateFavorite,
+                onClick = {
+                    updateFavorite = !updateFavorite
+                    onLikeClick()
+                }
+            )
+        }
+        if (showMenus) {
+            CurtainCallMenu(
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(top = 32.dp),
+                onEdit = onEditClick,
+                onDelete = onDeleteClick
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun ShowReviewContentPreview2() {
+    var showMenus by remember { mutableStateOf(false) }
+    CurtainCallTheme {
+        ShowReviewContent(
+            modifier = Modifier.fillMaxWidth(),
+            showReviewModel = ShowReviewModel(
+                content = "청재미있게봤어요고전연극은처음인데엄청재미있게봤어요고전연극은처음인데엄청재미있게" +
+                    "봤어요고전연극은처음인데엄청재미있게봤어요고전연극은처음인데엄청재미있게봤어요고전연극은처음인" +
+                    "데엄청재미있게봤어요고전연극은처음인데엄청재미있게봤어요고전연극은처음인데엄청재미있게봤어요고전연극" +
+                    "은처음인데엄청재미있게봤어요고전연극은처음인데엄청재미있게봤어요고전연극은처음인데엄청재미있게봤어요고전연극" +
+                    "은처음인데엄청재미있게봤어요고전연극은처음인데엄청재미있게봤어요고전연극은처음인데엄청재미있게봤어요고전연극은처음" +
+                    "인데엄청재미있게봤어요고전연극은처음인데엄청재미있게봤어요고전연극은처음인데엄청재미있게봤어요고전연극은처음인데엄청재" +
+                    "미있게봤어요고전연극은처음인데엄청재미있게봤어요고전연극은처음인데엄청재미있게봤어요고전연극은처음인데엄청재미있게봤어" +
+                    "요고전연극은처음인데엄청재미있게봤어요고전연극은처음인데엄청재미있게봤어요고전연극은처음인데엄청재미있게봤어요고전연극" +
+                    "은처음인데엄청재미있게봤어요고전연극은처음인데엄청재미있",
+                createdAt = "2023-08-31T03:28:00",
+                creatorNickname = "ows3090",
+                grade = 4,
+                likeCount = 37
+            ),
+            isMyReview = true,
+            showMenus = showMenus,
+            onMoreClick = { showMenus = !showMenus },
+            isFavorite = true
         )
     }
 }
