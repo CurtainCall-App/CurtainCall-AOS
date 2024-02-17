@@ -181,6 +181,7 @@ fun ShowReviewItemContent(
     onDeleteClick: () -> Unit = {},
     onReportClick: () -> Unit = {}
 ) {
+    var updateLikeCount by remember(showReviewModel) { mutableStateOf(showReviewModel.likeCount) }
     var updateFavorite by remember(isFavorite) { mutableStateOf(isFavorite) }
     var hasVisualOverflow by remember { mutableStateOf(false) }
     var moreView by remember { mutableStateOf(false) }
@@ -282,9 +283,14 @@ fun ShowReviewItemContent(
             }
             CurtainCallReviewLikeButton(
                 modifier = Modifier.padding(top = 20.dp),
-                num = showReviewModel.likeCount,
+                num = updateLikeCount,
                 isSelected = updateFavorite,
                 onClick = {
+                    if (updateFavorite) {
+                        updateLikeCount--
+                    } else {
+                        updateLikeCount++
+                    }
                     updateFavorite = !updateFavorite
                     onLikeClick()
                 }

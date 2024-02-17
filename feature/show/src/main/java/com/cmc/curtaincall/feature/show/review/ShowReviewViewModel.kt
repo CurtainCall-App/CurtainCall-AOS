@@ -8,7 +8,9 @@ import com.cmc.curtaincall.domain.model.review.ShowReviewModel
 import com.cmc.curtaincall.domain.repository.MemberRepository
 import com.cmc.curtaincall.domain.repository.ReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
@@ -27,6 +29,9 @@ class ShowReviewViewModel @Inject constructor(
     private val _memberId = MutableStateFlow(Int.MAX_VALUE)
     val memberId = _memberId.asStateFlow()
 
+    private val _isRefresh = MutableSharedFlow<Boolean>()
+    val isRefresh = _isRefresh.asSharedFlow()
+
     init {
         getMemberId()
     }
@@ -43,6 +48,21 @@ class ShowReviewViewModel @Inject constructor(
             .cachedIn(viewModelScope)
             .onEach { _showReviewModels.value = it }
             .launchIn(viewModelScope)
+    }
+
+    fun selectLikeReview(
+        reviewId: Int,
+        isFavorite: Boolean
+    ) {
+        if (isFavorite) {
+            reviewRepository.requestLikeReview(reviewId)
+                .onEach { _isRefresh.emit(true) }
+                .launchIn(viewModelScope)
+        } else {
+            reviewRepository.requestDislikeReview(reviewId)
+                .onEach { _isRefresh.emit(true) }
+                .launchIn(viewModelScope)
+        }
     }
 
     // ///

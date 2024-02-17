@@ -107,6 +107,14 @@ private fun ShowReviewContent(
     val showReviewModels = showReviewViewModel.showReviewModel.collectAsLazyPagingItems()
     val memberId by showReviewViewModel.memberId.collectAsStateWithLifecycle()
     var showMenu by remember { mutableStateOf(false) }
+
+    LaunchedEffect(showReviewViewModel) {
+        showReviewViewModel.isRefresh.collect { isRefresh ->
+            if (isRefresh) {
+                showReviewModels.refresh()
+            }
+        }
+    }
     Column(modifier) {
         Row(
             modifier = Modifier
@@ -169,11 +177,16 @@ private fun ShowReviewContent(
                         ShowReviewItemContent(
                             modifier = Modifier.fillMaxWidth(),
                             showReviewModel = showReviewModel,
-                            isMyReview = true,
+                            isMyReview = memberId == showReviewModel.creatorId,
                             showMenu = showMenu,
                             isFavorite = showReviewModel.isFavorite,
                             onMoreClick = { showMenu = !showMenu },
-                            onLikeClick = {}
+                            onLikeClick = {
+                                showReviewViewModel.selectLikeReview(
+                                    reviewId = showReviewModel.id,
+                                    isFavorite = !showReviewModel.isFavorite
+                                )
+                            }
                         )
                     }
                 }
