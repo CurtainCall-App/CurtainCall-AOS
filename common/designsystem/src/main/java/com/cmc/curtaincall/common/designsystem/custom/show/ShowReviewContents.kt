@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -104,7 +105,7 @@ fun ShowReviewListEmptyContent(
 }
 
 @Composable
-fun ShowReviewContent(
+fun ShowReviewItemContent(
     modifier: Modifier = Modifier,
     showReviewModel: ShowReviewModel
 ) {
@@ -155,7 +156,7 @@ fun ShowReviewContent(
 @Composable
 private fun ShowReviewContentPreview() {
     CurtainCallTheme {
-        ShowReviewContent(
+        ShowReviewItemContent(
             modifier = Modifier.fillMaxWidth(),
             showReviewModel = ShowReviewModel(
                 content = "리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰리뷰",
@@ -168,11 +169,11 @@ private fun ShowReviewContentPreview() {
 }
 
 @Composable
-fun ShowReviewContent(
+fun ShowReviewItemContent(
     modifier: Modifier = Modifier,
     showReviewModel: ShowReviewModel = ShowReviewModel(),
     isMyReview: Boolean = false,
-    showMenus: Boolean = false,
+    showMenu: Boolean = false,
     isFavorite: Boolean = false,
     onMoreClick: () -> Unit = {},
     onLikeClick: () -> Unit = {},
@@ -188,58 +189,63 @@ fun ShowReviewContent(
             .background(CurtainCallTheme.colors.background)
             .padding(20.dp)
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            AsyncImage(
-                model = showReviewModel.creatorImageUrl,
-                contentDescription = null,
-                modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape),
-                error = ColorPainter(Color.LightGray),
-                contentScale = ContentScale.FillBounds
-            )
-            Column(
-                modifier = Modifier
-                    .padding(start = 12.dp)
-                    .weight(1f)
+        Column(Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
-                    text = showReviewModel.creatorNickname,
-                    style = CurtainCallTheme.typography.body3.copy(
-                        fontWeight = FontWeight.SemiBold
-                    )
-                )
-                Text(
-                    text = showReviewModel.createdAt.convertUIDate(),
-                    style = CurtainCallTheme.typography.body3.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        color = Grey5
-                    )
-                )
-            }
-            if (isMyReview) {
-                Icon(
-                    painter = painterResource(R.drawable.ic_more_vert),
+                AsyncImage(
+                    model = showReviewModel.creatorImageUrl,
                     contentDescription = null,
                     modifier = Modifier
-                        .size(24.dp)
-                        .clickable { onMoreClick() },
-                    tint = Color.Unspecified
+                        .size(40.dp)
+                        .clip(CircleShape),
+                    error = ColorPainter(Color.LightGray),
+                    contentScale = ContentScale.FillBounds
                 )
-            } else {
-                Text(
-                    text = stringResource(R.string.report),
-                    modifier.clickable { onReportClick() },
-                    style = CurtainCallTheme.typography.body4.copy(
-                        fontWeight = FontWeight.SemiBold,
-                        color = Grey6
+                Column(Modifier.padding(start = 12.dp)) {
+                    Text(
+                        text = showReviewModel.creatorNickname,
+                        style = CurtainCallTheme.typography.body3.copy(
+                            fontWeight = FontWeight.SemiBold
+                        )
                     )
-                )
+                    Text(
+                        text = showReviewModel.createdAt.convertUIDate(),
+                        style = CurtainCallTheme.typography.body3.copy(
+                            fontWeight = FontWeight.SemiBold,
+                            color = Grey5
+                        )
+                    )
+                }
+                if (isMyReview) {
+                    Spacer(Modifier.weight(1f))
+                    Icon(
+                        painter = painterResource(R.drawable.ic_more_vert),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(24.dp)
+                            .clickable { onMoreClick() },
+                        tint = Color.Unspecified
+                    )
+                } else {
+                    Text(
+                        text = stringResource(R.string.report),
+                        modifier
+                            .fillMaxWidth()
+                            .clickable { onReportClick() },
+                        style = CurtainCallTheme.typography.body4.copy(
+                            fontWeight = FontWeight.SemiBold,
+                            color = Grey6
+                        ),
+                        textAlign = TextAlign.End
+                    )
+                }
             }
-        }
-        Column(modifier = Modifier.padding(top = 60.dp)) {
             CurtainCallRatingBar(
-                modifier = Modifier.size(84.dp, 16.dp),
+                modifier = Modifier
+                    .padding(top = 20.dp)
+                    .size(84.dp, 16.dp),
                 rating = showReviewModel.grade
             )
             Text(
@@ -284,7 +290,7 @@ fun ShowReviewContent(
                 }
             )
         }
-        if (showMenus) {
+        if (showMenu) {
             CurtainCallMenu(
                 modifier = Modifier
                     .align(Alignment.TopEnd)
@@ -301,7 +307,7 @@ fun ShowReviewContent(
 private fun ShowReviewContentPreview2() {
     var showMenus by remember { mutableStateOf(false) }
     CurtainCallTheme {
-        ShowReviewContent(
+        ShowReviewItemContent(
             modifier = Modifier.fillMaxWidth(),
             showReviewModel = ShowReviewModel(
                 content = "청재미있게봤어요고전연극은처음인데엄청재미있게봤어요고전연극은처음인데엄청재미있게" +
@@ -319,7 +325,7 @@ private fun ShowReviewContentPreview2() {
                 likeCount = 37
             ),
             isMyReview = true,
-            showMenus = showMenus,
+            showMenu = showMenus,
             onMoreClick = { showMenus = !showMenus },
             isFavorite = true
         )

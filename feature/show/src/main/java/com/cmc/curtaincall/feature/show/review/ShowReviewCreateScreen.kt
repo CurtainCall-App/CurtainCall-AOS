@@ -87,7 +87,6 @@ internal fun ShowReviewCreateScreen(
             showId = showId,
             reviewId = reviewId,
             onBack = {
-                showReviewViewModel.requestShowReviewList(showId)
                 onBack()
             }
         )

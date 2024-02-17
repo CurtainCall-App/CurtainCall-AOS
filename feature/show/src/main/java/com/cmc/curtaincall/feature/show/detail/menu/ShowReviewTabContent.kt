@@ -14,7 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.buttons.common.CurtainCallFilledButton
-import com.cmc.curtaincall.common.designsystem.custom.show.ShowReviewContent
+import com.cmc.curtaincall.common.designsystem.custom.show.ShowReviewItemContent
 import com.cmc.curtaincall.common.designsystem.custom.show.ShowReviewEmptyContent
 import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import com.cmc.curtaincall.domain.model.review.ShowReviewModel
@@ -52,7 +52,7 @@ fun ShowReviewTabContent(
                 style = CurtainCallTheme.typography.subTitle4
             )
             showReviews.forEachIndexed { index, showReview ->
-                ShowReviewContent(
+                ShowReviewItemContent(
                     modifier = Modifier
                         .padding(top = if (index == 0) 10.dp else 12.dp)
                         .padding(horizontal = 20.dp)
