@@ -1,7 +1,6 @@
 package com.cmc.curtaincall.feature.show.review
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -24,7 +22,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -37,6 +34,7 @@ import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.appbars.CurtainCallCenterTopAppBarWithBack
 import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.designsystem.component.buttons.common.CurtainCallFilledButton
+import com.cmc.curtaincall.common.designsystem.component.divider.HorizontalDivider
 import com.cmc.curtaincall.common.designsystem.custom.show.ShowReviewItemContent
 import com.cmc.curtaincall.common.designsystem.custom.show.ShowReviewListEmptyContent
 import com.cmc.curtaincall.common.designsystem.theme.Black
@@ -154,10 +152,7 @@ private fun ShowReviewContent(
                 modifier = Modifier
                     .padding(top = 16.dp)
                     .fillMaxSize()
-                    .background(
-                        color = CurtainCallTheme.colors.background,
-                        shape = RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)
-                    ),
+                    .background(color = CurtainCallTheme.colors.background),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(Modifier.height(179.dp))
@@ -169,8 +164,7 @@ private fun ShowReviewContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 16.dp)
-                    .clip(RoundedCornerShape(topStart = 24.dp, topEnd = 24.dp)),
-                verticalArrangement = Arrangement.spacedBy(10.dp)
+                    .background(color = CurtainCallTheme.colors.background)
             ) {
                 items(showReviewModels.itemCount) { index ->
                     showReviewModels[index]?.let { showReviewModel ->
@@ -189,6 +183,19 @@ private fun ShowReviewContent(
                             }
                         )
                     }
+                    HorizontalDivider(
+                        modifier = Modifier.fillMaxWidth(),
+                        height = if (index + 1 < showReviewModels.itemCount) {
+                            10.dp
+                        } else {
+                            101.dp
+                        },
+                        background = if (index + 1 < showReviewModels.itemCount) {
+                            Grey9
+                        } else {
+                            CurtainCallTheme.colors.background
+                        }
+                    )
                 }
             }
         }
