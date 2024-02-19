@@ -87,7 +87,6 @@ internal fun ShowReviewCreateScreen(
             showId = showId,
             reviewId = reviewId,
             onBack = {
-                showReviewViewModel.requestShowReviewList(showId)
                 onBack()
             }
         )
@@ -118,7 +117,7 @@ private fun ShowReviewCreateHeader(
             title = if (fromMyPage) {
                 stringResource(R.string.mypage_writing_review_edit)
             } else {
-                stringResource(R.string.performance_review)
+                stringResource(R.string.show_review_title)
             },
             containerColor = Color.Transparent,
             contentColor = White,

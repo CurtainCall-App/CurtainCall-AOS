@@ -14,7 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.buttons.common.CurtainCallFilledButton
-import com.cmc.curtaincall.common.designsystem.custom.show.ShowReviewContent
+import com.cmc.curtaincall.common.designsystem.custom.show.ShowReviewItemContent
 import com.cmc.curtaincall.common.designsystem.custom.show.ShowReviewEmptyContent
 import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import com.cmc.curtaincall.domain.model.review.ShowReviewModel
@@ -23,7 +23,9 @@ import com.cmc.curtaincall.domain.model.review.ShowReviewModel
 fun ShowReviewTabContent(
     modifier: Modifier = Modifier,
     showReviews: List<ShowReviewModel> = listOf(),
-    reviewCount: Int = 0
+    reviewCount: Int = 0,
+    showId: String = "",
+    onNavigateToReview: (String, Int) -> Unit = { _, _ -> }
 ) {
     Column(modifier.heightIn(min = 285.dp)) {
         if (reviewCount == 0) {
@@ -33,13 +35,13 @@ fun ShowReviewTabContent(
             )
             Spacer(Modifier.weight(60f))
             CurtainCallFilledButton(
-                text = stringResource(R.string.review_all_view),
+                text = stringResource(R.string.write_review),
                 modifier = Modifier
                     .padding(bottom = 30.dp)
                     .padding(horizontal = 20.dp)
                     .fillMaxWidth()
                     .height(52.dp),
-                onClick = {}
+                onClick = { onNavigateToReview(showId, reviewCount) }
             )
         } else {
             Text(
@@ -50,7 +52,7 @@ fun ShowReviewTabContent(
                 style = CurtainCallTheme.typography.subTitle4
             )
             showReviews.forEachIndexed { index, showReview ->
-                ShowReviewContent(
+                ShowReviewItemContent(
                     modifier = Modifier
                         .padding(top = if (index == 0) 10.dp else 12.dp)
                         .padding(horizontal = 20.dp)
@@ -65,7 +67,7 @@ fun ShowReviewTabContent(
                     .padding(horizontal = 20.dp)
                     .fillMaxWidth()
                     .height(52.dp),
-                onClick = {}
+                onClick = { onNavigateToReview(showId, reviewCount) }
             )
         }
     }

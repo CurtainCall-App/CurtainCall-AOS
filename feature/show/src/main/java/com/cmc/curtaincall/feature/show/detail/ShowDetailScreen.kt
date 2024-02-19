@@ -41,7 +41,7 @@ import com.cmc.curtaincall.feature.show.detail.menu.ShowReviewTabContent
 internal fun ShowDetailScreen(
     showDetailViewModel: ShowDetailViewModel = hiltViewModel(),
     showId: String?,
-    onNavigateReview: (String) -> Unit = {},
+    onNavigateToReview: (String, Int) -> Unit = { _, _ -> },
     onNavigateLostProperty: (String, String) -> Unit = { _, _ -> },
     onBack: () -> Unit = {}
 ) {
@@ -49,7 +49,6 @@ internal fun ShowDetailScreen(
 
     val scrollState = rememberScrollState()
     val showDetailUiState by showDetailViewModel.uiState.collectAsStateWithLifecycle()
-    val ticketPrices = showDetailUiState.showDetailModel.ticketPrice.split(", ")
 
     LaunchedEffect(Unit) {
         showDetailViewModel.requestShowDetail(showId)
@@ -73,7 +72,9 @@ internal fun ShowDetailScreen(
             onBack = onBack
         )
         ShowDetailMenuTab(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            showId = showId,
+            onNavigateToReview = onNavigateToReview
         )
     }
 }
@@ -81,7 +82,9 @@ internal fun ShowDetailScreen(
 @Composable
 private fun ShowDetailMenuTab(
     modifier: Modifier = Modifier,
-    showDetailViewModel: ShowDetailViewModel = hiltViewModel()
+    showDetailViewModel: ShowDetailViewModel = hiltViewModel(),
+    showId: String = "",
+    onNavigateToReview: (String, Int) -> Unit = { _, _ -> }
 ) {
     val showDetailUiState by showDetailViewModel.uiState.collectAsStateWithLifecycle()
     Column(modifier) {
@@ -141,7 +144,9 @@ private fun ShowDetailMenuTab(
                         .fillMaxSize()
                         .background(CurtainCallTheme.colors.background),
                     showReviews = showDetailUiState.showReviews,
-                    reviewCount = showDetailUiState.showDetailModel.reviewCount
+                    reviewCount = showDetailUiState.showDetailModel.reviewCount,
+                    showId = showId,
+                    onNavigateToReview = onNavigateToReview
                 )
             }
 

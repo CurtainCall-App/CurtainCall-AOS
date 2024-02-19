@@ -32,7 +32,7 @@ class ReviewPagingSource @Inject constructor(
             val favoriteReviews = reviewService.checkLikeReviews(response.showReviews.map { it.id })
             val result = response.showReviews.map { showReview ->
                 showReview.toModel().copy(
-                    isFavortie = favoriteReviews.likeReviews.find {
+                    isFavorite = favoriteReviews.likeReviews.find {
                         it.showReviewId == showReview.id
                     }?.liked ?: false
                 )

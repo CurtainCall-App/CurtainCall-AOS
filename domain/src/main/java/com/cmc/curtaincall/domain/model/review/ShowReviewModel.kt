@@ -10,5 +10,5 @@ data class ShowReviewModel(
     val id: Int = 0,
     val showId: String = "",
     val likeCount: Int = 0,
-    val isFavortie: Boolean = false
+    val isFavorite: Boolean = false
 )

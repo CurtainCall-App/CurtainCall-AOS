@@ -8,35 +8,64 @@ import com.cmc.curtaincall.domain.model.review.ShowReviewModel
 import com.cmc.curtaincall.domain.repository.MemberRepository
 import com.cmc.curtaincall.domain.repository.ReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
 class ShowReviewViewModel @Inject constructor(
-    private val reviewRepository: ReviewRepository,
-    private val memberRepository: MemberRepository
+    private val memberRepository: MemberRepository,
+    private val reviewRepository: ReviewRepository
 ) : RootViewModel<ShowReviewSideEffect>() {
+
+    private val _showReviewModels = MutableStateFlow<PagingData<ShowReviewModel>>(PagingData.empty())
+    val showReviewModel = _showReviewModels.asStateFlow()
 
     private val _memberId = MutableStateFlow(Int.MAX_VALUE)
     val memberId = _memberId.asStateFlow()
+
+    private val _isRefresh = MutableSharedFlow<Boolean>()
+    val isRefresh = _isRefresh.asSharedFlow()
 
     init {
         getMemberId()
     }
 
-    var reviewItems: Flow<PagingData<ShowReviewModel>> = reviewRepository
-        .fetchShowReviewList("")
-        .cachedIn(viewModelScope)
-
-    fun requestShowReviewList(showId: String) {
-        reviewItems = reviewRepository
-            .fetchShowReviewList(showId)
-            .cachedIn(viewModelScope)
+    private fun getMemberId() {
+        memberRepository.getMemberId()
+            .onEach { _memberId.value = it }
+            .launchIn(viewModelScope)
     }
+
+    fun fetchShowReviewList(showId: String) {
+        reviewRepository.fetchShowReviewList(showId)
+            .distinctUntilChanged()
+            .cachedIn(viewModelScope)
+            .onEach { _showReviewModels.value = it }
+            .launchIn(viewModelScope)
+    }
+
+    fun selectLikeReview(
+        reviewId: Int,
+        isFavorite: Boolean
+    ) {
+        if (isFavorite) {
+            reviewRepository.requestLikeReview(reviewId)
+                .onEach { _isRefresh.emit(true) }
+                .launchIn(viewModelScope)
+        } else {
+            reviewRepository.requestDislikeReview(reviewId)
+                .onEach { _isRefresh.emit(true) }
+                .launchIn(viewModelScope)
+        }
+    }
+
+    // ///
 
     fun createShowReview(
         showId: String,
@@ -70,11 +99,5 @@ class ShowReviewViewModel @Inject constructor(
 
     fun requestDislikeReview(reviewId: Int) {
         reviewRepository.requestDislikeReview(reviewId).launchIn(viewModelScope)
-    }
-
-    private fun getMemberId() {
-        memberRepository.getMemberId()
-            .onEach { _memberId.value = it }
-            .launchIn(viewModelScope)
     }
 }

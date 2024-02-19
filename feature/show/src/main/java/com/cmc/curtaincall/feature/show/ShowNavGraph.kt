@@ -38,8 +38,8 @@ fun NavGraphBuilder.showNavGraph(
             val showIdArg = entry.arguments?.getString(ShowDestination.Detail.showIdArg)
             ShowDetailScreen(
                 showId = showIdArg,
-                onNavigateReview = { showId ->
-                    navHostController.navigate("${ShowDestination.Review.route}/$showId")
+                onNavigateToReview = { showId, reviewCount ->
+                    navHostController.navigate("${ShowDestination.Review.route}/$showId/$reviewCount")
                 },
                 onNavigateLostProperty = { facilityId, facilityName ->
                     navHostController.navigate("${ShowDestination.LostProperty.route}/$facilityId/$facilityName")
@@ -55,9 +55,11 @@ fun NavGraphBuilder.showNavGraph(
             arguments = ShowDestination.Review.arguments
         ) { entry ->
             val showIdArg = entry.arguments?.getString(ShowDestination.Review.showIdArg)
+            val reviewCountArg = entry.arguments?.getInt(ShowDestination.Review.reviewCountArg)
             ShowReviewScreen(
                 showId = showIdArg,
-                onNavigateReviewCreate = { reviewId ->
+                reviewCount = reviewCountArg,
+                onNavigateToReviewCreate = { reviewId ->
                     navHostController.navigate("${ShowDestination.ReviewCreate.route}/$showIdArg/$reviewId")
                 },
                 onNavigateReport = onNavigateReport,
