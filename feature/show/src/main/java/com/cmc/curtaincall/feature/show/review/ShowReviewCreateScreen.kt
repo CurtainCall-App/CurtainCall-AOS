@@ -33,6 +33,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.cmc.curtaincall.common.designsystem.R
@@ -55,7 +56,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 internal fun ShowReviewCreateScreen(
     showDetailViewModel: ShowDetailViewModel,
-    showReviewViewModel: ShowReviewViewModel,
+    showReviewViewModel: ShowReviewViewModel = hiltViewModel(),
     showId: String?,
     reviewId: Int?,
     onBack: () -> Unit

@@ -174,7 +174,7 @@ private fun ShowReviewContent(
         } else {
             LazyColumn(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxSize()
                     .padding(top = 16.dp)
                     .background(color = CurtainCallTheme.colors.background),
                 state = lazyListState
