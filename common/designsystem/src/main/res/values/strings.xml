@@ -18,6 +18,7 @@
     <string name="simple_view">간단히 보기</string>
     <string name="edit">수정</string>
     <string name="delete">삭제</string>
+    <string name="write_completed">작성 완료</string>
 
 
     <!-- design system -->
@@ -74,6 +75,10 @@
     <string name="show_review_title">공연 리뷰</string>
     <string name="show_review_empty_list">아직 공연 리뷰가 없어요</string>
     <string name="show_review_empty_list_content">간단한 리뷰 작성으로\n감상 후기를 공유해보세요:)</string>
+    <string name="show_review_create_guide">공연은 만족스러웠나요?</string>
+    <string name="show_review_create_description">공연 리뷰를 작성해주세요</string>
+    <string name="show_review_create_text_placeholder">공연이 어떘는지 자세히 작성해주세요!</string>
+    <string name="show_review_create_max_text_restrict">500자 이내로 작성해주세요</string>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 

@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.cmc.curtaincall.common.navigation.NavGraphLabel
+import com.cmc.curtaincall.common.navigation.destination.DEFAULT_REVIEW_ID
 import com.cmc.curtaincall.common.navigation.destination.ShowDestination
 import com.cmc.curtaincall.domain.type.ReportType
 import com.cmc.curtaincall.feature.show.detail.ShowDetailScreen
@@ -41,6 +42,9 @@ fun NavGraphBuilder.showNavGraph(
                 onNavigateToReview = { showId, reviewCount ->
                     navHostController.navigate("${ShowDestination.Review.route}/$showId/$reviewCount")
                 },
+                onNavigateToReviewCreate = {
+                    navHostController.navigate("${ShowDestination.ReviewCreate.route}/$showIdArg/$DEFAULT_REVIEW_ID")
+                },
                 onNavigateLostProperty = { facilityId, facilityName ->
                     navHostController.navigate("${ShowDestination.LostProperty.route}/$facilityId/$facilityName")
                 },
@@ -72,15 +76,26 @@ fun NavGraphBuilder.showNavGraph(
             route = ShowDestination.ReviewCreate.routeWithArgs,
             arguments = ShowDestination.ReviewCreate.arguments
         ) { entry ->
-            val parentEntry = remember(entry) { navHostController.getBackStackEntry(ShowDestination.Detail.routeWithArgs) }
+            val showDetailEntry = remember(entry) { navHostController.getBackStackEntry(ShowDestination.Detail.routeWithArgs) }
             val showIdArg = entry.arguments?.getString(ShowDestination.ReviewCreate.showIdArg)
             val reviewIdArg = entry.arguments?.getInt(ShowDestination.ReviewCreate.reviewIdArg)
-            ShowReviewCreateScreen(
-                showDetailViewModel = hiltViewModel(parentEntry),
-                showId = showIdArg,
-                reviewId = reviewIdArg,
-                onBack = { navHostController.popBackStack() }
-            )
+            if (navHostController.previousBackStackEntry?.destination?.route == ShowDestination.Review.route) {
+                val reviewEntry = remember(entry) { navHostController.getBackStackEntry(ShowDestination.Review.routeWithArgs) }
+                ShowReviewCreateScreen(
+                    showDetailViewModel = hiltViewModel(showDetailEntry),
+                    showReviewViewModel = hiltViewModel(reviewEntry),
+                    showId = showIdArg,
+                    reviewId = reviewIdArg,
+                    onBack = { navHostController.popBackStack() }
+                )
+            } else {
+                ShowReviewCreateScreen(
+                    showDetailViewModel = hiltViewModel(showDetailEntry),
+                    showId = showIdArg,
+                    reviewId = reviewIdArg,
+                    onBack = { navHostController.popBackStack() }
+                )
+            }
         }
         composable(
             route = ShowDestination.LostProperty.routeWithArgs,

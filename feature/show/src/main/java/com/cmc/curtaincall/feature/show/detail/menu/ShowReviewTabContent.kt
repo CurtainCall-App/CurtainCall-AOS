@@ -25,7 +25,8 @@ fun ShowReviewTabContent(
     showReviews: List<ShowReviewModel> = listOf(),
     reviewCount: Int = 0,
     showId: String = "",
-    onNavigateToReview: (String, Int) -> Unit = { _, _ -> }
+    onNavigateToReview: (String, Int) -> Unit = { _, _ -> },
+    onNavigateToReviewCreate: () -> Unit = {}
 ) {
     Column(modifier.heightIn(min = 285.dp)) {
         if (reviewCount == 0) {
@@ -41,7 +42,7 @@ fun ShowReviewTabContent(
                     .padding(horizontal = 20.dp)
                     .fillMaxWidth()
                     .height(52.dp),
-                onClick = { onNavigateToReview(showId, reviewCount) }
+                onClick = { onNavigateToReviewCreate() }
             )
         } else {
             Text(

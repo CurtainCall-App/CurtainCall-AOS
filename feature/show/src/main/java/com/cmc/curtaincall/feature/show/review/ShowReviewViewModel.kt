@@ -65,17 +65,17 @@ class ShowReviewViewModel @Inject constructor(
         }
     }
 
-    // ///
-
     fun createShowReview(
         showId: String,
         grade: Int,
         content: String
     ) {
         reviewRepository.createShowReview(showId, grade, content)
-            .onEach { sendSideEffect(ShowReviewSideEffect.CreateSuccess) }
+            .onEach { sendSideEffect(ShowReviewSideEffect.ReviewCreated) }
             .launchIn(viewModelScope)
     }
+
+    // ///
 
     fun updateShowReview(
         reviewId: Int,
