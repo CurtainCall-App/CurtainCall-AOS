@@ -72,11 +72,13 @@ fun NavGraphBuilder.showNavGraph(
             route = ShowDestination.ReviewCreate.routeWithArgs,
             arguments = ShowDestination.ReviewCreate.arguments
         ) { entry ->
-            val parentEntry = remember(entry) { navHostController.getBackStackEntry(ShowDestination.Detail.routeWithArgs) }
+            val showDetailEntry = remember(entry) { navHostController.getBackStackEntry(ShowDestination.Detail.routeWithArgs) }
+            val reviewEntry = remember(entry) { navHostController.getBackStackEntry(ShowDestination.Review.routeWithArgs) }
             val showIdArg = entry.arguments?.getString(ShowDestination.ReviewCreate.showIdArg)
             val reviewIdArg = entry.arguments?.getInt(ShowDestination.ReviewCreate.reviewIdArg)
             ShowReviewCreateScreen(
-                showDetailViewModel = hiltViewModel(parentEntry),
+                showDetailViewModel = hiltViewModel(showDetailEntry),
+                showReviewViewModel = hiltViewModel(reviewEntry),
                 showId = showIdArg,
                 reviewId = reviewIdArg,
                 onBack = { navHostController.popBackStack() }

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -43,6 +44,7 @@ import com.cmc.curtaincall.common.designsystem.theme.Grey9
 import com.cmc.curtaincall.common.navigation.destination.DEFAULT_REVIEW_ID
 import com.cmc.curtaincall.domain.type.ReportType
 import com.cmc.curtaincall.domain.type.ReviewSortType
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 internal fun ShowReviewScreen(
@@ -105,6 +107,7 @@ private fun ShowReviewContent(
     val showReviewModels = showReviewViewModel.showReviewModel.collectAsLazyPagingItems()
     val memberId by showReviewViewModel.memberId.collectAsStateWithLifecycle()
     var showMenu by remember { mutableStateOf(false) }
+    val lazyListState = rememberLazyListState()
 
     LaunchedEffect(showReviewViewModel) {
         showReviewViewModel.isRefresh.collect { isRefresh ->
@@ -113,6 +116,15 @@ private fun ShowReviewContent(
             }
         }
     }
+
+    LaunchedEffect(true) {
+        showReviewViewModel.effects.collectLatest { effect ->
+            if (effect == ShowReviewSideEffect.ReviewCreated) {
+                lazyListState.animateScrollToItem(0)
+            }
+        }
+    }
+
     Column(modifier) {
         Row(
             modifier = Modifier
@@ -164,7 +176,8 @@ private fun ShowReviewContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 16.dp)
-                    .background(color = CurtainCallTheme.colors.background)
+                    .background(color = CurtainCallTheme.colors.background),
+                state = lazyListState
             ) {
                 items(showReviewModels.itemCount) { index ->
                     showReviewModels[index]?.let { showReviewModel ->
