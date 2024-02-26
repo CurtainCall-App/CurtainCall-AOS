@@ -6,6 +6,7 @@ import com.cmc.curtaincall.core.network.service.review.request.UpdateShowReviewR
 import com.cmc.curtaincall.core.network.service.review.response.CreateReviewResponse
 import com.cmc.curtaincall.core.network.service.review.response.LikeReviewResponse
 import com.cmc.curtaincall.core.network.service.review.response.ShowReviewResponse
+import com.cmc.curtaincall.domain.model.show.CheckCreateReviewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -65,6 +66,12 @@ class ReviewRemoteSource @Inject constructor(
                 )
             ).isSuccessful
         )
+    }
+
+    fun checkCreatedReview(
+        showId: String
+    ): Flow<CheckCreateReviewModel> = flow {
+        emit(reviewService.checkCreatedReview(showId).toModel())
     }
 
     fun requestLikeReview(

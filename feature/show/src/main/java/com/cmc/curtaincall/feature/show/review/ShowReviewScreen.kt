@@ -35,6 +35,7 @@ import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.appbars.CurtainCallCenterTopAppBarWithBack
 import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.designsystem.component.buttons.common.CurtainCallFilledButton
+import com.cmc.curtaincall.common.designsystem.component.dialogs.ConfirmDialog
 import com.cmc.curtaincall.common.designsystem.component.divider.HorizontalDivider
 import com.cmc.curtaincall.common.designsystem.custom.show.ShowReviewItemContent
 import com.cmc.curtaincall.common.designsystem.custom.show.ShowReviewListEmptyContent
@@ -45,6 +46,7 @@ import com.cmc.curtaincall.common.navigation.destination.DEFAULT_REVIEW_ID
 import com.cmc.curtaincall.domain.type.ReportType
 import com.cmc.curtaincall.domain.type.ReviewSortType
 import kotlinx.coroutines.flow.collectLatest
+import timber.log.Timber
 
 @Composable
 internal fun ShowReviewScreen(
@@ -60,6 +62,21 @@ internal fun ShowReviewScreen(
 
     LaunchedEffect(Unit) {
         showReviewViewModel.fetchShowReviewList(showId)
+        showReviewViewModel.checkCreateReview(showId)
+    }
+
+    val isExistReview by showReviewViewModel.isExistMyReview.collectAsStateWithLifecycle()
+    var existedReviewPopup by remember { mutableStateOf(false) }
+
+    Timber.d("ShowReviewScreen $isExistReview $existedReviewPopup")
+
+    if (existedReviewPopup) {
+        ConfirmDialog(
+            title = "이미 공연 리뷰를 등록했어요!",
+            actionText = "확인",
+            onAction = { existedReviewPopup = false },
+            onDismiss = { existedReviewPopup = false }
+        )
     }
 
     SystemUiStatusBar(Grey9)
@@ -83,7 +100,13 @@ internal fun ShowReviewScreen(
                 textStyle = CurtainCallTheme.typography.body2.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
-                onClick = { onNavigateToReviewCreate(DEFAULT_REVIEW_ID) }
+                onClick = {
+                    if (isExistReview) {
+                        existedReviewPopup = true
+                    } else {
+                        onNavigateToReviewCreate(DEFAULT_REVIEW_ID)
+                    }
+                }
             )
         },
         floatingActionButtonPosition = FabPosition.Center
@@ -213,86 +236,4 @@ private fun ShowReviewContent(
             }
         }
     }
-}
-
-@Composable
-private fun ShowReviewContent(
-    modifier: Modifier = Modifier,
-    showReviewViewModel: ShowReviewViewModel = hiltViewModel(),
-    showId: String,
-    onNavigateReport: (Int, ReportType) -> Unit,
-    onNavigateReviewCreate: (Int) -> Unit
-) {
-//    val reviewItems = showReviewViewModel.reviewItems.collectAsLazyPagingItems()
-//    var isShowRemoveDialog by remember { mutableStateOf(false) }
-//    var removeReviewId by remember { mutableIntStateOf(0) }
-//    var clickIndex by remember { mutableIntStateOf(-1) }
-//
-//    if (isShowRemoveDialog) {
-//        CurtainCallBasicDialog(
-//            title = stringResource(R.string.dialog_performance_review_remove_title),
-//            description = stringResource(R.string.dialog_performance_review_remove_description),
-//            dismissText = stringResource(R.string.dialog_performance_review_remove_dismiss),
-//            positiveText = stringResource(R.string.dialog_performance_review_remove_positive),
-//            onDismiss = { isShowRemoveDialog = false },
-//            onPositive = {
-//                showReviewViewModel.deleteShowReview(removeReviewId)
-//                showReviewViewModel.requestShowReviewList(showId)
-//                isShowRemoveDialog = false
-//            }
-//        )
-//    }
-//    if (reviewItems.itemCount == 0) {
-//        EmptyContent(
-//            modifier = Modifier.fillMaxSize(),
-//            text = stringResource(R.string.performance_review_detail_empty)
-//        )
-//    } else {
-//        LazyColumn(
-//            modifier = modifier
-//                .padding(top = 13.dp)
-//                .padding(horizontal = 20.dp)
-//        ) {
-//            itemsIndexed(reviewItems) { index, reviewItem ->
-//                reviewItem?.let { reviewItem ->
-//                    ReviewDetailItem(
-//                        modifier = Modifier
-//                            .fillMaxWidth()
-//                            .padding(vertical = 20.dp),
-//                        painter = painterResource(R.drawable.ic_default_profile),
-//                        rating = reviewItem.grade,
-//                        name = reviewItem.creatorNickname,
-//                        date = reviewItem.createdAt.toChangeFullDate(),
-//                        comment = reviewItem.content,
-//                        numberOfLike = reviewItem.likeCount,
-//                        isFavorite = reviewItem.isFavorite,
-//                        isClickMoreVert = clickIndex == index,
-//                        onClickMoreVert = { check -> clickIndex = if (check) index else -1 },
-//                        onFavoriteChange = { check ->
-//                            if (check) {
-//                                showReviewViewModel.requestLikeReview(reviewItem.id)
-//                            } else {
-//                                showReviewViewModel.requestDislikeReview(reviewItem.id)
-//                            }
-//                        },
-//                        isMyWriting = showReviewViewModel.memberId.value == reviewItem.creatorId,
-//                        onChangeWriting = { onNavigateReviewCreate(reviewItem.id) },
-//                        onRemoveWriting = {
-//                            removeReviewId = reviewItem.id
-//                            isShowRemoveDialog = true
-//                        },
-//                        onReport = { onNavigateReport(reviewItem.id, ReportType.SHOW_REVIEW) }
-//                    )
-//                    if (index < reviewItems.itemCount - 1) {
-//                        Spacer(
-//                            modifier = Modifier
-//                                .fillMaxWidth()
-//                                .height(1.dp)
-//                                .background(Bright_Gray)
-//                        )
-//                    }
-//                }
-//            }
-//        }
-//    }
 }

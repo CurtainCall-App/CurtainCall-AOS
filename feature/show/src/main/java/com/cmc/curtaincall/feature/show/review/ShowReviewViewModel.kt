@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -31,6 +32,9 @@ class ShowReviewViewModel @Inject constructor(
 
     private val _isRefresh = MutableSharedFlow<Boolean>()
     val isRefresh = _isRefresh.asSharedFlow()
+
+    private val _isExistMyReview = MutableStateFlow(false)
+    val isExistMyReview = _isExistMyReview.asStateFlow()
 
     init {
         getMemberId()
@@ -75,6 +79,13 @@ class ShowReviewViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
+    fun checkCreateReview(showId: String) {
+        reviewRepository.checkCreatedReview(showId)
+            .catch { _isExistMyReview.value = false }
+            .onEach { _isExistMyReview.value = true }
+            .launchIn(viewModelScope)
+    }
+
     // ///
 
     fun updateShowReview(
@@ -91,13 +102,5 @@ class ShowReviewViewModel @Inject constructor(
         reviewRepository.deleteShowReview(reviewId)
             .onEach { sendSideEffect(ShowReviewSideEffect.DeleteSuccess) }
             .launchIn(viewModelScope)
-    }
-
-    fun requestLikeReview(reviewId: Int) {
-        reviewRepository.requestLikeReview(reviewId).launchIn(viewModelScope)
-    }
-
-    fun requestDislikeReview(reviewId: Int) {
-        reviewRepository.requestDislikeReview(reviewId).launchIn(viewModelScope)
     }
 }

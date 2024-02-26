@@ -58,7 +58,7 @@ fun BaseDialog(
             .fillMaxWidth()
             .padding(horizontal = DialogOuterPadding),
         shape = RoundedCornerShape(Paddings.xlarge),
-        colors = CardDefaults.cardColors(contentColor = CurtainCallTheme.colors.background)
+        colors = CardDefaults.cardColors(containerColor = CurtainCallTheme.colors.background)
     ) {
         Column(
             modifier = Modifier

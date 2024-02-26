@@ -2,6 +2,7 @@ package com.cmc.curtaincall.core.network.service.review
 
 import com.cmc.curtaincall.core.network.service.review.request.CreateShowReviewRequest
 import com.cmc.curtaincall.core.network.service.review.request.UpdateShowReviewRequest
+import com.cmc.curtaincall.core.network.service.review.response.CheckCreateReviewResponse
 import com.cmc.curtaincall.core.network.service.review.response.CreateReviewResponse
 import com.cmc.curtaincall.core.network.service.review.response.LikeReviewsResponse
 import com.cmc.curtaincall.core.network.service.review.response.ShowReviewsResponse
@@ -39,6 +40,11 @@ interface ReviewService {
         @Path("reviewId") reviewId: Int,
         @Body updateShowReviewRequest: UpdateShowReviewRequest
     ): Response<Unit>
+
+    @GET("shows/{showId}/member")
+    suspend fun checkCreatedReview(
+        @Path("showId") showId: String
+    ): CheckCreateReviewResponse
 
     @PUT("reviews/{reviewId}/like")
     suspend fun requestLikeReview(

@@ -11,6 +11,7 @@ import com.cmc.curtaincall.data.source.remote.ReviewRemoteSource
 import com.cmc.curtaincall.domain.model.review.CreateReviewModel
 import com.cmc.curtaincall.domain.model.review.LikeReviewModel
 import com.cmc.curtaincall.domain.model.review.ShowReviewModel
+import com.cmc.curtaincall.domain.model.show.CheckCreateReviewModel
 import com.cmc.curtaincall.domain.repository.ReviewRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -45,6 +46,8 @@ class ReviewRepositoryImpl @Inject constructor(
     override fun updateShowReview(reviewId: Int, content: String, grade: Int): Flow<Boolean> =
         reviewRemoteSource.updateShowReview(reviewId, content, grade)
 
+    override fun checkCreatedReview(showId: String): Flow<CheckCreateReviewModel> =
+        reviewRemoteSource.checkCreatedReview(showId)
     override fun requestLikeReview(reviewId: Int): Flow<Boolean> =
         reviewRemoteSource.requestLikeReview(reviewId)
 
