@@ -86,6 +86,15 @@ class ShowReviewViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
+    fun deleteShowReview(
+        showId: String,
+        reviewId: Int
+    ) {
+        reviewRepository.deleteShowReview(reviewId)
+            .onEach { _isRefresh.emit(it) }
+            .launchIn(viewModelScope)
+    }
+
     // ///
 
     fun updateShowReview(
@@ -95,12 +104,6 @@ class ShowReviewViewModel @Inject constructor(
     ) {
         reviewRepository.updateShowReview(reviewId, content, grade)
             .onEach { sendSideEffect(ShowReviewSideEffect.UpdateSuccess) }
-            .launchIn(viewModelScope)
-    }
-
-    fun deleteShowReview(reviewId: Int) {
-        reviewRepository.deleteShowReview(reviewId)
-            .onEach { sendSideEffect(ShowReviewSideEffect.DeleteSuccess) }
             .launchIn(viewModelScope)
     }
 }
