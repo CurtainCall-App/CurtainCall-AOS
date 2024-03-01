@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.show.review
+package com.cmc.curtaincall.feature.show.review.create
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -51,6 +51,8 @@ import com.cmc.curtaincall.common.designsystem.theme.Red
 import com.cmc.curtaincall.common.navigation.destination.DEFAULT_REVIEW_ID
 import com.cmc.curtaincall.domain.type.translateShowGenreType
 import com.cmc.curtaincall.feature.show.detail.ShowDetailViewModel
+import com.cmc.curtaincall.feature.show.review.ShowReviewSideEffect
+import com.cmc.curtaincall.feature.show.review.ShowReviewViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -64,14 +66,16 @@ internal fun ShowReviewCreateScreen(
     requireNotNull(showId)
     requireNotNull(reviewId)
 
-    val updateMode = reviewId != DEFAULT_REVIEW_ID
+    val editMode = reviewId != DEFAULT_REVIEW_ID
     var rating by remember { mutableIntStateOf(0) }
     var reviewText by remember { mutableStateOf("") }
 
     LaunchedEffect(showDetailViewModel) {
         showReviewViewModel.effects.collectLatest { effect ->
-            if (effect == ShowReviewSideEffect.ReviewCreated) {
-                onBack()
+            when (effect) {
+                is ShowReviewSideEffect.CreateMyReview -> onBack()
+                is ShowReviewSideEffect.RefreshShowReview -> onBack()
+                else -> Unit
             }
         }
     }
@@ -79,7 +83,7 @@ internal fun ShowReviewCreateScreen(
     Scaffold(
         topBar = {
             CurtainCallCenterTopAppBarWithBack(
-                title = stringResource(R.string.show_review_title), // 수정
+                title = stringResource(if (editMode) R.string.show_review_edit_title else R.string.show_review_title),
                 containerColor = Grey9,
                 contentColor = Black,
                 onBack = onBack
@@ -96,7 +100,15 @@ internal fun ShowReviewCreateScreen(
                 textStyle = CurtainCallTheme.typography.body2.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
-                onClick = { showReviewViewModel.createShowReview(showId, rating, reviewText) }
+                onClick = {
+                    if (reviewText.isNotEmpty()) {
+                        if (editMode) {
+                            showReviewViewModel.updateShowReview(reviewId, reviewText, rating)
+                        } else {
+                            showReviewViewModel.createShowReview(showId, rating, reviewText)
+                        }
+                    }
+                }
             )
         },
         floatingActionButtonPosition = FabPosition.Center

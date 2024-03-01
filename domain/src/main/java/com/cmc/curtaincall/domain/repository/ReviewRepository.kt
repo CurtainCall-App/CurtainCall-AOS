@@ -4,6 +4,7 @@ import androidx.paging.PagingData
 import com.cmc.curtaincall.domain.model.review.CreateReviewModel
 import com.cmc.curtaincall.domain.model.review.LikeReviewModel
 import com.cmc.curtaincall.domain.model.review.ShowReviewModel
+import com.cmc.curtaincall.domain.model.show.CheckCreateReviewModel
 import kotlinx.coroutines.flow.Flow
 
 interface ReviewRepository {
@@ -33,6 +34,10 @@ interface ReviewRepository {
         content: String,
         grade: Int
     ): Flow<Boolean>
+
+    fun checkCreatedReview(
+        showId: String
+    ): Flow<CheckCreateReviewModel>
 
     fun requestLikeReview(
         reviewId: Int

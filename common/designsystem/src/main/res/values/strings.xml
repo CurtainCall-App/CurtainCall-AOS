@@ -79,6 +79,7 @@
     <string name="show_review_create_description">공연 리뷰를 작성해주세요</string>
     <string name="show_review_create_text_placeholder">공연이 어떘는지 자세히 작성해주세요!</string>
     <string name="show_review_create_max_text_restrict">500자 이내로 작성해주세요</string>
+    <string name="show_review_edit_title">공연 리뷰 수정</string>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 

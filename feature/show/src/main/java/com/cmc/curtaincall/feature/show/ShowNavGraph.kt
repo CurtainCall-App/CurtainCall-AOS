@@ -14,7 +14,7 @@ import com.cmc.curtaincall.feature.show.detail.ShowDetailScreen
 import com.cmc.curtaincall.feature.show.lostproperty.ShowLostPropertyScreen
 import com.cmc.curtaincall.feature.show.lostproperty.create.ShowLostPropertyCreateScreen
 import com.cmc.curtaincall.feature.show.lostproperty.detail.ShowLostPropertyDetailScreen
-import com.cmc.curtaincall.feature.show.review.ShowReviewCreateScreen
+import com.cmc.curtaincall.feature.show.review.create.ShowReviewCreateScreen
 import com.cmc.curtaincall.feature.show.review.ShowReviewScreen
 import com.cmc.curtaincall.feature.show.search.ShowSearchScreen
 
