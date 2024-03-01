@@ -94,16 +94,13 @@ class ShowReviewViewModel @Inject constructor(
             .onEach { sendSideEffect(ShowReviewSideEffect.DeleteMyReview) }
             .launchIn(viewModelScope)
     }
-
-    // ///
-
     fun updateShowReview(
         reviewId: Int,
         content: String,
         grade: Int
     ) {
-//        reviewRepository.updateShowReview(reviewId, content, grade)
-//            .onEach { sendSideEffect(ShowReviewSideEffect.UpdateSuccess) }
-//            .launchIn(viewModelScope)
+        reviewRepository.updateShowReview(reviewId, content, grade)
+            .onEach { sendSideEffect(ShowReviewSideEffect.RefreshShowReview) }
+            .launchIn(viewModelScope)
     }
 }

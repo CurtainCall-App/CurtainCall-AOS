@@ -1,6 +1,7 @@
 package com.cmc.curtaincall.feature.show.review
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -113,7 +114,8 @@ internal fun ShowReviewScreen(
                 .fillMaxSize()
                 .background(Grey9),
             showId = showId,
-            reviewCount = reviewCount
+            reviewCount = reviewCount,
+            onNavigateToReviewCreate = onNavigateToReviewCreate
         )
     }
 }
@@ -123,7 +125,8 @@ private fun ShowReviewContent(
     modifier: Modifier = Modifier,
     showReviewViewModel: ShowReviewViewModel = hiltViewModel(),
     showId: String,
-    reviewCount: Int
+    reviewCount: Int,
+    onNavigateToReviewCreate: (Int) -> Unit = {},
 ) {
     val showReviewUiState by showReviewViewModel.uiState.collectAsStateWithLifecycle()
     val showReviewModels = showReviewUiState.showReviewModels.collectAsLazyPagingItems()
@@ -149,7 +152,7 @@ private fun ShowReviewContent(
         }
     }
 
-    Column(modifier) {
+    Column(modifier.clickable { showMenu = false }) {
         Row(
             modifier = Modifier
                 .padding(top = 24.dp)
@@ -219,6 +222,7 @@ private fun ShowReviewContent(
                                 )
                             },
                             onEditClick = {
+                                onNavigateToReviewCreate(showReviewModel.id)
                             },
                             onDeleteClick = {
                                 showReviewViewModel.deleteShowReview(

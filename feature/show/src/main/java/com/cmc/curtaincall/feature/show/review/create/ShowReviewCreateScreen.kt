@@ -66,14 +66,16 @@ internal fun ShowReviewCreateScreen(
     requireNotNull(showId)
     requireNotNull(reviewId)
 
-    val updateMode = reviewId != DEFAULT_REVIEW_ID
+    val editMode = reviewId != DEFAULT_REVIEW_ID
     var rating by remember { mutableIntStateOf(0) }
     var reviewText by remember { mutableStateOf("") }
 
     LaunchedEffect(showDetailViewModel) {
         showReviewViewModel.effects.collectLatest { effect ->
-            if (effect == ShowReviewSideEffect.CreateMyReview) {
-                onBack()
+            when (effect) {
+                is ShowReviewSideEffect.CreateMyReview -> onBack()
+                is ShowReviewSideEffect.RefreshShowReview -> onBack()
+                else -> Unit
             }
         }
     }
@@ -81,7 +83,7 @@ internal fun ShowReviewCreateScreen(
     Scaffold(
         topBar = {
             CurtainCallCenterTopAppBarWithBack(
-                title = stringResource(R.string.show_review_title), // 수정
+                title = stringResource(if (editMode) R.string.show_review_edit_title else R.string.show_review_title),
                 containerColor = Grey9,
                 contentColor = Black,
                 onBack = onBack
@@ -99,8 +101,12 @@ internal fun ShowReviewCreateScreen(
                     fontWeight = FontWeight.SemiBold
                 ),
                 onClick = {
-                    if(reviewText.isNotEmpty()) {
-                        showReviewViewModel.createShowReview(showId, rating, reviewText)
+                    if (reviewText.isNotEmpty()) {
+                        if (editMode) {
+                            showReviewViewModel.updateShowReview(reviewId, reviewText, rating)
+                        } else {
+                            showReviewViewModel.createShowReview(showId, rating, reviewText)
+                        }
                     }
                 }
             )
