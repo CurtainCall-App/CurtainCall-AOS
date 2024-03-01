@@ -17,6 +17,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -181,7 +182,7 @@ fun ShowReviewItemContent(
     onDeleteClick: () -> Unit = {},
     onReportClick: () -> Unit = {}
 ) {
-    var updateLikeCount by remember(showReviewModel) { mutableStateOf(showReviewModel.likeCount) }
+    var updateLikeCount by remember(showReviewModel) { mutableIntStateOf(showReviewModel.likeCount) }
     var updateFavorite by remember(isFavorite) { mutableStateOf(isFavorite) }
     var hasVisualOverflow by remember { mutableStateOf(false) }
     var moreView by remember { mutableStateOf(false) }

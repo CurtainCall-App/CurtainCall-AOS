@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.feature.show.review
+package com.cmc.curtaincall.feature.show.review.create
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -51,6 +51,8 @@ import com.cmc.curtaincall.common.designsystem.theme.Red
 import com.cmc.curtaincall.common.navigation.destination.DEFAULT_REVIEW_ID
 import com.cmc.curtaincall.domain.type.translateShowGenreType
 import com.cmc.curtaincall.feature.show.detail.ShowDetailViewModel
+import com.cmc.curtaincall.feature.show.review.ShowReviewSideEffect
+import com.cmc.curtaincall.feature.show.review.ShowReviewViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -70,7 +72,7 @@ internal fun ShowReviewCreateScreen(
 
     LaunchedEffect(showDetailViewModel) {
         showReviewViewModel.effects.collectLatest { effect ->
-            if (effect == ShowReviewSideEffect.ReviewCreated) {
+            if (effect == ShowReviewSideEffect.CreateMyReview) {
                 onBack()
             }
         }
@@ -96,7 +98,11 @@ internal fun ShowReviewCreateScreen(
                 textStyle = CurtainCallTheme.typography.body2.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
-                onClick = { showReviewViewModel.createShowReview(showId, rating, reviewText) }
+                onClick = {
+                    if(reviewText.isNotEmpty()) {
+                        showReviewViewModel.createShowReview(showId, rating, reviewText)
+                    }
+                }
             )
         },
         floatingActionButtonPosition = FabPosition.Center

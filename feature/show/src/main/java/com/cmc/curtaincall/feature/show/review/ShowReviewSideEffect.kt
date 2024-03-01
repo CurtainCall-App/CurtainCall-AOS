@@ -3,9 +3,9 @@ package com.cmc.curtaincall.feature.show.review
 import com.cmc.curtaincall.core.base.BaseSideEffect
 
 sealed class ShowReviewSideEffect : BaseSideEffect {
-    object ReviewCreated : ShowReviewSideEffect()
+    object RefreshShowReview : ShowReviewSideEffect()
 
-    object UpdateSuccess : ShowReviewSideEffect()
+    object DeleteMyReview : ShowReviewSideEffect()
 
-    object DeleteSuccess : ShowReviewSideEffect()
+    object CreateMyReview : ShowReviewSideEffect()
 }

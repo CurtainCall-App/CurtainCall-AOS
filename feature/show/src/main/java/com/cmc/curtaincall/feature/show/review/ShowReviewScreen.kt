@@ -45,8 +45,6 @@ import com.cmc.curtaincall.common.designsystem.theme.Grey9
 import com.cmc.curtaincall.common.navigation.destination.DEFAULT_REVIEW_ID
 import com.cmc.curtaincall.domain.type.ReportType
 import com.cmc.curtaincall.domain.type.ReviewSortType
-import kotlinx.coroutines.flow.collectLatest
-import timber.log.Timber
 
 @Composable
 internal fun ShowReviewScreen(
@@ -62,13 +60,11 @@ internal fun ShowReviewScreen(
 
     LaunchedEffect(Unit) {
         showReviewViewModel.fetchShowReviewList(showId)
-        showReviewViewModel.checkCreateReview(showId)
+        showReviewViewModel.checkMyReview(showId)
     }
 
-    val isExistReview by showReviewViewModel.isExistMyReview.collectAsStateWithLifecycle()
+    val showReviewUiState by showReviewViewModel.uiState.collectAsStateWithLifecycle()
     var existedReviewPopup by remember { mutableStateOf(false) }
-
-    Timber.d("ShowReviewScreen $isExistReview $existedReviewPopup")
 
     if (existedReviewPopup) {
         ConfirmDialog(
@@ -101,7 +97,7 @@ internal fun ShowReviewScreen(
                     fontWeight = FontWeight.SemiBold
                 ),
                 onClick = {
-                    if (isExistReview) {
+                    if (showReviewUiState.hasMyReview) {
                         existedReviewPopup = true
                     } else {
                         onNavigateToReviewCreate(DEFAULT_REVIEW_ID)
@@ -116,6 +112,7 @@ internal fun ShowReviewScreen(
                 .padding(paddingValues)
                 .fillMaxSize()
                 .background(Grey9),
+            showId = showId,
             reviewCount = reviewCount
         )
     }
@@ -125,25 +122,29 @@ internal fun ShowReviewScreen(
 private fun ShowReviewContent(
     modifier: Modifier = Modifier,
     showReviewViewModel: ShowReviewViewModel = hiltViewModel(),
+    showId: String,
     reviewCount: Int
 ) {
-    val showReviewModels = showReviewViewModel.showReviewModel.collectAsLazyPagingItems()
-    val memberId by showReviewViewModel.memberId.collectAsStateWithLifecycle()
+    val showReviewUiState by showReviewViewModel.uiState.collectAsStateWithLifecycle()
+    val showReviewModels = showReviewUiState.showReviewModels.collectAsLazyPagingItems()
+    val memberId = showReviewUiState.memberId
     var showMenu by remember { mutableStateOf(false) }
     val lazyListState = rememberLazyListState()
 
     LaunchedEffect(showReviewViewModel) {
-        showReviewViewModel.isRefresh.collect { isRefresh ->
-            if (isRefresh) {
-                showReviewModels.refresh()
-            }
-        }
-    }
+        showReviewViewModel.effects.collect { effects ->
+            when (effects) {
+                ShowReviewSideEffect.RefreshShowReview -> {
+                    showReviewModels.refresh()
+                }
 
-    LaunchedEffect(true) {
-        showReviewViewModel.effects.collectLatest { effect ->
-            if (effect == ShowReviewSideEffect.ReviewCreated) {
-                lazyListState.animateScrollToItem(0)
+                ShowReviewSideEffect.CreateMyReview -> {
+                    lazyListState.animateScrollToItem(0)
+                }
+
+                ShowReviewSideEffect.DeleteMyReview -> {
+                    showReviewViewModel.fetchShowReviewList(showId)
+                }
             }
         }
     }
@@ -182,7 +183,7 @@ private fun ShowReviewContent(
                 )
             }
         }
-        if (reviewCount == 0) {
+        if (showReviewModels.itemCount == 0) {
             Column(
                 modifier = Modifier
                     .padding(top = 16.dp)
@@ -208,7 +209,7 @@ private fun ShowReviewContent(
                             modifier = Modifier.fillMaxWidth(),
                             showReviewModel = showReviewModel,
                             isMyReview = memberId == showReviewModel.creatorId,
-                            showMenu = showMenu,
+                            showMenu = memberId == showReviewModel.creatorId && showMenu,
                             isFavorite = showReviewModel.isFavorite,
                             onMoreClick = { showMenu = !showMenu },
                             onLikeClick = {
@@ -216,21 +217,21 @@ private fun ShowReviewContent(
                                     reviewId = showReviewModel.id,
                                     isFavorite = !showReviewModel.isFavorite
                                 )
+                            },
+                            onEditClick = {
+                            },
+                            onDeleteClick = {
+                                showReviewViewModel.deleteShowReview(
+                                    showId = showId,
+                                    reviewId = showReviewModel.id
+                                )
                             }
                         )
                     }
                     HorizontalDivider(
                         modifier = Modifier.fillMaxWidth(),
-                        height = if (index + 1 < showReviewModels.itemCount) {
-                            10.dp
-                        } else {
-                            101.dp
-                        },
-                        background = if (index + 1 < showReviewModels.itemCount) {
-                            Grey9
-                        } else {
-                            CurtainCallTheme.colors.background
-                        }
+                        height = if (index + 1 < showReviewModels.itemCount) 10.dp else 101.dp,
+                        background = if (index + 1 < showReviewModels.itemCount) Grey9 else CurtainCallTheme.colors.background
                     )
                 }
             }
