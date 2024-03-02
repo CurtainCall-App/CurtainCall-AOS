@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.designsystem.component.buttons.common.CurtainCallFilledButton
-import com.cmc.curtaincall.common.designsystem.component.lib.pager.DynamicHorizontalPagerIndicator
+import com.cmc.curtaincall.common.designsystem.component.indicators.pager.DynamicHorizontalPagerIndicator
 import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import kotlinx.coroutines.launch
 
