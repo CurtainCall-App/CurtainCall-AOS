@@ -59,7 +59,7 @@ fun CurtainCallPopularPoster(
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(RoundedCornerShape(10.dp)),
-                contentScale = ContentScale.FillWidth
+                contentScale = ContentScale.FillBounds
             )
             Box(
                 modifier = Modifier
@@ -128,7 +128,7 @@ fun CurtainCallOpenShowPoster(
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(RoundedCornerShape(10.dp)),
-                contentScale = ContentScale.FillWidth
+                contentScale = ContentScale.FillBounds
             )
             Box(
                 modifier = Modifier
@@ -204,7 +204,7 @@ fun CurtainCallEndShowPoster(
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(RoundedCornerShape(10.dp)),
-                contentScale = ContentScale.FillWidth
+                contentScale = ContentScale.FillBounds
             )
             Box(
                 modifier = Modifier
