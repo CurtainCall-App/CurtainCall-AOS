@@ -22,7 +22,6 @@ import io.getstream.chat.android.client.logger.ChatLogLevel
 import io.getstream.chat.android.offline.model.message.attachments.UploadAttachmentsNetworkType
 import io.getstream.chat.android.offline.plugin.configuration.Config
 import io.getstream.chat.android.offline.plugin.factory.StreamOfflinePluginFactory
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -40,7 +39,6 @@ class MainActivity : ComponentActivity() {
         }
 
         if (::firebaseAnalytics.isInitialized) {
-            Timber.d("firebaseAnalytics init")
             firebaseAnalytics.logEvent(
                 FirebaseAnalytics.Event.SCREEN_VIEW,
                 bundleOf(

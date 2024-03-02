@@ -26,7 +26,6 @@ import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.designsystem.dimension.Paddings
 import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
-import com.cmc.curtaincall.common.designsystem.theme.Eerie_Black
 import com.cmc.curtaincall.feature.auth.login.kakao.LoginKaKaoButton
 import com.cmc.curtaincall.feature.auth.login.naver.LoginNaverButton
 import kotlinx.coroutines.flow.collectLatest
@@ -40,7 +39,6 @@ fun LoginScreen(
     onNavigateSignUpTerms: () -> Unit,
     onNavigateHome: () -> Unit
 ) {
-    SystemUiStatusBar(Eerie_Black)
     LaunchedEffect(loginViewModel) {
         loginViewModel.effects.collectLatest { sideEffect ->
             when (sideEffect) {
@@ -55,10 +53,11 @@ fun LoginScreen(
         }
     }
 
+    SystemUiStatusBar(CurtainCallTheme.colors.primary)
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Eerie_Black),
+            .background(CurtainCallTheme.colors.primary),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(Modifier.weight(228f))
