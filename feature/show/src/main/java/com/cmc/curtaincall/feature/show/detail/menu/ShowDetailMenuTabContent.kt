@@ -1,5 +1,6 @@
 package com.cmc.curtaincall.feature.show.detail.menu
 
+import android.text.Html
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,10 +17,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.buttons.common.CurtainCallOutlinedButton
 import com.cmc.curtaincall.common.designsystem.component.divider.HorizontalDivider
@@ -46,6 +49,7 @@ fun ShowDetailMenuTabContent(
     showDetailModel: ShowDetailModel = ShowDetailModel(),
     facilityDetailModel: FacilityDetailModel = FacilityDetailModel()
 ) {
+    val context = LocalContext.current
     var isExpanded by remember { mutableStateOf(false) }
     Column(modifier) {
         ShowDetailInfoScreen(
@@ -74,11 +78,10 @@ fun ShowDetailMenuTabContent(
         if (showDetailModel.introductionImages.isNotEmpty()) {
             Column(Modifier.fillMaxWidth()) {
                 AsyncImage(
-                    model = showDetailModel.introductionImages.first()
-                        .replace("<styurl>", "")
-                        .split("</styurl>")
-                        .map { it.trim() }
-                        .first(),
+                    model = ImageRequest.Builder(context)
+                        .allowHardware(false)
+                        .data(Html.fromHtml(showDetailModel.introductionImages.first(), Html.FROM_HTML_MODE_LEGACY).toString())
+                        .build(),
                     contentDescription = null,
                     modifier = Modifier
                         .padding(top = 37.dp)
