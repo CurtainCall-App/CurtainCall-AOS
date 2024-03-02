@@ -6,6 +6,19 @@
     <string name="cancel">취소</string>
     <string name="show">작품</string>
     <string name="recently_search_word">최근 검색어</string>
+
+    <!-- app -->
+    <string name="onboarding_first_banner_title">작품 정보뿐만 아니라 분실물까지!</string>
+    <string name="onboarding_first_banner_description">공연에 대한 상세한 정보와 공연 리뷰,\n그리고 공연장별 분실물 정보를 알 수 있어요!</string>
+    <string name="onboarding_second_banner_title">파티원을 구해요!</string>
+    <string name="onboarding_second_banner_description">보고 싶은 작품을 다른 사람과 함께 관람하거나\n이야기를 나누며 작품을 온전히 즐길 수 있어요!</string>
+    <string name="onboarding_third_banner_title">라이브톡으로 더 생생하게!</string>
+    <string name="onboarding_third_banner_description">실시간으로 다른 사람들과 함께 작품에 대한\n이야기를 자유롭게 나눌 수 있어요!</string>
+    <string name="onboarding_next_login">로그인 하기</string>
+    
+    <!-- design system -->
+    <string name="default_top_appbar_title">CURTAIN CALL</string>
+    <string name="search_appbar_hint">작품 제목을 입력하세요.</string>
     <string name="delete_all_search_word">전체 삭제</string>
     <string name="empty_search_word">검색 내역이 없어요</string>
     <string name="review_grade_format">%.1f</string>
@@ -19,11 +32,6 @@
     <string name="edit">수정</string>
     <string name="delete">삭제</string>
     <string name="write_completed">작성 완료</string>
-
-
-    <!-- design system -->
-    <string name="default_top_appbar_title">CURTAIN CALL</string>
-    <string name="search_appbar_hint">작품 제목을 입력하세요.</string>
 
     <!-- auth -->
     <string name="signup_terms_title">약관 동의</string>
