@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.common.designsystem.component.lib.pager
+package com.cmc.curtaincall.common.designsystem.component.indicators.pager
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background

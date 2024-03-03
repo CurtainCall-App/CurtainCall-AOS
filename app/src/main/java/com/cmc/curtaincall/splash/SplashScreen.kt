@@ -8,7 +8,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
-import com.cmc.curtaincall.common.designsystem.theme.Cetacean_Blue
+import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -17,7 +17,6 @@ fun SplashScreen(
     onNavigateOnBoarding: () -> Unit,
     onNavigateOnHome: () -> Unit
 ) {
-    SystemUiStatusBar(Cetacean_Blue)
     LaunchedEffect(true) {
         splashViewModel.effects.collectLatest { effect ->
             when (effect) {
@@ -31,9 +30,10 @@ fun SplashScreen(
             }
         }
     }
+    SystemUiStatusBar(CurtainCallTheme.colors.primary)
     Spacer(
         modifier = Modifier
             .fillMaxSize()
-            .background(Cetacean_Blue)
+            .background(CurtainCallTheme.colors.primary)
     )
 }
