@@ -3,6 +3,7 @@ package com.cmc.curtaincall.feature.show.review
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.cmc.curtaincall.core.base.BaseViewModel
+import com.cmc.curtaincall.domain.enums.ReviewSortType
 import com.cmc.curtaincall.domain.repository.MemberRepository
 import com.cmc.curtaincall.domain.repository.ReviewRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,6 +37,10 @@ class ShowReviewViewModel @Inject constructor(
             is ShowReviewEvent.CheckMyReview -> {
                 currentState.copy(hasMyReview = event.hasMyReview)
             }
+
+            is ShowReviewEvent.SelectSortType -> {
+                currentState.copy(sortType = event.sortType)
+            }
         }
 
     private fun getMemberId() {
@@ -47,7 +52,7 @@ class ShowReviewViewModel @Inject constructor(
     fun fetchShowReviewList(showId: String) {
         sendAction(
             ShowReviewEvent.FetchShowReviewList(
-                showReviewModels = reviewRepository.fetchShowReviewList(showId)
+                showReviewModels = reviewRepository.fetchShowReviewList(showId, uiState.value.sortType)
                     .distinctUntilChanged()
                     .cachedIn(viewModelScope)
             )
@@ -94,6 +99,7 @@ class ShowReviewViewModel @Inject constructor(
             .onEach { sendSideEffect(ShowReviewSideEffect.DeleteMyReview) }
             .launchIn(viewModelScope)
     }
+
     fun updateShowReview(
         reviewId: Int,
         content: String,
@@ -102,5 +108,13 @@ class ShowReviewViewModel @Inject constructor(
         reviewRepository.updateShowReview(reviewId, content, grade)
             .onEach { sendSideEffect(ShowReviewSideEffect.RefreshShowReview) }
             .launchIn(viewModelScope)
+    }
+
+    fun selectSortType(
+        showId: String,
+        sortType: ReviewSortType
+    ) {
+        sendAction(ShowReviewEvent.SelectSortType(sortType = sortType))
+        fetchShowReviewList(showId)
     }
 }

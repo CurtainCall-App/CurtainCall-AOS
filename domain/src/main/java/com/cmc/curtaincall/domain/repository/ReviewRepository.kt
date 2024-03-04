@@ -1,6 +1,7 @@
 package com.cmc.curtaincall.domain.repository
 
 import androidx.paging.PagingData
+import com.cmc.curtaincall.domain.enums.ReviewSortType
 import com.cmc.curtaincall.domain.model.review.CreateReviewModel
 import com.cmc.curtaincall.domain.model.review.LikeReviewModel
 import com.cmc.curtaincall.domain.model.review.ShowReviewModel
@@ -16,13 +17,15 @@ interface ReviewRepository {
     ): Flow<CreateReviewModel>
 
     fun fetchShowReviewList(
-        showId: String
+        showId: String,
+        sortType: ReviewSortType
     ): Flow<PagingData<ShowReviewModel>>
 
     fun requestShowReviewList(
         showId: String,
         page: Int,
-        size: Int
+        size: Int,
+        sortType: ReviewSortType
     ): Flow<List<ShowReviewModel>>
 
     fun deleteShowReview(

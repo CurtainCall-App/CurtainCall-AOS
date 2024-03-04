@@ -32,7 +32,7 @@ import com.cmc.curtaincall.common.designsystem.dimension.Paddings
 import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import com.cmc.curtaincall.common.designsystem.theme.Grey1
 import com.cmc.curtaincall.common.designsystem.theme.Grey5
-import com.cmc.curtaincall.domain.type.ShowGenreType
+import com.cmc.curtaincall.domain.enums.ShowGenreType
 
 @Composable
 fun CurtainCallPopularPoster(

@@ -3,6 +3,7 @@ package com.cmc.curtaincall.data.source.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.cmc.curtaincall.core.network.service.review.ReviewService
+import com.cmc.curtaincall.domain.enums.ReviewSortType
 import com.cmc.curtaincall.domain.model.review.ShowReviewModel
 import javax.inject.Inject
 
@@ -11,7 +12,8 @@ const val REVIEW_PAGE_SIZE = 20
 
 class ReviewPagingSource @Inject constructor(
     private val reviewService: ReviewService,
-    private val showId: String
+    private val showId: String,
+    private val sortType: ReviewSortType
 ) : PagingSource<Int, ShowReviewModel>() {
     override fun getRefreshKey(state: PagingState<Int, ShowReviewModel>): Int? {
         return state.anchorPosition?.let { position ->
@@ -26,7 +28,8 @@ class ReviewPagingSource @Inject constructor(
             val response = reviewService.requestShowReviewList(
                 showId = showId,
                 page = pageKey,
-                size = REVIEW_PAGE_SIZE
+                size = REVIEW_PAGE_SIZE,
+                sort = sortType.code
             )
 
             val favoriteReviews = reviewService.checkLikeReviews(response.showReviews.map { it.id })

@@ -28,7 +28,8 @@ import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import com.cmc.curtaincall.common.designsystem.theme.Grey5
 import com.cmc.curtaincall.common.designsystem.theme.NoRippleTheme
-import com.cmc.curtaincall.domain.type.ShowSortType
+import com.cmc.curtaincall.domain.enums.ReviewSortType
+import com.cmc.curtaincall.domain.enums.ShowSortType
 
 private val ShowSortBottomSheetHeight = 270.dp
 private val ShowSortBottomSheetRadius = 28.dp
@@ -85,6 +86,58 @@ fun CurtainCallShowSortBottomSheet(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CurtainCallReviewSortBottomSheet(
+    reviewSortType: ReviewSortType = ReviewSortType.RECENTLY,
+    onSelectSortType: (ReviewSortType) -> Unit = {},
+    onDismissRequest: () -> Unit = {}
+) {
+    ModalBottomSheet(
+        onDismissRequest = onDismissRequest,
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(220.dp),
+        shape = RoundedCornerShape(
+            topStart = ShowSortBottomSheetRadius,
+            topEnd = ShowSortBottomSheetRadius
+        ),
+        containerColor = CurtainCallTheme.colors.background
+    ) {
+        ReviewSortType.values().forEach { sortType ->
+            Row(
+                modifier = Modifier
+                    .padding(start = 30.dp, end = 15.dp)
+                    .fillMaxWidth()
+                    .height(50.dp)
+                    .clickable { onSelectSortType(sortType) },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = sortType.label,
+                    modifier = Modifier.weight(1f),
+                    style = CurtainCallTheme.typography.body2.copy(
+                        fontWeight = FontWeight.SemiBold,
+                        color = if (sortType == reviewSortType) {
+                            CurtainCallTheme.colors.primary
+                        } else {
+                            Grey5
+                        }
+                    )
+                )
+                if (sortType == reviewSortType) {
+                    Icon(
+                        painter = painterResource(R.drawable.ic_check),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp),
+                        tint = CurtainCallTheme.colors.secondary
+                    )
+                }
+            }
+        }
+    }
+}
+
 @Preview
 @Composable
 private fun CurtainCallShowSortBottomSheetPreview() {
@@ -93,6 +146,20 @@ private fun CurtainCallShowSortBottomSheetPreview() {
         CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
             CurtainCallShowSortBottomSheet(
                 showSortType = sortType,
+                onSelectSortType = { sortType = it }
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun CurtainCallReviewSortBottomSheetPreview() {
+    var sortType by remember { mutableStateOf(ReviewSortType.RECENTLY) }
+    CurtainCallTheme {
+        CompositionLocalProvider(LocalRippleTheme provides NoRippleTheme) {
+            CurtainCallReviewSortBottomSheet(
+                reviewSortType = sortType,
                 onSelectSortType = { sortType = it }
             )
         }

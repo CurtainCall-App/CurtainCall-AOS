@@ -10,8 +10,8 @@ import com.cmc.curtaincall.domain.model.show.ShowSearchWordModel
 import com.cmc.curtaincall.domain.repository.FavoriteRepository
 import com.cmc.curtaincall.domain.repository.LaunchRepository
 import com.cmc.curtaincall.domain.repository.ShowRepository
-import com.cmc.curtaincall.domain.type.ShowGenreType
-import com.cmc.curtaincall.domain.type.ShowSortType
+import com.cmc.curtaincall.domain.enums.ShowGenreType
+import com.cmc.curtaincall.domain.enums.ShowSortType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

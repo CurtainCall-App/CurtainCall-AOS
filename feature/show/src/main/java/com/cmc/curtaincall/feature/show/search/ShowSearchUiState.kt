@@ -1,8 +1,8 @@
 package com.cmc.curtaincall.feature.show.search
 
 import com.cmc.curtaincall.core.base.BaseState
-import com.cmc.curtaincall.domain.type.ShowGenreType
-import com.cmc.curtaincall.domain.type.ShowSortType
+import com.cmc.curtaincall.domain.enums.ShowGenreType
+import com.cmc.curtaincall.domain.enums.ShowSortType
 
 data class ShowSearchUiState(
     val isActiveSearch: Boolean = false,

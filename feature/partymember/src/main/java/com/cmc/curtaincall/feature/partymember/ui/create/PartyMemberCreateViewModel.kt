@@ -5,7 +5,7 @@ import androidx.paging.cachedIn
 import com.cmc.curtaincall.common.designsystem.component.card.PartyType
 import com.cmc.curtaincall.common.utility.extensions.changeShowAt
 import com.cmc.curtaincall.core.base.BaseViewModel
-import com.cmc.curtaincall.domain.type.ShowSortType
+import com.cmc.curtaincall.domain.enums.ShowSortType
 import com.cmc.curtaincall.domain.repository.PartyRepository
 import com.cmc.curtaincall.domain.repository.ShowRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

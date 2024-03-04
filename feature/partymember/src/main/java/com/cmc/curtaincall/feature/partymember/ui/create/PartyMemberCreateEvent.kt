@@ -2,7 +2,7 @@ package com.cmc.curtaincall.feature.partymember.ui.create
 
 import androidx.paging.PagingData
 import com.cmc.curtaincall.core.base.BaseEvent
-import com.cmc.curtaincall.domain.type.ShowSortType
+import com.cmc.curtaincall.domain.enums.ShowSortType
 import com.cmc.curtaincall.domain.model.show.ShowDetailModel
 import com.cmc.curtaincall.domain.model.show.ShowInfoModel
 import kotlinx.coroutines.flow.Flow

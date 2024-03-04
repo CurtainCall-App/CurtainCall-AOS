@@ -38,6 +38,7 @@ import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.designsystem.component.buttons.common.CurtainCallFilledButton
 import com.cmc.curtaincall.common.designsystem.component.dialogs.ConfirmDialog
 import com.cmc.curtaincall.common.designsystem.component.divider.HorizontalDivider
+import com.cmc.curtaincall.common.designsystem.component.sheets.bottom.CurtainCallReviewSortBottomSheet
 import com.cmc.curtaincall.common.designsystem.custom.show.ShowReviewItemContent
 import com.cmc.curtaincall.common.designsystem.custom.show.ShowReviewListEmptyContent
 import com.cmc.curtaincall.common.designsystem.theme.Black
@@ -45,7 +46,6 @@ import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import com.cmc.curtaincall.common.designsystem.theme.Grey9
 import com.cmc.curtaincall.common.navigation.destination.DEFAULT_REVIEW_ID
 import com.cmc.curtaincall.domain.type.ReportType
-import com.cmc.curtaincall.domain.type.ReviewSortType
 
 @Composable
 internal fun ShowReviewScreen(
@@ -131,7 +131,8 @@ private fun ShowReviewContent(
     val showReviewUiState by showReviewViewModel.uiState.collectAsStateWithLifecycle()
     val showReviewModels = showReviewUiState.showReviewModels.collectAsLazyPagingItems()
     val memberId = showReviewUiState.memberId
-    var showMenu by remember { mutableStateOf(false) }
+    var showMenu by remember { mutableStateOf(false) } // 내 리뷰 수정/삭제 메뉴
+    var sortBottomSheet by remember { mutableStateOf(false) }
     val lazyListState = rememberLazyListState()
 
     LaunchedEffect(showReviewViewModel) {
@@ -150,6 +151,17 @@ private fun ShowReviewContent(
                 }
             }
         }
+    }
+
+    if (sortBottomSheet) {
+        CurtainCallReviewSortBottomSheet(
+            reviewSortType = showReviewUiState.sortType,
+            onSelectSortType = {
+                showReviewViewModel.selectSortType(showId, it)
+                sortBottomSheet = false
+            },
+            onDismissRequest = { sortBottomSheet = false }
+        )
     }
 
     Column(modifier.clickable { showMenu = false }) {
@@ -171,9 +183,12 @@ private fun ShowReviewContent(
                     color = CurtainCallTheme.colors.primary
                 )
             )
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier.clickable { sortBottomSheet = true },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(
-                    text = ReviewSortType.RECENTLY.label,
+                    text = showReviewUiState.sortType.label,
                     style = CurtainCallTheme.typography.body3
                 )
                 Icon(
