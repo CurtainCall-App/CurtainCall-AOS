@@ -7,7 +7,7 @@ import androidx.compose.ui.window.DialogProperties
 import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 
 @Composable
-fun SelectDialog(
+fun CurtainCallSelectDialog(
     title: String,
     description: String? = null,
     cancelButtonText: String,
@@ -34,7 +34,7 @@ fun SelectDialog(
 }
 
 @Composable
-fun ConfirmDialog(
+fun CurtainCallConfirmDialog(
     title: String,
     description: String? = null,
     actionText: String,
@@ -60,7 +60,7 @@ fun ConfirmDialog(
 @Composable
 private fun SelectDialogPreview() {
     CurtainCallTheme {
-        SelectDialog(
+        CurtainCallSelectDialog(
             title = "'커튼콜'이 사용자의 사진에\n접근하려고 해요",
             description = "앱에서 사진을 업로드하려면\n사진 라이브러리에 접근할 수 있어야 해요:)",
             cancelButtonText = "거부",
@@ -73,7 +73,7 @@ private fun SelectDialogPreview() {
 @Composable
 private fun ConfirmDialogPreview() {
     CurtainCallTheme {
-        ConfirmDialog(
+        CurtainCallConfirmDialog(
             title = "이미 공연 리뷰를 등록했어요!",
             actionText = "확인"
         )
