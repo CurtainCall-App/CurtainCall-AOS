@@ -6,6 +6,8 @@
     <string name="cancel">취소</string>
     <string name="show">작품</string>
     <string name="recently_search_word">최근 검색어</string>
+    <string name="dismiss">아니요</string>
+    <string name="delete_popup">네, 삭제할게요</string>
 
     <!-- app -->
     <string name="onboarding_first_banner_title">작품 정보뿐만 아니라 분실물까지!</string>
@@ -88,6 +90,7 @@
     <string name="show_review_create_text_placeholder">공연이 어떘는지 자세히 작성해주세요!</string>
     <string name="show_review_create_max_text_restrict">500자 이내로 작성해주세요</string>
     <string name="show_review_edit_title">공연 리뷰 수정</string>
+    <string name="show_review_delete_title">해당 게시물을 삭제할까요?</string>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
@@ -257,7 +260,7 @@
     <string name="livetalk_appbar_title">라이브톡</string>
     <string name="livetalk_empty_contents">해당 기능은\n추후에 제공될 예정입니다.</string>
 
-    <!-- home-->
+    <!-- home-->요
     <string name="home_appbar_title">CURTAIN CALL</string>
     <string name="home_banner_word_dictionary_title">알쏭달쏭 용어 사전</string>
     <string name="home_banner_word_dictionary_description">연극과 뮤지컬에 관해\n모르는 용어가 있다면?</string>

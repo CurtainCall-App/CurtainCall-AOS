@@ -41,7 +41,7 @@ import com.cmc.curtaincall.common.designsystem.theme.*
 import com.cmc.curtaincall.common.utility.extensions.toChangeDate
 import com.cmc.curtaincall.common.utility.extensions.toRunningTime
 import com.cmc.curtaincall.domain.enums.ShowDay
-import com.cmc.curtaincall.domain.type.ShowGenreType
+import com.cmc.curtaincall.domain.enums.ShowGenreType
 import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -37,7 +37,7 @@ import com.cmc.curtaincall.common.utility.extensions.convertDDay
 import com.cmc.curtaincall.common.utility.extensions.convertSimpleDate
 import com.cmc.curtaincall.common.utility.extensions.toChangeDate
 import com.cmc.curtaincall.domain.model.show.ShowRecommendationModel
-import com.cmc.curtaincall.domain.type.translateShowGenreType
+import com.cmc.curtaincall.domain.enums.translateShowGenreType
 import io.getstream.chat.android.client.ChatClient
 
 @OptIn(ExperimentalMaterial3Api::class)

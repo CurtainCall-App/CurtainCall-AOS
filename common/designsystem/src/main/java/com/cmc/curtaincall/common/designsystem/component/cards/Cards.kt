@@ -37,7 +37,7 @@ import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import com.cmc.curtaincall.common.designsystem.theme.Grey4
 import com.cmc.curtaincall.common.designsystem.theme.Grey8
 import com.cmc.curtaincall.domain.model.show.ShowDetailModel
-import com.cmc.curtaincall.domain.type.translateShowGenreType
+import com.cmc.curtaincall.domain.enums.translateShowGenreType
 
 @Composable
 fun ShowDetailCard(

@@ -3,6 +3,7 @@ package com.cmc.curtaincall.feature.show.detail
 import androidx.lifecycle.viewModelScope
 import com.cmc.curtaincall.core.base.BaseViewModel
 import com.cmc.curtaincall.domain.enums.MenuTabType
+import com.cmc.curtaincall.domain.enums.ReviewSortType
 import com.cmc.curtaincall.domain.repository.FavoriteRepository
 import com.cmc.curtaincall.domain.repository.LostPropertyRepository
 import com.cmc.curtaincall.domain.repository.ReviewRepository
@@ -111,7 +112,8 @@ class ShowDetailViewModel @Inject constructor(
                 reviewRepository.requestShowReviewList(
                     showId = showId,
                     page = 0,
-                    size = 3
+                    size = 3,
+                    sortType = ReviewSortType.RECENTLY
                 )
             }.onEach { sendAction(ShowDetailEvent.RequestShowReviewList(it)) }
             .launchIn(viewModelScope)

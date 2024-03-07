@@ -17,7 +17,7 @@ import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.extensions.toSp
 import com.cmc.curtaincall.common.designsystem.theme.Nero
 import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
-import com.cmc.curtaincall.domain.type.ShowSortType
+import com.cmc.curtaincall.domain.enums.ShowSortType
 
 @Composable
 fun SortTypeRow(

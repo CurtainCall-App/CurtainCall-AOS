@@ -6,6 +6,7 @@ import com.cmc.curtaincall.core.network.service.review.request.UpdateShowReviewR
 import com.cmc.curtaincall.core.network.service.review.response.CreateReviewResponse
 import com.cmc.curtaincall.core.network.service.review.response.LikeReviewResponse
 import com.cmc.curtaincall.core.network.service.review.response.ShowReviewResponse
+import com.cmc.curtaincall.domain.enums.ReviewSortType
 import com.cmc.curtaincall.domain.model.show.CheckCreateReviewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -33,13 +34,15 @@ class ReviewRemoteSource @Inject constructor(
     fun requestShowReviewList(
         showId: String,
         page: Int,
-        size: Int
+        size: Int,
+        sortType: ReviewSortType
     ): Flow<List<ShowReviewResponse>> = flow {
         emit(
             reviewService.requestShowReviewList(
                 showId = showId,
                 page = page,
-                size = size
+                size = size,
+                sort = sortType.code
             ).showReviews
         )
     }

@@ -27,7 +27,8 @@ interface ReviewService {
     suspend fun requestShowReviewList(
         @Path("showId") showId: String,
         @Query("page") page: Int,
-        @Query("size") size: Int
+        @Query("size") size: Int,
+        @Query("sort") sort: String
     ): ShowReviewsResponse
 
     @DELETE("reviews/{reviewId}")

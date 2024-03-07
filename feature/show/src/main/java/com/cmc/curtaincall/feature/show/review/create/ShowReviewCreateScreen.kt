@@ -49,7 +49,7 @@ import com.cmc.curtaincall.common.designsystem.theme.Grey6
 import com.cmc.curtaincall.common.designsystem.theme.Grey9
 import com.cmc.curtaincall.common.designsystem.theme.Red
 import com.cmc.curtaincall.common.navigation.destination.DEFAULT_REVIEW_ID
-import com.cmc.curtaincall.domain.type.translateShowGenreType
+import com.cmc.curtaincall.domain.enums.translateShowGenreType
 import com.cmc.curtaincall.feature.show.detail.ShowDetailViewModel
 import com.cmc.curtaincall.feature.show.review.ShowReviewSideEffect
 import com.cmc.curtaincall.feature.show.review.ShowReviewViewModel

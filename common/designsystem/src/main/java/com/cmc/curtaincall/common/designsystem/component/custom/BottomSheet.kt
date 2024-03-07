@@ -28,7 +28,7 @@ import com.cmc.curtaincall.common.designsystem.theme.Me_Pink
 import com.cmc.curtaincall.common.designsystem.theme.Nero
 import com.cmc.curtaincall.common.designsystem.theme.White
 import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
-import com.cmc.curtaincall.domain.type.ShowSortType
+import com.cmc.curtaincall.domain.enums.ShowSortType
 import com.holix.android.bottomsheetdialog.compose.BottomSheetDialog
 
 @Composable

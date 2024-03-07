@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -36,8 +37,10 @@ import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.appbars.CurtainCallCenterTopAppBarWithBack
 import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.designsystem.component.buttons.common.CurtainCallFilledButton
-import com.cmc.curtaincall.common.designsystem.component.dialogs.ConfirmDialog
+import com.cmc.curtaincall.common.designsystem.component.dialogs.CurtainCallConfirmDialog
+import com.cmc.curtaincall.common.designsystem.component.dialogs.CurtainCallSelectDialog
 import com.cmc.curtaincall.common.designsystem.component.divider.HorizontalDivider
+import com.cmc.curtaincall.common.designsystem.component.sheets.bottom.CurtainCallReviewSortBottomSheet
 import com.cmc.curtaincall.common.designsystem.custom.show.ShowReviewItemContent
 import com.cmc.curtaincall.common.designsystem.custom.show.ShowReviewListEmptyContent
 import com.cmc.curtaincall.common.designsystem.theme.Black
@@ -45,7 +48,6 @@ import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import com.cmc.curtaincall.common.designsystem.theme.Grey9
 import com.cmc.curtaincall.common.navigation.destination.DEFAULT_REVIEW_ID
 import com.cmc.curtaincall.domain.type.ReportType
-import com.cmc.curtaincall.domain.type.ReviewSortType
 
 @Composable
 internal fun ShowReviewScreen(
@@ -68,7 +70,7 @@ internal fun ShowReviewScreen(
     var existedReviewPopup by remember { mutableStateOf(false) }
 
     if (existedReviewPopup) {
-        ConfirmDialog(
+        CurtainCallConfirmDialog(
             title = "이미 공연 리뷰를 등록했어요!",
             actionText = "확인",
             onAction = { existedReviewPopup = false },
@@ -131,7 +133,9 @@ private fun ShowReviewContent(
     val showReviewUiState by showReviewViewModel.uiState.collectAsStateWithLifecycle()
     val showReviewModels = showReviewUiState.showReviewModels.collectAsLazyPagingItems()
     val memberId = showReviewUiState.memberId
-    var showMenu by remember { mutableStateOf(false) }
+    var showMenu by remember { mutableStateOf(false) } // 내 리뷰 수정/삭제 메뉴
+    var sortBottomSheet by remember { mutableStateOf(false) } // 정렬 바텀시트
+    var deleteReviewId by remember { mutableIntStateOf(Int.MIN_VALUE) } // 삭제 팝업
     val lazyListState = rememberLazyListState()
 
     LaunchedEffect(showReviewViewModel) {
@@ -150,6 +154,33 @@ private fun ShowReviewContent(
                 }
             }
         }
+    }
+
+    if (sortBottomSheet) {
+        CurtainCallReviewSortBottomSheet(
+            reviewSortType = showReviewUiState.sortType,
+            onSelectSortType = {
+                showReviewViewModel.selectSortType(showId, it)
+                sortBottomSheet = false
+            },
+            onDismissRequest = { sortBottomSheet = false }
+        )
+    }
+
+    if (deleteReviewId != Int.MIN_VALUE) {
+        CurtainCallSelectDialog(
+            title = stringResource(R.string.show_review_delete_title),
+            cancelButtonText = stringResource(R.string.dismiss),
+            actionButtonText = stringResource(R.string.delete_popup),
+            onCancel = { deleteReviewId = Int.MIN_VALUE },
+            onAction = {
+                showReviewViewModel.deleteShowReview(
+                    showId = showId,
+                    reviewId = deleteReviewId
+                )
+                deleteReviewId = Int.MIN_VALUE
+            }
+        )
     }
 
     Column(modifier.clickable { showMenu = false }) {
@@ -171,9 +202,12 @@ private fun ShowReviewContent(
                     color = CurtainCallTheme.colors.primary
                 )
             )
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                modifier = Modifier.clickable { sortBottomSheet = true },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(
-                    text = ReviewSortType.RECENTLY.label,
+                    text = showReviewUiState.sortType.label,
                     style = CurtainCallTheme.typography.body3
                 )
                 Icon(
@@ -221,15 +255,8 @@ private fun ShowReviewContent(
                                     isFavorite = !showReviewModel.isFavorite
                                 )
                             },
-                            onEditClick = {
-                                onNavigateToReviewCreate(showReviewModel.id)
-                            },
-                            onDeleteClick = {
-                                showReviewViewModel.deleteShowReview(
-                                    showId = showId,
-                                    reviewId = showReviewModel.id
-                                )
-                            }
+                            onEditClick = { onNavigateToReviewCreate(showReviewModel.id) },
+                            onDeleteClick = { deleteReviewId = showReviewModel.id }
                         )
                     }
                     HorizontalDivider(

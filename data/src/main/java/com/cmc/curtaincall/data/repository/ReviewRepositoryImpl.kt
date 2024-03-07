@@ -3,11 +3,11 @@ package com.cmc.curtaincall.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import androidx.paging.map
 import com.cmc.curtaincall.core.network.service.review.ReviewService
 import com.cmc.curtaincall.data.source.paging.REVIEW_PAGE_SIZE
 import com.cmc.curtaincall.data.source.paging.ReviewPagingSource
 import com.cmc.curtaincall.data.source.remote.ReviewRemoteSource
+import com.cmc.curtaincall.domain.enums.ReviewSortType
 import com.cmc.curtaincall.domain.model.review.CreateReviewModel
 import com.cmc.curtaincall.domain.model.review.LikeReviewModel
 import com.cmc.curtaincall.domain.model.review.ShowReviewModel
@@ -28,15 +28,23 @@ class ReviewRepositoryImpl @Inject constructor(
     ): Flow<CreateReviewModel> =
         reviewRemoteSource.createShowReview(showId, grade, content).map { it.toModel() }
 
-    override fun fetchShowReviewList(showId: String): Flow<PagingData<ShowReviewModel>> {
+    override fun fetchShowReviewList(
+        showId: String,
+        sortType: ReviewSortType
+    ): Flow<PagingData<ShowReviewModel>> {
         return Pager(
             config = PagingConfig(pageSize = REVIEW_PAGE_SIZE),
-            pagingSourceFactory = { ReviewPagingSource(reviewService, showId) }
+            pagingSourceFactory = { ReviewPagingSource(reviewService, showId, sortType) }
         ).flow
     }
 
-    override fun requestShowReviewList(showId: String, page: Int, size: Int): Flow<List<ShowReviewModel>> =
-        reviewRemoteSource.requestShowReviewList(showId, page, size).map { showReviews ->
+    override fun requestShowReviewList(
+        showId: String,
+        page: Int,
+        size: Int,
+        sortType: ReviewSortType
+    ): Flow<List<ShowReviewModel>> =
+        reviewRemoteSource.requestShowReviewList(showId, page, size, sortType).map { showReviews ->
             showReviews.map { it.toModel() }
         }
 
@@ -48,6 +56,7 @@ class ReviewRepositoryImpl @Inject constructor(
 
     override fun checkCreatedReview(showId: String): Flow<CheckCreateReviewModel> =
         reviewRemoteSource.checkCreatedReview(showId)
+
     override fun requestLikeReview(reviewId: Int): Flow<Boolean> =
         reviewRemoteSource.requestLikeReview(reviewId)
 
