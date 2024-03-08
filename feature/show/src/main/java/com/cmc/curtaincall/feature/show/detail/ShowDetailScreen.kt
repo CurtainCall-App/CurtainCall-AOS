@@ -33,7 +33,7 @@ import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import com.cmc.curtaincall.common.designsystem.theme.Grey8
 import com.cmc.curtaincall.domain.enums.MenuTabType
 import com.cmc.curtaincall.domain.model.show.ShowDetailModel
-import com.cmc.curtaincall.feature.show.detail.menu.LostPropertyTabContent
+import com.cmc.curtaincall.feature.show.detail.menu.ShowLostPropertyTabContent
 import com.cmc.curtaincall.feature.show.detail.menu.ShowDetailMenuTabContent
 import com.cmc.curtaincall.feature.show.detail.menu.ShowReviewTabContent
 
@@ -155,7 +155,7 @@ private fun ShowDetailMenuTab(
             }
 
             MenuTabType.LOST_PROPERTY -> {
-                LostPropertyTabContent(
+                ShowLostPropertyTabContent(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(CurtainCallTheme.colors.background),

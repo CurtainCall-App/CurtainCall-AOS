@@ -25,13 +25,13 @@ import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import com.cmc.curtaincall.domain.model.lostproperty.LostPropertyModel
 
 @Composable
-fun LostPropertyTabContent(
+fun ShowLostPropertyTabContent(
     modifier: Modifier = Modifier,
     lostProperties: List<LostPropertyModel> = listOf()
 ) {
     Column(modifier.heightIn(min = 285.dp)) {
         if (lostProperties.isEmpty()) {
-            Spacer(Modifier.weight(58f))
+            Spacer(Modifier.weight(60f))
             LostPropertyEmptyContent(
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
@@ -49,8 +49,8 @@ fun LostPropertyTabContent(
             Text(
                 text = stringResource(R.string.lost_property_title),
                 modifier = Modifier
-                    .padding(top = 39.dp)
-                    .padding(horizontal = 20.dp),
+                    .padding(top = 40.dp)
+                    .padding(horizontal = 22.dp),
                 style = CurtainCallTheme.typography.subTitle4
             )
             LazyRow(
@@ -67,6 +67,7 @@ fun LostPropertyTabContent(
                     )
                 }
             }
+            Spacer(Modifier.weight(1f))
             CurtainCallFilledButton(
                 text = stringResource(R.string.lost_property_all_view),
                 modifier = Modifier

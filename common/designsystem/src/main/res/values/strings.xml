@@ -81,6 +81,7 @@
     <string name="review_all_view">리뷰 모두 보기</string>
     <string name="write_review">리뷰 작성하기</string>
     <string name="lost_property_all_view">분실물 모두 보기</string>
+    <string name="write_lost_property">분실물 올리기</string>
     <string name="lost_property_title">분실물이 있어요</string>
     <string name="show_review_title">공연 리뷰</string>
     <string name="show_review_empty_list">아직 공연 리뷰가 없어요</string>
