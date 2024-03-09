@@ -1,5 +1,6 @@
 package com.cmc.curtaincall.common.designsystem.custom.show
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -58,10 +59,11 @@ fun LostPropertyEmptyContent(
 @Composable
 fun LostPropertyContent(
     modifier: Modifier = Modifier,
-    lostPropertyModel: LostPropertyModel = LostPropertyModel()
+    lostPropertyModel: LostPropertyModel = LostPropertyModel(),
+    onClick: () -> Unit = {}
 ) {
     Card(
-        modifier = modifier,
+        modifier = modifier.clickable { onClick() },
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
             containerColor = CurtainCallTheme.colors.background

@@ -27,7 +27,8 @@ import com.cmc.curtaincall.domain.model.lostproperty.LostPropertyModel
 @Composable
 fun ShowLostPropertyTabContent(
     modifier: Modifier = Modifier,
-    lostProperties: List<LostPropertyModel> = listOf()
+    lostProperties: List<LostPropertyModel> = listOf(),
+    onNavigateToLostProperty: (String, String) -> Unit = { _, _ -> }
 ) {
     Column(modifier.heightIn(min = 285.dp)) {
         if (lostProperties.isEmpty()) {
@@ -63,7 +64,8 @@ fun ShowLostPropertyTabContent(
                 items(lostProperties) { lostPropertyModel ->
                     LostPropertyContent(
                         modifier = Modifier.size(135.dp, 180.dp),
-                        lostPropertyModel = lostPropertyModel
+                        lostPropertyModel = lostPropertyModel,
+                        onClick = { onNavigateToLostProperty(lostPropertyModel.facilityId, lostPropertyModel.facilityName) }
                     )
                 }
             }

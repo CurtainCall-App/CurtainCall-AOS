@@ -45,7 +45,7 @@ fun NavGraphBuilder.showNavGraph(
                 onNavigateToReviewCreate = {
                     navHostController.navigate("${ShowDestination.ReviewCreate.route}/$showIdArg/$DEFAULT_REVIEW_ID")
                 },
-                onNavigateLostProperty = { facilityId, facilityName ->
+                onNavigateToLostProperty = { facilityId, facilityName ->
                     navHostController.navigate("${ShowDestination.LostProperty.route}/$facilityId/$facilityName")
                 },
                 onBack = {
@@ -106,10 +106,10 @@ fun NavGraphBuilder.showNavGraph(
             ShowLostPropertyScreen(
                 facilityId = facilityIdArg,
                 facilityName = facilityNameArg,
-                onNavigateLostPropertyDetail = { lostPropertyId, fromCreateArg ->
+                onNavigateToLostPropertyDetail = { lostPropertyId, fromCreateArg ->
                     navHostController.navigate("${ShowDestination.LostPropertyDetail.route}/$lostPropertyId/$fromCreateArg")
                 },
-                onNavigateLostPropertyCreate = { facilityId, facilityName ->
+                onNavigateToLostPropertyCreate = { facilityId, facilityName ->
                     navHostController.navigate(
                         "${ShowDestination.LostPropertyCreate.route}?" +
                             "${ShowDestination.LostPropertyCreate.facilityIdArg}=$facilityId&" +

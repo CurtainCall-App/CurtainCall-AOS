@@ -9,10 +9,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import com.cmc.curtaincall.common.designsystem.theme.Grey6
 import com.cmc.curtaincall.common.designsystem.theme.Grey9
@@ -49,6 +51,31 @@ fun CurtainCallBasicChip(
     }
 }
 
+@Composable
+fun CurtainCallCalenderSelectShip(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
+    Box(
+        modifier = modifier
+            .clickable { onClick() }
+            .background(
+                color = CurtainCallTheme.colors.secondary,
+                shape = RoundedCornerShape(6.dp)
+            ).padding(horizontal = 8.dp)
+            .padding(vertical = 4.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = stringResource(R.string.select_date),
+            style = CurtainCallTheme.typography.body4.copy(
+                color = CurtainCallTheme.colors.primary,
+                fontWeight = FontWeight.SemiBold
+            )
+        )
+    }
+}
+
 @Preview
 @Composable
 private fun CurtainCallBasicChipPreview() {
@@ -57,5 +84,13 @@ private fun CurtainCallBasicChipPreview() {
             text = "Label",
             isSelect = true
         )
+    }
+}
+
+@Preview
+@Composable
+private fun CurtainCallCalenderSelectShipPreview() {
+    CurtainCallTheme {
+        CurtainCallCalenderSelectShip()
     }
 }

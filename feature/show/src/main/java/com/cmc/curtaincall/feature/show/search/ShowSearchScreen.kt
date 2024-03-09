@@ -21,26 +21,18 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
-import androidx.paging.compose.itemsIndexed
 import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.appbars.CurtainCallSearchTitleTopAppBar
 import com.cmc.curtaincall.common.designsystem.component.appbars.SearchAppBarState
 import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.designsystem.component.canvas.CurtainCallShowSortCoachMark
-import com.cmc.curtaincall.common.designsystem.component.card.PerformanceDetailCard
 import com.cmc.curtaincall.common.designsystem.component.chips.CurtainCallBasicChip
-import com.cmc.curtaincall.common.designsystem.component.content.empty.EmptyContent
-import com.cmc.curtaincall.common.designsystem.component.item.search.SearchTextItem
 import com.cmc.curtaincall.common.designsystem.component.sheets.bottom.CurtainCallShowSortBottomSheet
 import com.cmc.curtaincall.common.designsystem.custom.poster.CurtainCallShowPoster
 import com.cmc.curtaincall.common.designsystem.custom.search.SearchWordContent
 import com.cmc.curtaincall.common.designsystem.custom.search.SearchWordEmptyContent
 import com.cmc.curtaincall.common.designsystem.dimension.Paddings
-import com.cmc.curtaincall.common.designsystem.extensions.toSp
 import com.cmc.curtaincall.common.designsystem.theme.*
-import com.cmc.curtaincall.common.utility.extensions.toChangeDate
-import com.cmc.curtaincall.common.utility.extensions.toRunningTime
-import com.cmc.curtaincall.domain.enums.ShowDay
 import com.cmc.curtaincall.domain.enums.ShowGenreType
 import timber.log.Timber
 
@@ -183,131 +175,6 @@ private fun ShowSearchContent(
                         onClose = { showListViewModel.deleteShowSearchWord(showSearchWord) },
                         onClick = { showListViewModel.searchRecentlyWord(showSearchWord) }
                     )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun ShowSearchContent(
-    modifier: Modifier = Modifier,
-    showListViewModel: ShowSearchViewModel = hiltViewModel(),
-    queryString: String = "",
-    isDoneSearch: Boolean = true,
-    onSearch: (String) -> Unit = {},
-    onNavigateDetail: (String) -> Unit = {}
-) {
-    val searchWords by showListViewModel.searchWords.collectAsStateWithLifecycle()
-    val showSearchItems = showListViewModel.showSearchItems.collectAsLazyPagingItems()
-    LazyColumn(modifier) {
-        item {
-            Spacer(
-                modifier = Modifier
-                    .padding(top = 20.dp)
-                    .fillMaxWidth()
-                    .height(1.dp)
-                    .background(Anti_Flash_White)
-            )
-        }
-
-        if (queryString.isEmpty()) {
-            if (searchWords.isEmpty()) {
-                item {
-                    EmptyContent(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .fillParentMaxHeight(),
-                        text = stringResource(R.string.search_empty_recently_word)
-                    )
-                }
-            } else {
-                item {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp)
-                            .padding(bottom = 20.dp)
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 10.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = stringResource(R.string.search_recently_word),
-                                modifier = Modifier.weight(1f),
-                                color = Chinese_Black,
-                                fontSize = 16.dp.toSp(),
-                                fontWeight = FontWeight.Bold,
-                                fontFamily = spoqahansanseeo
-                            )
-                            Text(
-                                text = stringResource(R.string.search_delete_recentyl_word),
-                                modifier = Modifier.clickable { showListViewModel.deleteShowSearchWordList() },
-                                color = Roman_Silver,
-                                fontSize = 14.dp.toSp(),
-                                fontWeight = FontWeight.Medium,
-                                fontFamily = spoqahansanseeo
-                            )
-                        }
-                        searchWords.forEach { searchWord ->
-                            SearchTextItem(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 10.dp),
-                                text = searchWord.word,
-                                onDelete = { showListViewModel.deleteShowSearchWord(searchWord) },
-                                onClick = { onSearch(searchWord.word) }
-                            )
-                        }
-                    }
-                }
-            }
-        } else {
-            if (isDoneSearch) {
-                itemsIndexed(showSearchItems) { index, showInfoModel ->
-                    showInfoModel?.let { model ->
-                        PerformanceDetailCard(
-                            modifier = Modifier
-                                .padding(horizontal = 20.dp)
-                                .fillMaxWidth()
-                                .padding(vertical = 12.dp),
-                            imageUrl = model.poster,
-                            painter = painterResource(R.drawable.ic_error_poster),
-                            title = model.name,
-                            rate = if (model.reviewCount == 0) 0.0f else (model.reviewGradeSum / model.reviewCount.toFloat()),
-                            numberOfTotal = model.reviewCount,
-                            period = "${model.startDate.toChangeDate()}-${model.endDate.toChangeDate()}",
-                            runningTime = if (model.runtime.isEmpty()) "해당 정보 없음" else "${model.runtime.toRunningTime()}분",
-                            date = model.showTimes.map {
-                                when (it.dayOfWeek) {
-                                    ShowDay.Monday.dayOfWeek -> ShowDay.Monday
-                                    ShowDay.Tuesday.dayOfWeek -> ShowDay.Tuesday
-                                    ShowDay.Wednesday.dayOfWeek -> ShowDay.Wednesday
-                                    ShowDay.Thursday.dayOfWeek -> ShowDay.Thursday
-                                    ShowDay.Friday.dayOfWeek -> ShowDay.Friday
-                                    ShowDay.Saturday.dayOfWeek -> ShowDay.Saturday
-                                    else -> ShowDay.Sunday
-                                }
-                            }.sortedBy { it.id }.toSet().joinToString(", ") { it.label },
-                            location = model.facilityName,
-                            onClick = { onNavigateDetail(model.id) },
-                            isFavorite = model.favorite,
-                            onFavorite = { showListViewModel.requestFavoriteShow(model.id) },
-                            onDisFavorite = { showListViewModel.deleteFavoriteShow(model.id) }
-                        )
-                        if (index != showSearchItems.itemCount) {
-                            Spacer(
-                                modifier = Modifier
-                                    .padding(vertical = 16.dp, horizontal = 20.dp)
-                                    .fillMaxWidth()
-                                    .height(1.dp)
-                                    .background(Cultured)
-                            )
-                        }
-                    }
                 }
             }
         }

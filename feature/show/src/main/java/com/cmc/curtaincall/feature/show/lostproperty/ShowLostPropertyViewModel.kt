@@ -2,6 +2,7 @@ package com.cmc.curtaincall.feature.show.lostproperty
 
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import com.cmc.curtaincall.common.designsystem.component.appbars.SearchAppBarState
 import com.cmc.curtaincall.common.designsystem.component.show.lostproperty.LostPropertyType
 import com.cmc.curtaincall.core.base.BaseViewModel
 import com.cmc.curtaincall.domain.model.lostproperty.LostPropertyModel
@@ -21,6 +22,10 @@ class ShowLostPropertyViewModel @Inject constructor(
 ) : BaseViewModel<ShowLostPropertyUiState, ShowLostPropertyEvent, Nothing>(
     initialState = ShowLostPropertyUiState()
 ) {
+    private val _searchAppBarState = MutableStateFlow(SearchAppBarState())
+    val searchAppBarState = _searchAppBarState.asStateFlow()
+
+    // ///
     private var _searchWords = MutableStateFlow<List<LostPropertySearchWordModel>>(listOf())
     val searchWords = _searchWords.asStateFlow()
 

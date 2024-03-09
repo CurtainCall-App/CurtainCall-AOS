@@ -8,6 +8,7 @@
     <string name="recently_search_word">최근 검색어</string>
     <string name="dismiss">아니요</string>
     <string name="delete_popup">네, 삭제할게요</string>
+    <string name="lost_property">분실물</string>
 
     <!-- app -->
     <string name="onboarding_first_banner_title">작품 정보뿐만 아니라 분실물까지!</string>
@@ -34,6 +35,7 @@
     <string name="edit">수정</string>
     <string name="delete">삭제</string>
     <string name="write_completed">작성 완료</string>
+    <string name="select_date">날짜 선택</string>
 
     <!-- auth -->
     <string name="signup_terms_title">약관 동의</string>

@@ -43,7 +43,7 @@ internal fun ShowDetailScreen(
     showId: String?,
     onNavigateToReview: (String, Int) -> Unit = { _, _ -> },
     onNavigateToReviewCreate: () -> Unit = {},
-    onNavigateLostProperty: (String, String) -> Unit = { _, _ -> },
+    onNavigateToLostProperty: (String, String) -> Unit = { _, _ -> },
     onBack: () -> Unit = {}
 ) {
     requireNotNull(showId)
@@ -76,7 +76,8 @@ internal fun ShowDetailScreen(
             modifier = Modifier.fillMaxSize(),
             showId = showId,
             onNavigateToReview = onNavigateToReview,
-            onNavigateToReviewCreate = onNavigateToReviewCreate
+            onNavigateToReviewCreate = onNavigateToReviewCreate,
+            onNavigateToLostProperty = onNavigateToLostProperty
         )
     }
 }
@@ -87,7 +88,8 @@ private fun ShowDetailMenuTab(
     showDetailViewModel: ShowDetailViewModel = hiltViewModel(),
     showId: String = "",
     onNavigateToReview: (String, Int) -> Unit = { _, _ -> },
-    onNavigateToReviewCreate: () -> Unit = {}
+    onNavigateToReviewCreate: () -> Unit = {},
+    onNavigateToLostProperty: (String, String) -> Unit = { _, _ -> }
 ) {
     val showDetailUiState by showDetailViewModel.uiState.collectAsStateWithLifecycle()
     Column(modifier) {
