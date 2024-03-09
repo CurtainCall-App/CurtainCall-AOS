@@ -66,7 +66,7 @@ fun ShowLostPropertyTabContent(
                 items(lostProperties) { lostPropertyModel ->
                     LostPropertyContent(
                         modifier = Modifier.size(135.dp, 180.dp),
-                        lostPropertyModel = lostPropertyModel,
+                        lostPropertyModel = lostPropertyModel
                     )
                 }
             }

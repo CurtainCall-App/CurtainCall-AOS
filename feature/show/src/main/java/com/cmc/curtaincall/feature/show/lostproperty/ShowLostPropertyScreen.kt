@@ -66,6 +66,13 @@ internal fun ShowLostPropertyScreen(
         floatingActionButtonPosition = FabPosition.Center
     ) { paddingValues ->
         if (searchAppBarState.isSearchMode.value) {
+            ShowLostPropertyListContent(
+                modifier = Modifier
+                    .padding(paddingValues)
+                    .fillMaxSize()
+                    .background(CurtainCallTheme.colors.background),
+                facilityName = facilityName
+            )
         } else {
             ShowLostPropertyListContent(
                 modifier = Modifier
