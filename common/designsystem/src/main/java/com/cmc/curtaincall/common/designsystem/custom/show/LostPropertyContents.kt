@@ -87,7 +87,7 @@ fun LostPropertyContent(
                 style = CurtainCallTheme.typography.body4.copy(
                     fontWeight = FontWeight.SemiBold
                 ),
-                modifier = Modifier.padding(top = 8.dp),
+                modifier = Modifier.padding(top = 12.dp),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -96,7 +96,7 @@ fun LostPropertyContent(
                 style = CurtainCallTheme.typography.body4.copy(
                     color = Grey3
                 ),
-                modifier = Modifier.padding(top = 12.dp),
+                modifier = Modifier.padding(top = 10.dp),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )

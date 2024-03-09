@@ -161,7 +161,10 @@ private fun ShowDetailMenuTab(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(CurtainCallTheme.colors.background),
-                    lostProperties = showDetailUiState.lostProperties
+                    lostProperties = showDetailUiState.lostProperties,
+                    facilityId = showDetailUiState.showDetailModel.facilityId,
+                    facilityName = showDetailUiState.showDetailModel.facilityName,
+                    onNavigateToLostProperty = onNavigateToLostProperty
                 )
             }
         }

@@ -4,8 +4,8 @@ import com.cmc.curtaincall.core.network.service.lostproperty.LostPropertyService
 import com.cmc.curtaincall.core.network.service.lostproperty.request.CreateLostPropertyRequest
 import com.cmc.curtaincall.core.network.service.lostproperty.request.UpdateLostPropertyRequest
 import com.cmc.curtaincall.core.network.service.lostproperty.response.CreateLostPropertyResponse
-import com.cmc.curtaincall.core.network.service.lostproperty.response.LostPropertyDetailResponse
 import com.cmc.curtaincall.core.network.service.lostproperty.response.LostItemResponse
+import com.cmc.curtaincall.core.network.service.lostproperty.response.LostPropertyDetailResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -43,16 +43,16 @@ class LostPropertyRemoteSource @Inject constructor(
         page: Int,
         size: Int,
         facilityId: String,
-        type: String?,
-        foundDate: String?
+        foundDateStart: String?,
+        foundDateEnd: String?
     ): Flow<List<LostItemResponse>> = flow {
         emit(
             lostItemService.requestLostItemList(
                 page = page,
                 size = size,
                 facilityId = facilityId,
-                type = type,
-                foundDate = foundDate
+                foundDateStart = foundDateStart,
+                foundDateEnd = foundDateEnd
             ).lostItems
         )
     }

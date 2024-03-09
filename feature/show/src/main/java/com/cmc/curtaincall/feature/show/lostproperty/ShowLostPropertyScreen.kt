@@ -2,6 +2,8 @@ package com.cmc.curtaincall.feature.show.lostproperty
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -11,11 +13,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.appbars.CurtainCallSearchTitleTopAppBarWithBack
 import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.designsystem.component.buttons.common.CurtainCallFilledButton
 import com.cmc.curtaincall.common.designsystem.component.chips.CurtainCallCalenderSelectShip
+import com.cmc.curtaincall.common.designsystem.custom.show.LostPropertyContent
 import com.cmc.curtaincall.common.designsystem.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,6 +34,10 @@ internal fun ShowLostPropertyScreen(
 ) {
     requireNotNull(facilityId)
     requireNotNull(facilityName)
+
+    LaunchedEffect(Unit) {
+        showLostPropertyViewModel.fetchLostPropertyList(facilityId = facilityId)
+    }
 
     val searchAppBarState by showLostPropertyViewModel.searchAppBarState.collectAsStateWithLifecycle()
     SystemUiStatusBar(White)
@@ -76,10 +84,12 @@ private fun ShowLostPropertyListContent(
     showLostPropertyViewModel: ShowLostPropertyViewModel = hiltViewModel(),
     facilityName: String
 ) {
+    val lostPropertyModels = showLostPropertyViewModel.lostPropertyModels.collectAsLazyPagingItems()
     Column(modifier) {
         Row(
             modifier = Modifier
                 .padding(horizontal = 20.dp)
+                .padding(top = 20.dp)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -89,6 +99,23 @@ private fun ShowLostPropertyListContent(
             )
             Spacer(Modifier.weight(1f))
             CurtainCallCalenderSelectShip()
+        }
+        LazyVerticalGrid(
+            modifier = Modifier.fillMaxSize(),
+            columns = GridCells.Fixed(2),
+            contentPadding = PaddingValues(20.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp)
+        ) {
+            items(lostPropertyModels.itemCount) { index ->
+                lostPropertyModels[index]?.let { lostPropertyModel ->
+                    LostPropertyContent(
+                        modifier = Modifier.size(154.dp, 195.dp),
+                        lostPropertyModel = lostPropertyModel,
+                        onClick = {}
+                    )
+                }
+            }
         }
     }
 }

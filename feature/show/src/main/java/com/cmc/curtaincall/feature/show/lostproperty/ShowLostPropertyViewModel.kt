@@ -19,11 +19,14 @@ import javax.inject.Inject
 @HiltViewModel
 class ShowLostPropertyViewModel @Inject constructor(
     private val lostPropertyRepository: LostPropertyRepository
-) : BaseViewModel<ShowLostPropertyUiState, ShowLostPropertyEvent, Nothing>(
-    initialState = ShowLostPropertyUiState()
+) : BaseViewModel<ShowLostPropertyState, ShowLostPropertyEvent, Nothing>(
+    initialState = ShowLostPropertyState()
 ) {
     private val _searchAppBarState = MutableStateFlow(SearchAppBarState())
     val searchAppBarState = _searchAppBarState.asStateFlow()
+
+    private val _lostPropertyModels = MutableStateFlow<PagingData<LostPropertyModel>>(PagingData.empty())
+    val lostPropertyModels = _lostPropertyModels.asStateFlow()
 
     // ///
     private var _searchWords = MutableStateFlow<List<LostPropertySearchWordModel>>(listOf())
@@ -39,7 +42,22 @@ class ShowLostPropertyViewModel @Inject constructor(
         requestLostPropertySearchWords()
     }
 
-    override fun reduceState(currentState: ShowLostPropertyUiState, event: ShowLostPropertyEvent): ShowLostPropertyUiState =
+    fun fetchLostPropertyList(
+        facilityId: String,
+        foundDateStart: String? = null,
+        foundDateEnd: String? = null
+    ) {
+        lostPropertyRepository.fetchLostPropertyList(
+            facilityId = facilityId,
+            foundDateStart = foundDateStart,
+            foundDateEnd = foundDateEnd
+        ).onEach {
+            _lostPropertyModels.value = it
+        }.launchIn(viewModelScope)
+    }
+
+    // ///
+    override fun reduceState(currentState: ShowLostPropertyState, event: ShowLostPropertyEvent): ShowLostPropertyState =
         when (event) {
             is ShowLostPropertyEvent.SelectDate -> {
                 currentState.copy(lostDate = event.date)
@@ -99,11 +117,11 @@ class ShowLostPropertyViewModel @Inject constructor(
         type: String? = null,
         foundData: String? = null
     ) {
-        lostPropertyRepository.fetchLostPropertyList(
-            facilityId = facilityId,
-            type = type,
-            foundDate = foundData
-        ).onEach { _lostPropertySearchItems.value = it }.launchIn(viewModelScope)
+//        lostPropertyRepository.fetchLostPropertyList(
+//            facilityId = facilityId,
+//            type = type,
+//            foundDate = foundData
+//        ).onEach { _lostPropertySearchItems.value = it }.launchIn(viewModelScope)
     }
 
     fun requestLostDetailProperty(lostPropertyId: Int) {

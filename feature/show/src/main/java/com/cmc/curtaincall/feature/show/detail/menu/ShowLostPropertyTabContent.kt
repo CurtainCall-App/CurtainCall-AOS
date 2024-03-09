@@ -28,6 +28,8 @@ import com.cmc.curtaincall.domain.model.lostproperty.LostPropertyModel
 fun ShowLostPropertyTabContent(
     modifier: Modifier = Modifier,
     lostProperties: List<LostPropertyModel> = listOf(),
+    facilityId: String,
+    facilityName: String,
     onNavigateToLostProperty: (String, String) -> Unit = { _, _ -> }
 ) {
     Column(modifier.heightIn(min = 285.dp)) {
@@ -65,7 +67,6 @@ fun ShowLostPropertyTabContent(
                     LostPropertyContent(
                         modifier = Modifier.size(135.dp, 180.dp),
                         lostPropertyModel = lostPropertyModel,
-                        onClick = { onNavigateToLostProperty(lostPropertyModel.facilityId, lostPropertyModel.facilityName) }
                     )
                 }
             }
@@ -77,7 +78,7 @@ fun ShowLostPropertyTabContent(
                     .padding(horizontal = 20.dp)
                     .fillMaxWidth()
                     .height(52.dp),
-                onClick = {}
+                onClick = { onNavigateToLostProperty(facilityId, facilityName) }
             )
         }
     }

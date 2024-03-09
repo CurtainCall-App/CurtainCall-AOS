@@ -3,8 +3,8 @@ package com.cmc.curtaincall.core.network.service.lostproperty
 import com.cmc.curtaincall.core.network.service.lostproperty.request.CreateLostPropertyRequest
 import com.cmc.curtaincall.core.network.service.lostproperty.request.UpdateLostPropertyRequest
 import com.cmc.curtaincall.core.network.service.lostproperty.response.CreateLostPropertyResponse
-import com.cmc.curtaincall.core.network.service.lostproperty.response.LostPropertyDetailResponse
 import com.cmc.curtaincall.core.network.service.lostproperty.response.LostItemListResponse
+import com.cmc.curtaincall.core.network.service.lostproperty.response.LostPropertyDetailResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -26,8 +26,8 @@ interface LostPropertyService {
         @Query("page") page: Int,
         @Query("size") size: Int,
         @Query("facilityId") facilityId: String,
-        @Query("type") type: String?,
-        @Query("foundDate") foundDate: String?
+        @Query("foundDateStart") foundDateStart: String?,
+        @Query("foundDateEnd") foundDateEnd: String?
     ): LostItemListResponse
 
     @GET("lostItems/{lostItemId}")
