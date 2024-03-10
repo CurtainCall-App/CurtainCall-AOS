@@ -8,6 +8,7 @@
     <string name="recently_search_word">최근 검색어</string>
     <string name="dismiss">아니요</string>
     <string name="delete_popup">네, 삭제할게요</string>
+    <string name="lost_property">분실물</string>
 
     <!-- app -->
     <string name="onboarding_first_banner_title">작품 정보뿐만 아니라 분실물까지!</string>
@@ -34,6 +35,7 @@
     <string name="edit">수정</string>
     <string name="delete">삭제</string>
     <string name="write_completed">작성 완료</string>
+    <string name="select_date">날짜 선택</string>
 
     <!-- auth -->
     <string name="signup_terms_title">약관 동의</string>
@@ -81,6 +83,7 @@
     <string name="review_all_view">리뷰 모두 보기</string>
     <string name="write_review">리뷰 작성하기</string>
     <string name="lost_property_all_view">분실물 모두 보기</string>
+    <string name="write_lost_property">분실물 올리기</string>
     <string name="lost_property_title">분실물이 있어요</string>
     <string name="show_review_title">공연 리뷰</string>
     <string name="show_review_empty_list">아직 공연 리뷰가 없어요</string>

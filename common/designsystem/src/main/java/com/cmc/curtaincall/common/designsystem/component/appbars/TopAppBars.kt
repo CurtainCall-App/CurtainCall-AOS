@@ -234,3 +234,119 @@ fun CurtainCallSearchTitleTopAppBar(
         }
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CurtainCallSearchTitleTopAppBarWithBack(
+    title: String,
+    searchAppBarState: SearchAppBarState = SearchAppBarState {},
+    onBack: () -> Unit = {}
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(TopAppBarHeight)
+            .background(CurtainCallTheme.colors.background),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        if (searchAppBarState.isSearchMode.value) {
+            Row(
+                modifier = Modifier
+                    .padding(start = 14.dp, end = 18.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .background(Grey9, RoundedCornerShape(30.dp))
+                        .padding(start = 14.dp, end = 11.dp)
+                        .padding(vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    BasicTextField(
+                        value = searchAppBarState.searchText.value,
+                        onValueChange = searchAppBarState.onTextChange,
+                        modifier = Modifier
+                            .weight(1f)
+                            .background(Grey9, RoundedCornerShape(30.dp)),
+                        textStyle = CurtainCallTheme.typography.body3.copy(fontWeight = FontWeight.SemiBold),
+                        singleLine = true,
+                        maxLines = 1,
+                        keyboardActions = KeyboardActions(
+                            onDone = { searchAppBarState.onDone(searchAppBarState.searchText.value) }
+                        )
+                    ) { innerTextField ->
+                        Box(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentAlignment = Alignment.CenterStart
+                        ) {
+                            if (searchAppBarState.searchText.value.isEmpty()) {
+                                Text(
+                                    text = stringResource(R.string.search_appbar_hint),
+                                    style = CurtainCallTheme.typography.body3.copy(
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = Grey6
+                                    )
+                                )
+                            }
+                            innerTextField()
+                        }
+                    }
+                    Icon(
+                        painter = painterResource(R.drawable.ic_search_close),
+                        contentDescription = TopAppBarClearActionDescription,
+                        modifier = Modifier
+                            .padding(start = 11.dp)
+                            .size(18.dp)
+                            .clickable { searchAppBarState.onClear() },
+                        tint = Color.Unspecified
+                    )
+                }
+                Text(
+                    text = stringResource(R.string.cancel),
+                    modifier = Modifier
+                        .padding(start = 10.dp)
+                        .clickable { searchAppBarState.onCancel() },
+                    style = CurtainCallTheme.typography.body3.copy(
+                        color = Grey2,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                )
+            }
+        } else {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_arrow_back),
+                    contentDescription = TopAppBarBackIconDescription,
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .padding(start = 16.dp)
+                        .size(TopAppBarBackIconSize)
+                        .clickable { onBack() },
+                    tint = Black
+                )
+                Text(
+                    text = title,
+                    modifier = Modifier.align(Alignment.Center),
+                    style = CurtainCallTheme.typography.subTitle4.copy(
+                        color = Black
+                    )
+                )
+                Icon(
+                    painter = painterResource(R.drawable.ic_search),
+                    contentDescription = TopAppBarSearchActionDescription,
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .padding(end = 16.dp)
+                        .size(TopAppBarBackIconSize)
+                        .clickable { searchAppBarState.onSearch() },
+                    tint = Black
+                )
+            }
+        }
+    }
+}

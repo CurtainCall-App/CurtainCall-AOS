@@ -33,7 +33,7 @@ import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import com.cmc.curtaincall.common.designsystem.theme.Grey8
 import com.cmc.curtaincall.domain.enums.MenuTabType
 import com.cmc.curtaincall.domain.model.show.ShowDetailModel
-import com.cmc.curtaincall.feature.show.detail.menu.LostPropertyTabContent
+import com.cmc.curtaincall.feature.show.detail.menu.ShowLostPropertyTabContent
 import com.cmc.curtaincall.feature.show.detail.menu.ShowDetailMenuTabContent
 import com.cmc.curtaincall.feature.show.detail.menu.ShowReviewTabContent
 
@@ -43,7 +43,7 @@ internal fun ShowDetailScreen(
     showId: String?,
     onNavigateToReview: (String, Int) -> Unit = { _, _ -> },
     onNavigateToReviewCreate: () -> Unit = {},
-    onNavigateLostProperty: (String, String) -> Unit = { _, _ -> },
+    onNavigateToLostProperty: (String, String) -> Unit = { _, _ -> },
     onBack: () -> Unit = {}
 ) {
     requireNotNull(showId)
@@ -76,7 +76,8 @@ internal fun ShowDetailScreen(
             modifier = Modifier.fillMaxSize(),
             showId = showId,
             onNavigateToReview = onNavigateToReview,
-            onNavigateToReviewCreate = onNavigateToReviewCreate
+            onNavigateToReviewCreate = onNavigateToReviewCreate,
+            onNavigateToLostProperty = onNavigateToLostProperty
         )
     }
 }
@@ -87,7 +88,8 @@ private fun ShowDetailMenuTab(
     showDetailViewModel: ShowDetailViewModel = hiltViewModel(),
     showId: String = "",
     onNavigateToReview: (String, Int) -> Unit = { _, _ -> },
-    onNavigateToReviewCreate: () -> Unit = {}
+    onNavigateToReviewCreate: () -> Unit = {},
+    onNavigateToLostProperty: (String, String) -> Unit = { _, _ -> }
 ) {
     val showDetailUiState by showDetailViewModel.uiState.collectAsStateWithLifecycle()
     Column(modifier) {
@@ -155,11 +157,14 @@ private fun ShowDetailMenuTab(
             }
 
             MenuTabType.LOST_PROPERTY -> {
-                LostPropertyTabContent(
+                ShowLostPropertyTabContent(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(CurtainCallTheme.colors.background),
-                    lostProperties = showDetailUiState.lostProperties
+                    lostProperties = showDetailUiState.lostProperties,
+                    facilityId = showDetailUiState.showDetailModel.facilityId,
+                    facilityName = showDetailUiState.showDetailModel.facilityName,
+                    onNavigateToLostProperty = onNavigateToLostProperty
                 )
             }
         }

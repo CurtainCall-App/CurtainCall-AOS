@@ -104,8 +104,8 @@ class ShowDetailViewModel @Inject constructor(
                     page = 0,
                     size = 10,
                     facilityId = it.id,
-                    type = null,
-                    foundDate = null
+                    foundDateStart = null,
+                    foundDateEnd = null
                 )
             }.onEach { sendAction(ShowDetailEvent.RequestLostPropertyList(it)) }
             .flatMapConcat {

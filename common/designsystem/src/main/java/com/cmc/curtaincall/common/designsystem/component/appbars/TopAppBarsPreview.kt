@@ -36,3 +36,18 @@ private fun CurtainCallSearchTitleTopAppBarPreview() {
         )
     }
 }
+
+@Preview
+@Composable
+private fun CurtainCallSearchTitleTopAppBarWithBackPreview() {
+    var text = remember { mutableStateOf("") }
+    CurtainCallTheme {
+        CurtainCallSearchTitleTopAppBarWithBack(
+            title = "작품",
+            searchAppBarState = SearchAppBarState(
+                searchText = text,
+                onTextChange = { text.value = it }
+            )
+        )
+    }
+}

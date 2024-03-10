@@ -4,7 +4,7 @@ import com.cmc.curtaincall.common.designsystem.component.show.lostproperty.LostP
 import com.cmc.curtaincall.core.base.BaseState
 import com.cmc.curtaincall.domain.model.lostproperty.LostPropertyDetailModel
 
-data class ShowLostPropertyUiState(
+data class ShowLostPropertyState(
     val isActiveSearch: Boolean = false,
     val isDoneSearch: Boolean = false,
     val queryString: String = "",

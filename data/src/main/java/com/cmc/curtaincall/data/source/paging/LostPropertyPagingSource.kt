@@ -12,8 +12,8 @@ const val LOSTITEM_PAGE_SIZE = 20
 class LostItemPagingSource @Inject constructor(
     val lostItemService: LostPropertyService,
     val facilityId: String,
-    val type: String?,
-    val foundDate: String?
+    val foundDateStart: String?,
+    val foundDateEnd: String?
 ) : PagingSource<Int, LostItemResponse>() {
     override fun getRefreshKey(state: PagingState<Int, LostItemResponse>): Int? {
         return state.anchorPosition?.let { position ->
@@ -29,8 +29,8 @@ class LostItemPagingSource @Inject constructor(
                 page = pageKey,
                 size = LOSTITEM_PAGE_SIZE,
                 facilityId = facilityId,
-                type = type,
-                foundDate = foundDate
+                foundDateStart = foundDateStart,
+                foundDateEnd = foundDateEnd
             )
 
             return LoadResult.Page(
