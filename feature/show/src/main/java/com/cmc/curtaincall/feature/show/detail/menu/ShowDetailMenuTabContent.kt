@@ -1,6 +1,5 @@
 package com.cmc.curtaincall.feature.show.detail.menu
 
-import android.text.Html
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -77,10 +76,15 @@ fun ShowDetailMenuTabContent(
         )
         if (showDetailModel.introductionImages.isNotEmpty()) {
             Column(Modifier.fillMaxWidth()) {
+                val introductionImage = showDetailModel.introductionImages.first()
+                    .replace("<styurl>", "")
+                    .replace("</styurl>", " ")
+                    .split(" ")
+                    .first()
                 AsyncImage(
                     model = ImageRequest.Builder(context)
                         .allowHardware(false)
-                        .data(Html.fromHtml(showDetailModel.introductionImages.first(), Html.FROM_HTML_MODE_LEGACY).toString())
+                        .data(introductionImage)
                         .build(),
                     contentDescription = null,
                     modifier = Modifier
