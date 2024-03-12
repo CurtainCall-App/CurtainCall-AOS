@@ -5,4 +5,5 @@ object NavGraphLabel {
     const val AUTH = "auth_graph"
     const val SHOW = "show_graph"
     const val HOME = "home_graph"
+    const val PARTY_MEMBER = "party_member_graph"
 }

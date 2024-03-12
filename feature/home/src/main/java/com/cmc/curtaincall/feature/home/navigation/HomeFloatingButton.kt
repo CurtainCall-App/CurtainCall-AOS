@@ -12,10 +12,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.navigation.destination.HomeDestination
+import com.cmc.curtaincall.common.navigation.destination.PartyMemberDestination
 import com.cmc.curtaincall.common.navigation.destination.ShowDestination
 import com.cmc.curtaincall.feature.livetalk.LiveTalkDestination
 import com.cmc.curtaincall.feature.mypage.MyPageDestination
-import com.cmc.curtaincall.feature.partymember.PartyMemberDestination
 
 @Composable
 fun HomeFloatingButton(navHostController: NavHostController) {

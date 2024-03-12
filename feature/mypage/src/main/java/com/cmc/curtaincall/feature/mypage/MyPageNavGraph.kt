@@ -23,7 +23,7 @@ import com.cmc.curtaincall.feature.mypage.saveperformance.MyPageSavedPerformance
 import com.cmc.curtaincall.feature.mypage.setting.MyPageDeleteMemberScreen
 import com.cmc.curtaincall.feature.mypage.setting.MyPageSettingScreen
 import com.cmc.curtaincall.feature.mypage.write.MyPageWriteScreen
-import com.cmc.curtaincall.feature.partymember.PartyMemberDestination
+import com.cmc.curtaincall.feature.partymember.PartyMemberDestination2
 
 private const val MYPAGE_GRAPH = "mypage_graph"
 const val MYPAGE = "mypage"
@@ -231,16 +231,16 @@ fun NavGraphBuilder.mypageNavGraph(
                 myPageViewModel = hiltViewModel(parentEntry),
                 onNavigateRecruitmentDetail = { partyType, partyId ->
                     navHostController.navigate(
-                        PartyMemberDestination.Detail.route + "?" +
-                            "${PartyMemberDestination.Detail.partyIdArg}=$partyId" + "&" +
-                            "${PartyMemberDestination.Detail.typeArg}=$partyType" + "&" +
-                            "${PartyMemberDestination.Detail.myWritingArg}=true" + "&" +
-                            "${PartyMemberDestination.Detail.fromRecruitmentArg}=true" + "&" +
-                            "${PartyMemberDestination.Detail.fromParticipationArg}=false"
+                        PartyMemberDestination2.Detail.route + "?" +
+                            "${PartyMemberDestination2.Detail.partyIdArg}=$partyId" + "&" +
+                            "${PartyMemberDestination2.Detail.typeArg}=$partyType" + "&" +
+                            "${PartyMemberDestination2.Detail.myWritingArg}=true" + "&" +
+                            "${PartyMemberDestination2.Detail.fromRecruitmentArg}=true" + "&" +
+                            "${PartyMemberDestination2.Detail.fromParticipationArg}=false"
                     )
                 },
                 onNavigatePartyMember = {
-                    navHostController.navigate("${PartyMemberDestination.List.route}/$it")
+                    navHostController.navigate("${PartyMemberDestination2.List.route}/$it")
                 },
                 onBack = {
                     navHostController.popBackStack()
@@ -254,16 +254,16 @@ fun NavGraphBuilder.mypageNavGraph(
                 myPageViewModel = hiltViewModel(parentEntry),
                 onNavigateParticipationDetail = { partyType, partyId ->
                     navHostController.navigate(
-                        PartyMemberDestination.Detail.route + "?" +
-                            "${PartyMemberDestination.Detail.partyIdArg}=$partyId" + "&" +
-                            "${PartyMemberDestination.Detail.typeArg}=$partyType" + "&" +
-                            "${PartyMemberDestination.Detail.myWritingArg}=false" + "&" +
-                            "${PartyMemberDestination.Detail.fromRecruitmentArg}=false" + "&" +
-                            "${PartyMemberDestination.Detail.fromParticipationArg}=true"
+                        PartyMemberDestination2.Detail.route + "?" +
+                            "${PartyMemberDestination2.Detail.partyIdArg}=$partyId" + "&" +
+                            "${PartyMemberDestination2.Detail.typeArg}=$partyType" + "&" +
+                            "${PartyMemberDestination2.Detail.myWritingArg}=false" + "&" +
+                            "${PartyMemberDestination2.Detail.fromRecruitmentArg}=false" + "&" +
+                            "${PartyMemberDestination2.Detail.fromParticipationArg}=true"
                     )
                 },
                 onNavigatePartyMember = {
-                    navHostController.navigate("${PartyMemberDestination.List.route}/$it")
+                    navHostController.navigate("${PartyMemberDestination2.List.route}/$it")
                 },
                 onBack = {
                     navHostController.popBackStack()
