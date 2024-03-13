@@ -35,7 +35,7 @@
     <string name="edit">수정</string>
     <string name="delete">삭제</string>
     <string name="write_completed">작성 완료</string>
-    <string name="select_date">날짜 선택</string>
+    <string name="select_date">날짜 선택</string>색
 
     <!-- auth -->
     <string name="signup_terms_title">약관 동의</string>
@@ -94,6 +94,10 @@
     <string name="show_review_create_max_text_restrict">500자 이내로 작성해주세요</string>
     <string name="show_review_edit_title">공연 리뷰 수정</string>
     <string name="show_review_delete_title">해당 게시물을 삭제할까요?</string>
+
+    <!--    party member-->
+    <string name="party_member">파티원</string>
+    <string name="party_member_recruitment">파티원 모집하기</string>
 
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
 
