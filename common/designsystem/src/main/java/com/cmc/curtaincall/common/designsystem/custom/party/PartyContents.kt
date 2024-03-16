@@ -131,7 +131,7 @@ fun PartyContent(
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = partyModel.title, // TODO content 필드로 수정
+                    text = partyModel.content,
                     modifier = Modifier.padding(top = 8.dp),
                     style = CurtainCallTheme.typography.body4.copy(
                         color = Grey3
@@ -242,6 +242,7 @@ fun PartyContentPreview() {
             partyModel = PartyModel(
                 creatorNickname = "ows3090",
                 title = "제목제목제목",
+                content = "내용두줄내용두줄내용두줄내용두줄내용두줄내용두줄내용두줄내용두줄내용두",
                 showAt = "2023-04-28T19:30:00",
                 curMemberNum = 3,
                 maxMemberNum = 5
