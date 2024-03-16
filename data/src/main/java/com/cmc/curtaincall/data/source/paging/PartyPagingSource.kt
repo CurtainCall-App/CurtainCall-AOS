@@ -11,7 +11,8 @@ const val PARTY_PAGE_SIZE = 20
 
 class PartyPagingSource @Inject constructor(
     private val partyService: PartyService,
-    private val category: String
+    private val startDate: String?,
+    private val endDate: String?
 ) : PagingSource<Int, PartyModel>() {
     override fun getRefreshKey(state: PagingState<Int, PartyModel>): Int? {
         return state.anchorPosition?.let { position ->
@@ -26,7 +27,8 @@ class PartyPagingSource @Inject constructor(
             val response = partyService.requestPartyList(
                 page = pageKey,
                 size = PARTY_PAGE_SIZE,
-                category = category
+                startDate = startDate,
+                endDate = endDate
             )
             val participateParties = partyService.checkParties(response.parties.map { it.id })
             val result = response.parties.map { party ->

@@ -19,13 +19,15 @@ interface PartyRepository {
     suspend fun deletePartySearchWordList()
 
     fun fetchPartyList(
-        category: String
+        startDate: String?,
+        endDate: String?
     ): Flow<PagingData<PartyModel>>
 
     fun requestPartyList(
         page: Int,
-        size: Int,
-        category: String
+        size: Int?,
+        startDate: String?,
+        endDate: String?
     ): Flow<List<PartyModel>>
 
     fun fetchSearchPartyList(

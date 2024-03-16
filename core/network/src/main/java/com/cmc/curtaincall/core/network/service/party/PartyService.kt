@@ -21,8 +21,9 @@ interface PartyService {
     @GET("parties")
     suspend fun requestPartyList(
         @Query("page") page: Int,
-        @Query("size") size: Int,
-        @Query("category") category: String
+        @Query("size") size: Int?,
+        @Query("startDate") startDate: String?,
+        @Query("endDate") endDate: String?
     ): PartyListResponse
 
     @GET("search/party")

@@ -1,9 +1,11 @@
 package com.cmc.curtaincall.feature.partymember.ui
 
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.cmc.curtaincall.common.designsystem.component.card.PartyType
 import com.cmc.curtaincall.core.base.BaseViewModel
+import com.cmc.curtaincall.domain.model.party.PartyModel
 import com.cmc.curtaincall.domain.model.party.PartySearchWordModel
 import com.cmc.curtaincall.domain.repository.MemberRepository
 import com.cmc.curtaincall.domain.repository.PartyRepository
@@ -23,6 +25,9 @@ class PartyMemberViewModel @Inject constructor(
 ) : BaseViewModel<PartyMemberUiState, PartyMemberEvent, Nothing>(
     initialState = PartyMemberUiState()
 ) {
+    private val _partyModels = MutableStateFlow<PagingData<PartyModel>>(PagingData.empty())
+    val partyModel = _partyModels.asStateFlow()
+
     private val _memberId = MutableStateFlow(0)
     val memberId: StateFlow<Int> = _memberId.asStateFlow()
 
@@ -30,12 +35,24 @@ class PartyMemberViewModel @Inject constructor(
     val searchWords = _searchWords.asStateFlow()
 
     init {
-        getMemberId()
-        requestPartySearchWords()
-        loadWatchingItems()
-        loadFoodCafeItems()
-        loadEtcItems()
+        fetchPartyList()
+//        getMemberId()
+//        requestPartySearchWords()
     }
+
+    private fun fetchPartyList(
+        startDate: String? = null,
+        endDate: String? = null
+    ) {
+        partyRepository.fetchPartyList(
+            startDate = startDate,
+            endDate = endDate
+        ).onEach {
+            _partyModels.value = it
+        }.launchIn(viewModelScope)
+    }
+
+    // //
 
     override fun reduceState(currentState: PartyMemberUiState, event: PartyMemberEvent): PartyMemberUiState =
         when (event) {
@@ -75,27 +92,27 @@ class PartyMemberViewModel @Inject constructor(
         }
 
     fun loadWatchingItems() {
-        sendAction(
-            PartyMemberEvent.LoadWatchingItems(
-                watchingItems = partyRepository.fetchPartyList("WATCHING")
-            )
-        )
+//        sendAction(
+// //            PartyMemberEvent.LoadWatchingItems(
+// //                watchingItems = partyRepository.fetchPartyList("WATCHING")
+// //            )
+//        )
     }
 
     fun loadFoodCafeItems() {
-        sendAction(
-            PartyMemberEvent.LoadFoodCafeItems(
-                foodCafeItems = partyRepository.fetchPartyList("FOOD_CAFE")
-            )
-        )
+//        sendAction(
+// //            PartyMemberEvent.LoadFoodCafeItems(
+// //                foodCafeItems = partyRepository.fetchPartyList("FOOD_CAFE")
+// //            )
+//        )
     }
 
     fun loadEtcItems() {
-        sendAction(
-            PartyMemberEvent.LoadEtcItems(
-                etcItems = partyRepository.fetchPartyList("ETC")
-            )
-        )
+//        sendAction(
+// //            PartyMemberEvent.LoadEtcItems(
+// //                etcItems = partyRepository.fetchPartyList("ETC")
+// //            )
+//        )
     }
 
     private fun getMemberId() {
