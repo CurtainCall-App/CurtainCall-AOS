@@ -9,6 +9,8 @@ private const val DEFAULT_DATE_PATTERN = "yyyy-MM-dd"
 private const val DEFAULT_UI_DATE_PATTERN = "yyyy.MM.dd"
 private const val DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ss"
 private const val SIMPLE_DATE_PATTERN = "yy.MM.dd(E)"
+private const val PARTY_DATE_PATTERN = "yyyy.MM.dd(E)"
+private const val PARTY_TIME_PATTERN = "HH:mm"
 fun getTodayDate(): String {
     return SimpleDateFormat(DATE_PATTERN, Locale.KOREA).format(Calendar.getInstance().time)
 }
@@ -112,6 +114,26 @@ fun String.convertUIDate(): String {
     val date = SimpleDateFormat(DATE_PATTERN, Locale.KOREA).parse(this)
     date?.let { date ->
         return SimpleDateFormat(DEFAULT_UI_DATE_PATTERN, Locale.KOREA).format(date)
+    } ?: kotlin.run {
+        return ""
+    }
+}
+
+fun String.convertPartyDate(): String {
+    if (isEmpty()) return ""
+    val date = SimpleDateFormat(DATE_PATTERN, Locale.KOREA).parse(this)
+    date?.let { date ->
+        return SimpleDateFormat(PARTY_DATE_PATTERN, Locale.KOREA).format(date)
+    } ?: kotlin.run {
+        return ""
+    }
+}
+
+fun String.convertPartyTime(): String {
+    if (isEmpty()) return ""
+    val date = SimpleDateFormat(DATE_PATTERN, Locale.KOREA).parse(this)
+    date?.let { date ->
+        return SimpleDateFormat(PARTY_TIME_PATTERN, Locale.KOREA).format(date)
     } ?: kotlin.run {
         return ""
     }
