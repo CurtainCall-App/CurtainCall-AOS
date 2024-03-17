@@ -12,6 +12,7 @@
     <string name="no_information">정보없음</string>
     <string name="finish_recruitment">모집완료</string>
     <string name="recruiting">모집중</string>
+    <string name="finish_select">선택완료</string>
 
     <!-- app -->
     <string name="onboarding_first_banner_title">작품 정보뿐만 아니라 분실물까지!</string>

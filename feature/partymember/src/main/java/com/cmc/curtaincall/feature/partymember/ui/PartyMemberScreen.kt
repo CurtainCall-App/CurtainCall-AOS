@@ -1,21 +1,16 @@
 package com.cmc.curtaincall.feature.partymember.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -29,8 +24,7 @@ import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.designsystem.component.buttons.common.CurtainCallFilledButton
 import com.cmc.curtaincall.common.designsystem.component.card.PartyType
 import com.cmc.curtaincall.common.designsystem.component.tooltip.CurtainCallPartyTooltip
-import com.cmc.curtaincall.common.designsystem.custom.party.PartyContent
-import com.cmc.curtaincall.common.designsystem.custom.party.PartyEmptyContent
+import com.cmc.curtaincall.common.designsystem.custom.common.CurtainCallCalendar
 import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import com.cmc.curtaincall.common.designsystem.theme.Grey8
 
@@ -92,24 +86,28 @@ private fun PartyMemberContent(
             )
         }
 
-        if (partyModels.itemCount == 0) {
-            Column(modifier = Modifier.fillMaxSize()) {
-                Spacer(Modifier.weight(200f))
-                PartyEmptyContent(Modifier.align(Alignment.CenterHorizontally))
-                Spacer(Modifier.weight(308f))
-            }
-        } else {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 10.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                items(partyModels.itemCount) { index ->
-                    partyModels[index]?.let { partyModel ->
-                        PartyContent(partyModel = partyModel)
-                    }
-                }
-            }
-        }
+        CurtainCallCalendar(
+            modifier = Modifier.width(320.dp)
+        )
+
+//        if (partyModels.itemCount == 0) {
+//            Column(modifier = Modifier.fillMaxSize()) {
+//                Spacer(Modifier.weight(200f))
+//                PartyEmptyContent(Modifier.align(Alignment.CenterHorizontally))
+//                Spacer(Modifier.weight(308f))
+//            }
+//        } else {
+//            LazyColumn(
+//                modifier = Modifier.fillMaxSize(),
+//                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 10.dp),
+//                verticalArrangement = Arrangement.spacedBy(12.dp)
+//            ) {
+//                items(partyModels.itemCount) { index ->
+//                    partyModels[index]?.let { partyModel ->
+//                        PartyContent(partyModel = partyModel)
+//                    }
+//                }
+//            }
+//        }
     }
 }

@@ -44,7 +44,6 @@ import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.basic.CurtainCallBorderText
-import com.cmc.curtaincall.common.designsystem.component.custom.SelectedDateCalender
 import com.cmc.curtaincall.common.designsystem.extensions.toSp
 import com.cmc.curtaincall.common.designsystem.theme.Arsenic
 import com.cmc.curtaincall.common.designsystem.theme.Black_Pearl
@@ -58,7 +57,6 @@ import com.cmc.curtaincall.common.designsystem.theme.Roman_Silver
 import com.cmc.curtaincall.common.designsystem.theme.Silver_Sand
 import com.cmc.curtaincall.common.designsystem.theme.White
 import com.cmc.curtaincall.common.designsystem.theme.spoqahansanseeo
-import com.cmc.curtaincall.common.utility.extensions.getCalendarDays
 import com.cmc.curtaincall.common.utility.extensions.getTimes
 import com.cmc.curtaincall.feature.partymember.ui.create.PartyMemberCreateViewModel
 
@@ -91,24 +89,24 @@ fun LazyGridScope.showPerformanceSecondStep(
                     }
                 }
             ) {
-                SelectedDateCalender(
-                    modifier = Modifier.padding(top = 10.dp),
-                    calendarDays = getCalendarDays(
-                        partyMemberCreateUiState.showDetailModel.startDate,
-                        partyMemberCreateUiState.showDetailModel.endDate
-                    ),
-                    onDateClick = {
-                        onSelectDate(
-                            String.format(
-                                "%d. %02d. %02d",
-                                it.date.year,
-                                it.date.month.value,
-                                it.date.dayOfMonth
-                            )
-                        )
-                        isClickedDate = false
-                    }
-                )
+//                SelectedDateCalender(
+//                    modifier = Modifier.padding(top = 10.dp),
+//                    calendarDays = getCalendarDays(
+//                        partyMemberCreateUiState.showDetailModel.startDate,
+//                        partyMemberCreateUiState.showDetailModel.endDate
+//                    ),
+//                    onDateClick = {
+//                        onSelectDate(
+//                            String.format(
+//                                "%d. %02d. %02d",
+//                                it.date.year,
+//                                it.date.month.value,
+//                                it.date.dayOfMonth
+//                            )
+//                        )
+//                        isClickedDate = false
+//                    }
+//                )
             }
 
             SelectInput(
