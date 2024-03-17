@@ -13,4 +13,6 @@ object PreferenceKeys {
     val MEMBER_NICKNAME = stringPreferencesKey("MEMBER_NICKNAME")
 
     val IS_FIRST_ENTRY_SHOW_LIST = booleanPreferencesKey("IS_FIRST_ENTRY_SHOW_LIST")
+
+    val IS_SHOW_PARTY_TOOLTIPS = booleanPreferencesKey("IS_SHOW_PARTY_TOOLTIPS")
 }

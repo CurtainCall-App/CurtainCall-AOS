@@ -16,14 +16,16 @@ class PartyRemoteSource @Inject constructor(
 ) {
     fun requestPartyList(
         page: Int,
-        size: Int,
-        category: String
+        size: Int?,
+        startDate: String?,
+        endDate: String?
     ): Flow<List<PartyResponse>> = flow {
         emit(
             partyService.requestPartyList(
                 page = page,
                 size = size,
-                category = category
+                startDate = startDate,
+                endDate = endDate
             ).parties
         )
     }

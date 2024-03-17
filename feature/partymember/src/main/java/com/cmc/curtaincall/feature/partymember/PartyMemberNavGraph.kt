@@ -12,6 +12,8 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.card.PartyType
+import com.cmc.curtaincall.common.navigation.NavGraphLabel
+import com.cmc.curtaincall.common.navigation.destination.PartyMemberDestination
 import com.cmc.curtaincall.core.navigation.BottomDestination
 import com.cmc.curtaincall.core.navigation.CurtainCallDestination
 import com.cmc.curtaincall.domain.type.ReportType
@@ -30,15 +32,15 @@ private const val PARTYMEMBER_DETAIL = "partymember_detail"
 private const val PARTYMEMBER_CREATE = "partymember_create"
 private const val PARTYMEMBER_LIVETALK = "partymember_livetalk"
 
-sealed interface PartyMemberDestination : CurtainCallDestination {
-    object PartyMember : PartyMemberDestination, BottomDestination {
+sealed interface PartyMemberDestination2 : CurtainCallDestination {
+    object PartyMember : PartyMemberDestination2, BottomDestination {
         override val route = PARTYMEMBER
         override val icon = R.drawable.ic_partymember
         override val selectIcon = R.drawable.ic_partymember_sel
         override val label = PARTYMEMBER_LABEL
     }
 
-    object List : PartyMemberDestination {
+    object List : PartyMemberDestination2 {
         override val route = PARTYMEMBER_LIST
         const val typeArg = "type"
         val routeWithArgs = "$route/{$typeArg}"
@@ -49,7 +51,7 @@ sealed interface PartyMemberDestination : CurtainCallDestination {
         )
     }
 
-    object Detail : PartyMemberDestination {
+    object Detail : PartyMemberDestination2 {
         override val route = PARTYMEMBER_DETAIL
         const val typeArg = "type"
         const val partyIdArg = "partyId"
@@ -85,7 +87,7 @@ sealed interface PartyMemberDestination : CurtainCallDestination {
         )
     }
 
-    object Create : PartyMemberDestination {
+    object Create : PartyMemberDestination2 {
         override val route = PARTYMEMBER_CREATE
         const val typeArg = "type"
         val routeWithArgs = "$route/{$typeArg}"
@@ -96,7 +98,7 @@ sealed interface PartyMemberDestination : CurtainCallDestination {
         )
     }
 
-    object LiveTalk : PartyMemberDestination {
+    object LiveTalk : PartyMemberDestination2 {
         override val route = PARTYMEMBER_LIVETALK
     }
 }
@@ -106,14 +108,14 @@ fun NavGraphBuilder.partymemberNavGraph(
     chatClient: ChatClient,
     onNavigateReport: (Int, ReportType) -> Unit
 ) {
-    navigation(startDestination = PartyMemberDestination.PartyMember.route, route = PARTYMEMBER_GRAPH) {
+    navigation(startDestination = PartyMemberDestination.PartyMember.route, route = NavGraphLabel.PARTY_MEMBER) {
         composable(route = PartyMemberDestination.PartyMember.route) {
-            PartyMemberScreen { navHostController.navigate("${PartyMemberDestination.List.route}/$it") }
+            PartyMemberScreen { navHostController.navigate("${PartyMemberDestination2.List.route}/$it") }
         }
 
         composable(
-            route = PartyMemberDestination.List.routeWithArgs,
-            arguments = PartyMemberDestination.List.arguments
+            route = PartyMemberDestination2.List.routeWithArgs,
+            arguments = PartyMemberDestination2.List.arguments
         ) { entry ->
             val partyType: PartyType? = getPartyType(entry.arguments)
             if (partyType != null) {
@@ -121,29 +123,29 @@ fun NavGraphBuilder.partymemberNavGraph(
                     partyType = partyType,
                     onNavigateDetail = { partyType, partyId, myWriting ->
                         navHostController.navigate(
-                            PartyMemberDestination.Detail.route + "?" +
-                                "${PartyMemberDestination.Detail.partyIdArg}=$partyId" + "&" +
-                                "${PartyMemberDestination.Detail.typeArg}=$partyType" + "&" +
-                                "${PartyMemberDestination.Detail.myWritingArg}=$myWriting" + "&" +
-                                "${PartyMemberDestination.Detail.fromRecruitmentArg}=false" + "&" +
-                                "${PartyMemberDestination.Detail.fromParticipationArg}=false"
+                            PartyMemberDestination2.Detail.route + "?" +
+                                "${PartyMemberDestination2.Detail.partyIdArg}=$partyId" + "&" +
+                                "${PartyMemberDestination2.Detail.typeArg}=$partyType" + "&" +
+                                "${PartyMemberDestination2.Detail.myWritingArg}=$myWriting" + "&" +
+                                "${PartyMemberDestination2.Detail.fromRecruitmentArg}=false" + "&" +
+                                "${PartyMemberDestination2.Detail.fromParticipationArg}=false"
                         )
                     },
-                    onNavigateCreate = { navHostController.navigate("${PartyMemberDestination.Create.route}/$it") },
+                    onNavigateCreate = { navHostController.navigate("${PartyMemberDestination2.Create.route}/$it") },
                     onBack = { navHostController.popBackStack() }
                 )
             }
         }
 
         composable(
-            route = PartyMemberDestination.Detail.routeWithArgs,
-            arguments = PartyMemberDestination.Detail.arguments
+            route = PartyMemberDestination2.Detail.routeWithArgs,
+            arguments = PartyMemberDestination2.Detail.arguments
         ) { entry ->
             val partyType: PartyType? = getPartyType(entry.arguments)
-            val partyId = entry.arguments?.getInt(PartyMemberDestination.Detail.partyIdArg) ?: Int.MIN_VALUE
-            val myWriting = entry.arguments?.getBoolean(PartyMemberDestination.Detail.myWritingArg) ?: false
-            val fromRecruitment = entry.arguments?.getBoolean(PartyMemberDestination.Detail.fromRecruitmentArg) ?: false
-            val fromParticipation = entry.arguments?.getBoolean(PartyMemberDestination.Detail.fromParticipationArg) ?: false
+            val partyId = entry.arguments?.getInt(PartyMemberDestination2.Detail.partyIdArg) ?: Int.MIN_VALUE
+            val myWriting = entry.arguments?.getBoolean(PartyMemberDestination2.Detail.myWritingArg) ?: false
+            val fromRecruitment = entry.arguments?.getBoolean(PartyMemberDestination2.Detail.fromRecruitmentArg) ?: false
+            val fromParticipation = entry.arguments?.getBoolean(PartyMemberDestination2.Detail.fromParticipationArg) ?: false
             if (partyType != null) {
                 PartyMemberDetailScreen(
                     partyId = partyId,
@@ -152,7 +154,7 @@ fun NavGraphBuilder.partymemberNavGraph(
                     fromParticipation = fromParticipation,
                     partyType = partyType,
                     onNavigateReport = onNavigateReport,
-                    onNavigateLiveTalk = { navHostController.navigate(PartyMemberDestination.LiveTalk.route) },
+                    onNavigateLiveTalk = { navHostController.navigate(PartyMemberDestination2.LiveTalk.route) },
                     onBack = { navHostController.popBackStack() }
                 )
             } else {
@@ -163,15 +165,15 @@ fun NavGraphBuilder.partymemberNavGraph(
                     fromParticipation = fromParticipation,
                     partyType = PartyType.PERFORMANCE,
                     onNavigateReport = onNavigateReport,
-                    onNavigateLiveTalk = { navHostController.navigate(PartyMemberDestination.LiveTalk.route) },
+                    onNavigateLiveTalk = { navHostController.navigate(PartyMemberDestination2.LiveTalk.route) },
                     onBack = { navHostController.popBackStack() }
                 )
             }
         }
 
         composable(
-            route = PartyMemberDestination.Create.routeWithArgs,
-            arguments = PartyMemberDestination.Create.arguments
+            route = PartyMemberDestination2.Create.routeWithArgs,
+            arguments = PartyMemberDestination2.Create.arguments
         ) { entry ->
             val partyType: PartyType? = getPartyType(entry.arguments)
             if (partyType != null) {
@@ -182,8 +184,8 @@ fun NavGraphBuilder.partymemberNavGraph(
             }
         }
 
-        composable(route = PartyMemberDestination.LiveTalk.route) { entry ->
-            val parentEntry = remember(entry) { navHostController.getBackStackEntry(PartyMemberDestination.Detail.routeWithArgs) }
+        composable(route = PartyMemberDestination2.LiveTalk.route) { entry ->
+            val parentEntry = remember(entry) { navHostController.getBackStackEntry(PartyMemberDestination2.Detail.routeWithArgs) }
             PartyMemberLiveTalkScreen(
                 partyMemberDetailViewModel = hiltViewModel(parentEntry),
                 chatClient = chatClient,
@@ -195,7 +197,7 @@ fun NavGraphBuilder.partymemberNavGraph(
 
 fun getPartyType(bundle: Bundle?): PartyType? =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        bundle?.getSerializable(PartyMemberDestination.List.typeArg, PartyType::class.java)
+        bundle?.getSerializable(PartyMemberDestination2.List.typeArg, PartyType::class.java)
     } else {
-        bundle?.getSerializable(PartyMemberDestination.List.typeArg) as? PartyType?
+        bundle?.getSerializable(PartyMemberDestination2.List.typeArg) as? PartyType?
     }

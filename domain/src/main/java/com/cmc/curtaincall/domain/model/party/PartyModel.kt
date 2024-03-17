@@ -1,6 +1,7 @@
 package com.cmc.curtaincall.domain.model.party
 
 data class PartyModel(
+    val content: String = "",
     val category: String = "",
     val createdAt: String = "",
     val creatorId: Int = Int.MIN_VALUE,

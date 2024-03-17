@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.common.designsystem.component.canvas
+package com.cmc.curtaincall.common.designsystem.component.tooltip
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -25,7 +25,7 @@ import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import com.cmc.curtaincall.common.designsystem.theme.Grey1
 
 @Composable
-fun CurtainCallShowSortCoachMark(
+fun CurtainCallShowSortTooltip(
     modifier: Modifier = Modifier,
     text: String,
     onClick: () -> Unit = {}
@@ -73,7 +73,7 @@ fun CurtainCallShowSortCoachMark(
 }
 
 @Composable
-fun CurtainCallShowLiveTalkCoachMark(
+fun CurtainCallShowLiveTalkTooltip(
     modifier: Modifier = Modifier,
     text: String,
     onClick: () -> Unit = {}
@@ -120,11 +120,59 @@ fun CurtainCallShowLiveTalkCoachMark(
     }
 }
 
+@Composable
+fun CurtainCallPartyTooltip(
+    modifier: Modifier = Modifier,
+    text: String,
+    onClick: () -> Unit = {}
+) {
+    Column(modifier.width(215.dp)) {
+        Canvas(
+            modifier = Modifier
+                .padding(start = 22.dp)
+                .size(10.dp, 5.dp)
+        ) {
+            drawPath(
+                color = Grey1,
+                path = Path().apply {
+                    moveTo(5.dp.toPx(), 0.dp.toPx())
+                    lineTo(0.dp.toPx(), 6.dp.toPx())
+                    lineTo(10.dp.toPx(), 6.dp.toPx())
+                }
+            )
+        }
+        Box(
+            modifier = Modifier
+                .size(215.dp, 33.dp)
+                .background(Grey1, RoundedCornerShape(8.dp)),
+            contentAlignment = Alignment.Center
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    text = text,
+                    style = CurtainCallTheme.typography.body5.copy(
+                        color = CurtainCallTheme.colors.onPrimary
+                    )
+                )
+                Icon(
+                    painter = painterResource(R.drawable.ic_white_close),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(start = 4.dp)
+                        .size(14.dp)
+                        .clickable { onClick() },
+                    tint = Color.Unspecified
+                )
+            }
+        }
+    }
+}
+
 @Preview(showBackground = true, widthDp = 360, heightDp = 100)
 @Composable
-private fun CurtainCallCoachMarkPreview() {
+private fun CurtainCallShowSortTooltipPreview() {
     CurtainCallTheme {
-        CurtainCallShowSortCoachMark(
+        CurtainCallShowSortTooltip(
             text = "인기순은 현재 상영 중인 작품 50개만 볼 수 있어요!"
         )
     }
@@ -132,10 +180,20 @@ private fun CurtainCallCoachMarkPreview() {
 
 @Preview(showBackground = true, widthDp = 360, heightDp = 100)
 @Composable
-private fun CurtainCallShowLiveTalkCoachMarkPreview() {
+private fun CurtainCallShowLiveTalkTooltipPreview() {
     CurtainCallTheme {
-        CurtainCallShowLiveTalkCoachMark(
+        CurtainCallShowLiveTalkTooltip(
             text = "실시간으로 공연에 대한 기대감&후기를 공유해봐요!"
+        )
+    }
+}
+
+@Preview(showBackground = true, widthDp = 360, heightDp = 100)
+@Composable
+private fun CurtainCallPartyTooltipPreview() {
+    CurtainCallTheme {
+        CurtainCallPartyTooltip(
+            text = "공연을 함께 볼 사람을 구할 수 있어요!"
         )
     }
 }

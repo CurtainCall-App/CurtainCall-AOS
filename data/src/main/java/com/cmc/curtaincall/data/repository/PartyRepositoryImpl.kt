@@ -43,15 +43,23 @@ class PartyRepositoryImpl @Inject constructor(
         partyLocalSource.deletePartySearchWordList()
     }
 
-    override fun fetchPartyList(category: String): Flow<PagingData<PartyModel>> {
+    override fun fetchPartyList(
+        startDate: String?,
+        endDate: String?
+    ): Flow<PagingData<PartyModel>> {
         return Pager(
             config = PagingConfig(pageSize = PARTY_PAGE_SIZE),
-            pagingSourceFactory = { PartyPagingSource(partyService, category) }
+            pagingSourceFactory = { PartyPagingSource(partyService, startDate, endDate) }
         ).flow
     }
 
-    override fun requestPartyList(page: Int, size: Int, category: String): Flow<List<PartyModel>> =
-        partyRemoteSource.requestPartyList(page, size, category).map { parties ->
+    override fun requestPartyList(
+        page: Int,
+        size: Int?,
+        startDate: String?,
+        endDate: String?
+    ): Flow<List<PartyModel>> =
+        partyRemoteSource.requestPartyList(page, size, startDate, endDate).map { parties ->
             parties.map { it.toModel() }
         }
 

@@ -26,7 +26,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.appbars.CurtainCallCenterTopAppBarWithBack
 import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
-import com.cmc.curtaincall.common.designsystem.component.canvas.CurtainCallShowLiveTalkCoachMark
+import com.cmc.curtaincall.common.designsystem.component.tooltip.CurtainCallShowLiveTalkTooltip
 import com.cmc.curtaincall.common.designsystem.component.cards.ShowDetailCard
 import com.cmc.curtaincall.common.designsystem.component.divider.HorizontalDivider
 import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
@@ -211,7 +211,7 @@ private fun ShowDetailContent(
             }
         )
         if (isShowCoachMark) {
-            CurtainCallShowLiveTalkCoachMark(
+            CurtainCallShowLiveTalkTooltip(
                 modifier = Modifier.padding(top = 620.dp),
                 text = stringResource(R.string.livetalk_coach_mark),
                 onClick = { showDetailViewModel.closeCoachMark() }

@@ -350,3 +350,113 @@ fun CurtainCallSearchTitleTopAppBarWithBack(
         }
     }
 }
+
+@Composable
+fun CurtainCallSearchTitleTopAppBarWithCalendar(
+    title: String,
+    searchAppBarState: SearchAppBarState = SearchAppBarState {},
+    containerColor: Color = CurtainCallTheme.colors.background,
+    contentColor: Color = Black,
+    onClick: () -> Unit = {}
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(TopAppBarHeight)
+            .background(containerColor),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        if (searchAppBarState.isSearchMode.value) {
+            Row(
+                modifier = Modifier
+                    .padding(start = 14.dp, end = 18.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    modifier = Modifier
+                        .weight(1f)
+                        .background(Grey9, RoundedCornerShape(30.dp))
+                        .padding(start = 14.dp, end = 11.dp)
+                        .padding(vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    BasicTextField(
+                        value = searchAppBarState.searchText.value,
+                        onValueChange = searchAppBarState.onTextChange,
+                        modifier = Modifier
+                            .weight(1f)
+                            .background(Grey9, RoundedCornerShape(30.dp)),
+                        textStyle = CurtainCallTheme.typography.body3.copy(fontWeight = FontWeight.SemiBold),
+                        singleLine = true,
+                        maxLines = 1,
+                        keyboardActions = KeyboardActions(
+                            onDone = { searchAppBarState.onDone(searchAppBarState.searchText.value) }
+                        )
+                    ) { innerTextField ->
+                        Box(
+                            modifier = Modifier.fillMaxWidth(),
+                            contentAlignment = Alignment.CenterStart
+                        ) {
+                            if (searchAppBarState.searchText.value.isEmpty()) {
+                                Text(
+                                    text = stringResource(R.string.search_appbar_hint),
+                                    style = CurtainCallTheme.typography.body3.copy(
+                                        fontWeight = FontWeight.SemiBold,
+                                        color = Grey6
+                                    )
+                                )
+                            }
+                            innerTextField()
+                        }
+                    }
+                    Icon(
+                        painter = painterResource(R.drawable.ic_search_close),
+                        contentDescription = TopAppBarClearActionDescription,
+                        modifier = Modifier
+                            .padding(start = 11.dp)
+                            .size(18.dp)
+                            .clickable { searchAppBarState.onClear() },
+                        tint = Color.Unspecified
+                    )
+                }
+                Text(
+                    text = stringResource(R.string.cancel),
+                    modifier = Modifier
+                        .padding(start = 10.dp)
+                        .clickable { searchAppBarState.onCancel() },
+                    style = CurtainCallTheme.typography.body3.copy(
+                        color = Grey2,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                )
+            }
+        } else {
+            Text(
+                text = title,
+                modifier = Modifier.padding(start = 20.dp),
+                style = CurtainCallTheme.typography.h2.copy(
+                    color = contentColor
+                )
+            )
+            Spacer(Modifier.weight(1f))
+            Icon(
+                painter = painterResource(R.drawable.ic_calendar),
+                contentDescription = TopAppBarBackIconDescription,
+                modifier = Modifier
+                    .size(TopAppBarBackIconSize)
+                    .clickable { onClick() },
+                tint = contentColor
+            )
+            Icon(
+                painter = painterResource(R.drawable.ic_search),
+                contentDescription = TopAppBarSearchActionDescription,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .size(TopAppBarBackIconSize)
+                    .clickable { searchAppBarState.onSearch() },
+                tint = contentColor
+            )
+        }
+    }
+}
