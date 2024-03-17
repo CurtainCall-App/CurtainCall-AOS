@@ -15,4 +15,11 @@ class LaunchRepositoryImpl @Inject constructor(
     override suspend fun setIsFirstEntryShowList() {
         launchLocalSource.setIsFirstEntryShowList()
     }
+
+    override fun isShowPartyTooltip(): Flow<Boolean> =
+        launchLocalSource.isShowPartyTooltip()
+
+    override suspend fun stopShowPartyTooltip() {
+        launchLocalSource.stopShowPartyTooltip()
+    }
 }

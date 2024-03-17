@@ -14,18 +14,21 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.cmc.curtaincall.common.designsystem.R
 import com.cmc.curtaincall.common.designsystem.component.appbars.CurtainCallSearchTitleTopAppBarWithCalendar
 import com.cmc.curtaincall.common.designsystem.component.basic.SystemUiStatusBar
 import com.cmc.curtaincall.common.designsystem.component.buttons.common.CurtainCallFilledButton
 import com.cmc.curtaincall.common.designsystem.component.card.PartyType
+import com.cmc.curtaincall.common.designsystem.component.tooltip.CurtainCallPartyTooltip
 import com.cmc.curtaincall.common.designsystem.custom.party.PartyContent
 import com.cmc.curtaincall.common.designsystem.custom.party.PartyEmptyContent
 import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
@@ -79,7 +82,16 @@ private fun PartyMemberContent(
     partyMemberViewModel: PartyMemberViewModel = hiltViewModel(),
 ) {
     val partyModels = partyMemberViewModel.partyModel.collectAsLazyPagingItems()
+    val isShowTooltip by partyMemberViewModel.isShowTooltip.collectAsStateWithLifecycle()
     Box(modifier) {
+        if (isShowTooltip) {
+            CurtainCallPartyTooltip(
+                modifier = Modifier.padding(start = 20.dp),
+                text = stringResource(R.string.party_member_tooltip),
+                onClick = { partyMemberViewModel.stopPartyTooltip() }
+            )
+        }
+
         if (partyModels.itemCount == 0) {
             Column(modifier = Modifier.fillMaxSize()) {
                 Spacer(Modifier.weight(200f))

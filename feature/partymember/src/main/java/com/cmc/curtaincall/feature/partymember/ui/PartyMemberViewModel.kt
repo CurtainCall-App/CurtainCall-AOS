@@ -7,6 +7,7 @@ import com.cmc.curtaincall.common.designsystem.component.card.PartyType
 import com.cmc.curtaincall.core.base.BaseViewModel
 import com.cmc.curtaincall.domain.model.party.PartyModel
 import com.cmc.curtaincall.domain.model.party.PartySearchWordModel
+import com.cmc.curtaincall.domain.repository.LaunchRepository
 import com.cmc.curtaincall.domain.repository.MemberRepository
 import com.cmc.curtaincall.domain.repository.PartyRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,12 +22,18 @@ import javax.inject.Inject
 @HiltViewModel
 class PartyMemberViewModel @Inject constructor(
     private val partyRepository: PartyRepository,
-    private val memberRepository: MemberRepository
+    private val memberRepository: MemberRepository,
+    private val launchRepository: LaunchRepository
 ) : BaseViewModel<PartyMemberUiState, PartyMemberEvent, Nothing>(
     initialState = PartyMemberUiState()
 ) {
     private val _partyModels = MutableStateFlow<PagingData<PartyModel>>(PagingData.empty())
     val partyModel = _partyModels.asStateFlow()
+
+    private val _isShowTooltip = MutableStateFlow(false)
+    val isShowTooltip = _isShowTooltip.asStateFlow()
+
+    // /
 
     private val _memberId = MutableStateFlow(0)
     val memberId: StateFlow<Int> = _memberId.asStateFlow()
@@ -35,6 +42,7 @@ class PartyMemberViewModel @Inject constructor(
     val searchWords = _searchWords.asStateFlow()
 
     init {
+        checkPartyTooltip()
         fetchPartyList()
 //        getMemberId()
 //        requestPartySearchWords()
@@ -50,6 +58,18 @@ class PartyMemberViewModel @Inject constructor(
         ).onEach {
             _partyModels.value = it
         }.launchIn(viewModelScope)
+    }
+
+    private fun checkPartyTooltip() {
+        launchRepository.isShowPartyTooltip()
+            .onEach { _isShowTooltip.value = it }
+            .launchIn(viewModelScope)
+    }
+
+    fun stopPartyTooltip() {
+        viewModelScope.launch {
+            launchRepository.stopShowPartyTooltip()
+        }
     }
 
     // //
