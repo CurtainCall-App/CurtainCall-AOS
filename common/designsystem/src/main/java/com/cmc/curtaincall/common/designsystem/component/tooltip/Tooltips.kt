@@ -1,4 +1,4 @@
-package com.cmc.curtaincall.common.designsystem.component.canvas
+package com.cmc.curtaincall.common.designsystem.component.tooltip
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -25,7 +25,7 @@ import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import com.cmc.curtaincall.common.designsystem.theme.Grey1
 
 @Composable
-fun CurtainCallShowSortCoachMark(
+fun CurtainCallShowSortTooltip(
     modifier: Modifier = Modifier,
     text: String,
     onClick: () -> Unit = {}
@@ -73,7 +73,7 @@ fun CurtainCallShowSortCoachMark(
 }
 
 @Composable
-fun CurtainCallShowLiveTalkCoachMark(
+fun CurtainCallShowLiveTalkTooltip(
     modifier: Modifier = Modifier,
     text: String,
     onClick: () -> Unit = {}
@@ -122,9 +122,9 @@ fun CurtainCallShowLiveTalkCoachMark(
 
 @Preview(showBackground = true, widthDp = 360, heightDp = 100)
 @Composable
-private fun CurtainCallCoachMarkPreview() {
+private fun CurtainCallShowSortTooltipPreview() {
     CurtainCallTheme {
-        CurtainCallShowSortCoachMark(
+        CurtainCallShowSortTooltip(
             text = "인기순은 현재 상영 중인 작품 50개만 볼 수 있어요!"
         )
     }
@@ -132,9 +132,9 @@ private fun CurtainCallCoachMarkPreview() {
 
 @Preview(showBackground = true, widthDp = 360, heightDp = 100)
 @Composable
-private fun CurtainCallShowLiveTalkCoachMarkPreview() {
+private fun CurtainCallShowLiveTalkTooltipPreview() {
     CurtainCallTheme {
-        CurtainCallShowLiveTalkCoachMark(
+        CurtainCallShowLiveTalkTooltip(
             text = "실시간으로 공연에 대한 기대감&후기를 공유해봐요!"
         )
     }
