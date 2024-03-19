@@ -106,7 +106,7 @@ fun CurtainCallCalendar(
                         if (selectedDays.size == 2) {
                             selectedDays = listOf(it)
                         } else {
-                            selectedDays = selectedDays + listOf(it)
+                            selectedDays = (selectedDays + listOf(it)).sortedBy { it.date }
                         }
                     }
                 )
@@ -215,43 +215,46 @@ private fun CurtainCallDay(
         contentAlignment = Alignment.Center
     ) {
         if (day.position == DayPosition.MonthDate) {
-            Row(modifier = Modifier.matchParentSize()) {
-                Spacer(
+            if (selectedCalendarDays.size == 2) {
+                val hasStartRadius = day.date == selectedCalendarDays[0].date ||
+                    day.date.dayOfWeek == DayOfWeek.SUNDAY ||
+                    day.date.dayOfMonth == 1
+
+                val hasEndRadius = day.date == selectedCalendarDays[1].date ||
+                    day.date.dayOfWeek == DayOfWeek.SATURDAY ||
+                    day.date.dayOfMonth == day.date.lengthOfMonth()
+
+                Row(
                     modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                        .background(
-                            if (selectedCalendarDays.size == 2) {
-                                if (selectedCalendarDays[0].date < day.date && day.date <= selectedCalendarDays[1].date) {
+                        .matchParentSize()
+                        .padding(vertical = 4.dp)
+                ) {
+                    Spacer(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = if (hasStartRadius) 4.dp else 0.dp)
+                            .padding(end = if (hasEndRadius) 4.dp else 0.dp)
+                            .fillMaxHeight()
+                            .background(
+                                color = if (selectedCalendarDays[0].date <= day.date && day.date <= selectedCalendarDays[1].date) {
                                     CurtainCallTheme.colors.secondary.copy(0.4f)
                                 } else {
                                     CurtainCallTheme.colors.background
-                                }
-                            } else {
-                                CurtainCallTheme.colors.background
-                            }
-                        )
-                )
-                Spacer(
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                        .background(
-                            if (selectedCalendarDays.size == 2) {
-                                if (selectedCalendarDays[0].date <= day.date && day.date < selectedCalendarDays[1].date) {
-                                    CurtainCallTheme.colors.secondary.copy(0.4f)
-                                } else {
-                                    CurtainCallTheme.colors.background
-                                }
-                            } else {
-                                CurtainCallTheme.colors.background
-                            }
-                        )
-                )
+                                },
+                                shape = RoundedCornerShape(
+                                    topStart = if (hasStartRadius) 50.dp else 0.dp,
+                                    bottomStart = if (hasStartRadius) 50.dp else 0.dp,
+                                    topEnd = if (hasEndRadius) 50.dp else 0.dp,
+                                    bottomEnd = if (hasEndRadius) 50.dp else 0.dp
+                                )
+                            )
+                    )
+                }
             }
             Box(
                 modifier = Modifier
                     .aspectRatio(1f)
+                    .padding(4.dp)
                     .background(
                         color = if (selectedCalendarDays.contains(day)) {
                             CurtainCallTheme.colors.secondary
