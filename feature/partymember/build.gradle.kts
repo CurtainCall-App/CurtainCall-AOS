@@ -18,7 +18,6 @@ dependencies {
     // androidx
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.core.ktx)
 
     // compose
     implementation(libs.accompanist.systemuicontroller)

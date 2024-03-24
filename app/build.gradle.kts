@@ -28,6 +28,7 @@ dependencies {
     implementation(project(":feature:auth"))
     implementation(project(":feature:home"))
     implementation(project(":feature:mypage"))
+    implementation(project(":feature:partymember"))
 
     // androidx
     implementation(libs.androidx.core.ktx)

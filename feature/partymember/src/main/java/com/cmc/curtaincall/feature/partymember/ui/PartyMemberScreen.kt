@@ -1,20 +1,30 @@
 package com.cmc.curtaincall.feature.partymember.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -25,22 +35,27 @@ import com.cmc.curtaincall.common.designsystem.component.buttons.common.CurtainC
 import com.cmc.curtaincall.common.designsystem.component.card.PartyType
 import com.cmc.curtaincall.common.designsystem.component.tooltip.CurtainCallPartyTooltip
 import com.cmc.curtaincall.common.designsystem.custom.common.CurtainCallCalendar
+import com.cmc.curtaincall.common.designsystem.custom.party.PartyContent
+import com.cmc.curtaincall.common.designsystem.custom.party.PartyEmptyContent
 import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import com.cmc.curtaincall.common.designsystem.theme.Grey8
+import com.kizitonwose.calendar.core.CalendarDay
 
 @Composable
 fun PartyMemberScreen(
     onNavigateList: (PartyType) -> Unit
 ) {
+    var selectedCalendarDays = remember { mutableStateOf<List<CalendarDay>>(listOf()) }
+    var isShowCalendar by remember { mutableStateOf(false) }
+
     SystemUiStatusBar(Grey8)
     Scaffold(
         topBar = {
             CurtainCallSearchTitleTopAppBarWithCalendar(
                 title = stringResource(R.string.party_member),
                 containerColor = Grey8,
-                onClick = {
-                    // TODO 캘린더 클릭
-                }
+                selectedCalendarDays = selectedCalendarDays.value,
+                onCalendarClick = { isShowCalendar = true }
             )
         },
         floatingActionButton = {
@@ -65,7 +80,12 @@ fun PartyMemberScreen(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
-                .background(Grey8)
+                .background(Grey8),
+            isShowCalendar = isShowCalendar,
+            onSelectCalendarDays = {
+                selectedCalendarDays.value = it
+                isShowCalendar = false
+            }
         )
     }
 }
@@ -74,9 +94,12 @@ fun PartyMemberScreen(
 private fun PartyMemberContent(
     modifier: Modifier = Modifier,
     partyMemberViewModel: PartyMemberViewModel = hiltViewModel(),
+    isShowCalendar: Boolean = false,
+    onSelectCalendarDays: (List<CalendarDay>) -> Unit = {}
 ) {
     val partyModels = partyMemberViewModel.partyModel.collectAsLazyPagingItems()
     val isShowTooltip by partyMemberViewModel.isShowTooltip.collectAsStateWithLifecycle()
+
     Box(modifier) {
         if (isShowTooltip) {
             CurtainCallPartyTooltip(
@@ -86,28 +109,34 @@ private fun PartyMemberContent(
             )
         }
 
-        CurtainCallCalendar(
-            modifier = Modifier.width(320.dp)
-        )
+        if (isShowCalendar) {
+            CurtainCallCalendar(
+                modifier = Modifier
+                    .zIndex(1f)
+                    .align(Alignment.TopCenter)
+                    .width(320.dp),
+                onSelectDays = onSelectCalendarDays
+            )
+        }
 
-//        if (partyModels.itemCount == 0) {
-//            Column(modifier = Modifier.fillMaxSize()) {
-//                Spacer(Modifier.weight(200f))
-//                PartyEmptyContent(Modifier.align(Alignment.CenterHorizontally))
-//                Spacer(Modifier.weight(308f))
-//            }
-//        } else {
-//            LazyColumn(
-//                modifier = Modifier.fillMaxSize(),
-//                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 10.dp),
-//                verticalArrangement = Arrangement.spacedBy(12.dp)
-//            ) {
-//                items(partyModels.itemCount) { index ->
-//                    partyModels[index]?.let { partyModel ->
-//                        PartyContent(partyModel = partyModel)
-//                    }
-//                }
-//            }
-//        }
+        if (partyModels.itemCount == 0) {
+            Column(modifier = Modifier.fillMaxSize()) {
+                Spacer(Modifier.weight(200f))
+                PartyEmptyContent(Modifier.align(Alignment.CenterHorizontally))
+                Spacer(Modifier.weight(308f))
+            }
+        } else {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(horizontal = 20.dp, vertical = 10.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(partyModels.itemCount) { index ->
+                    partyModels[index]?.let { partyModel ->
+                        PartyContent(partyModel = partyModel)
+                    }
+                }
+            }
+        }
     }
 }

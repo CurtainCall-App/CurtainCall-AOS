@@ -123,7 +123,8 @@ fun CurtainCallCalendar(
             contentColor = CurtainCallTheme.colors.primary,
             textStyle = CurtainCallTheme.typography.body2.copy(
                 fontWeight = FontWeight.SemiBold
-            )
+            ),
+            onClick = { onSelectDays(selectedDays) }
         )
     }
 }
