@@ -398,5 +398,4 @@ private fun PreviousDateCalendarPreview() {
             onDateClick = {}
         )
     }
-
 }
