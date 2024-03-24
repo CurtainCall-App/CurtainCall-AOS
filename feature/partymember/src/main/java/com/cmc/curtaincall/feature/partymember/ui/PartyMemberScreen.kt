@@ -40,6 +40,7 @@ import com.cmc.curtaincall.common.designsystem.custom.party.PartyEmptyContent
 import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import com.cmc.curtaincall.common.designsystem.theme.Grey8
 import com.kizitonwose.calendar.core.CalendarDay
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun PartyMemberScreen(
@@ -115,7 +116,13 @@ private fun PartyMemberContent(
                     .zIndex(1f)
                     .align(Alignment.TopCenter)
                     .width(320.dp),
-                onSelectDays = onSelectCalendarDays
+                onSelectDays = {
+                    onSelectCalendarDays(it)
+                    partyMemberViewModel.fetchPartyList(
+                        startDate = it.first().date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+                        endDate = it.getOrNull(1)?.date?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                    )
+                }
             )
         }
 
