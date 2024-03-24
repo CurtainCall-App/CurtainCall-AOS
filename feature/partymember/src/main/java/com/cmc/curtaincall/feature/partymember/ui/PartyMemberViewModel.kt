@@ -48,7 +48,7 @@ class PartyMemberViewModel @Inject constructor(
 //        requestPartySearchWords()
     }
 
-    private fun fetchPartyList(
+    fun fetchPartyList(
         startDate: String? = null,
         endDate: String? = null
     ) {

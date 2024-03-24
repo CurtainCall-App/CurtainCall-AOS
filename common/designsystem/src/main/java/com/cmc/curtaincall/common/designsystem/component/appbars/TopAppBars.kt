@@ -31,12 +31,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.cmc.curtaincall.common.designsystem.R
+import com.cmc.curtaincall.common.designsystem.dimension.Paddings
 import com.cmc.curtaincall.common.designsystem.theme.Black
 import com.cmc.curtaincall.common.designsystem.theme.CurtainCallTheme
 import com.cmc.curtaincall.common.designsystem.theme.Grey2
 import com.cmc.curtaincall.common.designsystem.theme.Grey6
 import com.cmc.curtaincall.common.designsystem.theme.Grey9
 import com.cmc.curtaincall.common.designsystem.theme.avenirnext
+import com.kizitonwose.calendar.core.CalendarDay
+import java.time.format.DateTimeFormatter
 
 private const val TopAppBarBackIconDescription = "Go Back"
 private const val TopAppBarSearchActionDescription = "Search"
@@ -357,7 +360,8 @@ fun CurtainCallSearchTitleTopAppBarWithCalendar(
     searchAppBarState: SearchAppBarState = SearchAppBarState {},
     containerColor: Color = CurtainCallTheme.colors.background,
     contentColor: Color = Black,
-    onClick: () -> Unit = {}
+    selectedCalendarDays: List<CalendarDay> = listOf(),
+    onCalendarClick: () -> Unit = {}
 ) {
     Row(
         modifier = Modifier
@@ -440,14 +444,31 @@ fun CurtainCallSearchTitleTopAppBarWithCalendar(
                 )
             )
             Spacer(Modifier.weight(1f))
-            Icon(
-                painter = painterResource(R.drawable.ic_calendar),
-                contentDescription = TopAppBarBackIconDescription,
-                modifier = Modifier
-                    .size(TopAppBarBackIconSize)
-                    .clickable { onClick() },
-                tint = contentColor
-            )
+            if (selectedCalendarDays.isEmpty()) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_calendar),
+                    contentDescription = TopAppBarBackIconDescription,
+                    modifier = Modifier
+                        .size(TopAppBarBackIconSize)
+                        .clickable { onCalendarClick() },
+                    tint = contentColor
+                )
+            } else {
+                Box(
+                    modifier = Modifier
+                        .background(CurtainCallTheme.colors.secondary, RoundedCornerShape(6.dp))
+                        .padding(horizontal = Paddings.medium, vertical = Paddings.small),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = selectedCalendarDays.joinToString(" - ") { it.date.format(DateTimeFormatter.ofPattern("yy.MM.dd")) },
+                        style = CurtainCallTheme.typography.body4.copy(
+                            fontWeight = FontWeight.SemiBold,
+                            color = CurtainCallTheme.colors.primary
+                        )
+                    )
+                }
+            }
             Icon(
                 painter = painterResource(R.drawable.ic_search),
                 contentDescription = TopAppBarSearchActionDescription,
