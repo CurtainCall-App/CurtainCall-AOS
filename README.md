@@ -6,7 +6,7 @@ A theater & musical networking platform that shares the emotions on stage
 <br>
 
 ## Download
-Go to the [Release](https://play.google.com/store/apps/details?id=com.cmc.curtaincall&hl=ko&gl=US) to download the latest APK.
+Go to the [Release](https://play.google.com/store/apps/details?id=com.cmc.curtaincall&hl=ko&gl=US) to download the latest APK. (No maintenance)
 
 <br>
 
